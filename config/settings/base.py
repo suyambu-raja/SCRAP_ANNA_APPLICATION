@@ -123,8 +123,8 @@ DATABASES = {
 # ------------------------------------------------------------------
 # IMPORTANT: Do NOT uncomment until accounts.Account is actually defined.
 # Setting AUTH_USER_MODEL after the first migration breaks the project.
-#
-# AUTH_USER_MODEL = "accounts.Account"
+
+AUTH_USER_MODEL = "accounts.Account"
 
 
 # ------------------------------------------------------------------
