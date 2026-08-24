@@ -9,6 +9,7 @@ class SettlementRecord(BaseModel):
         FAILED = 'FAILED', 'Failed'
 
     merchant = models.ForeignKey(Account, on_delete=models.PROTECT, related_name="settlements", db_index=True)
+    source_reference_id = models.CharField(max_length=255, unique=True, db_index=True)
     gross_transacted_value = models.DecimalField(max_digits=12, decimal_places=2)
     commission_rate = models.DecimalField(max_digits=4, decimal_places=2)
     commission_owed = models.DecimalField(max_digits=10, decimal_places=2)
@@ -25,6 +26,7 @@ class MarketplaceSettlementRecord(BaseModel):
         FAILED = 'FAILED', 'Failed'
 
     merchant = models.ForeignKey(Account, on_delete=models.PROTECT, related_name="marketplace_settlements", db_index=True)
+    source_reference_id = models.CharField(max_length=255, unique=True, db_index=True)
     commission_owed = models.DecimalField(max_digits=10, decimal_places=2)
     settlement_date = models.DateField(db_index=True)
     payment_status = models.CharField(max_length=20, choices=PaymentStatus.choices, default=PaymentStatus.PENDING, db_index=True)
