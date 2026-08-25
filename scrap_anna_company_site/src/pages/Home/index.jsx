@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { 
-  ArrowRight, ShieldCheck, CheckCircle2, XCircle, TrendingUp, 
+  ArrowRight, ShieldCheck, CheckCircle2, 
   Sparkles, Home, Store, Factory, Network, FilePlus2, Users, 
   CalendarClock, Scale, FileCheck, MapPin, Receipt, 
   FileText, ShieldAlert, Headphones, ChevronRight, HelpCircle,
-  Smartphone, UserCheck, Truck, Recycle, Languages, Mic, Phone,
-  Tag, SlidersHorizontal
+  Smartphone, UserCheck, Truck, Languages, Mic, Phone,
+  Tag, SlidersHorizontal, TrendingUp
 } from 'lucide-react';
 import SEO from '../../components/common/SEO';
 import SectionHeader from '../../components/common/SectionHeader';
@@ -14,8 +14,7 @@ import Button from '../../components/common/Button';
 import CTASection from '../../components/common/CTASection';
 import { useJoinModal } from '../../components/layout/Layout';
 import { 
-  audienceCards, howItWorksSteps, trustFeatures, 
-  comparisonData, impactStatistics, marketPricesData 
+  audienceCards, howItWorksSteps, trustFeatures 
 } from '../../data/siteData';
 import heroTruckImg from '../../assets/hero-truck.png';
 
@@ -668,319 +667,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* WHY SCRAP ANNA? COMPARISON SECTION */}
-      <section className="section bg-white">
-        <div className="container">
-          <SectionHeader
-            eyebrow="Market Comparison"
-            title="Why Scrap Anna?"
-            subtitle="How our tech-enabled marketplace solves the fundamental hurdles of traditional scrap collection."
-          />
-
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: '2rem',
-            maxWidth: '1000px',
-            margin: '0 auto'
-          }} className="comparison-grid">
-            
-            {/* Traditional Scrap Card */}
-            <div style={{
-              backgroundColor: 'var(--color-offwhite)',
-              borderRadius: 'var(--radius-lg)',
-              padding: '2.25rem',
-              border: '1px solid var(--color-border)'
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '1.5rem' }}>
-                <div style={{
-                  width: '32px',
-                  height: '32px',
-                  borderRadius: '50%',
-                  backgroundColor: '#FEE2E2',
-                  color: '#DC2626',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}>
-                  <XCircle size={20} />
-                </div>
-                <h3 style={{ fontSize: '1.25rem', color: 'var(--color-graphite-dark)', margin: 0 }}>
-                  Traditional Scrap Method
-                </h3>
-              </div>
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                {comparisonData.traditional.map((item, idx) => (
-                  <div key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
-                    <XCircle size={18} style={{ color: '#DC2626', flexShrink: 0, marginTop: '3px' }} />
-                    <span style={{ fontSize: 'var(--text-small)', color: 'var(--color-text-secondary)', lineHeight: 1.5 }}>
-                      {item}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Scrap Anna Card */}
-            <div style={{
-              backgroundColor: 'var(--color-primary-yellow-light)',
-              borderRadius: 'var(--radius-lg)',
-              padding: '2.25rem',
-              border: '2px solid var(--color-primary-yellow)',
-              boxShadow: 'var(--shadow-md)',
-              position: 'relative'
-            }}>
-              <div style={{
-                position: 'absolute',
-                top: '-12px',
-                right: '1.5rem',
-                backgroundColor: 'var(--color-graphite-dark)',
-                color: 'var(--color-primary-yellow)',
-                fontSize: '0.75rem',
-                fontWeight: 700,
-                padding: '0.25rem 0.75rem',
-                borderRadius: 'var(--radius-pill)',
-                letterSpacing: '0.05em'
-              }}>
-                MODERN STANDARD
-              </div>
-
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '1.5rem' }}>
-                <div style={{
-                  width: '32px',
-                  height: '32px',
-                  borderRadius: '50%',
-                  backgroundColor: 'var(--color-primary-yellow)',
-                  color: 'var(--color-graphite-dark)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}>
-                  <CheckCircle2 size={20} strokeWidth={2.5} />
-                </div>
-                <h3 style={{ fontSize: '1.25rem', color: 'var(--color-graphite-dark)', margin: 0 }}>
-                  Scrap Anna Platform
-                </h3>
-              </div>
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                {comparisonData.scrapAnna.map((item, idx) => (
-                  <div key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
-                    <CheckCircle2 size={18} style={{ color: '#16A34A', flexShrink: 0, marginTop: '3px' }} />
-                    <span style={{ fontSize: 'var(--text-small)', color: 'var(--color-graphite-dark)', fontWeight: 500, lineHeight: 1.5 }}>
-                      {item}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      {/* MARKET PRICES PREVIEW SECTION */}
-      <section className="section bg-offwhite" style={{ borderTop: '1px solid var(--color-border)' }}>
-        <div className="container">
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1.2fr',
-            gap: '3.5rem',
-            alignItems: 'center'
-          }} className="price-preview-grid">
-            
-            {/* Left Description */}
-            <div>
-              <span className="badge badge-yellow" style={{ marginBottom: '1rem' }}>
-                Market Transparency
-              </span>
-              <h2 style={{ fontSize: 'var(--text-h2)', marginBottom: '1.25rem', color: 'var(--color-graphite-dark)' }}>
-                Know the Market.{' '}
-                <span className="text-yellow-highlight">Sell with Confidence.</span>
-              </h2>
-              <p style={{ fontSize: 'var(--text-body)', color: 'var(--color-text-secondary)', lineHeight: 1.7, marginBottom: '1.5rem' }}>
-                Scrap Anna provides indicative reference market pricing across metals, paper, polymers, and e-waste so you always know fair fair-market value before scheduling.
-              </p>
-
-              <div style={{
-                backgroundColor: 'var(--color-soft-yellow)',
-                border: '1px solid var(--color-soft-yellow-border)',
-                borderRadius: 'var(--radius-md)',
-                padding: '1rem 1.25rem',
-                marginBottom: '2rem'
-              }}>
-                <p style={{ fontSize: 'var(--text-small)', color: 'var(--color-graphite-dark)', margin: 0, lineHeight: 1.5 }}>
-                  <strong>Disclaimer:</strong> Prices are reference market rates and may vary based on location, material quality, quantity, and daily market movements.
-                </p>
-              </div>
-
-              <Button
-                to="/market-prices"
-                variant="primary"
-                size="lg"
-                icon={ArrowRight}
-              >
-                View Full Market Price Directory
-              </Button>
-            </div>
-
-            {/* Right Reference Rates Preview Table */}
-            <div style={{
-              backgroundColor: 'var(--color-white)',
-              borderRadius: 'var(--radius-lg)',
-              boxShadow: 'var(--shadow-md)',
-              border: '1px solid var(--color-border)',
-              overflow: 'hidden'
-            }}>
-              <div style={{
-                backgroundColor: 'var(--color-secondary-graphite)',
-                color: 'var(--color-white)',
-                padding: '1.25rem 1.5rem',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center'
-              }}>
-                <div style={{ fontWeight: 700, fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <TrendingUp size={18} style={{ color: 'var(--color-primary-yellow)' }} />
-                  <span>Reference Scrap Rates (Indicative)</span>
-                </div>
-                <span style={{ fontSize: '0.75rem', backgroundColor: 'rgba(255,255,255,0.15)', padding: '0.2rem 0.5rem', borderRadius: '4px' }}>
-                  Updated Daily
-                </span>
-              </div>
-
-              <div style={{ padding: '1rem 1.5rem' }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                  <thead>
-                    <tr style={{ borderBottom: '1px solid var(--color-border)' }}>
-                      <th style={{ textAlign: 'left', padding: '0.75rem 0', fontSize: '0.8rem', color: 'var(--color-text-muted)', textTransform: 'uppercase' }}>Material</th>
-                      <th style={{ textAlign: 'right', padding: '0.75rem 0', fontSize: '0.8rem', color: 'var(--color-text-muted)', textTransform: 'uppercase' }}>Est. Rate</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {[
-                      { material: "Copper Scrap (Armature/Heavy)", price: "₹650 - ₹720 / kg" },
-                      { material: "Aluminium Section / Extrusions", price: "₹140 - ₹170 / kg" },
-                      { material: "Iron / Heavy Melting Scrap", price: "₹28 - ₹34 / kg" },
-                      { material: "Old Corrugated Cardboard (OCC)", price: "₹12 - ₹15 / kg" },
-                      { material: "Computer CPU Motherboards", price: "₹180 - ₹240 / pc" }
-                    ].map((item, idx) => (
-                      <tr key={idx} style={{ borderBottom: idx < 4 ? '1px solid #F3F4F6' : 'none' }}>
-                        <td style={{ padding: '0.85rem 0', fontWeight: 600, color: 'var(--color-text-primary)', fontSize: '0.95rem' }}>
-                          {item.material}
-                        </td>
-                        <td style={{ padding: '0.85rem 0', textAlign: 'right', fontWeight: 700, color: 'var(--color-graphite-dark)', fontSize: '0.95rem' }}>
-                          {item.price}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-
-              <div style={{ backgroundColor: '#F9FAFB', padding: '0.75rem 1.5rem', borderTop: '1px solid var(--color-border)', textAlign: 'center' }}>
-                <Link to="/market-prices" style={{ fontSize: '0.85rem', fontWeight: 600, color: '#D97706' }}>
-                  See all 20+ materials & calculate estimated value →
-                </Link>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      {/* STATS / IMPACT BANNER (Directly below How It Works per reference) */}
-      <section className="section bg-white" style={{ paddingTop: '1rem', paddingBottom: '3.5rem' }}>
-        <div className="container">
-          <div 
-            style={{
-              backgroundColor: '#FFFBEB',
-              border: '1px solid #FDE68A',
-              borderRadius: '14px',
-              padding: '2.25rem 2rem',
-              display: 'grid',
-              gridTemplateColumns: 'repeat(4, 1fr)',
-              alignItems: 'center',
-              gap: '1rem',
-              boxShadow: '0 2px 10px rgba(249, 197, 28, 0.06)'
-            }}
-            className="stats-highlight-banner"
-          >
-            {[
-              {
-                icon: Users,
-                iconColor: "var(--color-primary-yellow)",
-                value: "10K+",
-                label: "Happy Households",
-                border: true
-              },
-              {
-                icon: Store,
-                iconColor: "#1F242D",
-                value: "2K+",
-                label: "Active Merchants",
-                border: true
-              },
-              {
-                icon: Factory,
-                iconColor: "#1F242D",
-                value: "500+",
-                label: "Industries Connected",
-                border: true
-              },
-              {
-                icon: Recycle,
-                iconColor: "var(--color-primary-yellow)",
-                value: "25K+",
-                label: "Tons of Scrap Recycled",
-                border: false
-              }
-            ].map((stat, idx) => {
-              const StatIcon = stat.icon;
-              return (
-                <div 
-                  key={idx}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '1rem',
-                    borderRight: stat.border ? '1px solid #FDE68A' : 'none',
-                    paddingRight: stat.border ? '1rem' : '0'
-                  }}
-                  className="stat-banner-item"
-                >
-                  <div style={{ color: stat.iconColor, flexShrink: 0 }}>
-                    <StatIcon size={42} strokeWidth={2} />
-                  </div>
-                  <div>
-                    <div style={{
-                      fontSize: '1.85rem',
-                      fontWeight: 800,
-                      color: '#1F242D',
-                      lineHeight: 1.1,
-                      letterSpacing: '-0.02em'
-                    }}>
-                      {stat.value}
-                    </div>
-                    <div style={{
-                      fontSize: '0.85rem',
-                      fontWeight: 500,
-                      color: '#4B5563',
-                      marginTop: '3px',
-                      whiteSpace: 'nowrap'
-                    }}>
-                      {stat.label}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
       {/* STARTING IN CHENNAI INITIAL LAUNCH SECTION */}
       <section className="section bg-white" style={{ paddingTop: '3.5rem', paddingBottom: '3.5rem', borderTop: '1px solid #E5E7EB' }}>
         <div className="container" style={{ maxWidth: '960px' }}>
@@ -1089,13 +775,9 @@ export default function HomePage() {
           color: #D97706 !important;
         }
         @media (max-width: 1024px) {
-          .hero-grid, .price-preview-grid {
+          .hero-grid {
             grid-template-columns: 1fr !important;
             gap: 2rem !important;
-          }
-          .comparison-grid {
-            grid-template-columns: 1fr !important;
-            gap: 1.5rem !important;
           }
           .how-it-works-timeline {
             flex-wrap: wrap !important;
@@ -1104,15 +786,6 @@ export default function HomePage() {
           }
           .timeline-arrow {
             display: none !important;
-          }
-          .stats-highlight-banner {
-            grid-template-columns: repeat(2, 1fr) !important;
-            gap: 1.75rem !important;
-          }
-          .stat-banner-item {
-            border-right: none !important;
-            justifyContent: flex-start !important;
-            padding-left: 1.5rem !important;
           }
           .hero-trust-chips {
             grid-template-columns: repeat(2, 1fr) !important;
@@ -1132,18 +805,8 @@ export default function HomePage() {
             border-radius: 12px;
             padding: 1.5rem 1.25rem;
           }
-          .comparison-grid {
-            grid-template-columns: 1fr !important;
-          }
         }
         @media (max-width: 640px) {
-          .stats-highlight-banner {
-            grid-template-columns: 1fr !important;
-            padding: 1.5rem !important;
-          }
-          .stat-banner-item {
-            padding-left: 0.5rem !important;
-          }
           .hero-trust-chips {
             grid-template-columns: repeat(2, 1fr) !important;
             gap: 0.75rem !important;
