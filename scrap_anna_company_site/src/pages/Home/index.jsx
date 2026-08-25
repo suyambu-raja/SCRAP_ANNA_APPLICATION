@@ -81,21 +81,24 @@ export default function HomePage() {
             paddingTop: '3rem',
             paddingBottom: '3rem'
           }}>
-            <div style={{ marginBottom: '0.75rem' }}>
+            <div style={{ marginBottom: '0.75rem' }} className="hero-badge-anim">
               <span className="badge badge-yellow" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.75rem', fontWeight: 700 }}>
                 <MapPin size={13} />
                 Launching in Chennai, Tamil Nadu
               </span>
             </div>
 
-            <h1 style={{
-              color: 'var(--color-graphite-dark)',
-              fontSize: 'clamp(2rem, 3.5vw, 3rem)',
-              lineHeight: 1.12,
-              marginBottom: '1rem',
-              letterSpacing: '-0.02em',
-              fontWeight: 800
-            }}>
+            <h1 
+              style={{
+                color: 'var(--color-graphite-dark)',
+                fontSize: 'clamp(2rem, 3.5vw, 3rem)',
+                lineHeight: 1.12,
+                marginBottom: '1rem',
+                letterSpacing: '-0.02em',
+                fontWeight: 800
+              }}
+              className="hero-headline-anim"
+            >
               Connecting Scrap.<br />
               Creating Value.<br />
               Building a{' '}
@@ -104,24 +107,30 @@ export default function HomePage() {
               </span>
             </h1>
 
-            <p style={{
-              fontSize: '0.9375rem',
-              color: 'var(--color-text-secondary)',
-              lineHeight: 1.6,
-              marginBottom: '1.5rem',
-              maxWidth: '460px'
-            }}>
+            <p 
+              style={{
+                fontSize: '0.9375rem',
+                color: 'var(--color-text-secondary)',
+                lineHeight: 1.6,
+                marginBottom: '1.5rem',
+                maxWidth: '460px'
+              }}
+              className="hero-desc-anim"
+            >
               Scrap Anna is starting its journey in Chennai, connecting households, merchants and industries on one digital platform for transparent transactions, fair prices and a cleaner future.
             </p>
 
             {/* Trust Points — 4 icons in a horizontal row */}
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(4, 1fr)',
-              gap: '0.5rem',
-              marginBottom: '1.75rem',
-              maxWidth: '460px'
-            }} className="hero-trust-chips">
+            <div 
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(4, 1fr)',
+                gap: '0.5rem',
+                marginBottom: '1.75rem',
+                maxWidth: '460px'
+              }} 
+              className="hero-trust-chips hero-trust-anim"
+            >
               {[
                 { icon: ShieldCheck, label: "Verified & Trusted Network" },
                 { icon: Receipt, label: "Digital Billing & Payments" },
@@ -153,7 +162,10 @@ export default function HomePage() {
             </div>
 
             {/* CTA Buttons */}
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', alignItems: 'center' }}>
+            <div 
+              style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', alignItems: 'center' }}
+              className="hero-cta-anim"
+            >
               <Button
                 variant="primary"
                 size="lg"
@@ -195,17 +207,106 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Right Hero Image — flush to right edge */}
-          <div style={{ 
-            display: 'flex', 
-            alignItems: 'flex-end', 
-            justifyContent: 'flex-end',
-            alignSelf: 'end',
-            overflow: 'hidden',
-            height: '100%',
-            padding: 0,
-            margin: 0
-          }}>
+          {/* Right Hero Image with Floating Decorative Badges */}
+          <div 
+            style={{ 
+              display: 'flex', 
+              alignItems: 'flex-end', 
+              justifyContent: 'flex-end',
+              alignSelf: 'end',
+              position: 'relative',
+              height: '100%',
+              padding: 0,
+              margin: 0
+            }}
+            className="hero-image-wrapper"
+          >
+            {/* Floating Element 1 (Top Left) */}
+            <div 
+              style={{
+                position: 'absolute',
+                top: '12%',
+                left: '6%',
+                zIndex: 2,
+                backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                backdropFilter: 'blur(8px)',
+                border: '1px solid #E5E7EB',
+                borderRadius: '12px',
+                padding: '0.5rem 0.85rem',
+                boxShadow: '0 8px 24px rgba(0, 0, 0, 0.08)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                pointerEvents: 'none'
+              }}
+              className="hero-float-chip-1"
+            >
+              <div style={{
+                width: '28px',
+                height: '28px',
+                borderRadius: '8px',
+                backgroundColor: '#1F242D',
+                color: 'var(--color-primary-yellow)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0
+              }}>
+                <Scale size={15} strokeWidth={2.2} />
+              </div>
+              <div>
+                <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#1F242D', lineHeight: 1.1 }}>
+                  Digital Weighing
+                </div>
+                <div style={{ fontSize: '0.62rem', color: '#6B7280', fontWeight: 600 }}>
+                  100% Calibrated Scales
+                </div>
+              </div>
+            </div>
+
+                        {/* Floating Element 2 (Top Right) */}
+            <div 
+              style={{
+                position: 'absolute',
+                top: '16%',
+                right: '6%',
+                zIndex: 2,
+                backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                backdropFilter: 'blur(8px)',
+                border: '1px solid #E5E7EB',
+                borderRadius: '12px',
+                padding: '0.5rem 0.85rem',
+                boxShadow: '0 8px 24px rgba(0, 0, 0, 0.08)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                pointerEvents: 'none'
+              }}
+              className="hero-float-chip-2"
+            >
+              <div style={{
+                width: '28px',
+                height: '28px',
+                borderRadius: '8px',
+                backgroundColor: '#1F242D',
+                color: 'var(--color-primary-yellow)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0
+              }}>
+                <Receipt size={15} strokeWidth={2.2} />
+              </div>
+              <div>
+                <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#1F242D', lineHeight: 1.1 }}>
+                  Instant Payout
+                </div>
+                <div style={{ fontSize: '0.62rem', color: '#6B7280', fontWeight: 600 }}>
+                  UPI & Digital Bill
+                </div>
+              </div>
+            </div>
+
             <img
               src={heroTruckImg}
               alt="Scrap Anna branded truck loaded with scrap metal, city skyline and barrels"
@@ -218,6 +319,7 @@ export default function HomePage() {
                 padding: 0,
                 margin: 0
               }}
+              className="hero-truck-anim"
               loading="eager"
             />
           </div>
@@ -297,23 +399,27 @@ export default function HomePage() {
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
-                    transition: 'all 0.25s ease'
+                    transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)'
                   }}
-                  className="audience-feature-card"
+                  className={`audience-feature-card audience-card-${idx}`}
                 >
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <div style={{
-                      width: '68px',
-                      height: '68px',
-                      borderRadius: '50%',
-                      backgroundColor: card.iconBg,
-                      color: card.iconColor,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      marginBottom: '1.5rem',
-                      boxShadow: '0 2px 6px rgba(0,0,0,0.06)'
-                    }}>
+                    <div 
+                      style={{
+                        width: '68px',
+                        height: '68px',
+                        borderRadius: '50%',
+                        backgroundColor: card.iconBg,
+                        color: card.iconColor,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        marginBottom: '1.5rem',
+                        boxShadow: '0 2px 6px rgba(0,0,0,0.06)',
+                        transition: 'transform 0.25s cubic-bezier(0.16, 1, 0.3, 1)'
+                      }}
+                      className="audience-icon-box"
+                    >
                       <IconComponent size={30} strokeWidth={2} />
                     </div>
 
@@ -359,112 +465,232 @@ export default function HomePage() {
             })}
           </div>
 
-          {/* Industry Scrap Multiple Offers Highlight Banner */}
+          {/* INDUSTRY "MULTIPLE OFFERS" ANIMATED WORKFLOW DIAGRAM */}
           <div style={{
-            marginTop: '2.5rem',
-            backgroundColor: '#FFF8DB',
-            border: '1.5px solid #FDE68A',
-            borderRadius: '14px',
-            padding: '1.5rem 1.75rem',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: '1.25rem',
-            boxShadow: '0 2px 10px rgba(249, 197, 28, 0.08)'
+            marginTop: '3rem',
+            backgroundColor: '#1F242D',
+            border: '1px solid #374151',
+            borderRadius: '16px',
+            padding: '2rem 2.25rem',
+            boxShadow: '0 8px 30px rgba(0, 0, 0, 0.12)',
+            color: '#FFFFFF',
+            position: 'relative',
+            overflow: 'hidden'
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flex: '1 1 480px' }}>
-              <div style={{
-                width: '46px',
-                height: '46px',
-                borderRadius: '10px',
-                backgroundColor: 'var(--color-primary-yellow)',
-                color: '#1F242D',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexShrink: 0
-              }}>
-                <Factory size={24} />
-              </div>
+            {/* Header / Intro */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: '1rem',
+              marginBottom: '2rem',
+              borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+              paddingBottom: '1.25rem'
+            }}>
               <div>
-                <h4 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#1F242D', margin: '0 0 0.25rem 0' }}>
-                  Industries. Multiple Offers. Your Choice.
-                </h4>
-                <p style={{ fontSize: '0.9rem', color: '#4B5563', margin: 0, lineHeight: 1.5 }}>
-                  Post your scrap once and receive offers from nearby merchants. Compare prices and pickup timing, then choose what works best for you.
-                </p>
+                <span style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.4rem',
+                  fontSize: '0.75rem',
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.06em',
+                  color: 'var(--color-primary-yellow)',
+                  backgroundColor: 'rgba(249, 197, 28, 0.12)',
+                  padding: '0.3rem 0.75rem',
+                  borderRadius: '6px',
+                  marginBottom: '0.5rem'
+                }}>
+                  <Factory size={13} />
+                  Exclusive Industry Feature
+                </span>
+                <h3 style={{ fontSize: '1.35rem', fontWeight: 800, color: '#FFFFFF', margin: 0 }}>
+                  Multiple Merchant Offers Flow Directly to You
+                </h3>
               </div>
+
+              <Link
+                to="/industries"
+                style={{
+                  backgroundColor: 'var(--color-primary-yellow)',
+                  color: '#1F242D',
+                  fontWeight: 700,
+                  fontSize: '0.875rem',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.45rem',
+                  textDecoration: 'none',
+                  padding: '0.65rem 1.25rem',
+                  borderRadius: '8px',
+                  transition: 'all 0.15s ease'
+                }}
+                className="cta-primary-btn"
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#E5B214'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'var(--color-primary-yellow)'}
+              >
+                <span>Explore Industry Bidding</span>
+                <ArrowRight size={15} className="cta-btn-arrow" />
+              </Link>
             </div>
 
-            <Link
-              to="/industries"
-              style={{
-                backgroundColor: '#1F242D',
-                color: '#FFFFFF',
-                fontWeight: 700,
-                fontSize: '0.875rem',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.4rem',
-                textDecoration: 'none',
-                padding: '0.65rem 1.25rem',
-                borderRadius: '8px',
-                transition: 'all 0.15s ease'
-              }}
-              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#374151'}
-              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#1F242D'}
-            >
-              <span>Explore Industry Bidding</span>
-              <ArrowRight size={15} style={{ color: 'var(--color-primary-yellow)' }} />
-            </Link>
-          </div>
-
-          {/* Accessibility Highlight Strip */}
-          <div style={{
-            marginTop: '1.25rem',
-            backgroundColor: '#F9FAFB',
-            border: '1px solid #E5E7EB',
-            borderRadius: '12px',
-            padding: '1rem 1.5rem',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: '0.75rem'
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            {/* Interactive 3-Stage Workflow Architecture */}
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr auto 1.4fr auto 1fr',
+              alignItems: 'center',
+              gap: '1rem'
+            }} className="industry-workflow-grid">
+              
+              {/* Stage 1: Post Scrap */}
               <div style={{
-                width: '32px',
-                height: '32px',
-                borderRadius: '6px',
-                backgroundColor: '#FFF3C4',
-                color: '#92400E',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexShrink: 0
+                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                border: '1px solid rgba(255, 255, 255, 0.12)',
+                borderRadius: '12px',
+                padding: '1.25rem 1rem',
+                textAlign: 'center'
               }}>
-                <Languages size={18} />
+                <div style={{
+                  width: '42px',
+                  height: '42px',
+                  borderRadius: '10px',
+                  backgroundColor: 'rgba(249, 197, 28, 0.15)',
+                  color: 'var(--color-primary-yellow)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  margin: '0 auto 0.75rem auto'
+                }}>
+                  <Factory size={22} />
+                </div>
+                <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--color-primary-yellow)', textTransform: 'uppercase', marginBottom: '0.2rem' }}>
+                  Step 1
+                </div>
+                <div style={{ fontSize: '0.95rem', fontWeight: 800, color: '#FFFFFF', marginBottom: '0.35rem' }}>
+                  Industry Posts Scrap
+                </div>
+                <div style={{ fontSize: '0.75rem', color: '#9CA3AF', lineHeight: 1.4 }}>
+                  Post scrap specifications, grade & quantity once.
+                </div>
               </div>
-              <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#374151' }}>
-                Designed for Easy Access: <strong>Tamil + English | Tamil Voice Assistance | Voice Call Support</strong>
-              </span>
+
+              {/* Animated Connector Arrow 1 */}
+              <div style={{ color: 'var(--color-primary-yellow)', display: 'flex', justifyContent: 'center' }} className="flow-arrow-pulse">
+                <ArrowRight size={22} strokeWidth={2.2} />
+              </div>
+
+              {/* Stage 2: Competing Merchant Offers */}
+              <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.65rem'
+              }}>
+                {/* Offer A */}
+                <div style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  borderRadius: '10px',
+                  padding: '0.65rem 0.95rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: '0.5rem',
+                  transition: 'all 0.2s ease'
+                }} className="offer-card-hover">
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <Store size={15} style={{ color: '#9CA3AF' }} />
+                    <span style={{ fontSize: '0.8rem', color: '#E5E7EB', fontWeight: 600 }}>Merchant 1</span>
+                  </div>
+                  <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#FFFFFF', backgroundColor: 'rgba(255,255,255,0.1)', padding: '0.2rem 0.5rem', borderRadius: '4px' }}>
+                    ₹38.50/kg
+                  </span>
+                </div>
+
+                {/* Offer B (Best Highlight) */}
+                <div style={{
+                  backgroundColor: 'rgba(249, 197, 28, 0.12)',
+                  border: '1.5px solid var(--color-primary-yellow)',
+                  borderRadius: '10px',
+                  padding: '0.7rem 0.95rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: '0.5rem',
+                  boxShadow: '0 0 16px rgba(249, 197, 28, 0.15)'
+                }} className="offer-card-highlight">
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <Store size={15} style={{ color: 'var(--color-primary-yellow)' }} />
+                    <div>
+                      <span style={{ fontSize: '0.8rem', color: '#FFFFFF', fontWeight: 700 }}>Merchant 2</span>
+                      <span style={{ display: 'block', fontSize: '0.65rem', color: 'var(--color-primary-yellow)', fontWeight: 600 }}>Best Offer • Fast Pickup</span>
+                    </div>
+                  </div>
+                  <span style={{ fontSize: '0.92rem', fontWeight: 800, color: '#1F242D', backgroundColor: 'var(--color-primary-yellow)', padding: '0.25rem 0.6rem', borderRadius: '5px' }}>
+                    ₹39.20/kg ⭐
+                  </span>
+                </div>
+
+                {/* Offer C */}
+                <div style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  borderRadius: '10px',
+                  padding: '0.65rem 0.95rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: '0.5rem',
+                  transition: 'all 0.2s ease'
+                }} className="offer-card-hover">
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <Store size={15} style={{ color: '#9CA3AF' }} />
+                    <span style={{ fontSize: '0.8rem', color: '#E5E7EB', fontWeight: 600 }}>Merchant 3</span>
+                  </div>
+                  <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#FFFFFF', backgroundColor: 'rgba(255,255,255,0.1)', padding: '0.2rem 0.5rem', borderRadius: '4px' }}>
+                    ₹38.80/kg
+                  </span>
+                </div>
+              </div>
+
+              {/* Animated Connector Arrow 2 */}
+              <div style={{ color: 'var(--color-primary-yellow)', display: 'flex', justifyContent: 'center' }} className="flow-arrow-pulse">
+                <ArrowRight size={22} strokeWidth={2.2} />
+              </div>
+
+              {/* Stage 3: Industry Selection */}
+              <div style={{
+                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                border: '1px solid rgba(255, 255, 255, 0.12)',
+                borderRadius: '12px',
+                padding: '1.25rem 1rem',
+                textAlign: 'center'
+              }}>
+                <div style={{
+                  width: '42px',
+                  height: '42px',
+                  borderRadius: '10px',
+                  backgroundColor: 'rgba(249, 197, 28, 0.15)',
+                  color: 'var(--color-primary-yellow)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  margin: '0 auto 0.75rem auto'
+                }}>
+                  <UserCheck size={22} />
+                </div>
+                <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--color-primary-yellow)', textTransform: 'uppercase', marginBottom: '0.2rem' }}>
+                  Step 2
+                </div>
+                <div style={{ fontSize: '0.95rem', fontWeight: 800, color: '#FFFFFF', marginBottom: '0.35rem' }}>
+                  You Choose & Schedule
+                </div>
+                <div style={{ fontSize: '0.75rem', color: '#9CA3AF', lineHeight: 1.4 }}>
+                  Compare price, timing & feedback, then confirm with 1 tap.
+                </div>
+              </div>
+
             </div>
-            <Link
-              to="/how-it-works"
-              style={{
-                fontSize: '0.8rem',
-                fontWeight: 700,
-                color: '#D97706',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.25rem'
-              }}
-            >
-              <span>See How It Works</span>
-              <ArrowRight size={13} />
-            </Link>
           </div>
         </div>
       </section>
@@ -611,6 +837,184 @@ export default function HomePage() {
               );
             })}
           </div>
+
+          {/* ACCESSIBILITY & INCLUSIVE DESIGN SHOWCASE */}
+          <div style={{
+            marginTop: '3.5rem',
+            backgroundColor: '#F9FAFB',
+            border: '1.5px solid #E5E7EB',
+            borderRadius: '16px',
+            padding: '2rem 2.25rem',
+            display: 'grid',
+            gridTemplateColumns: '1.1fr 1.9fr',
+            gap: '2rem',
+            alignItems: 'center',
+            boxShadow: '0 2px 12px rgba(0, 0, 0, 0.04)'
+          }} className="accessibility-card-grid">
+            <div>
+              <span style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.4rem',
+                fontSize: '0.75rem',
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                color: '#92400E',
+                backgroundColor: '#FFF3C4',
+                padding: '0.3rem 0.75rem',
+                borderRadius: '6px',
+                marginBottom: '0.75rem'
+              }}>
+                <Languages size={14} />
+                Accessibility & Easy Access
+              </span>
+              <h3 style={{
+                fontSize: '1.35rem',
+                fontWeight: 800,
+                color: '#1F242D',
+                margin: '0 0 0.5rem 0',
+                lineHeight: 1.25
+              }}>
+                Designed for Everyone in Tamil Nadu
+              </h3>
+              <p style={{
+                fontSize: '0.9rem',
+                color: '#4B5563',
+                lineHeight: 1.6,
+                margin: '0 0 1.25rem 0'
+              }}>
+                No complicated steps or language barriers. Whether you prefer reading in Tamil, using voice queries, or speaking on the phone, Scrap Anna is built for every resident, merchant and elder.
+              </p>
+              <Link
+                to="/how-it-works"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.45rem',
+                  fontSize: '0.85rem',
+                  fontWeight: 700,
+                  color: '#D97706',
+                  textDecoration: 'none',
+                  transition: 'gap 0.15s ease'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.gap = '0.7rem'}
+                onMouseLeave={(e) => e.currentTarget.style.gap = '0.45rem'}
+              >
+                <span>Explore Full Step-by-Step Flow</span>
+                <ArrowRight size={15} />
+              </Link>
+            </div>
+
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(3, 1fr)',
+              gap: '1rem'
+            }} className="accessibility-pills-grid">
+              {/* Feature 1: Bilingual (தமிழ் ↔ English) */}
+              <div style={{
+                backgroundColor: '#FFFFFF',
+                border: '1px solid #E5E7EB',
+                borderRadius: '12px',
+                padding: '1.25rem 1rem',
+                boxShadow: '0 2px 6px rgba(0,0,0,0.03)',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.4rem',
+                transition: 'transform 0.2s ease'
+              }} className="accessibility-pill-card">
+                <div style={{
+                  width: '38px',
+                  height: '38px',
+                  borderRadius: '8px',
+                  backgroundColor: '#FFFBEB',
+                  color: '#D97706',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginBottom: '0.35rem'
+                }}>
+                  <Languages size={19} />
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                  <div style={{ fontSize: '0.9rem', fontWeight: 800, color: '#1F242D' }}>
+                    தமிழ்  ↔  English
+                  </div>
+                </div>
+                <div style={{ fontSize: '0.75rem', color: '#6B7280', lineHeight: 1.45 }}>
+                  Full native bilingual interface with everyday vernacular terms.
+                </div>
+              </div>
+
+              {/* Feature 2: Tamil Voice Assistance (Subtle Pulsing Ring) */}
+              <div style={{
+                backgroundColor: '#FFFFFF',
+                border: '1px solid #E5E7EB',
+                borderRadius: '12px',
+                padding: '1.25rem 1rem',
+                boxShadow: '0 2px 6px rgba(0,0,0,0.03)',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.4rem',
+                transition: 'transform 0.2s ease'
+              }} className="accessibility-pill-card">
+                <div 
+                  style={{
+                    width: '38px',
+                    height: '38px',
+                    borderRadius: '8px',
+                    backgroundColor: '#FFF3C4',
+                    color: '#92400E',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: '0.35rem'
+                  }}
+                  className="mic-pulse-ring"
+                >
+                  <Mic size={19} />
+                </div>
+                <div style={{ fontSize: '0.9rem', fontWeight: 800, color: '#1F242D' }}>
+                  Tamil Voice Help
+                </div>
+                <div style={{ fontSize: '0.75rem', color: '#6B7280', lineHeight: 1.45 }}>
+                  Spoken Tamil voice assistance & audio guidance for every step.
+                </div>
+              </div>
+
+              {/* Feature 3: Voice Call Support */}
+              <div style={{
+                backgroundColor: '#FFFFFF',
+                border: '1px solid #E5E7EB',
+                borderRadius: '12px',
+                padding: '1.25rem 1rem',
+                boxShadow: '0 2px 6px rgba(0,0,0,0.03)',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.4rem'
+              }}>
+                <div style={{
+                  width: '38px',
+                  height: '38px',
+                  borderRadius: '8px',
+                  backgroundColor: '#EFF6FF',
+                  color: '#2563EB',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginBottom: '0.35rem'
+                }}>
+                  <Phone size={19} />
+                </div>
+                <div style={{ fontSize: '0.9rem', fontWeight: 800, color: '#1F242D' }}>
+                  Voice Call Support
+                </div>
+                <div style={{ fontSize: '0.75rem', color: '#6B7280', lineHeight: 1.45 }}>
+                  One-tap phone assistance for elders and small merchants.
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -651,9 +1055,7 @@ export default function HomePage() {
                     marginBottom: '1.25rem'
                   }}>
                     <Icon size={24} />
-                  </div>
-
-                  <h3 style={{ color: 'var(--color-white)', fontSize: '1.25rem', marginBottom: '0.75rem' }}>
+                  </div>                  <h3 style={{ color: 'var(--color-white)', fontSize: '1.25rem', marginBottom: '0.75rem' }}>
                     {feat.title}
                   </h3>
 
@@ -733,6 +1135,7 @@ export default function HomePage() {
             <div>
               <button
                 onClick={() => openJoinModal('household')}
+                className="cta-primary-btn"
                 style={{
                   backgroundColor: '#1F242D',
                   color: '#FFFFFF',
@@ -745,7 +1148,7 @@ export default function HomePage() {
                   whiteSpace: 'nowrap',
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: '0.45rem',
+                  gap: '0.5rem',
                   boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
                   transition: 'background-color 0.15s ease'
                 }}
@@ -753,7 +1156,7 @@ export default function HomePage() {
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#1F242D'}
               >
                 <span>Join Scrap Anna</span>
-                <ArrowRight size={16} />
+                <ArrowRight size={16} className="cta-btn-arrow" />
               </button>
             </div>
           </div>
@@ -763,8 +1166,173 @@ export default function HomePage() {
       {/* FINAL CTA SECTION */}
       <CTASection onJoinClick={() => openJoinModal('household')} />
 
-      {/* Responsive CSS */}
+      {/* Responsive & Animation CSS */}
       <style>{`
+        /* Staggered card entrance for Who is Scrap Anna For? */
+        .audience-card-0 { animation: heroFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s backwards; }
+        .audience-card-1 { animation: heroFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.22s backwards; }
+        .audience-card-2 { animation: heroFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.34s backwards; }
+        .audience-card-3 { animation: heroFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.46s backwards; }
+
+        .audience-feature-card:hover {
+          transform: translateY(-6px);
+          box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08) !important;
+          border-color: #D1D5DB !important;
+        }
+        .audience-feature-card:hover .audience-icon-box {
+          transform: scale(1.08);
+        }
+
+        /* Industry Multiple Offers Animation */
+        @keyframes flowPulse {
+          0% { transform: translateX(0); opacity: 0.6; }
+          50% { transform: translateX(4px); opacity: 1; }
+          100% { transform: translateX(0); opacity: 0.6; }
+        }
+        .flow-arrow-pulse {
+          animation: flowPulse 2s ease-in-out infinite;
+        }
+        .offer-card-hover:hover {
+          background-color: rgba(255, 255, 255, 0.1) !important;
+          transform: translateX(2px);
+        }
+
+        /* Timeline Step Item Animation */
+        .timeline-step-item {
+          transition: transform 0.2s ease;
+        }
+        .timeline-step-item:hover {
+          transform: translateY(-4px);
+        }
+
+        /* Subtle Microphone Pulse Ring (No distracting constant movement) */
+        @keyframes micPulseRing {
+          0% {
+            box-shadow: 0 0 0 0 rgba(217, 119, 6, 0.4);
+          }
+          70% {
+            box-shadow: 0 0 0 8px rgba(217, 119, 6, 0);
+          }
+          100% {
+            box-shadow: 0 0 0 0 rgba(217, 119, 6, 0);
+          }
+        }
+        .mic-pulse-ring {
+          animation: micPulseRing 2.4s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+        }
+
+        .accessibility-pill-card:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06) !important;
+        }
+
+        @media (max-width: 900px) {
+          .industry-workflow-grid {
+            grid-template-columns: 1fr !important;
+            gap: 1.25rem !important;
+          }
+          .flow-arrow-pulse {
+            transform: rotate(90deg);
+          }
+        }
+
+        /* Hero Entrance Keyframes */
+        @keyframes heroFadeUp {
+          from {
+            opacity: 0;
+            transform: translateY(22px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes heroTruckEntrance {
+          from {
+            opacity: 0;
+            transform: translateX(45px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+
+        /* Subtle Floating Keyframes */
+        @keyframes floatGentle1 {
+          0% {
+            transform: translateY(0px);
+          }
+          50% {
+            transform: translateY(-8px);
+          }
+          100% {
+            transform: translateY(0px);
+          }
+        }
+
+        @keyframes floatGentle2 {
+          0% {
+            transform: translateY(0px);
+          }
+          50% {
+            transform: translateY(7px);
+          }
+          100% {
+            transform: translateY(0px);
+          }
+        }
+
+        @keyframes floatGentle3 {
+          0% {
+            transform: translateY(0px);
+          }
+          50% {
+            transform: translateY(-6px);
+          }
+          100% {
+            transform: translateY(0px);
+          }
+        }
+
+        /* Hero Animation Classes */
+        .hero-badge-anim {
+          animation: heroFadeUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.05s backwards;
+        }
+
+        .hero-headline-anim {
+          animation: heroFadeUp 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.15s backwards;
+        }
+
+        .hero-desc-anim {
+          animation: heroFadeUp 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.28s backwards;
+        }
+
+        .hero-trust-anim {
+          animation: heroFadeUp 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.38s backwards;
+        }
+
+        .hero-cta-anim {
+          animation: heroFadeUp 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.48s backwards;
+        }
+
+        .hero-truck-anim {
+          animation: heroTruckEntrance 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s backwards;
+        }
+
+        .hero-float-chip-1 {
+          animation: heroFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.6s backwards, floatGentle1 4s ease-in-out 1.4s infinite;
+        }
+
+        .hero-float-chip-2 {
+          animation: heroFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.75s backwards, floatGentle2 4.6s ease-in-out 1.55s infinite;
+        }
+
+        .hero-float-chip-3 {
+          animation: heroFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.9s backwards, floatGentle3 3.8s ease-in-out 1.7s infinite;
+        }
+
         .audience-feature-card:hover {
           transform: translateY(-4px);
           box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08) !important;
@@ -774,7 +1342,20 @@ export default function HomePage() {
           gap: 0.6rem !important;
           color: #D97706 !important;
         }
+        .cta-primary-btn .cta-btn-arrow {
+          transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .cta-primary-btn:hover .cta-btn-arrow {
+          transform: translateX(4px);
+        }
         @media (max-width: 1024px) {
+          .accessibility-card-grid {
+            grid-template-columns: 1fr !important;
+            gap: 1.5rem !important;
+          }
+          .accessibility-pills-grid {
+            grid-template-columns: repeat(3, 1fr) !important;
+          }
           .hero-grid {
             grid-template-columns: 1fr !important;
             gap: 2rem !important;
@@ -805,8 +1386,15 @@ export default function HomePage() {
             border-radius: 12px;
             padding: 1.5rem 1.25rem;
           }
+          .hero-float-chip-1, .hero-float-chip-2, .hero-float-chip-3 {
+            display: none !important;
+          }
         }
         @media (max-width: 640px) {
+          .accessibility-pills-grid {
+            grid-template-columns: 1fr !important;
+            gap: 0.75rem !important;
+          }
           .hero-trust-chips {
             grid-template-columns: repeat(2, 1fr) !important;
             gap: 0.75rem !important;

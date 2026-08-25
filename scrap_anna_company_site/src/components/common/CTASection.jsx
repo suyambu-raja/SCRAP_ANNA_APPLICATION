@@ -5,7 +5,7 @@ import { ArrowRight } from 'lucide-react';
 export default function CTASection({
   title,
   description = "Together, let's build a cleaner, efficient and sustainable future.",
-  primaryText = "Join Scrap Anna Today",
+  primaryText = "Join Scrap Anna",
   secondaryText = "Contact Us",
   onJoinClick,
   className = ""
@@ -134,6 +134,7 @@ export default function CTASection({
           >
             <button
               onClick={onJoinClick ? onJoinClick : undefined}
+              className="cta-primary-btn"
               style={{
                 backgroundColor: 'var(--color-primary-yellow)',
                 color: '#1F242D',
@@ -144,7 +145,7 @@ export default function CTASection({
                 border: 'none',
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '0.45rem',
+                gap: '0.5rem',
                 cursor: 'pointer',
                 transition: 'all 0.2s ease',
                 whiteSpace: 'nowrap',
@@ -154,7 +155,7 @@ export default function CTASection({
               onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'var(--color-primary-yellow)'}
             >
               <span>{primaryText}</span>
-              <ArrowRight size={16} strokeWidth={2.5} />
+              <ArrowRight size={16} strokeWidth={2.5} className="cta-btn-arrow" />
             </button>
 
             <Link
@@ -191,6 +192,12 @@ export default function CTASection({
       </div>
 
       <style>{`
+        .cta-primary-btn .cta-btn-arrow {
+          transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .cta-primary-btn:hover .cta-btn-arrow {
+          transform: translateX(4px);
+        }
         @media (max-width: 860px) {
           .cta-banner-card {
             flex-direction: column !important;
@@ -204,7 +211,7 @@ export default function CTASection({
           .cta-btn-group > * {
             flex: 1 1 auto;
             text-align: center;
-            justify-content: center;
+            justifyContent: center;
           }
         }
       `}</style>

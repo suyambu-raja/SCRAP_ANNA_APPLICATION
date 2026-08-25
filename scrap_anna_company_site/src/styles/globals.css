@@ -171,6 +171,16 @@ button, input, select, textarea {
 .btn:hover { transform: translateY(-1px); }
 .btn:active { transform: translateY(0); }
 
+.btn svg,
+.cta-btn-arrow {
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn:hover svg:last-child,
+.cta-primary-btn:hover .cta-btn-arrow {
+  transform: translateX(4px);
+}
+
 .btn-primary {
   background-color: var(--color-primary-yellow);
   color: var(--color-graphite-dark);

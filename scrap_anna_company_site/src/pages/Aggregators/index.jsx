@@ -1,7 +1,7 @@
 import React from 'react';
 import { 
-  Network, Layers, TrendingUp, ShieldCheck, CheckCircle2, 
-  ArrowRight, Factory, Scale, FileCheck, Share2 
+  Network, Factory, Scale, ShieldCheck, CheckCircle2, 
+  ArrowRight, Layers, Truck, FileCheck
 } from 'lucide-react';
 import SEO from '../../components/common/SEO';
 import PageHero from '../../components/common/PageHero';
@@ -13,36 +13,39 @@ import { useJoinModal } from '../../components/layout/Layout';
 export default function AggregatorsPage() {
   const { openJoinModal } = useJoinModal();
 
-  const aggregatorBenefits = [
+  const keyBenefits = [
     {
       icon: Network,
       title: "Consolidated Merchant Supply",
-      desc: "Tap into an aggregated pipeline of sorted scrap batches from hundreds of verified local merchants across Tamil Nadu."
+      desc: "Tap into an aggregated pipeline of sorted scrap batches from verified neighborhood merchants across Tamil Nadu."
     },
     {
       icon: Factory,
       title: "Direct Mill & Smelter Offtake",
-      desc: "Connect bulk consolidated quantities directly with secondary steel plants, paper rolling mills, and polymer recycling units."
-    },
-    {
-      icon: Layers,
-      title: "High-Volume Consignment Lots",
-      desc: "Access exclusive multi-ton industrial auction lots and commercial plant disposals directly via our digital platform."
-    },
-    {
-      icon: Scale,
-      title: "Quality Grading & Baling Efficiency",
-      desc: "Improve sorting turnaround with pre-classified material streams and verified merchant quality scores."
+      desc: "Connect bulk consolidated quantities directly with secondary steel plants, paper rolling mills, and polymer recyclers."
     },
     {
       icon: FileCheck,
-      title: "Digital Supply Chain Visibility",
-      desc: "Track multi-truck dispatches, digital e-way bills, and consignment weighing records in real-time."
+      title: "Digital Supply & Fast Settlement",
+      desc: "Standardized digital manifests, verified weights, e-way bills, and transparent payment clearing for large lots."
+    }
+  ];
+
+  const simpleWorkflow = [
+    {
+      num: "01",
+      title: "Consolidate Supply",
+      desc: "Aggregate sorted scrap batches from local neighborhood collection merchants."
     },
     {
-      icon: TrendingUp,
-      title: "Competitive Wholesale Arbitrage",
-      desc: "Unlock superior economies of scale with predictable material inflow and transparent reference market pricing."
+      num: "02",
+      title: "Grade & Bale",
+      desc: "Process scrap lots into high-density bales, shredded bundles, or classified metal grades."
+    },
+    {
+      num: "03",
+      title: "Fulfill Mill Contracts",
+      desc: "Supply bulk volumes directly to verified secondary manufacturers with complete digital records."
     }
   ];
 
@@ -70,17 +73,17 @@ export default function AggregatorsPage() {
         }}
       />
 
-      {/* STRATEGIC ADVANTAGES */}
+      {/* 3 KEY BENEFITS */}
       <section className="section bg-white">
         <div className="container">
           <SectionHeader
-            eyebrow="Scale & Consolidation"
-            title="Empowering Bulk Scrap Yards & Processing Hubs"
-            subtitle="Bridging the critical gap between grassroots collection networks and large industrial recyclers."
+            eyebrow="Aggregator Advantages"
+            title="Scale Your Bulk Scrap Operations"
+            subtitle="Bridging the gap between grassroots collection networks and large industrial recyclers."
           />
 
           <div className="grid-3">
-            {aggregatorBenefits.map((item, idx) => {
+            {keyBenefits.map((item, idx) => {
               const Icon = item.icon;
               return (
                 <div key={idx} className="card card-hover" style={{ backgroundColor: 'var(--color-offwhite)' }}>
@@ -111,64 +114,115 @@ export default function AggregatorsPage() {
         </div>
       </section>
 
-      {/* STRATEGIC PARTNERSHIP VALUE */}
-      <section className="section bg-graphite-dark text-white" style={{ borderTop: '1px solid #374151' }}>
+      {/* SIMPLE WORKFLOW */}
+      <section className="section bg-offwhite" style={{ borderTop: '1px solid var(--color-border)', borderBottom: '1px solid var(--color-border)' }}>
         <div className="container">
-          <div style={{
-            maxWidth: '860px',
-            margin: '0 auto',
-            textAlign: 'center'
-          }}>
-            <span className="badge badge-dark" style={{ marginBottom: '1.25rem' }}>
-              B2B Scrap Distribution
-            </span>
-            <h2 style={{ fontSize: 'var(--text-h2)', color: 'var(--color-white)', marginBottom: '1.25rem' }}>
-              Why Scrap Anna is the Preferred Partner for Aggregators
-            </h2>
-            <p style={{ fontSize: 'var(--text-body-lg)', color: '#D1D5DB', lineHeight: 1.7, marginBottom: '2.5rem' }}>
-              Instead of relying on unstable informal supply chains with volatile grading, Scrap Anna gives you structured volume, standardized digital paperwork, and direct linkages to verified secondary manufacturers.
-            </p>
+          <SectionHeader
+            eyebrow="Simple Workflow"
+            title="How Aggregation Hubs Work"
+            subtitle="From merchant intake to high-volume industrial dispatch."
+          />
 
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(3, 1fr)',
-              gap: '1.5rem',
-              textAlign: 'left',
-              marginBottom: '2.5rem'
-            }} className="aggregator-stats-grid">
-              <div style={{ backgroundColor: 'rgba(255, 255, 255, 0.05)', padding: '1.5rem', borderRadius: 'var(--radius-md)', border: '1px solid rgba(255,255,255,0.1)' }}>
-                <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--color-primary-yellow)', marginBottom: '0.25rem' }}>
-                  100%
-                </div>
-                <div style={{ fontWeight: 700, fontSize: '0.95rem', marginBottom: '0.25rem' }}>Digital Provenance</div>
-                <div style={{ fontSize: '0.8rem', color: '#9CA3AF' }}>Complete traceability of scrap origin for recycling certifications.</div>
+          <div className="grid-3" style={{ gap: '1.5rem', maxWidth: '1000px', margin: '0 auto 2.5rem auto' }}>
+            {simpleWorkflow.map((step, idx) => (
+              <div
+                key={idx}
+                style={{
+                  backgroundColor: '#FFFFFF',
+                  border: '1px solid #E5E7EB',
+                  borderRadius: '14px',
+                  padding: '1.75rem 1.5rem',
+                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.03)'
+                }}
+              >
+                <span style={{
+                  fontSize: '0.8rem',
+                  fontWeight: 800,
+                  color: '#92400E',
+                  backgroundColor: '#FEF3C7',
+                  padding: '0.2rem 0.55rem',
+                  borderRadius: '6px',
+                  display: 'inline-block',
+                  marginBottom: '1rem',
+                  fontFamily: 'monospace'
+                }}>
+                  {step.num}
+                </span>
+                <h4 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#1F242D', marginBottom: '0.45rem' }}>
+                  {step.title}
+                </h4>
+                <p style={{ fontSize: '0.875rem', color: '#6B7280', lineHeight: 1.6, margin: 0 }}>
+                  {step.desc}
+                </p>
               </div>
+            ))}
+          </div>
 
-              <div style={{ backgroundColor: 'rgba(255, 255, 255, 0.05)', padding: '1.5rem', borderRadius: 'var(--radius-md)', border: '1px solid rgba(255,255,255,0.1)' }}>
-                <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--color-primary-yellow)', marginBottom: '0.25rem' }}>
-                  Multi-Category
-                </div>
-                <div style={{ fontWeight: 700, fontSize: '0.95rem', marginBottom: '0.25rem' }}>Ferrous & Non-Ferrous</div>
-                <div style={{ fontSize: '0.8rem', color: '#9CA3AF' }}>Access segregated metals, polymers, OCC paper, and e-waste.</div>
-              </div>
-
-              <div style={{ backgroundColor: 'rgba(255, 255, 255, 0.05)', padding: '1.5rem', borderRadius: 'var(--radius-md)', border: '1px solid rgba(255,255,255,0.1)' }}>
-                <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--color-primary-yellow)', marginBottom: '0.25rem' }}>
-                  Verified
-                </div>
-                <div style={{ fontWeight: 700, fontSize: '0.95rem', marginBottom: '0.25rem' }}>Fast Settlements</div>
-                <div style={{ fontSize: '0.8rem', color: '#9CA3AF' }}>Automated invoice generation and transparent payment clearing.</div>
-              </div>
-            </div>
-
+          <div style={{ textAlign: 'center' }}>
             <Button
               variant="primary"
               size="lg"
               icon={ArrowRight}
               onClick={() => openJoinModal('aggregator')}
             >
-              Partner as an Aggregator
+              Join as Aggregator Partner
             </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* PARTNER VERIFICATION DETAILS */}
+      <section className="section bg-white">
+        <div className="container" style={{ maxWidth: '920px' }}>
+          <div style={{
+            backgroundColor: '#FFF8DB',
+            border: '1.5px solid #FDE68A',
+            borderRadius: '16px',
+            padding: '2.5rem',
+            boxShadow: '0 4px 16px rgba(249, 197, 28, 0.08)'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
+              <div style={{
+                width: '42px',
+                height: '42px',
+                borderRadius: '10px',
+                backgroundColor: 'var(--color-primary-yellow)',
+                color: '#1F242D',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0
+              }}>
+                <ShieldCheck size={24} />
+              </div>
+              <h3 style={{ fontSize: '1.35rem', fontWeight: 800, color: '#1F242D', margin: 0 }}>
+                Partner Verification & Quality Standards
+              </h3>
+            </div>
+
+            <p style={{ fontSize: '0.95rem', color: '#4B5563', lineHeight: 1.6, marginBottom: '1.5rem' }}>
+              To maintain integrity across the supply chain, aggregator partners undergo swift verification for infrastructure, weighing accuracy, and statutory compliance:
+            </p>
+
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: '1rem'
+            }} className="verification-grid">
+              {[
+                "Weighbridge and platform scale calibration certification",
+                "Storage yard capacity and material segregation facilities",
+                "GST registration and commercial tax compliance",
+                "Environmental clearances for statutory audit manifests"
+              ].map((item, idx) => (
+                <div key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.65rem' }}>
+                  <CheckCircle2 size={18} style={{ color: '#16A34A', flexShrink: 0, marginTop: '2px' }} strokeWidth={2.5} />
+                  <span style={{ fontSize: '0.875rem', color: '#374151', lineHeight: 1.5 }}>
+                    {item}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -182,7 +236,7 @@ export default function AggregatorsPage() {
 
       <style>{`
         @media (max-width: 768px) {
-          .aggregator-stats-grid {
+          .verification-grid {
             grid-template-columns: 1fr !important;
           }
         }

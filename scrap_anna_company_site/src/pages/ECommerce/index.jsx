@@ -558,10 +558,36 @@ export default function ECommercePage() {
       />
 
       <style>{`
+        @keyframes arrowSlidePulse {
+          0% {
+            transform: translateY(-50%) translateX(0);
+            color: #9CA3AF;
+            border-color: #D1D5DB;
+          }
+          50% {
+            transform: translateY(-50%) translateX(3px);
+            color: #D97706;
+            border-color: #FDE68A;
+            box-shadow: 0 0 10px rgba(249, 197, 28, 0.35);
+          }
+          100% {
+            transform: translateY(-50%) translateX(0);
+            color: #9CA3AF;
+            border-color: #D1D5DB;
+          }
+        }
+        .desktop-step-arrow {
+          animation: arrowSlidePulse 2.2s ease-in-out infinite;
+          transition: all 0.2s ease;
+        }
         .workflow-step-card:hover {
-          transform: translateY(-3px);
+          transform: translateY(-4px);
           border-color: #D1D5DB !important;
-          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06) !important;
+          box-shadow: 0 10px 24px rgba(0, 0, 0, 0.07) !important;
+        }
+        .workflow-step-card:hover .desktop-step-arrow {
+          color: #D97706 !important;
+          border-color: #FDE68A !important;
         }
         @media (max-width: 1024px) {
           .workflow-grid {

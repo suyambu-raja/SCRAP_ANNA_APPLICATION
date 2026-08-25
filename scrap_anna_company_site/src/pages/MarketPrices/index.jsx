@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { 
-  TrendingUp, Search, Calculator, AlertCircle, 
-  ArrowUpRight, ArrowDownRight, Minus, RefreshCw, 
-  CheckCircle2, ArrowRight, DollarSign 
+  TrendingUp, Search, AlertCircle, 
+  ArrowUpRight, ArrowDownRight, Minus, RefreshCw 
 } from 'lucide-react';
 import SEO from '../../components/common/SEO';
 import PageHero from '../../components/common/PageHero';
@@ -17,10 +16,6 @@ export default function MarketPricesPage() {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Calculator State
-  const [calcMaterial, setCalcMaterial] = useState('Iron / Heavy Melting Scrap (HMS)');
-  const [calcWeight, setCalcWeight] = useState(25);
-
   const categories = ['All', ...marketPricesData.map(c => c.category)];
 
   // Flatten items for filtering
@@ -34,19 +29,6 @@ export default function MarketPricesPage() {
                           item.category.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
-
-  // Calculate estimated rate for the calculator widget
-  const getAverageRate = (priceString) => {
-    const numbers = priceString.match(/\d[\d,]*/g);
-    if (!numbers || numbers.length === 0) return 30;
-    const cleanNumbers = numbers.map(n => parseFloat(n.replace(/,/g, '')));
-    const avg = cleanNumbers.reduce((a, b) => a + b, 0) / cleanNumbers.length;
-    return avg;
-  };
-
-  const currentCalcItem = allItems.find(i => i.material === calcMaterial) || allItems[0];
-  const ratePerUnit = getAverageRate(currentCalcItem.price);
-  const estimatedTotal = Math.round(ratePerUnit * (parseFloat(calcWeight) || 0));
 
   const renderTrendIcon = (trend) => {
     if (trend === 'Up') {
@@ -74,7 +56,7 @@ export default function MarketPricesPage() {
     <>
       <SEO
         title="Market Prices - Reference Scrap Rates in Chennai & Tamil Nadu"
-        description="Check real-time reference scrap prices for iron, copper, aluminium, cardboard, plastics, and e-waste. Use our instant scrap value calculator."
+        description="Check real-time reference scrap prices for iron, copper, aluminium, cardboard, plastics, and e-waste in Chennai & Tamil Nadu."
       />
 
       <PageHero
@@ -89,11 +71,8 @@ export default function MarketPricesPage() {
           onClick: () => openJoinModal('household')
         }}
         secondaryCta={{
-          text: "Calculate Scrap Value",
-          onClick: () => {
-            const el = document.getElementById('calculator-section');
-            if (el) el.scrollIntoView({ behavior: 'smooth' });
-          }
+          text: "How It Works",
+          to: "/how-it-works"
         }}
       />
 
@@ -217,10 +196,11 @@ export default function MarketPricesPage() {
                     filteredItems.map((item, idx) => (
                       <tr 
                         key={idx}
+                        className="prices-table-row"
                         style={{ 
                           borderBottom: '1px solid #F3F4F6',
                           backgroundColor: idx % 2 === 0 ? 'var(--color-white)' : 'var(--color-offwhite)',
-                          transition: 'background-color var(--transition-fast)'
+                          transition: 'background-color 0.15s ease'
                         }}
                       >
                         <td style={{ padding: '1rem 1.5rem', fontWeight: 600, color: 'var(--color-text-primary)' }}>
@@ -278,130 +258,6 @@ export default function MarketPricesPage() {
         </div>
       </section>
 
-      {/* INTERACTIVE SCRAP VALUE CALCULATOR WIDGET */}
-      <section className="section bg-offwhite" id="calculator-section" style={{ borderTop: '1px solid var(--color-border)' }}>
-        <div className="container">
-          <SectionHeader
-            eyebrow="Instant Estimation"
-            title="Interactive Scrap Value Calculator"
-            subtitle="Get an approximate estimate of how much your recyclables are worth before booking a pickup."
-          />
-
-          <div style={{
-            maxWidth: '820px',
-            margin: '0 auto',
-            backgroundColor: 'var(--color-white)',
-            borderRadius: 'var(--radius-lg)',
-            border: '2px solid var(--color-primary-yellow)',
-            boxShadow: 'var(--shadow-lg)',
-            overflow: 'hidden'
-          }}>
-            <div style={{
-              backgroundColor: 'var(--color-graphite-dark)',
-              color: 'var(--color-white)',
-              padding: '1.25rem 1.75rem',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.75rem'
-            }}>
-              <Calculator size={22} style={{ color: 'var(--color-primary-yellow)' }} />
-              <div>
-                <h3 style={{ color: 'var(--color-white)', fontSize: '1.15rem', margin: 0 }}>
-                  Estimate Your Scrap Payout
-                </h3>
-                <span style={{ fontSize: '0.75rem', color: '#9CA3AF' }}>
-                  Select material and quantity to calculate indicative value
-                </span>
-              </div>
-            </div>
-
-            <div style={{ padding: '2rem' }}>
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: '1.2fr 1fr',
-                gap: '2rem',
-                alignItems: 'center'
-              }} className="calc-grid">
-                
-                {/* Inputs */}
-                <div>
-                  <div className="form-group">
-                    <label className="form-label">Select Scrap Material</label>
-                    <select
-                      className="form-select"
-                      value={calcMaterial}
-                      onChange={(e) => setCalcMaterial(e.target.value)}
-                    >
-                      {allItems.map((item, idx) => (
-                        <option key={idx} value={item.material}>
-                          {item.material} ({item.price}/{item.unit})
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div className="form-group">
-                    <label className="form-label">
-                      Estimated Weight / Quantity ({currentCalcItem.unit})
-                    </label>
-                    <input
-                      type="number"
-                      min="1"
-                      className="form-input"
-                      value={calcWeight}
-                      onChange={(e) => setCalcWeight(e.target.value)}
-                    />
-                  </div>
-
-                  <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-muted)' }}>
-                    Selected benchmark: ~₹{ratePerUnit.toFixed(1)} / {currentCalcItem.unit}
-                  </div>
-                </div>
-
-                {/* Calculation Output Card */}
-                <div style={{
-                  backgroundColor: 'var(--color-primary-yellow-light)',
-                  border: '1px solid var(--color-soft-yellow-border)',
-                  borderRadius: 'var(--radius-md)',
-                  padding: '1.75rem',
-                  textAlign: 'center'
-                }}>
-                  <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#92400E', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                    Estimated Payout Value
-                  </span>
-                  
-                  <div style={{
-                    fontSize: '2.75rem',
-                    fontFamily: 'var(--font-heading)',
-                    fontWeight: 800,
-                    color: 'var(--color-graphite-dark)',
-                    margin: '0.5rem 0'
-                  }}>
-                    ₹{estimatedTotal.toLocaleString('en-IN')}
-                  </div>
-
-                  <p style={{ fontSize: '0.8rem', color: '#92400E', marginBottom: '1.25rem' }}>
-                    For {calcWeight || 0} {currentCalcItem.unit} of {currentCalcItem.material}
-                  </p>
-
-                  <Button
-                    variant="primary"
-                    size="md"
-                    icon={ArrowRight}
-                    onClick={() => openJoinModal('household')}
-                    style={{ width: '100%', justifyContent: 'center' }}
-                  >
-                    Lock Rate & Request Pickup
-                  </Button>
-                </div>
-
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
       <CTASection
         title="Ready to Monetize Your Scrap?"
         description="Book certified doorstep pickup and experience transparent, calibrated digital weighing today."
@@ -410,8 +266,11 @@ export default function MarketPricesPage() {
       />
 
       <style>{`
+        .prices-table-row:hover {
+          background-color: #FFFDF5 !important;
+        }
         @media (max-width: 768px) {
-          .prices-controls-grid, .calc-grid {
+          .prices-controls-grid {
             grid-template-columns: 1fr !important;
             gap: 1.5rem !important;
           }

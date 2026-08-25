@@ -189,15 +189,12 @@ export default function Navbar({ onOpenJoinModal }) {
               fontWeight: isActive('/') ? 700 : 500,
               color: isActive('/') ? '#1F242D' : '#4B5563',
               textDecoration: 'none',
-              position: 'relative',
               padding: '0.35rem 0',
-              transition: 'color 0.15s ease',
               whiteSpace: 'nowrap'
             }}
-            className="nav-item-link"
+            className={`nav-item-link ${isActive('/') ? 'active' : ''}`}
           >
             Home
-            {isActive('/') && <span className="active-nav-indicator" />}
           </Link>
 
           {/* 2. About Us */}
@@ -208,15 +205,12 @@ export default function Navbar({ onOpenJoinModal }) {
               fontWeight: isActive('/about') ? 700 : 500,
               color: isActive('/about') ? '#1F242D' : '#4B5563',
               textDecoration: 'none',
-              position: 'relative',
               padding: '0.35rem 0',
-              transition: 'color 0.15s ease',
               whiteSpace: 'nowrap'
             }}
-            className="nav-item-link"
+            className={`nav-item-link ${isActive('/about') ? 'active' : ''}`}
           >
             About Us
-            {isActive('/about') && <span className="active-nav-indicator" />}
           </Link>
 
           {/* 3. How It Works */}
@@ -227,15 +221,12 @@ export default function Navbar({ onOpenJoinModal }) {
               fontWeight: isActive('/how-it-works') ? 700 : 500,
               color: isActive('/how-it-works') ? '#1F242D' : '#4B5563',
               textDecoration: 'none',
-              position: 'relative',
               padding: '0.35rem 0',
-              transition: 'color 0.15s ease',
               whiteSpace: 'nowrap'
             }}
-            className="nav-item-link"
+            className={`nav-item-link ${isActive('/how-it-works') ? 'active' : ''}`}
           >
             How It Works
-            {isActive('/how-it-works') && <span className="active-nav-indicator" />}
           </Link>
 
           {/* 4. For Users Dropdown */}
@@ -256,12 +247,10 @@ export default function Navbar({ onOpenJoinModal }) {
                 alignItems: 'center',
                 gap: '0.3rem',
                 padding: '0.35rem 0',
-                whiteSpace: 'nowrap',
-                position: 'relative',
-                transition: 'color 0.15s ease'
+                whiteSpace: 'nowrap'
               }}
               onClick={() => setUsersDropdownOpen(!usersDropdownOpen)}
-              className="nav-item-link"
+              className={`nav-item-link ${isUserActive || usersDropdownOpen ? 'active' : ''}`}
             >
               <span>For Users</span>
               <ChevronDown 
@@ -272,11 +261,11 @@ export default function Navbar({ onOpenJoinModal }) {
                   color: '#6B7280'
                 }} 
               />
-              {(isUserActive || usersDropdownOpen) && <span className="active-nav-indicator" />}
             </button>
 
             {usersDropdownOpen && (
               <div 
+                className="nav-dropdown-menu"
                 style={{
                   position: 'absolute',
                   top: 'calc(100% + 8px)',
@@ -284,11 +273,10 @@ export default function Navbar({ onOpenJoinModal }) {
                   backgroundColor: 'var(--color-white)',
                   border: '1px solid #E5E7EB',
                   borderRadius: '12px',
-                  boxShadow: '0 15px 30px -5px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+                  boxShadow: '0 12px 28px -4px rgba(0, 0, 0, 0.1), 0 4px 8px -2px rgba(0, 0, 0, 0.04)',
                   padding: '0.5rem',
                   minWidth: '240px',
-                  zIndex: 1100,
-                  animation: 'fadeIn 0.15s ease-out'
+                  zIndex: 1100
                 }}
               >
                 {userDropdownLinks.map((item) => {
@@ -354,15 +342,12 @@ export default function Navbar({ onOpenJoinModal }) {
               fontWeight: isActive('/e-commerce') ? 700 : 500,
               color: isActive('/e-commerce') ? '#1F242D' : '#4B5563',
               textDecoration: 'none',
-              position: 'relative',
               padding: '0.35rem 0',
-              transition: 'color 0.15s ease',
               whiteSpace: 'nowrap'
             }}
-            className="nav-item-link"
+            className={`nav-item-link ${isActive('/e-commerce') ? 'active' : ''}`}
           >
             Sell & Buy Scrap
-            {isActive('/e-commerce') && <span className="active-nav-indicator" />}
           </Link>
 
           {/* 6. Market Prices */}
@@ -373,18 +358,15 @@ export default function Navbar({ onOpenJoinModal }) {
               fontWeight: isActive('/market-prices') ? 700 : 500,
               color: isActive('/market-prices') ? '#1F242D' : '#4B5563',
               textDecoration: 'none',
-              position: 'relative',
               padding: '0.35rem 0',
-              transition: 'color 0.15s ease',
               whiteSpace: 'nowrap'
             }}
-            className="nav-item-link"
+            className={`nav-item-link ${isActive('/market-prices') ? 'active' : ''}`}
           >
             Market Prices
-            {isActive('/market-prices') && <span className="active-nav-indicator" />}
           </Link>
 
-          {/* 6. FAQs */}
+          {/* 7. FAQs */}
           <Link
             to="/faq"
             style={{
@@ -392,18 +374,15 @@ export default function Navbar({ onOpenJoinModal }) {
               fontWeight: isActive('/faq') ? 700 : 500,
               color: isActive('/faq') ? '#1F242D' : '#4B5563',
               textDecoration: 'none',
-              position: 'relative',
               padding: '0.35rem 0',
-              transition: 'color 0.15s ease',
               whiteSpace: 'nowrap'
             }}
-            className="nav-item-link"
+            className={`nav-item-link ${isActive('/faq') ? 'active' : ''}`}
           >
             FAQs
-            {isActive('/faq') && <span className="active-nav-indicator" />}
           </Link>
 
-          {/* 7. Contact Us */}
+          {/* 8. Contact Us */}
           <Link
             to="/contact"
             style={{
@@ -411,49 +390,23 @@ export default function Navbar({ onOpenJoinModal }) {
               fontWeight: isActive('/contact') ? 700 : 500,
               color: isActive('/contact') ? '#1F242D' : '#4B5563',
               textDecoration: 'none',
-              position: 'relative',
               padding: '0.35rem 0',
-              transition: 'color 0.15s ease',
               whiteSpace: 'nowrap'
             }}
-            className="nav-item-link"
+            className={`nav-item-link ${isActive('/contact') ? 'active' : ''}`}
           >
             Contact Us
-            {isActive('/contact') && <span className="active-nav-indicator" />}
           </Link>
         </nav>
 
-        {/* 8. Get Started Button on Desktop */}
+                {/* 8. Get Started Button on Desktop */}
         <div style={{ display: 'none', alignItems: 'center' }} className="desktop-cta-wrapper">
           <button
             onClick={() => onOpenJoinModal('household')}
-            style={{
-              backgroundColor: 'var(--color-primary-yellow)',
-              color: '#1F242D',
-              fontWeight: 700,
-              fontSize: '0.9rem',
-              padding: '0.65rem 1.25rem',
-              borderRadius: '8px',
-              border: 'none',
-              cursor: 'pointer',
-              whiteSpace: 'nowrap',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.45rem',
-              boxShadow: '0 2px 8px rgba(249, 197, 28, 0.25)',
-              transition: 'all 0.15s ease'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#E5B214';
-              e.currentTarget.style.transform = 'translateY(-1px)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = 'var(--color-primary-yellow)';
-              e.currentTarget.style.transform = 'translateY(0)';
-            }}
+            className="nav-get-started-btn"
           >
             <span>Get Started</span>
-            <ArrowRight size={16} strokeWidth={2.2} />
+            <ArrowRight size={16} strokeWidth={2.2} className="nav-btn-arrow" />
           </button>
         </div>
 
@@ -699,23 +652,89 @@ export default function Navbar({ onOpenJoinModal }) {
           </div>
         </div>
       )}
-
       <style>{`
-        .nav-item-link:hover {
-          color: #1F242D !important;
+        /* Desktop Navigation Links — Smooth expanding underline */
+        .nav-item-link {
+          position: relative;
+          transition: color 0.2s ease;
         }
-        .active-nav-indicator {
+        .nav-item-link::after {
+          content: '';
           position: absolute;
           bottom: -4px;
           left: 0;
-          right: 0;
-          height: 3px;
+          width: 100%;
+          height: 2.5px;
           background-color: var(--color-primary-yellow);
           border-radius: 2px;
+          transform: scaleX(0);
+          transform-origin: center;
+          transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+          opacity: 0;
         }
+        .nav-item-link:hover {
+          color: #1F242D !important;
+        }
+        .nav-item-link:hover::after {
+          transform: scaleX(0.45);
+          opacity: 0.5;
+        }
+        .nav-item-link.active::after {
+          transform: scaleX(1);
+          opacity: 1;
+        }
+
+        /* Dropdown fade and slide down */
+        .nav-dropdown-menu {
+          animation: dropdownSlideDown 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes dropdownSlideDown {
+          from {
+            opacity: 0;
+            transform: translateY(-8px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
         .user-dropdown-item:hover {
           background-color: #F9FAFB !important;
         }
+
+        /* Get Started Button Subtle Hover Effect */
+        .nav-get-started-btn {
+          background-color: var(--color-primary-yellow);
+          color: #1F242D;
+          font-weight: 700;
+          font-size: 0.9rem;
+          padding: 0.65rem 1.3rem;
+          borderRadius: 8px;
+          border: none;
+          cursor: pointer;
+          white-space: nowrap;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.45rem;
+          box-shadow: 0 2px 8px rgba(249, 197, 28, 0.22);
+          transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .nav-get-started-btn:hover {
+          background-color: #E5B214;
+          transform: translateY(-1px);
+          box-shadow: 0 4px 14px rgba(249, 197, 28, 0.35);
+        }
+        .nav-get-started-btn:active {
+          transform: translateY(0);
+        }
+        .nav-get-started-btn .nav-btn-arrow {
+          transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .nav-get-started-btn:hover .nav-btn-arrow {
+          transform: translateX(3px);
+        }
+
         @media (min-width: 1080px) {
           .desktop-nav {
             display: flex !important;

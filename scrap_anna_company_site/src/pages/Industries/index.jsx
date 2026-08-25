@@ -1,7 +1,6 @@
 import React from 'react';
 import { 
-  Factory, ShieldCheck, Scale, FileText, CheckCircle2, 
-  ArrowRight, Sparkles, Building2, Truck, HelpCircle, Layers,
+  Factory, CheckCircle2, ArrowRight, HelpCircle, 
   Package, Users, Tag, Clock, SlidersHorizontal, Check
 } from 'lucide-react';
 import SEO from '../../components/common/SEO';
@@ -56,48 +55,6 @@ export default function IndustriesPage() {
     "Nearby merchant connections",
     "More transparency",
     "Less manual searching"
-  ];
-
-  const industrialCapabilities = [
-    {
-      icon: Layers,
-      title: "Bulk Scrap Lot Listings",
-      desc: "Post large recurring or one-off scrap batches with chemical grade details, dimensions, and approximate tonnage."
-    },
-    {
-      icon: Scale,
-      title: "Weighbridge Synchronization",
-      desc: "Gross and tare weight recordings with certified weighbridge receipts and tamper-proof digital logs."
-    },
-    {
-      icon: FileText,
-      title: "Audit-Ready GST Invoicing",
-      desc: "Automated generation of GST-compliant commercial invoices, tax splits, and integrated e-way bill manifests."
-    },
-    {
-      icon: ShieldCheck,
-      title: "Certified Recycler Network",
-      desc: "Connect strictly with authorized commercial recyclers and aggregators possessing required environmental clearances."
-    },
-    {
-      icon: Truck,
-      title: "Factory Gate Pass & Logistics",
-      desc: "Structured driver and vehicle verification for seamless security clearance and compliance with plant safety protocols."
-    },
-    {
-      icon: Sparkles,
-      title: "ESG & Green Footprint Reports",
-      desc: "Quantify your factory's environmental circularity metrics with verified certificates of responsible recycling."
-    }
-  ];
-
-  const industrialMaterials = [
-    { name: "Heavy Melting Steel & Turnings", desc: "HMS 1 & 2, CNC machine turnings, stamping scrap, punch skeletons." },
-    { name: "Non-Ferrous Industrial Metals", desc: "Aluminium extrusion offcuts, copper busbars & armatures, brass turnings." },
-    { name: "Packaging & Corrugated Waste", desc: "High-volume OCC carton bales, industrial paper rolls, kraft paper waste." },
-    { name: "Industrial Polymers & Plastics", desc: "HDPE barrels, PP pallets & totes, purge lumps, LDPE stretch wrapping." },
-    { name: "Decommissioned Plant & Machinery", desc: "Obsolete boilers, electric motors, transformers, manufacturing line teardowns." },
-    { name: "Cables & Heavy Electricals", desc: "Armoured copper/aluminium cabling, high-voltage switchgear scrap." }
   ];
 
   return (
@@ -338,48 +295,7 @@ export default function IndustriesPage() {
         </div>
       </section>
 
-      {/* INDUSTRIAL CAPABILITIES OVERVIEW */}
-      <section className="section bg-offwhite" style={{ borderTop: '1px solid var(--color-border)' }}>
-        <div className="container">
-          <SectionHeader
-            eyebrow="Enterprise Features"
-            title="Engineered for Manufacturing Plants & Industrial Corridors"
-            subtitle="Transform your industrial scrap disposal from an operational headache into a structured, compliant revenue stream."
-          />
-
-          <div className="grid-3">
-            {industrialCapabilities.map((cap, idx) => {
-              const Icon = cap.icon;
-              return (
-                <div key={idx} className="card card-hover" style={{ backgroundColor: 'var(--color-offwhite)' }}>
-                  <div style={{
-                    width: '46px',
-                    height: '46px',
-                    borderRadius: 'var(--radius-sm)',
-                    backgroundColor: 'var(--color-primary-yellow-light)',
-                    border: '1px solid var(--color-soft-yellow-border)',
-                    color: '#92400E',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginBottom: '1.25rem'
-                  }}>
-                    <Icon size={22} />
-                  </div>
-                  <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem', color: 'var(--color-graphite-dark)' }}>
-                    {cap.title}
-                  </h3>
-                  <p style={{ fontSize: 'var(--text-small)', color: 'var(--color-text-secondary)', lineHeight: 1.6, margin: 0 }}>
-                    {cap.desc}
-                  </p>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* INDUSTRIAL FACILITY SHOWCASE & WORKFLOW */}
+      {/* INDUSTRIAL FACILITY SHOWCASE & GATE-PASS LOGISTICS WORKFLOW */}
       <section className="section bg-graphite-dark text-white" style={{ borderTop: '1px solid #374151', borderBottom: '1px solid #374151' }}>
         <div className="container">
           <div style={{
@@ -463,30 +379,6 @@ export default function IndustriesPage() {
               </div>
             </div>
 
-          </div>
-        </div>
-      </section>
-
-      {/* INDUSTRIAL SCRAP CATEGORIES */}
-      <section className="section bg-white">
-        <div className="container">
-          <SectionHeader
-            eyebrow="Commercial Grades"
-            title="Accepted Industrial Scrap Materials"
-            subtitle="We handle large-scale recurring factory lots across standard industrial classifications."
-          />
-
-          <div className="grid-3">
-            {industrialMaterials.map((mat, idx) => (
-              <div key={idx} className="card card-hover" style={{ backgroundColor: 'var(--color-offwhite)' }}>
-                <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem', color: 'var(--color-graphite-dark)' }}>
-                  {mat.name}
-                </h3>
-                <p style={{ fontSize: 'var(--text-small)', color: 'var(--color-text-secondary)', lineHeight: 1.6, margin: 0 }}>
-                  {mat.desc}
-                </p>
-              </div>
-            ))}
           </div>
         </div>
       </section>
