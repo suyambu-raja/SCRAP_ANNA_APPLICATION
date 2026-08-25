@@ -137,7 +137,8 @@ def place_order(listing_id: int, buyer_account: Account, delivery_address: str) 
             buyer=buyer_account,
             payment_reference=payment_reference,
             amount_paid=listing.displayed_price,
-            delivery_slot=delivery_slot
+            delivery_slot=delivery_slot,
+            delivery_address=delivery_address
         )
         
         # Note: We DO NOT change the listing status to SOLD here. It remains ACTIVE
