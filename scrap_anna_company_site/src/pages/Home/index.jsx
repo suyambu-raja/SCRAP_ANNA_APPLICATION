@@ -5,7 +5,8 @@ import {
   Sparkles, Home, Store, Factory, Network, FilePlus2, Users, 
   CalendarClock, Scale, FileCheck, MapPin, Receipt, 
   FileText, ShieldAlert, Headphones, ChevronRight, HelpCircle,
-  Smartphone, UserCheck, Truck, Recycle
+  Smartphone, UserCheck, Truck, Recycle, Languages, Mic, Phone,
+  Tag, SlidersHorizontal
 } from 'lucide-react';
 import SEO from '../../components/common/SEO';
 import SectionHeader from '../../components/common/SectionHeader';
@@ -259,7 +260,7 @@ export default function HomePage() {
               },
               {
                 title: "For Merchants",
-                description: "Get quality leads, manage pickups and grow your scrap business with ease.",
+                description: "Get quality leads, respond to industry requests, and grow your scrap business.",
                 icon: Store,
                 iconBg: "#20242D",
                 iconColor: "#FFFFFF",
@@ -267,7 +268,7 @@ export default function HomePage() {
               },
               {
                 title: "For Industries",
-                description: "Dispose or sell your industrial scrap with verified merchants and digital records.",
+                description: "Post scrap once, get multiple merchant offers, and choose based on price and time.",
                 icon: Factory,
                 iconBg: "#FFF3C4",
                 iconColor: "#1F242D",
@@ -359,70 +360,111 @@ export default function HomePage() {
             })}
           </div>
 
-          {/* More Opportunities for Merchants Informational Banner */}
+          {/* Industry Scrap Multiple Offers Highlight Banner */}
           <div style={{
             marginTop: '2.5rem',
-            backgroundColor: '#F9FAFB',
-            border: '1px solid #E5E7EB',
-            borderRadius: '12px',
-            padding: '1.25rem 1.75rem',
+            backgroundColor: '#FFF8DB',
+            border: '1.5px solid #FDE68A',
+            borderRadius: '14px',
+            padding: '1.5rem 1.75rem',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
             flexWrap: 'wrap',
-            gap: '1rem'
+            gap: '1.25rem',
+            boxShadow: '0 2px 10px rgba(249, 197, 28, 0.08)'
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flex: '1 1 480px' }}>
               <div style={{
-                width: '40px',
-                height: '40px',
-                borderRadius: '8px',
-                backgroundColor: '#FFF8DB',
-                border: '1px solid #FDE68A',
+                width: '46px',
+                height: '46px',
+                borderRadius: '10px',
+                backgroundColor: 'var(--color-primary-yellow)',
                 color: '#1F242D',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 flexShrink: 0
               }}>
-                <Store size={20} />
+                <Factory size={24} />
               </div>
               <div>
-                <h4 style={{ fontSize: '1rem', fontWeight: 700, color: '#1F242D', margin: 0, marginBottom: '0.2rem' }}>
-                  More Opportunities for Merchants
+                <h4 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#1F242D', margin: '0 0 0.25rem 0' }}>
+                  Industries. Multiple Offers. Your Choice.
                 </h4>
-                <p style={{ fontSize: '0.875rem', color: '#6B7280', margin: 0 }}>
-                  Buy and sell scrap through a connected network of businesses and scrap partners.
+                <p style={{ fontSize: '0.9rem', color: '#4B5563', margin: 0, lineHeight: 1.5 }}>
+                  Post your scrap once and receive offers from nearby merchants. Compare prices and pickup timing, then choose what works best for you.
                 </p>
               </div>
             </div>
+
             <Link
-              to="/merchants"
+              to="/industries"
               style={{
-                color: '#1F242D',
+                backgroundColor: '#1F242D',
+                color: '#FFFFFF',
                 fontWeight: 700,
                 fontSize: '0.875rem',
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '0.35rem',
+                gap: '0.4rem',
                 textDecoration: 'none',
-                backgroundColor: '#FFFFFF',
-                border: '1px solid #D1D5DB',
-                padding: '0.5rem 1rem',
+                padding: '0.65rem 1.25rem',
                 borderRadius: '8px',
                 transition: 'all 0.15s ease'
               }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = '#1F242D';
-                e.currentTarget.style.backgroundColor = '#F9FAFB';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = '#D1D5DB';
-                e.currentTarget.style.backgroundColor = '#FFFFFF';
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#374151'}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#1F242D'}
+            >
+              <span>Explore Industry Bidding</span>
+              <ArrowRight size={15} style={{ color: 'var(--color-primary-yellow)' }} />
+            </Link>
+          </div>
+
+          {/* Accessibility Highlight Strip */}
+          <div style={{
+            marginTop: '1.25rem',
+            backgroundColor: '#F9FAFB',
+            border: '1px solid #E5E7EB',
+            borderRadius: '12px',
+            padding: '1rem 1.5rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: '0.75rem'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <div style={{
+                width: '32px',
+                height: '32px',
+                borderRadius: '6px',
+                backgroundColor: '#FFF3C4',
+                color: '#92400E',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0
+              }}>
+                <Languages size={18} />
+              </div>
+              <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#374151' }}>
+                Designed for Easy Access: <strong>Tamil + English | Tamil Voice Assistance | Voice Call Support</strong>
+              </span>
+            </div>
+            <Link
+              to="/how-it-works"
+              style={{
+                fontSize: '0.8rem',
+                fontWeight: 700,
+                color: '#D97706',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.25rem'
               }}
             >
-              <span>For Merchants</span>
-              <ArrowRight size={15} style={{ color: 'var(--color-primary-yellow)' }} />
+              <span>See How It Works</span>
+              <ArrowRight size={13} />
             </Link>
           </div>
         </div>

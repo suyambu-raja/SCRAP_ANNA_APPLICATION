@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { 
   Home, Store, Factory, Network, CheckCircle2, 
   ArrowRight, ShieldCheck, FileCheck, Scale, Receipt, 
-  MapPin, Clock, Camera, Key, RefreshCw 
+  MapPin, Clock, Camera, Key, RefreshCw, Languages, Mic, Phone,
+  Package, Users, Tag, SlidersHorizontal
 } from 'lucide-react';
 import SEO from '../../components/common/SEO';
 import PageHero from '../../components/common/PageHero';
@@ -61,7 +62,7 @@ export default function HowItWorksPage() {
     },
     merchant: {
       title: "Merchant Collection & Growth Workflow",
-      subtitle: "Streamline your daily scrap routes with verified customer demand and digital accounting.",
+      subtitle: "Streamline your daily scrap routes with verified customer demand, industry price responses, and digital accounting.",
       badge: "Merchant Flow",
       steps: [
         {
@@ -74,19 +75,19 @@ export default function HowItWorksPage() {
           num: "02",
           icon: RefreshCw,
           title: "Receive Geotagged Leads",
-          desc: "Receive pre-verified household and small business scrap pickup requests in your immediate operating area."
+          desc: "Receive pre-verified household pickup requests and nearby industrial scrap opportunities in your area."
         },
         {
           num: "03",
-          icon: Clock,
-          title: "Accept & Plan Pickup Route",
-          desc: "Accept leads that match your vehicle capacity and optimize your travel route for maximum efficiency."
+          icon: Tag,
+          title: "Submit Price for Industrial Lots",
+          desc: "View industry scrap requests, evaluate the material specs, and submit your offered rate and available pickup timing."
         },
         {
           num: "04",
           icon: MapPin,
           title: "Arrive & Check-In",
-          desc: "Arrive at customer doorstep and confirm arrival via location verification on the platform."
+          desc: "Arrive at customer doorstep or factory gate and confirm arrival via location verification on the platform."
         },
         {
           num: "05",
@@ -103,45 +104,45 @@ export default function HowItWorksPage() {
       ]
     },
     industry: {
-      title: "Industrial Commercial Scrap Management",
-      subtitle: "Full digital compliance, audit trails, and structured bulk scrap sales for manufacturing units.",
-      badge: "Industry Flow",
+      title: "Industry-to-Merchant Connection Workflow",
+      subtitle: "Industries can receive multiple offers from nearby merchants and choose the option that best matches their requirements.",
+      badge: "Industry Flow: Post → Get Offers → Compare → Choose",
       steps: [
         {
           num: "01",
-          icon: Factory,
-          title: "Post Industrial Lot",
-          desc: "List manufacturing offcuts, turning scrap, obsolete machinery, or packaging waste with grade specifications and lot tonnage."
+          icon: Package,
+          title: "Post Your Scrap",
+          desc: "Add the scrap material, grade specifications, approximate tonnage, photos, and pickup facility details."
         },
         {
           num: "02",
-          icon: FileCheck,
-          title: "Compliance & Safety Specifications",
-          desc: "Specify plant gate-pass norms, lifting equipment requirements, and environmental handling parameters."
+          icon: Users,
+          title: "Nearby Merchants Respond",
+          desc: "Relevant nearby verified merchants view your request and submit their offered price and available pickup timeframe."
         },
         {
           num: "03",
-          icon: RefreshCw,
-          title: "Commercial Matchmaking",
-          desc: "Match lot with certified bulk merchants and recycling aggregators licensed for industrial procurement."
+          icon: Tag,
+          title: "Compare Offers",
+          desc: "Review competitive prices and pickup schedules submitted by interested merchants in one clear dashboard."
         },
         {
           num: "04",
-          icon: Scale,
-          title: "Weighbridge & Gate Verification",
-          desc: "Weighbridge gross and tare weight synchronization with photo logs and security pass authentication."
+          icon: SlidersHorizontal,
+          title: "Choose Your Merchant",
+          desc: "Select the offer that best matches your price expectations and operational time constraints."
         },
         {
           num: "05",
-          icon: Receipt,
-          title: "Digital GST Invoicing",
-          desc: "Instant automated generation of tax-compliant commercial invoice, e-way bill references, and payment settlement."
+          icon: Clock,
+          title: "Schedule Pickup",
+          desc: "Connect with the selected merchant, confirm gate pass credentials, and proceed with the coordinated pickup."
         },
         {
           num: "06",
-          icon: ShieldCheck,
-          title: "Certified Recycling Manifest",
-          desc: "Receive chain-of-custody certificates verifying responsible processing and audit-ready environmental documentation."
+          icon: Receipt,
+          title: "Digital GST Invoicing & Compliance",
+          desc: "Complete weighbridge recording, instant GST-compliant billing, and receive audit-ready recycling manifests."
         }
       ]
     },
@@ -550,6 +551,132 @@ export default function HowItWorksPage() {
             </div>
 
           </div>
+        </div>
+      </section>
+
+      {/* ACCESSIBILITY & INCLUSION SECTION: DESIGNED FOR EASY ACCESS */}
+      <section className="section bg-white" style={{ borderTop: '1px solid var(--color-border)', paddingTop: '4rem', paddingBottom: '4rem' }}>
+        <div className="container">
+          <div style={{ textAlign: 'center', maxWidth: '720px', margin: '0 auto 3rem auto' }}>
+            <span className="badge badge-yellow" style={{ marginBottom: '0.75rem' }}>
+              Built For Everyone
+            </span>
+            <h2 style={{
+              fontSize: 'clamp(1.75rem, 3vw, 2.25rem)',
+              fontWeight: 800,
+              color: 'var(--color-graphite-dark)',
+              letterSpacing: '-0.02em',
+              marginBottom: '0.65rem'
+            }}>
+              Designed for Easy Access
+            </h2>
+            <p style={{
+              fontSize: 'var(--text-body)',
+              color: 'var(--color-text-secondary)',
+              lineHeight: 1.6,
+              margin: 0
+            }}>
+              We want Scrap Anna to be easy to use even for people who are not comfortable with smart applications.
+            </p>
+          </div>
+
+          {/* 3 Accessibility Feature Cards */}
+          <div className="grid-3" style={{ gap: '1.5rem', marginBottom: '2.5rem' }}>
+            {[
+              {
+                icon: Languages,
+                title: "Tamil + English",
+                desc: "Use Scrap Anna in both Tamil and English across all digital interactions and communications."
+              },
+              {
+                icon: Mic,
+                title: "Tamil Voice Assistance",
+                desc: "Tamil voice assistance helps users access important features, post scrap requests, and check rates easily."
+              },
+              {
+                icon: Phone,
+                title: "Voice Call Support for Merchants",
+                desc: "Voice-call support helps neighborhood scrap merchants participate and respond without needing complex apps."
+              }
+            ].map((item, idx) => {
+              const Icon = item.icon;
+              return (
+                <div
+                  key={idx}
+                  className="card card-hover"
+                  style={{
+                    backgroundColor: '#F9FAFB',
+                    border: '1px solid #E5E7EB',
+                    borderRadius: '14px',
+                    padding: '2rem 1.75rem',
+                    textAlign: 'center',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center'
+                  }}
+                >
+                  <div style={{
+                    width: '56px',
+                    height: '56px',
+                    borderRadius: '14px',
+                    backgroundColor: '#FFF8DB',
+                    border: '1.5px solid #FDE68A',
+                    color: '#92400E',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: '1.25rem',
+                    boxShadow: '0 2px 8px rgba(249, 197, 28, 0.15)'
+                  }}>
+                    <Icon size={26} strokeWidth={2} />
+                  </div>
+
+                  <h3 style={{
+                    fontSize: '1.15rem',
+                    fontWeight: 800,
+                    color: 'var(--color-graphite-dark)',
+                    marginBottom: '0.5rem'
+                  }}>
+                    {item.title}
+                  </h3>
+
+                  <p style={{
+                    fontSize: '0.875rem',
+                    color: 'var(--color-text-secondary)',
+                    lineHeight: 1.6,
+                    margin: 0
+                  }}>
+                    {item.desc}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Accessibility Tagline Pill Strip */}
+          <div style={{
+            backgroundColor: 'var(--color-graphite-dark)',
+            color: 'var(--color-white)',
+            borderRadius: '12px',
+            padding: '1rem 1.5rem',
+            textAlign: 'center',
+            fontSize: '0.9rem',
+            fontWeight: 600,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexWrap: 'wrap',
+            gap: '0.75rem',
+            maxWidth: '680px',
+            margin: '0 auto'
+          }}>
+            <span style={{ color: 'var(--color-primary-yellow)' }}>Tamil + English</span>
+            <span style={{ color: '#6B7280' }}>•</span>
+            <span style={{ color: 'var(--color-primary-yellow)' }}>Tamil Voice Assistance</span>
+            <span style={{ color: '#6B7280' }}>•</span>
+            <span style={{ color: 'var(--color-primary-yellow)' }}>Voice Call Support</span>
+          </div>
+
         </div>
       </section>
 

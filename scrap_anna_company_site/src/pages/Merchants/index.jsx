@@ -120,10 +120,10 @@ export default function MerchantsPage() {
         </div>
       </section>
 
-      {/* BUY & SELL SCRAP CAPABILITY SECTION */}
+      {/* FIND MORE SCRAP OPPORTUNITIES: INDUSTRY SCRAP RESPONSES */}
       <section className="section bg-white" style={{ borderTop: '1px solid #E5E7EB', padding: '4.5rem 0' }}>
         <div className="container">
-          <div style={{ textAlign: 'center', maxWidth: '720px', margin: '0 auto 3rem auto' }}>
+          <div style={{ textAlign: 'center', maxWidth: '760px', margin: '0 auto 3rem auto' }}>
             <span style={{
               display: 'inline-block',
               fontSize: '0.8rem',
@@ -137,16 +137,16 @@ export default function MerchantsPage() {
               borderRadius: '9999px',
               marginBottom: '0.75rem'
             }}>
-              Network Trading
+              Industry Scrap Opportunities
             </span>
             <h2 style={{
-              fontSize: 'var(--text-h2)',
+              fontSize: 'clamp(1.75rem, 3vw, 2.25rem)',
               fontWeight: 800,
               color: '#1F242D',
               lineHeight: 1.25,
               marginBottom: '0.75rem'
             }}>
-              Buy & Sell Scrap Through Our Network
+              Find More Scrap Opportunities
             </h2>
             <p style={{
               fontSize: 'var(--text-body)',
@@ -154,179 +154,139 @@ export default function MerchantsPage() {
               lineHeight: 1.6,
               margin: 0
             }}>
-              Scrap Anna helps merchants connect with scrap opportunities, making it easier to buy available scrap and sell collected materials through a connected network.
+              Discover nearby industry scrap requests and submit your price when the opportunity matches your business. When industries post their available scrap, nearby verified merchants can respond with their competitive price and schedule.
             </p>
           </div>
 
-          {/* Dual Cards: Buy Scrap & Sell Scrap */}
+          {/* 5-Step Industry Response Workflow */}
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-            gap: '1.75rem',
-            maxWidth: '900px',
-            margin: '0 auto 3rem auto'
-          }}>
-            {/* Buy Scrap Card */}
-            <div style={{
-              backgroundColor: '#FFFFFF',
-              border: '1px solid #E5E7EB',
-              borderRadius: '14px',
-              padding: '2rem 1.75rem',
-              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.03)',
-              transition: 'all 0.2s ease'
-            }} className="merchant-trade-card">
-              <div style={{
-                width: '52px',
-                height: '52px',
-                borderRadius: '12px',
-                backgroundColor: '#FFF8DB',
-                border: '1px solid #FDE68A',
-                color: '#1F242D',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: '1.25rem'
-              }}>
-                <ShoppingBag size={24} strokeWidth={2} />
+            gridTemplateColumns: 'repeat(5, 1fr)',
+            gap: '1.25rem',
+            marginBottom: '3rem'
+          }} className="merchant-industry-flow-grid">
+            {[
+              {
+                step: "01",
+                title: "View Nearby Requests",
+                desc: "Discover available industry scrap requests posted in your operating territory."
+              },
+              {
+                step: "02",
+                title: "Check Scrap Details",
+                desc: "Review material type, grade, estimated volume, and pickup location."
+              },
+              {
+                step: "03",
+                title: "Submit Offered Price",
+                desc: "Submit your competitive price per kg/ton and your available pickup timing."
+              },
+              {
+                step: "04",
+                title: "Industry Selection",
+                desc: "The industry compares available merchant offers and selects the best fit."
+              },
+              {
+                step: "05",
+                title: "Proceed with Pickup",
+                desc: "Once selected, connect with the facility and execute the scheduled pickup."
+              }
+            ].map((item, idx) => (
+              <div
+                key={idx}
+                style={{
+                  backgroundColor: '#FFFFFF',
+                  border: '1px solid #E5E7EB',
+                  borderRadius: '14px',
+                  padding: '1.5rem 1.25rem',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  position: 'relative',
+                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.03)',
+                  transition: 'all 0.2s ease'
+                }}
+                className="merchant-step-card"
+              >
+                <span style={{
+                  fontSize: '0.8rem',
+                  fontWeight: 800,
+                  color: '#92400E',
+                  backgroundColor: '#FEF3C7',
+                  padding: '0.2rem 0.55rem',
+                  borderRadius: '6px',
+                  alignSelf: 'flex-start',
+                  marginBottom: '1rem',
+                  fontFamily: 'monospace'
+                }}>
+                  {item.step}
+                </span>
+                <h4 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#1F242D', marginBottom: '0.45rem', lineHeight: 1.3 }}>
+                  {item.title}
+                </h4>
+                <p style={{ fontSize: '0.85rem', color: '#6B7280', lineHeight: 1.55, margin: 0 }}>
+                  {item.desc}
+                </p>
               </div>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#1F242D', marginBottom: '0.65rem' }}>
-                Buy Scrap
-              </h3>
-              <p style={{ fontSize: '0.925rem', color: '#6B7280', lineHeight: 1.6, margin: 0 }}>
-                Merchants can find scrap available from connected sources and purchase materials that match their requirements.
-              </p>
-            </div>
-
-            {/* Sell Scrap Card */}
-            <div style={{
-              backgroundColor: '#FFFFFF',
-              border: '1px solid #E5E7EB',
-              borderRadius: '14px',
-              padding: '2rem 1.75rem',
-              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.03)',
-              transition: 'all 0.2s ease'
-            }} className="merchant-trade-card">
-              <div style={{
-                width: '52px',
-                height: '52px',
-                borderRadius: '12px',
-                backgroundColor: '#FFF8DB',
-                border: '1px solid #FDE68A',
-                color: '#1F242D',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: '1.25rem'
-              }}>
-                <Package size={24} strokeWidth={2} />
-              </div>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#1F242D', marginBottom: '0.65rem' }}>
-                Sell Scrap
-              </h3>
-              <p style={{ fontSize: '0.925rem', color: '#6B7280', lineHeight: 1.6, margin: 0 }}>
-                Merchants can find buyers for collected scrap and connect with relevant businesses through the Scrap Anna network.
-              </p>
-            </div>
+            ))}
           </div>
 
-          {/* How It Works Subsection */}
+          {/* Accessibility Voice Call Support Highlight for Merchants */}
           <div style={{
-            backgroundColor: '#F9FAFB',
-            border: '1px solid #E5E7EB',
+            backgroundColor: '#FFF8DB',
+            border: '1.5px solid #FDE68A',
             borderRadius: '16px',
-            padding: '2.5rem 2rem',
-            maxWidth: '900px',
-            margin: '0 auto'
+            padding: '1.75rem 2rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: '1.5rem'
           }}>
-            <h4 style={{
-              fontSize: '1.1rem',
-              fontWeight: 700,
-              color: '#1F242D',
-              textAlign: 'center',
-              marginBottom: '2rem'
-            }}>
-              How It Works
-            </h4>
-
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-              gap: '1.75rem',
-              textAlign: 'center'
-            }}>
-              <div>
-                <div style={{
-                  width: '36px',
-                  height: '36px',
-                  borderRadius: '50%',
-                  backgroundColor: 'var(--color-primary-yellow)',
-                  color: '#1F242D',
-                  fontWeight: 800,
-                  fontSize: '0.95rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  margin: '0 auto 0.85rem auto'
-                }}>
-                  1
-                </div>
-                <h5 style={{ fontSize: '1rem', fontWeight: 700, color: '#1F242D', marginBottom: '0.35rem' }}>
-                  Find Scrap
-                </h5>
-                <p style={{ fontSize: '0.85rem', color: '#6B7280', lineHeight: 1.5, margin: 0 }}>
-                  Discover available scrap opportunities through the Scrap Anna network.
-                </p>
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1.25rem', flex: '1 1 480px' }}>
+              <div style={{
+                width: '52px',
+                height: '52px',
+                borderRadius: '12px',
+                backgroundColor: 'var(--color-primary-yellow)',
+                color: '#1F242D',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0
+              }}>
+                <Smartphone size={26} strokeWidth={2} />
               </div>
-
               <div>
-                <div style={{
-                  width: '36px',
-                  height: '36px',
-                  borderRadius: '50%',
-                  backgroundColor: 'var(--color-primary-yellow)',
-                  color: '#1F242D',
-                  fontWeight: 800,
-                  fontSize: '0.95rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  margin: '0 auto 0.85rem auto'
+                <span style={{
+                  fontSize: '0.75rem',
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em',
+                  color: '#92400E',
+                  display: 'block',
+                  marginBottom: '0.25rem'
                 }}>
-                  2
-                </div>
-                <h5 style={{ fontSize: '1rem', fontWeight: 700, color: '#1F242D', marginBottom: '0.35rem' }}>
-                  Connect
-                </h5>
-                <p style={{ fontSize: '0.85rem', color: '#6B7280', lineHeight: 1.5, margin: 0 }}>
-                  Connect with the relevant seller or buyer.
-                </p>
-              </div>
-
-              <div>
-                <div style={{
-                  width: '36px',
-                  height: '36px',
-                  borderRadius: '50%',
-                  backgroundColor: 'var(--color-primary-yellow)',
-                  color: '#1F242D',
-                  fontWeight: 800,
-                  fontSize: '0.95rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  margin: '0 auto 0.85rem auto'
-                }}>
-                  3
-                </div>
-                <h5 style={{ fontSize: '1rem', fontWeight: 700, color: '#1F242D', marginBottom: '0.35rem' }}>
-                  Trade
-                </h5>
-                <p style={{ fontSize: '0.85rem', color: '#6B7280', lineHeight: 1.5, margin: 0 }}>
-                  Complete the scrap transaction directly between the connected parties.
+                  Accessibility Support
+                </span>
+                <h4 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#1F242D', margin: '0 0 0.35rem 0' }}>
+                  Merchant Voice Calls & Tamil Assistance
+                </h4>
+                <p style={{ fontSize: '0.9rem', color: '#4B5563', lineHeight: 1.5, margin: 0 }}>
+                  Not comfortable using smartphone applications? Voice-call support and Tamil voice assistance help local merchants participate, receive notifications, and submit price responses easily.
                 </p>
               </div>
             </div>
+
+            <Button
+              variant="primary"
+              size="md"
+              icon={ArrowRight}
+              onClick={() => openJoinModal('merchant')}
+            >
+              Join as Merchant
+            </Button>
           </div>
+
         </div>
       </section>
 
@@ -517,10 +477,25 @@ export default function MerchantsPage() {
       />
 
       <style>{`
+        .merchant-step-card:hover {
+          transform: translateY(-3px);
+          border-color: #D1D5DB !important;
+          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06) !important;
+        }
         @media (max-width: 1024px) {
           .merchant-commission-grid {
             grid-template-columns: 1fr !important;
             gap: 2.5rem !important;
+          }
+          .merchant-industry-flow-grid {
+            grid-template-columns: repeat(3, 1fr) !important;
+            gap: 1.25rem !important;
+          }
+        }
+        @media (max-width: 768px) {
+          .merchant-industry-flow-grid {
+            grid-template-columns: 1fr !important;
+            gap: 1rem !important;
           }
         }
       `}</style>
