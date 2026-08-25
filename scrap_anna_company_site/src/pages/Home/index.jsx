@@ -1037,10 +1037,23 @@ export default function HomePage() {
 
       {/* Responsive CSS */}
       <style>{`
+        .audience-feature-card:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08) !important;
+          border-color: #D1D5DB !important;
+        }
+        .audience-feature-card:hover .audience-card-link {
+          gap: 0.6rem !important;
+          color: #D97706 !important;
+        }
         @media (max-width: 1024px) {
           .hero-grid, .price-preview-grid {
             grid-template-columns: 1fr !important;
             gap: 2rem !important;
+          }
+          .comparison-grid {
+            grid-template-columns: 1fr !important;
+            gap: 1.5rem !important;
           }
           .how-it-works-timeline {
             flex-wrap: wrap !important;
@@ -1063,16 +1076,35 @@ export default function HomePage() {
             grid-template-columns: repeat(2, 1fr) !important;
           }
         }
-        @media (max-width: 640px) {
-          .stats-highlight-banner {
-            grid-template-columns: 1fr !important;
+        @media (max-width: 768px) {
+          .how-it-works-timeline {
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 1.25rem !important;
           }
           .timeline-step-item {
             max-width: 100% !important;
             width: 100% !important;
+            background-color: #F9FAFB;
+            border: 1px solid #E5E7EB;
+            border-radius: 12px;
+            padding: 1.5rem 1.25rem;
+          }
+          .comparison-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+        @media (max-width: 640px) {
+          .stats-highlight-banner {
+            grid-template-columns: 1fr !important;
+            padding: 1.5rem !important;
+          }
+          .stat-banner-item {
+            padding-left: 0.5rem !important;
           }
           .hero-trust-chips {
             grid-template-columns: repeat(2, 1fr) !important;
+            gap: 0.75rem !important;
           }
         }
       `}</style>

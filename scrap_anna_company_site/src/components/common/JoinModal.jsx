@@ -187,7 +187,7 @@ export default function JoinModal({ isOpen, onClose, defaultRole = 'household' }
             <form onSubmit={handleSubmit} noValidate>
               <div style={{ marginBottom: '1.25rem' }}>
                 <label className="form-label">Select Your Account Type</label>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.75rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.75rem' }} className="modal-role-grid">
                   {roleOptions.map((opt) => {
                     const Icon = opt.icon;
                     const isSelected = role === opt.id;
@@ -227,7 +227,7 @@ export default function JoinModal({ isOpen, onClose, defaultRole = 'household' }
                 </div>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }} className="modal-form-row">
                 <div className="form-group">
                   <label className="form-label">
                     {role === 'industry' || role === 'aggregator' ? 'Company / Contact Name *' : 'Full Name *'}
@@ -255,7 +255,7 @@ export default function JoinModal({ isOpen, onClose, defaultRole = 'household' }
                 </div>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }} className="modal-form-row">
                 <div className="form-group">
                   <label className="form-label">Email Address (Optional)</label>
                   <input
@@ -312,6 +312,15 @@ export default function JoinModal({ isOpen, onClose, defaultRole = 'household' }
           )}
         </div>
       </div>
+
+      <style>{`
+        @media (max-width: 540px) {
+          .modal-role-grid, .modal-form-row {
+            grid-template-columns: 1fr !important;
+            gap: 0.75rem !important;
+          }
+        }
+      `}</style>
     </div>
   );
 }

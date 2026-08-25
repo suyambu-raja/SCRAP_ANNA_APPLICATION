@@ -457,35 +457,15 @@ export default function Navbar({ onOpenJoinModal }) {
           </button>
         </div>
 
-        {/* Mobile Hamburger Toggle & Quick CTA */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }} className="mobile-toggle-wrapper">
-          <button
-            onClick={() => onOpenJoinModal('household')}
-            style={{
-              backgroundColor: 'var(--color-primary-yellow)',
-              color: '#1F242D',
-              fontWeight: 700,
-              fontSize: '0.8rem',
-              padding: '0.45rem 0.85rem',
-              borderRadius: '6px',
-              border: 'none',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.25rem'
-            }}
-          >
-            <span>Get Started</span>
-            <ArrowRight size={13} strokeWidth={2.2} />
-          </button>
-
+        {/* Mobile Hamburger Toggle */}
+        <div style={{ display: 'flex', alignItems: 'center' }} className="mobile-toggle-wrapper">
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             style={{
               backgroundColor: '#F3F4F6',
               border: '1px solid #E5E7EB',
               borderRadius: '8px',
-              padding: '0.4rem',
+              padding: '0.45rem',
               color: '#1F242D',
               cursor: 'pointer',
               display: 'flex',
