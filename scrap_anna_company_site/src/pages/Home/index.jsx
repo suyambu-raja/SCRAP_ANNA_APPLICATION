@@ -530,7 +530,7 @@ export default function HomePage() {
                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#E5B214'}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'var(--color-primary-yellow)'}
               >
-                <span>Explore Industry Bidding</span>
+                <span>Explore Merchant Offers</span>
                 <ArrowRight size={15} className="cta-btn-arrow" />
               </Link>
             </div>
