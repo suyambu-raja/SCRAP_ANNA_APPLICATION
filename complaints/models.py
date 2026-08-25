@@ -22,6 +22,7 @@ class Complaint(BaseModel):
     evidence_urls = models.JSONField(default=list)
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.OPEN, db_index=True)
     resolution_outcome = models.CharField(max_length=30, choices=ResolutionOutcome.choices, null=True, blank=True)
+    resolution_notes = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return f"Complaint {self.id} by {self.raised_by}"

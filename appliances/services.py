@@ -4,8 +4,15 @@ from django.utils import timezone
 from django.db import transaction
 from django.db.models import QuerySet
 
-from appliances.models import ApplianceListing
+import uuid
+
+from appliances.models import ApplianceListing, ApplianceBill
 from accounts.models import Account
+from settlements.services import (
+    calculate_commission,
+    get_active_commission_rate,
+    create_settlement_record
+)
 
 logger = logging.getLogger(__name__)
 
@@ -119,16 +126,9 @@ def accept_listing(listing_id: int, merchant_account: Account) -> ApplianceListi
         return listing
 
 
-def record_final_price(listing_id: int, merchant_account: Account, agreed_price: Decimal) -> ApplianceListing:
+def record_final_price(listing_id: int, merchant_account: Account, agreed_price: Decimal) -> ApplianceBill:
     """
     Records the final negotiated price at the point of pickup and transitions status to COLLECTED.
-
-    GAP IDENTIFIED: 
-    The `ApplianceListing` model currently has no suitable field to store the final `agreed_price`, weight, or payment reference.
-    
-    TODO / FIXME: A proper ApplianceBill model (mirroring pickups.Bill and bidding.CompanyBill) 
-    is needed before commission/settlement can actually be recorded here. We must skip the settlement call 
-    entirely in this case rather than calling it with incomplete data.
     
     Args:
         listing_id (int): The ID of the listing.
@@ -136,7 +136,7 @@ def record_final_price(listing_id: int, merchant_account: Account, agreed_price:
         agreed_price (Decimal): The final negotiated price in-person.
 
     Returns:
-        ApplianceListing: The updated listing with status=COLLECTED.
+        ApplianceBill: The generated bill for this listing.
 
     Raises:
         ValueError: If the listing is not in ACCEPTED status.
@@ -158,14 +158,33 @@ def record_final_price(listing_id: int, merchant_account: Account, agreed_price:
         if listing.accepted_merchant != merchant_account:
             raise PermissionError("You can only record the price for a listing you have accepted.")
 
-        # GAP: No suitable field in ApplianceListing exists to save `agreed_price`.
-        # We perform the status transition to keep the flow moving, but skip the settlement
-        # call entirely because we cannot record complete data without an ApplianceBill model.
+        transaction_type = "USER_PICKUP"
+        commission_amount = calculate_commission(agreed_price, transaction_type)
+        commission_rate = get_active_commission_rate(transaction_type)
+        
+        payment_reference = f"PAY-APP-{uuid.uuid4().hex[:8].upper()}"
+
+        bill = ApplianceBill.objects.create(
+            listing=listing,
+            merchant=merchant_account,
+            agreed_price=agreed_price,
+            commission_rate=commission_rate,
+            commission_amount=commission_amount,
+            payment_reference=payment_reference
+        )
+
         listing.status = ApplianceListing.Status.COLLECTED
         listing.save(update_fields=['status'])
         
+        create_settlement_record(
+            merchant_account=merchant_account,
+            gross_transacted_value=agreed_price,
+            transaction_type=transaction_type,
+            source_reference_id=str(bill.id)
+        )
+        
         logger.info(
             f"Merchant {merchant_account.phone_number} collected ApplianceListing {listing.id} "
-            f"for agreed price {agreed_price}. (WARNING: Price and settlement skipped due to schema gap!)"
+            f"for agreed price {agreed_price}. Generated Bill {bill.id} and Settlement."
         )
-        return listing
+        return bill
