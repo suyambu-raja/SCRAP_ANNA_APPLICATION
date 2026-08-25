@@ -1,0 +1,95 @@
+:root {
+  /* Brand Core Colors (Yellow + Graphite + White) */
+  --color-primary-yellow: #F9C51C;
+  --color-primary-yellow-hover: #E5B214;
+  --color-primary-yellow-active: #CA9B0D;
+  --color-primary-yellow-light: #FFFBEB;
+  --color-soft-yellow: #FFF8DB;
+  --color-soft-yellow-border: #FDE68A;
+
+  --color-secondary-graphite: #374151;
+  --color-graphite-hover: #2D333E;
+  --color-graphite-dark: #20242D;
+  --color-graphite-light: #4B5563;
+
+  --color-white: #FFFFFF;
+  --color-offwhite: #F9FAFB;
+  --color-surface-card: #FFFFFF;
+  --color-surface-subtle: #F3F4F6;
+
+  /* Typography Colors */
+  --color-text-primary: #1F242D;
+  --color-text-secondary: #374151;
+  --color-text-muted: #6B7280;
+  --color-text-light: #9CA3AF;
+  --color-text-inverse: #FFFFFF;
+
+  /* Borders */
+  --color-border: #E5E7EB;
+  --color-border-hover: #D1D5DB;
+  --color-border-dark: #374151;
+
+  /* Functional */
+  --color-success: #16A34A;
+  --color-success-light: #DCFCE7;
+  --color-warning: #F59E0B;
+  --color-warning-light: #FEF3C7;
+  --color-error: #DC2626;
+  --color-error-light: #FEE2E2;
+
+  /* Typography — Inter only */
+  --font-primary: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-heading: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Desktop Typography Scale (reference-accurate) */
+  --text-h1: 3.5rem;   /* 56px */
+  --text-h2: 2rem;     /* 32px */
+  --text-h3: 1.25rem;  /* 20px */
+  --text-h4: 1.125rem; /* 18px */
+  --text-body-lg: 1.0625rem; /* 17px */
+  --text-body: 1rem;   /* 16px */
+  --text-small: 0.875rem; /* 14px */
+  --text-xs: 0.75rem;  /* 12px */
+  --text-btn: 0.9375rem; /* 15px */
+  --text-nav: 0.875rem;  /* 14px */
+
+  /* Border Radius */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-pill: 9999px;
+
+  /* Shadows — subtle, professional */
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.06), 0 1px 2px -1px rgba(0, 0, 0, 0.04);
+  --shadow-card: 0 4px 16px rgba(17,24,39,0.05);
+  --shadow-md: 0 4px 12px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 8px 20px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+  --shadow-xl: 0 16px 32px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+  --shadow-yellow: 0 4px 14px -2px rgba(249, 197, 28, 0.3);
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-normal: 200ms ease;
+  --transition-slow: 300ms ease;
+
+  /* Layout */
+  --container-max-width: 1340px;
+  --container-padding: 1.5rem; /* 24px — tighter professional margins */
+  --header-height: 72px;
+  --section-spacing: 4.5rem; /* 72px */
+}
+
+@media (max-width: 768px) {
+  :root {
+    --text-h1: 2.25rem; /* 36px */
+    --text-h2: 1.625rem; /* 26px */
+    --text-h3: 1.125rem; /* 18px */
+    --text-body-lg: 0.9375rem;
+    --container-padding: 1.5rem; /* 24px mobile */
+    --header-height: 68px;
+    --section-spacing: 3.5rem; /* 56px */
+  }
+}

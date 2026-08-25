@@ -1,0 +1,1081 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { 
+  ArrowRight, ShieldCheck, CheckCircle2, XCircle, TrendingUp, 
+  Sparkles, Home, Store, Factory, Network, FilePlus2, Users, 
+  CalendarClock, Scale, FileCheck, MapPin, Receipt, 
+  FileText, ShieldAlert, Headphones, ChevronRight, HelpCircle,
+  Smartphone, UserCheck, Truck, Recycle
+} from 'lucide-react';
+import SEO from '../../components/common/SEO';
+import SectionHeader from '../../components/common/SectionHeader';
+import Button from '../../components/common/Button';
+import CTASection from '../../components/common/CTASection';
+import { useJoinModal } from '../../components/layout/Layout';
+import { 
+  audienceCards, howItWorksSteps, trustFeatures, 
+  comparisonData, impactStatistics, marketPricesData 
+} from '../../data/siteData';
+import heroTruckImg from '../../assets/hero-truck.png';
+
+export default function HomePage() {
+  const { openJoinModal } = useJoinModal();
+
+  const getAudienceIcon = (iconName) => {
+    switch (iconName) {
+      case 'Home': return Home;
+      case 'Store': return Store;
+      case 'Factory': return Factory;
+      case 'Network': return Network;
+      default: return Sparkles;
+    }
+  };
+
+  const getStepIcon = (iconName) => {
+    switch (iconName) {
+      case 'FilePlus2': return FilePlus2;
+      case 'Users': return Users;
+      case 'CalendarClock': return CalendarClock;
+      case 'Scale': return Scale;
+      case 'FileCheck': return FileCheck;
+      default: return Sparkles;
+    }
+  };
+
+  const getTrustIcon = (iconName) => {
+    switch (iconName) {
+      case 'ShieldCheck': return ShieldCheck;
+      case 'MapPin': return MapPin;
+      case 'Receipt': return Receipt;
+      case 'FileText': return FileText;
+      case 'ShieldAlert': return ShieldAlert;
+      case 'Headphones': return Headphones;
+      default: return ShieldCheck;
+    }
+  };
+
+  return (
+    <>
+      <SEO 
+        title="Scrap Anna - Digital Scrap Connection Platform | Chennai, Tamil Nadu" 
+        description="Scrap Anna connects households, merchants and industries in Chennai, Tamil Nadu on one digital platform for transparent transactions, fair reference prices and responsible recycling."
+      />
+
+      {/* HERO SECTION */}
+      <section style={{ 
+        backgroundColor: 'var(--color-white)',
+        overflow: 'hidden',
+        position: 'relative'
+      }}>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          alignItems: 'center',
+          width: '100%'
+        }} className="hero-grid">
+          
+          {/* Left Hero Content */}
+          <div style={{ 
+            paddingLeft: 'clamp(1.5rem, 3vw, 3rem)',
+            paddingRight: '1rem',
+            paddingTop: '3rem',
+            paddingBottom: '3rem'
+          }}>
+            <div style={{ marginBottom: '0.75rem' }}>
+              <span className="badge badge-yellow" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.75rem', fontWeight: 700 }}>
+                <MapPin size={13} />
+                Launching in Chennai, Tamil Nadu
+              </span>
+            </div>
+
+            <h1 style={{
+              color: 'var(--color-graphite-dark)',
+              fontSize: 'clamp(2rem, 3.5vw, 3rem)',
+              lineHeight: 1.12,
+              marginBottom: '1rem',
+              letterSpacing: '-0.02em',
+              fontWeight: 800
+            }}>
+              Connecting Scrap.<br />
+              Creating Value.<br />
+              Building a{' '}
+              <span style={{ color: 'var(--color-primary-yellow)' }}>
+                Better Tomorrow.
+              </span>
+            </h1>
+
+            <p style={{
+              fontSize: '0.9375rem',
+              color: 'var(--color-text-secondary)',
+              lineHeight: 1.6,
+              marginBottom: '1.5rem',
+              maxWidth: '460px'
+            }}>
+              Scrap Anna is starting its journey in Chennai, connecting households, merchants and industries on one digital platform for transparent transactions, fair prices and a cleaner future.
+            </p>
+
+            {/* Trust Points — 4 icons in a horizontal row */}
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(4, 1fr)',
+              gap: '0.5rem',
+              marginBottom: '1.75rem',
+              maxWidth: '460px'
+            }} className="hero-trust-chips">
+              {[
+                { icon: ShieldCheck, label: "Verified & Trusted Network" },
+                { icon: Receipt, label: "Digital Billing & Payments" },
+                { icon: TrendingUp, label: "Fair Prices & Market Transparency" },
+                { icon: Scale, label: "Secure & Safe Transactions" }
+              ].map((item, idx) => {
+                const TrustIcon = item.icon;
+                return (
+                  <div key={idx} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '0.3rem' }}>
+                    <div style={{
+                      width: '38px',
+                      height: '38px',
+                      borderRadius: '50%',
+                      backgroundColor: '#F9FAFB',
+                      border: '1.5px solid var(--color-border)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: '#374151'
+                    }}>
+                      <TrustIcon size={18} strokeWidth={1.6} />
+                    </div>
+                    <span style={{ fontSize: '0.65rem', fontWeight: 500, color: 'var(--color-text-secondary)', lineHeight: 1.3 }}>
+                      {item.label}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* CTA Buttons */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', alignItems: 'center' }}>
+              <Button
+                variant="primary"
+                size="lg"
+                icon={ArrowRight}
+                onClick={() => openJoinModal('household')}
+              >
+                Join Scrap Anna
+              </Button>
+              <button
+                onClick={() => window.location.href = '/how-it-works'}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  padding: '0.7rem 1.4rem',
+                  backgroundColor: 'var(--color-white)',
+                  border: '1.5px solid var(--color-border)',
+                  borderRadius: 'var(--radius-lg)',
+                  cursor: 'pointer',
+                  fontSize: '0.9375rem',
+                  fontWeight: 600,
+                  color: 'var(--color-graphite-dark)',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                <span style={{
+                  width: '22px',
+                  height: '22px',
+                  borderRadius: '50%',
+                  backgroundColor: 'var(--color-graphite-dark)',
+                  color: 'var(--color-white)',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '0.6rem'
+                }}>▶</span>
+                Watch How It Works
+              </button>
+            </div>
+          </div>
+
+          {/* Right Hero Image — flush to right edge */}
+          <div style={{ 
+            display: 'flex', 
+            alignItems: 'flex-end', 
+            justifyContent: 'flex-end',
+            alignSelf: 'end',
+            overflow: 'hidden',
+            height: '100%',
+            padding: 0,
+            margin: 0
+          }}>
+            <img
+              src={heroTruckImg}
+              alt="Scrap Anna branded truck loaded with scrap metal, city skyline and barrels"
+              style={{
+                width: '100%',
+                height: 'auto',
+                display: 'block',
+                objectFit: 'contain',
+                objectPosition: 'right bottom',
+                padding: 0,
+                margin: 0
+              }}
+              loading="eager"
+            />
+          </div>
+
+        </div>
+      </section>
+
+      {/* WHO IS SCRAP ANNA FOR? AUDIENCE SECTION */}
+      <section className="section bg-white" style={{ paddingTop: '3.5rem', paddingBottom: '3.5rem' }}>
+        <div className="container">
+          <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+            <h2 style={{ 
+              fontSize: 'clamp(1.75rem, 3vw, 2.25rem)', 
+              fontWeight: 800, 
+              color: '#1F242D', 
+              letterSpacing: '-0.02em',
+              marginBottom: '0.65rem'
+            }}>
+              Who is <span style={{ color: 'var(--color-primary-yellow)' }}>Scrap Anna</span> For?
+            </h2>
+            <div style={{ 
+              width: '44px', 
+              height: '3px', 
+              backgroundColor: 'var(--color-primary-yellow)', 
+              margin: '0 auto', 
+              borderRadius: '2px' 
+            }} />
+          </div>
+
+          <div className="grid-4" style={{ gap: '1.5rem' }}>
+            {[
+              {
+                title: "For Households",
+                description: "Sell your household scrap easily. We connect you with nearby verified merchants.",
+                icon: Home,
+                iconBg: "#FFF3C4",
+                iconColor: "#1F242D",
+                link: "/households"
+              },
+              {
+                title: "For Merchants",
+                description: "Get quality leads, manage pickups and grow your scrap business with ease.",
+                icon: Store,
+                iconBg: "#20242D",
+                iconColor: "#FFFFFF",
+                link: "/merchants"
+              },
+              {
+                title: "For Industries",
+                description: "Dispose or sell your industrial scrap with verified merchants and digital records.",
+                icon: Factory,
+                iconBg: "#FFF3C4",
+                iconColor: "#1F242D",
+                link: "/industries"
+              },
+              {
+                title: "For Aggregators",
+                description: "Partner with us to expand your network and maximize opportunities.",
+                icon: Users,
+                iconBg: "#20242D",
+                iconColor: "#FFFFFF",
+                link: "/aggregators"
+              }
+            ].map((card, idx) => {
+              const IconComponent = card.icon;
+              return (
+                <div
+                  key={idx}
+                  style={{
+                    backgroundColor: '#FFFFFF',
+                    border: '1px solid #E5E7EB',
+                    borderRadius: '14px',
+                    padding: '2.5rem 1.5rem 2rem',
+                    textAlign: 'center',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
+                    transition: 'all 0.25s ease'
+                  }}
+                  className="audience-feature-card"
+                >
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <div style={{
+                      width: '68px',
+                      height: '68px',
+                      borderRadius: '50%',
+                      backgroundColor: card.iconBg,
+                      color: card.iconColor,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      marginBottom: '1.5rem',
+                      boxShadow: '0 2px 6px rgba(0,0,0,0.06)'
+                    }}>
+                      <IconComponent size={30} strokeWidth={2} />
+                    </div>
+
+                    <h3 style={{
+                      fontSize: '1.25rem',
+                      fontWeight: 800,
+                      color: '#1F242D',
+                      marginBottom: '0.85rem'
+                    }}>
+                      {card.title}
+                    </h3>
+
+                    <p style={{
+                      fontSize: '0.875rem',
+                      color: '#4B5563',
+                      lineHeight: 1.6,
+                      marginBottom: '1.75rem',
+                      maxWidth: '240px'
+                    }}>
+                      {card.description}
+                    </p>
+                  </div>
+
+                  <Link
+                    to={card.link}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.35rem',
+                      fontSize: '0.875rem',
+                      fontWeight: 700,
+                      color: '#1F242D',
+                      textDecoration: 'none',
+                      transition: 'gap 0.15s ease'
+                    }}
+                    className="audience-card-link"
+                  >
+                    <span>Learn More</span>
+                    <ArrowRight size={15} />
+                  </Link>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* More Opportunities for Merchants Informational Banner */}
+          <div style={{
+            marginTop: '2.5rem',
+            backgroundColor: '#F9FAFB',
+            border: '1px solid #E5E7EB',
+            borderRadius: '12px',
+            padding: '1.25rem 1.75rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: '1rem'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+              <div style={{
+                width: '40px',
+                height: '40px',
+                borderRadius: '8px',
+                backgroundColor: '#FFF8DB',
+                border: '1px solid #FDE68A',
+                color: '#1F242D',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0
+              }}>
+                <Store size={20} />
+              </div>
+              <div>
+                <h4 style={{ fontSize: '1rem', fontWeight: 700, color: '#1F242D', margin: 0, marginBottom: '0.2rem' }}>
+                  More Opportunities for Merchants
+                </h4>
+                <p style={{ fontSize: '0.875rem', color: '#6B7280', margin: 0 }}>
+                  Buy and sell scrap through a connected network of businesses and scrap partners.
+                </p>
+              </div>
+            </div>
+            <Link
+              to="/merchants"
+              style={{
+                color: '#1F242D',
+                fontWeight: 700,
+                fontSize: '0.875rem',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.35rem',
+                textDecoration: 'none',
+                backgroundColor: '#FFFFFF',
+                border: '1px solid #D1D5DB',
+                padding: '0.5rem 1rem',
+                borderRadius: '8px',
+                transition: 'all 0.15s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = '#1F242D';
+                e.currentTarget.style.backgroundColor = '#F9FAFB';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = '#D1D5DB';
+                e.currentTarget.style.backgroundColor = '#FFFFFF';
+              }}
+            >
+              <span>For Merchants</span>
+              <ArrowRight size={15} style={{ color: 'var(--color-primary-yellow)' }} />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* HOW IT WORKS SECTION */}
+      <section className="section bg-white" id="how-it-works" style={{ paddingTop: '3.5rem', paddingBottom: '3.5rem' }}>
+        <div className="container">
+          <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
+            <h2 style={{ 
+              fontSize: 'clamp(1.75rem, 3vw, 2.25rem)', 
+              fontWeight: 800, 
+              color: '#1F242D', 
+              letterSpacing: '-0.02em',
+              marginBottom: '0.65rem'
+            }}>
+              How It Works
+            </h2>
+            <div style={{ 
+              width: '44px', 
+              height: '3px', 
+              backgroundColor: 'var(--color-primary-yellow)', 
+              margin: '0 auto', 
+              borderRadius: '2px' 
+            }} />
+          </div>
+
+          {/* 5 Steps in a Row with Arrows in between */}
+          <div 
+            style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              justifyContent: 'space-between',
+              position: 'relative'
+            }}
+            className="how-it-works-timeline"
+          >
+            {[
+              {
+                num: "1.",
+                title: "Post Scrap",
+                desc: "Post your scrap with details, photos and location.",
+                icon: Smartphone,
+                iconBg: "#FFF3C4",
+                iconColor: "#1F242D"
+              },
+              {
+                num: "2.",
+                title: "Get Connected",
+                desc: "Nearby verified merchants show interest in your request.",
+                icon: UserCheck,
+                iconBg: "#F3F4F6",
+                iconColor: "#1F242D"
+              },
+              {
+                num: "3.",
+                title: "Pickup Scheduled",
+                desc: "Select a merchant and schedule the pickup conveniently.",
+                icon: Truck,
+                iconBg: "#FFF3C4",
+                iconColor: "#1F242D"
+              },
+              {
+                num: "4.",
+                title: "Scrap Collected",
+                desc: "Scrap is collected, weighed and verified at your location.",
+                icon: Scale,
+                iconBg: "#F3F4F6",
+                iconColor: "#1F242D"
+              },
+              {
+                num: "5.",
+                title: "Digital Bill",
+                desc: "Digital bill is generated and payment is completed transparently.",
+                icon: Receipt,
+                iconBg: "#FFF3C4",
+                iconColor: "#1F242D"
+              }
+            ].map((step, idx) => {
+              const StepIcon = step.icon;
+              return (
+                <React.Fragment key={idx}>
+                  <div 
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      textAlign: 'center',
+                      flex: '1 1 0',
+                      maxWidth: '190px'
+                    }}
+                    className="timeline-step-item"
+                  >
+                    <div style={{
+                      width: '64px',
+                      height: '64px',
+                      borderRadius: '50%',
+                      backgroundColor: step.iconBg,
+                      color: step.iconColor,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      marginBottom: '1.25rem',
+                      boxShadow: '0 2px 6px rgba(0,0,0,0.05)'
+                    }}>
+                      <StepIcon size={28} strokeWidth={1.8} />
+                    </div>
+
+                    <h3 style={{
+                      fontSize: '0.95rem',
+                      fontWeight: 800,
+                      color: '#1F242D',
+                      marginBottom: '0.45rem'
+                    }}>
+                      {step.num} {step.title}
+                    </h3>
+
+                    <p style={{
+                      fontSize: '0.8rem',
+                      color: '#4B5563',
+                      lineHeight: 1.5,
+                      margin: 0
+                    }}>
+                      {step.desc}
+                    </p>
+                  </div>
+
+                  {/* Connecting Arrow between steps */}
+                  {idx < 4 && (
+                    <div 
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        paddingTop: '1.4rem',
+                        color: '#6B7280',
+                        flexShrink: 0
+                      }}
+                      className="timeline-arrow"
+                    >
+                      <ArrowRight size={20} strokeWidth={1.75} />
+                    </div>
+                  )}
+                </React.Fragment>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* TRUST & TRANSPARENCY SECTION */}
+      <section className="section bg-graphite-dark text-white" style={{ borderTop: '1px solid #374151' }}>
+        <div className="container">
+          <SectionHeader
+            eyebrow="Integrity First"
+            title="Built for Trust. Designed for Transparency."
+            subtitle="Every interaction is protected with digital records, verified credentials, and real-time oversight."
+            dark={true}
+          />
+
+          <div className="grid-3" style={{ gap: '1.5rem' }}>
+            {trustFeatures.map((feat, idx) => {
+              const Icon = getTrustIcon(feat.iconName);
+              return (
+                <div 
+                  key={idx}
+                  style={{
+                    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    borderRadius: 'var(--radius-lg)',
+                    padding: '2rem',
+                    transition: 'all var(--transition-normal)'
+                  }}
+                >
+                  <div style={{
+                    width: '46px',
+                    height: '46px',
+                    borderRadius: 'var(--radius-md)',
+                    backgroundColor: 'rgba(249, 197, 28, 0.15)',
+                    border: '1px solid rgba(249, 197, 28, 0.3)',
+                    color: 'var(--color-primary-yellow)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: '1.25rem'
+                  }}>
+                    <Icon size={24} />
+                  </div>
+
+                  <h3 style={{ color: 'var(--color-white)', fontSize: '1.25rem', marginBottom: '0.75rem' }}>
+                    {feat.title}
+                  </h3>
+
+                  <p style={{ color: '#9CA3AF', fontSize: 'var(--text-small)', lineHeight: 1.6, margin: 0 }}>
+                    {feat.description}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* WHY SCRAP ANNA? COMPARISON SECTION */}
+      <section className="section bg-white">
+        <div className="container">
+          <SectionHeader
+            eyebrow="Market Comparison"
+            title="Why Scrap Anna?"
+            subtitle="How our tech-enabled marketplace solves the fundamental hurdles of traditional scrap collection."
+          />
+
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: '2rem',
+            maxWidth: '1000px',
+            margin: '0 auto'
+          }} className="comparison-grid">
+            
+            {/* Traditional Scrap Card */}
+            <div style={{
+              backgroundColor: 'var(--color-offwhite)',
+              borderRadius: 'var(--radius-lg)',
+              padding: '2.25rem',
+              border: '1px solid var(--color-border)'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '1.5rem' }}>
+                <div style={{
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '50%',
+                  backgroundColor: '#FEE2E2',
+                  color: '#DC2626',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  <XCircle size={20} />
+                </div>
+                <h3 style={{ fontSize: '1.25rem', color: 'var(--color-graphite-dark)', margin: 0 }}>
+                  Traditional Scrap Method
+                </h3>
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                {comparisonData.traditional.map((item, idx) => (
+                  <div key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
+                    <XCircle size={18} style={{ color: '#DC2626', flexShrink: 0, marginTop: '3px' }} />
+                    <span style={{ fontSize: 'var(--text-small)', color: 'var(--color-text-secondary)', lineHeight: 1.5 }}>
+                      {item}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Scrap Anna Card */}
+            <div style={{
+              backgroundColor: 'var(--color-primary-yellow-light)',
+              borderRadius: 'var(--radius-lg)',
+              padding: '2.25rem',
+              border: '2px solid var(--color-primary-yellow)',
+              boxShadow: 'var(--shadow-md)',
+              position: 'relative'
+            }}>
+              <div style={{
+                position: 'absolute',
+                top: '-12px',
+                right: '1.5rem',
+                backgroundColor: 'var(--color-graphite-dark)',
+                color: 'var(--color-primary-yellow)',
+                fontSize: '0.75rem',
+                fontWeight: 700,
+                padding: '0.25rem 0.75rem',
+                borderRadius: 'var(--radius-pill)',
+                letterSpacing: '0.05em'
+              }}>
+                MODERN STANDARD
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '1.5rem' }}>
+                <div style={{
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '50%',
+                  backgroundColor: 'var(--color-primary-yellow)',
+                  color: 'var(--color-graphite-dark)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  <CheckCircle2 size={20} strokeWidth={2.5} />
+                </div>
+                <h3 style={{ fontSize: '1.25rem', color: 'var(--color-graphite-dark)', margin: 0 }}>
+                  Scrap Anna Platform
+                </h3>
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                {comparisonData.scrapAnna.map((item, idx) => (
+                  <div key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
+                    <CheckCircle2 size={18} style={{ color: '#16A34A', flexShrink: 0, marginTop: '3px' }} />
+                    <span style={{ fontSize: 'var(--text-small)', color: 'var(--color-graphite-dark)', fontWeight: 500, lineHeight: 1.5 }}>
+                      {item}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* MARKET PRICES PREVIEW SECTION */}
+      <section className="section bg-offwhite" style={{ borderTop: '1px solid var(--color-border)' }}>
+        <div className="container">
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 1.2fr',
+            gap: '3.5rem',
+            alignItems: 'center'
+          }} className="price-preview-grid">
+            
+            {/* Left Description */}
+            <div>
+              <span className="badge badge-yellow" style={{ marginBottom: '1rem' }}>
+                Market Transparency
+              </span>
+              <h2 style={{ fontSize: 'var(--text-h2)', marginBottom: '1.25rem', color: 'var(--color-graphite-dark)' }}>
+                Know the Market.{' '}
+                <span className="text-yellow-highlight">Sell with Confidence.</span>
+              </h2>
+              <p style={{ fontSize: 'var(--text-body)', color: 'var(--color-text-secondary)', lineHeight: 1.7, marginBottom: '1.5rem' }}>
+                Scrap Anna provides indicative reference market pricing across metals, paper, polymers, and e-waste so you always know fair fair-market value before scheduling.
+              </p>
+
+              <div style={{
+                backgroundColor: 'var(--color-soft-yellow)',
+                border: '1px solid var(--color-soft-yellow-border)',
+                borderRadius: 'var(--radius-md)',
+                padding: '1rem 1.25rem',
+                marginBottom: '2rem'
+              }}>
+                <p style={{ fontSize: 'var(--text-small)', color: 'var(--color-graphite-dark)', margin: 0, lineHeight: 1.5 }}>
+                  <strong>Disclaimer:</strong> Prices are reference market rates and may vary based on location, material quality, quantity, and daily market movements.
+                </p>
+              </div>
+
+              <Button
+                to="/market-prices"
+                variant="primary"
+                size="lg"
+                icon={ArrowRight}
+              >
+                View Full Market Price Directory
+              </Button>
+            </div>
+
+            {/* Right Reference Rates Preview Table */}
+            <div style={{
+              backgroundColor: 'var(--color-white)',
+              borderRadius: 'var(--radius-lg)',
+              boxShadow: 'var(--shadow-md)',
+              border: '1px solid var(--color-border)',
+              overflow: 'hidden'
+            }}>
+              <div style={{
+                backgroundColor: 'var(--color-secondary-graphite)',
+                color: 'var(--color-white)',
+                padding: '1.25rem 1.5rem',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center'
+              }}>
+                <div style={{ fontWeight: 700, fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <TrendingUp size={18} style={{ color: 'var(--color-primary-yellow)' }} />
+                  <span>Reference Scrap Rates (Indicative)</span>
+                </div>
+                <span style={{ fontSize: '0.75rem', backgroundColor: 'rgba(255,255,255,0.15)', padding: '0.2rem 0.5rem', borderRadius: '4px' }}>
+                  Updated Daily
+                </span>
+              </div>
+
+              <div style={{ padding: '1rem 1.5rem' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                  <thead>
+                    <tr style={{ borderBottom: '1px solid var(--color-border)' }}>
+                      <th style={{ textAlign: 'left', padding: '0.75rem 0', fontSize: '0.8rem', color: 'var(--color-text-muted)', textTransform: 'uppercase' }}>Material</th>
+                      <th style={{ textAlign: 'right', padding: '0.75rem 0', fontSize: '0.8rem', color: 'var(--color-text-muted)', textTransform: 'uppercase' }}>Est. Rate</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      { material: "Copper Scrap (Armature/Heavy)", price: "₹650 - ₹720 / kg" },
+                      { material: "Aluminium Section / Extrusions", price: "₹140 - ₹170 / kg" },
+                      { material: "Iron / Heavy Melting Scrap", price: "₹28 - ₹34 / kg" },
+                      { material: "Old Corrugated Cardboard (OCC)", price: "₹12 - ₹15 / kg" },
+                      { material: "Computer CPU Motherboards", price: "₹180 - ₹240 / pc" }
+                    ].map((item, idx) => (
+                      <tr key={idx} style={{ borderBottom: idx < 4 ? '1px solid #F3F4F6' : 'none' }}>
+                        <td style={{ padding: '0.85rem 0', fontWeight: 600, color: 'var(--color-text-primary)', fontSize: '0.95rem' }}>
+                          {item.material}
+                        </td>
+                        <td style={{ padding: '0.85rem 0', textAlign: 'right', fontWeight: 700, color: 'var(--color-graphite-dark)', fontSize: '0.95rem' }}>
+                          {item.price}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <div style={{ backgroundColor: '#F9FAFB', padding: '0.75rem 1.5rem', borderTop: '1px solid var(--color-border)', textAlign: 'center' }}>
+                <Link to="/market-prices" style={{ fontSize: '0.85rem', fontWeight: 600, color: '#D97706' }}>
+                  See all 20+ materials & calculate estimated value →
+                </Link>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* STATS / IMPACT BANNER (Directly below How It Works per reference) */}
+      <section className="section bg-white" style={{ paddingTop: '1rem', paddingBottom: '3.5rem' }}>
+        <div className="container">
+          <div 
+            style={{
+              backgroundColor: '#FFFBEB',
+              border: '1px solid #FDE68A',
+              borderRadius: '14px',
+              padding: '2.25rem 2rem',
+              display: 'grid',
+              gridTemplateColumns: 'repeat(4, 1fr)',
+              alignItems: 'center',
+              gap: '1rem',
+              boxShadow: '0 2px 10px rgba(249, 197, 28, 0.06)'
+            }}
+            className="stats-highlight-banner"
+          >
+            {[
+              {
+                icon: Users,
+                iconColor: "var(--color-primary-yellow)",
+                value: "10K+",
+                label: "Happy Households",
+                border: true
+              },
+              {
+                icon: Store,
+                iconColor: "#1F242D",
+                value: "2K+",
+                label: "Active Merchants",
+                border: true
+              },
+              {
+                icon: Factory,
+                iconColor: "#1F242D",
+                value: "500+",
+                label: "Industries Connected",
+                border: true
+              },
+              {
+                icon: Recycle,
+                iconColor: "var(--color-primary-yellow)",
+                value: "25K+",
+                label: "Tons of Scrap Recycled",
+                border: false
+              }
+            ].map((stat, idx) => {
+              const StatIcon = stat.icon;
+              return (
+                <div 
+                  key={idx}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '1rem',
+                    borderRight: stat.border ? '1px solid #FDE68A' : 'none',
+                    paddingRight: stat.border ? '1rem' : '0'
+                  }}
+                  className="stat-banner-item"
+                >
+                  <div style={{ color: stat.iconColor, flexShrink: 0 }}>
+                    <StatIcon size={42} strokeWidth={2} />
+                  </div>
+                  <div>
+                    <div style={{
+                      fontSize: '1.85rem',
+                      fontWeight: 800,
+                      color: '#1F242D',
+                      lineHeight: 1.1,
+                      letterSpacing: '-0.02em'
+                    }}>
+                      {stat.value}
+                    </div>
+                    <div style={{
+                      fontSize: '0.85rem',
+                      fontWeight: 500,
+                      color: '#4B5563',
+                      marginTop: '3px',
+                      whiteSpace: 'nowrap'
+                    }}>
+                      {stat.label}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* STARTING IN CHENNAI INITIAL LAUNCH SECTION */}
+      <section className="section bg-white" style={{ paddingTop: '3.5rem', paddingBottom: '3.5rem', borderTop: '1px solid #E5E7EB' }}>
+        <div className="container" style={{ maxWidth: '960px' }}>
+          <div style={{
+            backgroundColor: '#FFF8DB',
+            border: '1.5px solid #FDE68A',
+            borderRadius: '16px',
+            padding: '2.5rem 2.5rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '2rem',
+            flexWrap: 'wrap',
+            boxShadow: '0 4px 16px rgba(249, 197, 28, 0.08)'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1.25rem', flex: '1 1 480px' }}>
+              <div style={{
+                width: '54px',
+                height: '54px',
+                borderRadius: '12px',
+                backgroundColor: '#FFFFFF',
+                border: '1px solid #FDE68A',
+                color: '#92400E',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0
+              }}>
+                <MapPin size={28} />
+              </div>
+
+              <div>
+                <span style={{
+                  display: 'inline-block',
+                  fontSize: '0.75rem',
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em',
+                  color: '#92400E',
+                  marginBottom: '0.35rem'
+                }}>
+                  Starting in Chennai
+                </span>
+                <h3 style={{
+                  fontSize: '1.45rem',
+                  fontWeight: 800,
+                  color: '#1F242D',
+                  margin: '0 0 0.5rem 0',
+                  lineHeight: 1.25
+                }}>
+                  Scrap Anna is launching in Chennai, Tamil Nadu.
+                </h3>
+                <p style={{
+                  fontSize: '0.95rem',
+                  color: '#4B5563',
+                  lineHeight: 1.6,
+                  margin: 0
+                }}>
+                  We're starting locally by connecting households, merchants and industries in Chennai through a simple and trusted digital scrap network.
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <button
+                onClick={() => openJoinModal('household')}
+                style={{
+                  backgroundColor: '#1F242D',
+                  color: '#FFFFFF',
+                  fontWeight: 700,
+                  fontSize: '0.95rem',
+                  padding: '0.85rem 1.6rem',
+                  borderRadius: '8px',
+                  border: 'none',
+                  cursor: 'pointer',
+                  whiteSpace: 'nowrap',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.45rem',
+                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
+                  transition: 'background-color 0.15s ease'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#374151'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#1F242D'}
+              >
+                <span>Join Scrap Anna</span>
+                <ArrowRight size={16} />
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FINAL CTA SECTION */}
+      <CTASection onJoinClick={() => openJoinModal('household')} />
+
+      {/* Responsive CSS */}
+      <style>{`
+        @media (max-width: 1024px) {
+          .hero-grid, .price-preview-grid {
+            grid-template-columns: 1fr !important;
+            gap: 2rem !important;
+          }
+          .how-it-works-timeline {
+            flex-wrap: wrap !important;
+            gap: 2rem !important;
+            justifyContent: center !important;
+          }
+          .timeline-arrow {
+            display: none !important;
+          }
+          .stats-highlight-banner {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 1.75rem !important;
+          }
+          .stat-banner-item {
+            border-right: none !important;
+            justifyContent: flex-start !important;
+            padding-left: 1.5rem !important;
+          }
+          .hero-trust-chips {
+            grid-template-columns: repeat(2, 1fr) !important;
+          }
+        }
+        @media (max-width: 640px) {
+          .stats-highlight-banner {
+            grid-template-columns: 1fr !important;
+          }
+          .timeline-step-item {
+            max-width: 100% !important;
+            width: 100% !important;
+          }
+          .hero-trust-chips {
+            grid-template-columns: repeat(2, 1fr) !important;
+          }
+        }
+      `}</style>
+    </>
+  );
+}
