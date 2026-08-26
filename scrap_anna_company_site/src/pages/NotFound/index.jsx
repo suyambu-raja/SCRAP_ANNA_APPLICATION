@@ -10,6 +10,8 @@ export default function NotFoundPage() {
       <SEO
         title="Page Not Found (404) - Scrap Anna"
         description="The page you are looking for does not exist on Scrap Anna. Return to home or explore our scrap recycling solutions."
+        noindex={true}
+        canonical="https://scrapanna.com/404"
       />
 
       <section className="section bg-white" style={{ minHeight: '65vh', display: 'flex', alignItems: 'center' }}>

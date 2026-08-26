@@ -367,6 +367,8 @@ export default function IndustriesPage() {
                 <img
                   src={industrialImg}
                   alt="Scrap Anna clean industrial scrap logistics and handling yard"
+                  width="600"
+                  height="400"
                   style={{
                     width: '100%',
                     height: 'auto',

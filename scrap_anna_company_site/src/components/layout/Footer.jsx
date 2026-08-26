@@ -30,25 +30,13 @@ export default function Footer({ onOpenJoinModal }) {
                 style={{ 
                   display: 'inline-flex', 
                   alignItems: 'center', 
-                  gap: '0.65rem',
                   textDecoration: 'none',
                   marginBottom: '1rem'
                 }}
+                aria-label="Scrap Anna Home"
               >
-                <svg 
-                  width="36" 
-                  height="36" 
-                  viewBox="0 0 100 100" 
-                  fill="none" 
-                  xmlns="http://www.w3.org/2000/svg"
-                  style={{ flexShrink: 0 }}
-                >
-                  <path d="M36 20 L50 6 L64 20 H52 C52 27 55 33 60 37 L52 44 C45 38 41 29 41 20 H36 Z" fill="#F9C51C" />
-                  <path d="M74 42 L88 56 L74 70 V58 C67 58 61 61 57 66 L50 58 C56 51 65 47 74 47 V42 Z" fill="#F9C51C" />
-                  <path d="M26 68 L12 54 L26 40 V50 C33 50 39 47 43 42 L50 50 C44 57 35 61 26 61 V68 Z" fill="#FFFFFF" />
-                </svg>
                 <span style={{
-                  fontSize: '1.25rem',
+                  fontSize: '1.4rem',
                   fontWeight: 800,
                   color: 'var(--color-white)',
                   letterSpacing: '-0.02em'

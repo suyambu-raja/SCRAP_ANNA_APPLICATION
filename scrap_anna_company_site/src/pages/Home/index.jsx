@@ -310,6 +310,8 @@ export default function HomePage() {
             <img
               src={heroTruckImg}
               alt="Scrap Anna branded truck loaded with scrap metal, city skyline and barrels"
+              width="640"
+              height="480"
               style={{
                 width: '100%',
                 height: 'auto',

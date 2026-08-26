@@ -5,36 +5,8 @@ import {
   Home, Store, Factory, Network 
 } from 'lucide-react';
 import { navLinks } from '../../data/siteData';
-
-// Custom 3-segment Scrap Anna Recycle Icon matching reference
-function ScrapAnnaLogoMark({ size = 36 }) {
-  return (
-    <svg 
-      width={size} 
-      height={size} 
-      viewBox="0 0 100 100" 
-      fill="none" 
-      xmlns="http://www.w3.org/2000/svg"
-      style={{ flexShrink: 0 }}
-    >
-      {/* Top-Right Arrow (Yellow) */}
-      <path 
-        d="M36 20 L50 6 L64 20 H52 C52 27 55 33 60 37 L52 44 C45 38 41 29 41 20 H36 Z" 
-        fill="#F9C51C" 
-      />
-      {/* Right-Bottom Arrow (Yellow) */}
-      <path 
-        d="M74 42 L88 56 L74 70 V58 C67 58 61 61 57 66 L50 58 C56 51 65 47 74 47 V42 Z" 
-        fill="#F9C51C" 
-      />
-      {/* Bottom-Left Arrow (Dark Graphite) */}
-      <path 
-        d="M26 68 L12 54 L26 40 V50 C33 50 39 47 43 42 L50 50 C44 57 35 61 26 61 V68 Z" 
-        fill="#20242D" 
-      />
-    </svg>
-  );
-}
+import logoIcon from '../../assets/logo-icon.png';
+import logoText from '../../assets/logo-text.png';
 
 // "For Users" Dropdown Items
 const userDropdownLinks = [
@@ -127,16 +99,18 @@ export default function Navbar({ onOpenJoinModal }) {
       }}
     >
       <div 
-        className="container"
         style={{ 
           display: 'flex', 
           alignItems: 'center', 
           justifyContent: 'space-between',
           width: '100%',
+          maxWidth: '100%',
+          paddingLeft: 'clamp(1rem, 2vw, 2.5rem)',
+          paddingRight: 'clamp(1rem, 2vw, 2.5rem)',
           position: 'relative'
         }}
       >
-        {/* Brand Logo & Tagline */}
+        {/* Brand Logo & Name */}
         <Link 
           to="/" 
           style={{ 
@@ -148,24 +122,38 @@ export default function Navbar({ onOpenJoinModal }) {
           }}
           aria-label="Scrap Anna Home"
         >
-          <ScrapAnnaLogoMark size={36} />
-
-          <div>
+          <img 
+            src={logoIcon} 
+            alt="Scrap Anna Emblem" 
+            style={{ 
+              height: '46px', 
+              width: 'auto', 
+              objectFit: 'contain',
+              display: 'block',
+              flexShrink: 0
+            }} 
+          />
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+            <img 
+              src={logoText} 
+              alt="Scrap Anna" 
+              style={{ 
+                height: '21px', 
+                width: 'auto', 
+                objectFit: 'contain',
+                display: 'block' 
+              }} 
+            />
             <div style={{
-              fontSize: '1.25rem',
-              fontWeight: 800,
-              letterSpacing: '-0.02em',
-              lineHeight: 1,
-              color: '#1F242D'
-            }}>
-              Scrap <span style={{ color: 'var(--color-primary-yellow)' }}>Anna</span>
-            </div>
-            <div style={{
-              fontSize: '0.6rem',
-              fontWeight: 600,
+              fontSize: '0.58rem',
+              fontWeight: 700,
               letterSpacing: '0.04em',
               color: '#6B7280',
-              marginTop: '3px'
+              marginTop: '2px',
+              whiteSpace: 'nowrap',
+              textAlign: 'center',
+              lineHeight: 1,
+              width: '100%'
             }}>
               Connect • Collect • Recycle
             </div>
@@ -263,65 +251,74 @@ export default function Navbar({ onOpenJoinModal }) {
               />
             </button>
 
+            {/* Dropdown Menu Box */}
             {usersDropdownOpen && (
               <div 
-                className="nav-dropdown-menu"
                 style={{
                   position: 'absolute',
-                  top: 'calc(100% + 8px)',
-                  left: 0,
+                  top: '100%',
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                  marginTop: '0.75rem',
                   backgroundColor: 'var(--color-white)',
+                  borderRadius: '14px',
+                  boxShadow: '0 12px 36px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.05)',
                   border: '1px solid #E5E7EB',
-                  borderRadius: '12px',
-                  boxShadow: '0 12px 28px -4px rgba(0, 0, 0, 0.1), 0 4px 8px -2px rgba(0, 0, 0, 0.04)',
-                  padding: '0.5rem',
-                  minWidth: '240px',
-                  zIndex: 1100
+                  padding: '0.75rem',
+                  width: '320px',
+                  zIndex: 1050,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '0.35rem'
                 }}
+                className="nav-dropdown-menu"
               >
-                {userDropdownLinks.map((item) => {
+                {userDropdownLinks.map((item, idx) => {
                   const Icon = item.icon;
-                  const active = location.pathname === item.path;
+                  const itemActive = location.pathname === item.path;
                   return (
                     <Link
-                      key={item.path}
+                      key={idx}
                       to={item.path}
                       style={{
                         display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.75rem',
-                        padding: '0.65rem 0.85rem',
-                        borderRadius: '8px',
-                        backgroundColor: active ? '#FFFBEB' : 'transparent',
+                        alignItems: 'flex-start',
+                        gap: '0.85rem',
+                        padding: '0.65rem 0.75rem',
+                        borderRadius: '10px',
                         textDecoration: 'none',
-                        transition: 'all 0.15s ease'
+                        backgroundColor: itemActive ? '#FFFBEB' : 'transparent',
+                        transition: 'background-color 0.15s ease'
                       }}
                       className="user-dropdown-item"
                     >
                       <div style={{
-                        width: '32px',
-                        height: '32px',
-                        borderRadius: '6px',
-                        backgroundColor: '#FFF8DB',
+                        width: '34px',
+                        height: '34px',
+                        borderRadius: '8px',
+                        backgroundColor: itemActive ? 'var(--color-primary-yellow)' : '#F3F4F6',
+                        color: '#1F242D',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        color: '#1F242D',
-                        flexShrink: 0
+                        flexShrink: 0,
+                        marginTop: '2px'
                       }}>
-                        <Icon size={16} />
+                        <Icon size={18} strokeWidth={2} />
                       </div>
                       <div>
                         <div style={{
                           fontSize: '0.875rem',
-                          fontWeight: 600,
-                          color: '#1F242D'
+                          fontWeight: 700,
+                          color: itemActive ? '#1F242D' : '#1F242D',
+                          lineHeight: 1.2
                         }}>
                           {item.title}
                         </div>
                         <div style={{
                           fontSize: '0.75rem',
                           color: '#6B7280',
+                          marginTop: '2px',
                           lineHeight: 1.3
                         }}>
                           {item.desc}
@@ -366,7 +363,7 @@ export default function Navbar({ onOpenJoinModal }) {
             Market Prices
           </Link>
 
-          {/* 7. FAQs */}
+          {/* 7. FAQ */}
           <Link
             to="/faq"
             style={{
@@ -379,7 +376,7 @@ export default function Navbar({ onOpenJoinModal }) {
             }}
             className={`nav-item-link ${isActive('/faq') ? 'active' : ''}`}
           >
-            FAQs
+            FAQ
           </Link>
 
           {/* 8. Contact Us */}
@@ -395,28 +392,28 @@ export default function Navbar({ onOpenJoinModal }) {
             }}
             className={`nav-item-link ${isActive('/contact') ? 'active' : ''}`}
           >
-            Contact Us
+            Contact
           </Link>
         </nav>
 
-                {/* 8. Get Started Button on Desktop */}
-        <div style={{ display: 'none', alignItems: 'center' }} className="desktop-cta-wrapper">
-          <button
-            onClick={() => onOpenJoinModal('household')}
-            className="nav-get-started-btn"
-          >
-            <span>Get Started</span>
-            <ArrowRight size={16} strokeWidth={2.2} className="nav-btn-arrow" />
-          </button>
-        </div>
+        {/* Right CTA Button & Mobile Toggle */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <div style={{ display: 'none' }} className="desktop-cta-wrapper">
+            <button
+              onClick={() => onOpenJoinModal('household')}
+              className="nav-get-started-btn"
+            >
+              <span>Get Started</span>
+              <ArrowRight size={15} className="nav-btn-arrow" />
+            </button>
+          </div>
 
-        {/* Mobile Hamburger Toggle */}
-        <div style={{ display: 'flex', alignItems: 'center' }} className="mobile-toggle-wrapper">
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="mobile-toggle-wrapper"
             style={{
               backgroundColor: '#F3F4F6',
-              border: '1px solid #E5E7EB',
+              border: 'none',
               borderRadius: '8px',
               padding: '0.45rem',
               color: '#1F242D',
@@ -518,33 +515,38 @@ export default function Navbar({ onOpenJoinModal }) {
                 <ChevronRight size={15} style={{ color: isActive('/how-it-works') ? 'var(--color-primary-yellow)' : '#9CA3AF' }} />
               </Link>
 
-              {/* Mobile For Users Group */}
-              <div style={{ marginTop: '0.5rem', marginBottom: '0.5rem', borderTop: '1px solid #F3F4F6', paddingTop: '0.5rem' }}>
-                <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#9CA3AF', textTransform: 'uppercase', padding: '0.25rem 0.75rem' }}>
-                  For Users
-                </div>
-                {userDropdownLinks.map(link => (
+              {/* Mobile Role Pages */}
+              <div style={{ padding: '0.5rem 0.75rem 0.25rem 0.75rem', fontSize: '0.75rem', fontWeight: 800, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                Solutions
+              </div>
+
+              {userDropdownLinks.map((subItem, sIdx) => {
+                const isSubActive = location.pathname === subItem.path;
+                const SubIcon = subItem.icon;
+                return (
                   <Link
-                    key={link.path}
-                    to={link.path}
+                    key={sIdx}
+                    to={subItem.path}
                     style={{
                       display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'space-between',
-                      padding: '0.55rem 0.75rem',
+                      gap: '0.65rem',
+                      padding: '0.65rem 0.75rem',
                       borderRadius: '8px',
-                      backgroundColor: isActive(link.path) ? '#FFFBEB' : 'transparent',
-                      color: isActive(link.path) ? '#1F242D' : '#4B5563',
-                      fontWeight: isActive(link.path) ? 700 : 500,
-                      fontSize: '0.9rem',
+                      backgroundColor: isSubActive ? '#FFFBEB' : 'transparent',
+                      color: isSubActive ? '#1F242D' : '#4B5563',
+                      fontWeight: isSubActive ? 700 : 500,
+                      fontSize: '0.9375rem',
                       textDecoration: 'none'
                     }}
                   >
-                    <span>{link.title}</span>
-                    <ChevronRight size={14} style={{ color: '#9CA3AF' }} />
+                    <SubIcon size={16} style={{ color: isSubActive ? 'var(--color-primary-yellow)' : '#6B7280' }} />
+                    <span>{subItem.title}</span>
                   </Link>
-                ))}
-              </div>
+                );
+              })}
+
+              <div style={{ borderTop: '1px solid #F3F4F6', margin: '0.5rem 0' }} />
 
               <Link
                 to="/e-commerce"
@@ -599,7 +601,7 @@ export default function Navbar({ onOpenJoinModal }) {
                   textDecoration: 'none'
                 }}
               >
-                <span>FAQs</span>
+                <span>FAQ</span>
                 <ChevronRight size={15} style={{ color: isActive('/faq') ? 'var(--color-primary-yellow)' : '#9CA3AF' }} />
               </Link>
 
@@ -623,22 +625,19 @@ export default function Navbar({ onOpenJoinModal }) {
               </Link>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', borderTop: '1px solid #E5E7EB', paddingTop: '1rem' }}>
+            <div style={{ paddingTop: '0.5rem' }}>
               <button
                 onClick={() => {
                   setMobileMenuOpen(false);
                   onOpenJoinModal('household');
                 }}
+                className="btn btn-primary"
                 style={{
-                  backgroundColor: 'var(--color-primary-yellow)',
-                  color: '#1F242D',
-                  fontWeight: 700,
-                  fontSize: '0.95rem',
-                  padding: '0.85rem',
-                  borderRadius: '8px',
-                  border: 'none',
-                  cursor: 'pointer',
                   width: '100%',
+                  padding: '0.85rem',
+                  fontSize: '0.95rem',
+                  fontWeight: 700,
+                  borderRadius: '8px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -710,7 +709,7 @@ export default function Navbar({ onOpenJoinModal }) {
           font-weight: 700;
           font-size: 0.9rem;
           padding: 0.65rem 1.3rem;
-          borderRadius: 8px;
+          border-radius: 8px;
           border: none;
           cursor: pointer;
           white-space: nowrap;
