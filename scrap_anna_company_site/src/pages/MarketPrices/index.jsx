@@ -55,8 +55,8 @@ export default function MarketPricesPage() {
   return (
     <>
       <SEO
-        title="Market Prices - Reference Scrap Rates in Chennai & Tamil Nadu"
-        description="Check real-time reference scrap prices for iron, copper, aluminium, cardboard, plastics, and e-waste in Chennai & Tamil Nadu."
+        title="Market Prices - Reference Scrap Rates in Chennai"
+        description="Check real-time reference scrap prices for iron, copper, aluminium, cardboard, plastics, and e-waste in Chennai."
       />
 
       <PageHero
@@ -64,7 +64,7 @@ export default function MarketPricesPage() {
         badgeIcon={TrendingUp}
         title="Know the Market. Make Better Decisions."
         highlightWord="Make Better Decisions"
-        description="Scrap Anna provides daily updated reference price indices across metals, paper, polymers, and e-waste so you can sell and procure with complete clarity."
+        description="Scrap Anna provides daily updated reference price indices across metals, paper, polymers, and e-waste in Chennai so you can sell and procure with complete clarity."
         breadcrumbs={[{ label: 'Market Prices' }]}
         primaryCta={{
           text: "Book Pickup at These Rates",
@@ -176,7 +176,7 @@ export default function MarketPricesPage() {
                 color: 'var(--color-primary-yellow)'
               }}>
                 <RefreshCw size={12} />
-                <span>Updated Daily for South India Region</span>
+                <span>Updated Daily for Chennai Only</span>
               </div>
             </div>
 

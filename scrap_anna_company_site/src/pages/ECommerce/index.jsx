@@ -1,10 +1,9 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { 
   Search, FileText, Handshake, ShoppingBag, 
-  PackagePlus, Users, BadgeCheck, ShieldCheck, 
-  ArrowRight, ChevronRight, MapPin, Store, 
-  Sparkles, Info, CheckCircle2
+  PackagePlus, Tag, Users, ShieldCheck, 
+  ChevronRight, MapPin, Store, Sparkles, 
+  Info, Zap, Cog, Wrench, Factory, Bike, DoorClosed
 } from 'lucide-react';
 import SEO from '../../components/common/SEO';
 import PageHero from '../../components/common/PageHero';
@@ -20,72 +19,82 @@ export default function ECommercePage() {
     {
       number: "01",
       title: "Find Scrap",
-      description: "Discover available scrap from connected sellers.",
+      description: "Discover available scrap materials from connected sellers.",
       icon: Search
     },
     {
       number: "02",
       title: "Check Details",
-      description: "View material, quantity, location and available information.",
+      description: "View the material, quantity, condition and location.",
       icon: FileText
     },
     {
       number: "03",
       title: "Connect",
-      description: "Connect with the seller and discuss the pickup or transaction.",
+      description: "Contact the seller and discuss the purchase and pickup.",
       icon: Handshake
     },
     {
       number: "04",
-      title: "Buy Scrap",
-      description: "Complete the purchase directly between the relevant parties.",
+      title: "Buy",
+      description: "Agree on the details and arrange the purchase.",
       icon: ShoppingBag
     }
   ];
 
-  // Sell Scrap Workflow Steps
+  // Sell Reusable Items Workflow Steps
   const sellSteps = [
     {
       number: "01",
-      title: "List Scrap",
-      description: "Add the material, quantity, photos and location.",
+      title: "List Your Item",
+      description: "Add photos, item details and condition.",
       icon: PackagePlus
     },
     {
       number: "02",
-      title: "Get Connected",
-      description: "Relevant buyers can discover your available scrap.",
-      icon: Users
+      title: "Set Your Price",
+      description: "Tell interested buyers your asking price.",
+      icon: Tag
     },
     {
       number: "03",
-      title: "Connect",
-      description: "Discuss the material, quantity and transaction details.",
-      icon: Handshake
+      title: "Get Connected",
+      description: "Interested buyers can discover your item and contact you.",
+      icon: Users
     },
     {
       number: "04",
-      title: "Sell Scrap",
-      description: "Complete the sale with the connected buyer.",
-      icon: BadgeCheck
+      title: "Sell & Arrange Pickup",
+      description: "Agree on the details and arrange the item handover.",
+      icon: Handshake
     }
+  ];
+
+  // Reusable Items Examples Chips
+  const reusableExamples = [
+    { name: "Cycles", icon: Bike },
+    { name: "Motors", icon: Zap },
+    { name: "Engine Parts", icon: Cog },
+    { name: "Gates", icon: DoorClosed },
+    { name: "Industrial Parts", icon: Wrench },
+    { name: "Machinery Components", icon: Factory }
   ];
 
   return (
     <>
       <SEO
-        title="Buy & Sell Scrap - Simple Merchant Workflow | Scrap Anna Chennai"
-        description="A simple way for merchants to find scrap, connect with buyers and sellers, and grow their business through the Scrap Anna network. Launching first in Chennai, Tamil Nadu."
+        title="Buy & Sell Through Scrap Anna - Resale & Scrap Network | Chennai"
+        description="Connect with opportunities to buy scrap and give reusable materials a second life. Merchants can list reusable items, set their price, and connect with buyers."
       />
 
       {/* HERO SECTION */}
       <PageHero
-        eyebrow="Merchant Network"
+        eyebrow="Reuse & Resale Network"
         badgeIcon={Store}
-        title="Buy & Sell Scrap Through Scrap Anna"
-        highlightWord="Buy & Sell Scrap"
-        description="A simple way for merchants to find scrap, connect with buyers and sellers, and grow their business through the Scrap Anna network."
-        breadcrumbs={[{ label: 'Sell & Buy Scrap' }]}
+        title="Buy & Sell Through Scrap Anna"
+        highlightWord="Buy & Sell"
+        description="Connect with opportunities to buy scrap and give reusable materials a second life."
+        breadcrumbs={[{ label: 'Buy & Sell' }]}
         primaryCta={{
           text: "Join as a Merchant",
           onClick: () => openJoinModal('merchant')
@@ -96,15 +105,62 @@ export default function ECommercePage() {
         }}
       />
 
-      {/* DUAL HORIZONTAL WORKFLOW SECTION */}
+      {/* DUAL WORKFLOW SECTION */}
       <section id="workflow" className="section bg-white" style={{ paddingTop: '4.5rem', paddingBottom: '4.5rem' }}>
         <div className="container" style={{ maxWidth: '1200px' }}>
           
           <SectionHeader
             eyebrow="How It Works"
-            title="Buy & Sell Scrap"
-            subtitle="A simple way for merchants to find scrap, connect with buyers and sellers, and grow their business through the Scrap Anna network."
+            title="Buy & Sell Through Scrap Anna"
+            subtitle="Connect with opportunities to buy scrap and give reusable materials a second life."
           />
+
+          {/* KEY MESSAGE HIGHLIGHT BANNER */}
+          <div style={{
+            backgroundColor: '#FFFDF5',
+            border: '1.5px solid #FDE68A',
+            borderRadius: '16px',
+            padding: '1.75rem 2rem',
+            marginBottom: '3rem',
+            boxShadow: '0 4px 16px rgba(249, 197, 28, 0.08)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '1.25rem',
+            flexWrap: 'wrap'
+          }}>
+            <div style={{
+              width: '46px',
+              height: '46px',
+              borderRadius: '12px',
+              backgroundColor: 'var(--color-primary-yellow)',
+              color: '#1F242D',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0
+            }}>
+              <Sparkles size={24} />
+            </div>
+
+            <div style={{ flex: '1 1 300px' }}>
+              <h3 style={{
+                fontSize: '1.25rem',
+                fontWeight: 800,
+                color: '#1F242D',
+                margin: '0 0 0.35rem 0'
+              }}>
+                Don't Let Reusable Materials Go to Waste.
+              </h3>
+              <p style={{
+                fontSize: '0.925rem',
+                color: '#4B5563',
+                lineHeight: 1.5,
+                margin: 0
+              }}>
+                Merchants can list reusable items recovered from scrap, set their own price and connect with interested buyers.
+              </p>
+            </div>
+          </div>
 
           {/* WORKFLOW 1: BUY SCRAP */}
           <div style={{
@@ -126,10 +182,10 @@ export default function ECommercePage() {
               borderBottom: '1px solid #F3F4F6',
               paddingBottom: '1.25rem'
             }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', flexWrap: 'wrap' }}>
                 <span style={{
-                  backgroundColor: 'var(--color-primary-yellow)',
-                  color: '#111827',
+                  backgroundColor: '#374151',
+                  color: '#FFFFFF',
                   fontSize: '0.8rem',
                   fontWeight: 800,
                   letterSpacing: '0.06em',
@@ -140,11 +196,11 @@ export default function ECommercePage() {
                   alignItems: 'center',
                   gap: '0.35rem'
                 }}>
-                  <ShoppingBag size={14} />
+                  <Search size={14} />
                   BUY SCRAP
                 </span>
                 <span style={{ fontSize: '1.05rem', fontWeight: 700, color: '#111827' }}>
-                  Find available scrap and connect with the seller.
+                  Find available scrap materials and connect with relevant sellers.
                 </span>
               </div>
 
@@ -192,9 +248,9 @@ export default function ECommercePage() {
                         width: '46px',
                         height: '46px',
                         borderRadius: '10px',
-                        backgroundColor: '#FFF8DB',
-                        border: '1px solid #FDE68A',
-                        color: '#111827',
+                        backgroundColor: '#F3F4F6',
+                        border: '1px solid #E5E7EB',
+                        color: '#1F242D',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -206,8 +262,8 @@ export default function ECommercePage() {
                       <span style={{
                         fontSize: '0.8rem',
                         fontWeight: 800,
-                        color: '#92400E',
-                        backgroundColor: '#FEF3C7',
+                        color: '#4B5563',
+                        backgroundColor: '#F3F4F6',
                         padding: '0.2rem 0.55rem',
                         borderRadius: '6px',
                         fontFamily: 'monospace'
@@ -266,14 +322,14 @@ export default function ECommercePage() {
             </div>
           </div>
 
-          {/* WORKFLOW 2: SELL SCRAP */}
+          {/* WORKFLOW 2: SELL REUSABLE ITEMS (YELLOW ACCENT) */}
           <div style={{
-            backgroundColor: '#F8F9FA',
-            border: '1.5px solid #E5E7EB',
+            backgroundColor: '#FFFCF0',
+            border: '2px solid var(--color-primary-yellow)',
             borderRadius: '18px',
             padding: '2.5rem 2rem',
             marginBottom: '3rem',
-            boxShadow: '0 4px 16px rgba(0, 0, 0, 0.03)'
+            boxShadow: '0 6px 20px rgba(249, 197, 28, 0.1)'
           }}>
             {/* Header / Label */}
             <div style={{
@@ -283,13 +339,13 @@ export default function ECommercePage() {
               flexWrap: 'wrap',
               gap: '1rem',
               marginBottom: '2.25rem',
-              borderBottom: '1px solid #E5E7EB',
+              borderBottom: '1px solid rgba(249, 197, 28, 0.3)',
               paddingBottom: '1.25rem'
             }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', flexWrap: 'wrap' }}>
                 <span style={{
-                  backgroundColor: '#374151',
-                  color: '#FFFFFF',
+                  backgroundColor: 'var(--color-primary-yellow)',
+                  color: '#111827',
                   fontSize: '0.8rem',
                   fontWeight: 800,
                   letterSpacing: '0.06em',
@@ -298,18 +354,19 @@ export default function ECommercePage() {
                   borderRadius: '9999px',
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: '0.35rem'
+                  gap: '0.35rem',
+                  boxShadow: '0 2px 6px rgba(249, 197, 28, 0.3)'
                 }}>
                   <PackagePlus size={14} />
-                  SELL SCRAP
+                  SELL REUSABLE ITEMS
                 </span>
                 <span style={{ fontSize: '1.05rem', fontWeight: 700, color: '#111827' }}>
-                  List your available scrap and connect with relevant buyers.
+                  Turn reusable scrap into additional value by listing items with your own price.
                 </span>
               </div>
 
-              <span style={{ fontSize: '0.8rem', color: '#6B7280', fontWeight: 600 }}>
-                4 Simple Steps
+              <span style={{ fontSize: '0.8rem', color: '#92400E', fontWeight: 700 }}>
+                Resale & Reuse Opportunity
               </span>
             </div>
 
@@ -330,7 +387,7 @@ export default function ECommercePage() {
                     key={idx}
                     style={{
                       backgroundColor: '#FFFFFF',
-                      border: '1px solid #E5E7EB',
+                      border: '1.5px solid #FDE68A',
                       borderRadius: '14px',
                       padding: '24px',
                       display: 'flex',
@@ -339,7 +396,7 @@ export default function ECommercePage() {
                       boxShadow: '0 2px 8px rgba(0, 0, 0, 0.02)',
                       transition: 'all 0.2s ease'
                     }}
-                    className="workflow-step-card"
+                    className="workflow-step-card sell-card-hover"
                   >
                     {/* Top Row: Icon and Step Number */}
                     <div style={{
@@ -354,7 +411,7 @@ export default function ECommercePage() {
                         borderRadius: '10px',
                         backgroundColor: '#FFF8DB',
                         border: '1px solid #FDE68A',
-                        color: '#111827',
+                        color: '#92400E',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -405,15 +462,15 @@ export default function ECommercePage() {
                           transform: 'translateY(-50%)',
                           zIndex: 2,
                           backgroundColor: '#FFFFFF',
-                          border: '1px solid #D1D5DB',
+                          border: '1px solid #FDE68A',
                           borderRadius: '50%',
                           width: '24px',
                           height: '24px',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
-                          color: '#9CA3AF',
-                          boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
+                          color: '#D97706',
+                          boxShadow: '0 2px 4px rgba(249, 197, 28, 0.15)'
                         }}
                         className="desktop-step-arrow"
                       >
@@ -426,7 +483,99 @@ export default function ECommercePage() {
             </div>
           </div>
 
-          {/* TRUST NOTE HIGHLIGHT BOX */}
+          {/* REUSABLE ITEM EXAMPLES (COMPACT VISUAL CHIPS) */}
+          <div style={{
+            backgroundColor: 'var(--color-offwhite)',
+            border: '1px solid var(--color-border)',
+            borderRadius: '16px',
+            padding: '2rem 2.25rem',
+            marginBottom: '3rem',
+            boxShadow: 'var(--shadow-xs)'
+          }}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: '1rem',
+              marginBottom: '1.5rem'
+            }}>
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.35rem' }}>
+                  <span className="badge badge-yellow" style={{ fontSize: '0.75rem' }}>
+                    Reuse Categories
+                  </span>
+                  <h4 style={{
+                    fontSize: '1.25rem',
+                    fontWeight: 800,
+                    color: 'var(--color-graphite-dark)',
+                    margin: 0
+                  }}>
+                    What Can Merchants List?
+                  </h4>
+                </div>
+                <p style={{
+                  fontSize: '0.9rem',
+                  color: 'var(--color-text-secondary)',
+                  margin: 0,
+                  lineHeight: 1.5
+                }}>
+                  Reusable items recovered from scrap can be given a second life instead of being sold only as scrap by weight.
+                </p>
+              </div>
+            </div>
+
+            {/* Compact Chips Grid */}
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))',
+              gap: '0.85rem'
+            }} className="examples-chips-grid">
+              {reusableExamples.map((item, idx) => {
+                const ItemIcon = item.icon;
+                return (
+                  <div
+                    key={idx}
+                    style={{
+                      backgroundColor: 'var(--color-white)',
+                      border: '1px solid var(--color-border)',
+                      borderRadius: '10px',
+                      padding: '0.85rem 1.15rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.75rem',
+                      boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
+                      transition: 'all var(--transition-fast)'
+                    }}
+                    className="reusable-chip-item"
+                  >
+                    <div style={{
+                      width: '32px',
+                      height: '32px',
+                      borderRadius: '8px',
+                      backgroundColor: 'var(--color-primary-yellow-light)',
+                      color: '#92400E',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexShrink: 0
+                    }}>
+                      <ItemIcon size={17} />
+                    </div>
+                    <span style={{
+                      fontSize: '0.9rem',
+                      fontWeight: 700,
+                      color: 'var(--color-graphite-dark)'
+                    }}>
+                      {item.name}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* TRUST NOTE & ACCURACY NOTICE */}
           <div style={{
             backgroundColor: '#FFF8DB',
             border: '1.5px solid #FDE68A',
@@ -435,7 +584,7 @@ export default function ECommercePage() {
             display: 'flex',
             alignItems: 'center',
             gap: '1rem',
-            marginBottom: '2.5rem',
+            marginBottom: '2rem',
             boxShadow: '0 2px 8px rgba(249, 197, 28, 0.08)'
           }}>
             <div style={{
@@ -460,7 +609,7 @@ export default function ECommercePage() {
               margin: 0,
               lineHeight: 1.5
             }}>
-              Verified users and structured transaction workflows help create a more reliable scrap-trading network.
+              Merchants set their own asking prices. Verified users and structured workflows help connect buyers and sellers directly for pickup and purchase.
             </p>
           </div>
 
@@ -480,7 +629,7 @@ export default function ECommercePage() {
                 How the Scrap Anna network works
               </h5>
               <p style={{ fontSize: '0.875rem', color: '#6B7280', lineHeight: 1.6, margin: 0 }}>
-                Scrap Anna provides the digital connection between merchants and relevant scrap sellers or buyers. The website is only explaining this workflow; the actual buying, selling, listing, communication and transaction functionality will exist in the Scrap Anna application.
+                Scrap Anna provides the digital connection between merchants and relevant scrap sellers or buyers. This website explains the workflow; the actual listing, communication, and transaction coordination belong to the Scrap Anna application.
               </p>
             </div>
           </div>
@@ -542,7 +691,7 @@ export default function ECommercePage() {
                 lineHeight: 1.5,
                 margin: 0
               }}>
-                Scrap Anna is starting its journey in Chennai, Tamil Nadu, connecting households, merchants and industries through one digital platform.
+                Scrap Anna is starting its journey in Chennai, connecting households, merchants and industries through one digital platform.
               </p>
             </div>
           </div>
@@ -551,8 +700,8 @@ export default function ECommercePage() {
 
       {/* CTA SECTION */}
       <CTASection
-        title="Ready to grow your scrap business?"
-        description="Join Scrap Anna to connect with scrap sellers, buyers, and verified partners across Chennai."
+        title="Ready to turn scrap & reusable materials into value?"
+        description="Join Scrap Anna to connect with scrap sellers, buyers, and reuse opportunities across Chennai."
         primaryText="Join Scrap Anna"
         onJoinClick={() => openJoinModal('merchant')}
       />
@@ -585,9 +734,15 @@ export default function ECommercePage() {
           border-color: #D1D5DB !important;
           box-shadow: 0 10px 24px rgba(0, 0, 0, 0.07) !important;
         }
-        .workflow-step-card:hover .desktop-step-arrow {
-          color: #D97706 !important;
-          border-color: #FDE68A !important;
+        .sell-card-hover:hover {
+          border-color: var(--color-primary-yellow) !important;
+          box-shadow: 0 10px 24px rgba(249, 197, 28, 0.2) !important;
+        }
+        .reusable-chip-item:hover {
+          transform: translateY(-2px);
+          border-color: var(--color-primary-yellow) !important;
+          box-shadow: 0 4px 12px rgba(249, 197, 28, 0.12) !important;
+          background-color: #FFFDF5 !important;
         }
         @media (max-width: 1024px) {
           .workflow-grid {
@@ -601,6 +756,9 @@ export default function ECommercePage() {
         @media (max-width: 640px) {
           .workflow-grid {
             grid-template-columns: 1fr !important;
+          }
+          .examples-chips-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
           }
         }
       `}</style>

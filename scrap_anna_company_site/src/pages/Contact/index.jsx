@@ -1,16 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { 
-  Mail, Phone, MapPin, Clock, Send, CheckCircle2, 
-  Sparkles, MessageSquare, ShieldCheck, HelpCircle 
+  Mail, Phone, MapPin, Send, CheckCircle2, MessageCircle 
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import SEO from '../../components/common/SEO';
 import PageHero from '../../components/common/PageHero';
-import SectionHeader from '../../components/common/SectionHeader';
 import Button from '../../components/common/Button';
 import { siteConfig } from '../../data/siteData';
 
 export default function ContactPage() {
+  const formRef = useRef(null);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -32,6 +31,16 @@ export default function ContactPage() {
     'Partner',
     'General Enquiry'
   ];
+
+  const scrollToForm = () => {
+    if (formRef.current) {
+      formRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const firstInput = formRef.current.querySelector('input');
+      if (firstInput) {
+        firstInput.focus();
+      }
+    }
+  };
 
   const validate = () => {
     const newErrors = {};
@@ -89,8 +98,8 @@ export default function ContactPage() {
   return (
     <>
       <SEO
-        title="Contact Us - Let's Connect & Transform Scrap Recycling"
-        description="Have questions or want to partner with Scrap Anna? Reach our Chennai headquarters, submit an inquiry, or speak with our support team."
+        title="Contact Us - Scrap Anna"
+        description="Have questions or want to partner with Scrap Anna? Connect with our team in Chennai or submit an enquiry."
       />
 
       <PageHero
@@ -98,7 +107,7 @@ export default function ContactPage() {
         badgeIcon={Mail}
         title="Let's Connect & Transform Scrap Management"
         highlightWord="Let's Connect"
-        description="Have a question about selling scrap, partnering as a merchant, or organizing bulk industrial recycling? Our dedicated team in Chennai is here to assist you."
+        description="Have a question about selling scrap, partnering as a merchant, or bulk recycling? We are starting in Chennai and our team is here to assist you."
         breadcrumbs={[{ label: 'Contact Us' }]}
       />
 
@@ -112,13 +121,17 @@ export default function ContactPage() {
           }} className="contact-grid">
             
             {/* Contact Form Box */}
-            <div style={{
-              backgroundColor: 'var(--color-white)',
-              borderRadius: 'var(--radius-lg)',
-              border: '1px solid var(--color-border)',
-              padding: '2.5rem',
-              boxShadow: 'var(--shadow-md)'
-            }}>
+            <div 
+              ref={formRef}
+              id="contact-form"
+              style={{
+                backgroundColor: 'var(--color-white)',
+                borderRadius: 'var(--radius-lg)',
+                border: '1px solid var(--color-border)',
+                padding: '2.5rem',
+                boxShadow: 'var(--shadow-md)'
+              }}
+            >
               <div style={{ marginBottom: '2rem' }}>
                 <span className="badge badge-yellow" style={{ marginBottom: '0.75rem' }}>
                   Send an Enquiry
@@ -127,7 +140,7 @@ export default function ContactPage() {
                   How Can We Help You?
                 </h2>
                 <p style={{ fontSize: 'var(--text-small)', color: 'var(--color-text-secondary)', margin: 0 }}>
-                  Fill out the form below and our operations desk will respond within 24 hours.
+                  Fill out the form below and our team will get back to you.
                 </p>
               </div>
 
@@ -268,10 +281,10 @@ export default function ContactPage() {
               )}
             </div>
 
-            {/* Right: Contact Information & Location Cards */}
+            {/* Right: Startup Contact Information Cards */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
               
-              {/* Office Location Card */}
+              {/* Location & Contact Card */}
               <div style={{
                 backgroundColor: 'var(--color-graphite-dark)',
                 color: 'var(--color-white)',
@@ -280,62 +293,123 @@ export default function ContactPage() {
                 border: '1px solid #374151',
                 boxShadow: 'var(--shadow-md)'
               }}>
-                <h3 style={{ color: 'var(--color-white)', fontSize: '1.25rem', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <MapPin size={20} style={{ color: 'var(--color-primary-yellow)' }} />
-                  <span>Headquarters</span>
-                </h3>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.15rem' }}>
+                  <div style={{
+                    width: '42px',
+                    height: '42px',
+                    borderRadius: 'var(--radius-sm)',
+                    backgroundColor: 'rgba(249, 197, 28, 0.15)',
+                    border: '1px solid rgba(249, 197, 28, 0.3)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'var(--color-primary-yellow)',
+                    flexShrink: 0
+                  }}>
+                    <MapPin size={22} />
+                  </div>
+                  <div>
+                    <h3 style={{ color: 'var(--color-white)', fontSize: '1.2rem', margin: 0, fontWeight: 700 }}>
+                      Launching in Chennai
+                    </h3>
+                    <span style={{ color: 'var(--color-primary-yellow)', fontSize: '0.85rem', fontWeight: 600 }}>
+                      Chennai, Tamil Nadu
+                    </span>
+                  </div>
+                </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', fontSize: 'var(--text-small)', color: '#D1D5DB' }}>
-                  <p style={{ margin: 0, color: '#E5E7EB', lineHeight: 1.6 }}>
-                    <strong>Scrap Anna Headquarters</strong><br />
-                    {siteConfig.contact.address}
-                  </p>
+                <p style={{ fontSize: 'var(--text-small)', color: '#D1D5DB', lineHeight: 1.6, margin: '0 0 1.5rem 0' }}>
+                  Starting locally, connecting households, merchants and industries through Scrap Anna.
+                </p>
 
-                  <div style={{ borderTop: '1px solid #374151', paddingTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-                      <Mail size={16} style={{ color: 'var(--color-primary-yellow)' }} />
-                      <a href={`mailto:${siteConfig.contact.email}`} style={{ color: 'var(--color-white)' }}>
-                        {siteConfig.contact.email}
-                      </a>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-                      <Phone size={16} style={{ color: 'var(--color-primary-yellow)' }} />
-                      <span>{siteConfig.contact.phone}</span>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-                      <Clock size={16} style={{ color: 'var(--color-primary-yellow)' }} />
-                      <span>{siteConfig.contact.workingHours}</span>
-                    </div>
+                <div style={{ borderTop: '1px solid #374151', paddingTop: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.85rem', fontSize: 'var(--text-small)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <Mail size={16} style={{ color: 'var(--color-primary-yellow)', flexShrink: 0 }} />
+                    <a 
+                      href={`mailto:${siteConfig.contact.email}`} 
+                      style={{ 
+                        color: 'var(--color-white)', 
+                        textDecoration: 'none',
+                        fontWeight: 500,
+                        transition: 'color var(--transition-fast)'
+                      }}
+                    >
+                      {siteConfig.contact.email}
+                    </a>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <Phone size={16} style={{ color: 'var(--color-primary-yellow)', flexShrink: 0 }} />
+                    <a 
+                      href={`tel:${siteConfig.contact.phone.replace(/[\s-]/g, '')}`} 
+                      style={{ 
+                        color: '#E5E7EB', 
+                        textDecoration: 'none',
+                        fontWeight: 500,
+                        transition: 'color var(--transition-fast)'
+                      }}
+                    >
+                      {siteConfig.contact.phone}
+                    </a>
                   </div>
                 </div>
               </div>
 
-              {/* Direct Support Promise Card */}
+              {/* Need Help Card */}
               <div style={{
                 backgroundColor: 'var(--color-soft-yellow)',
                 border: '1px solid var(--color-soft-yellow-border)',
                 borderRadius: 'var(--radius-lg)',
-                padding: '1.75rem'
+                padding: '2rem',
+                boxShadow: 'var(--shadow-xs)'
               }}>
-                <div style={{
-                  width: '36px',
-                  height: '36px',
-                  borderRadius: '50%',
-                  backgroundColor: 'var(--color-white)',
-                  color: '#92400E',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginBottom: '0.75rem'
-                }}>
-                  <ShieldCheck size={20} />
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
+                  <div style={{
+                    width: '42px',
+                    height: '42px',
+                    borderRadius: 'var(--radius-sm)',
+                    backgroundColor: 'var(--color-white)',
+                    border: '1px solid var(--color-soft-yellow-border)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#92400E',
+                    flexShrink: 0
+                  }}>
+                    <MessageCircle size={22} />
+                  </div>
+                  <h3 style={{ color: '#92400E', fontSize: '1.2rem', margin: 0, fontWeight: 700 }}>
+                    Need Help?
+                  </h3>
                 </div>
-                <h4 style={{ fontSize: '1.1rem', color: '#92400E', marginBottom: '0.4rem' }}>
-                  Fast Response Guarantee
-                </h4>
-                <p style={{ fontSize: 'var(--text-small)', color: '#92400E', margin: 0, lineHeight: 1.5 }}>
-                  Whether you are an individual selling books or an industrial plant needing 50 MT scrap clearance, our team responds swiftly with tailored assistance.
+
+                <p style={{ fontSize: 'var(--text-small)', color: '#78350F', margin: '0 0 1.5rem 0', lineHeight: 1.6 }}>
+                  Have a question or want to partner with Scrap Anna? Send us an enquiry and our team will get back to you.
                 </p>
+
+                <button
+                  type="button"
+                  onClick={scrollToForm}
+                  className="btn"
+                  style={{
+                    width: '100%',
+                    justifyContent: 'center',
+                    backgroundColor: 'var(--color-graphite-dark)',
+                    color: 'var(--color-white)',
+                    border: 'none',
+                    padding: '0.75rem 1.25rem',
+                    fontSize: 'var(--text-small)',
+                    fontWeight: 600,
+                    borderRadius: 'var(--radius-md)',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    transition: 'all var(--transition-fast)'
+                  }}
+                >
+                  <span>Send an Enquiry</span>
+                  <Send size={15} />
+                </button>
               </div>
 
             </div>

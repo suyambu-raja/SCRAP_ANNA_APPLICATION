@@ -176,7 +176,7 @@ export default function JoinModal({ isOpen, onClose, defaultRole = 'household' }
               </p>
               <div style={{ backgroundColor: 'var(--color-soft-yellow)', padding: '1rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-soft-yellow-border)', marginBottom: '1.5rem' }}>
                 <p style={{ fontSize: 'var(--text-small)', color: '#92400E', margin: 0 }}>
-                  ⚡ Instant Support: You can also reach our Chennai desk at <strong>contact@scrapanna.com</strong>
+                  ⚡ Instant Support: You can also reach our Chennai desk at <strong>scrap.anna.shop@gmail.com</strong>
                 </p>
               </div>
               <Button variant="primary" onClick={onClose} size="md">

@@ -89,7 +89,7 @@ export default function FAQPage() {
                 borderRadius: 'var(--radius-pill)',
                 boxShadow: 'var(--shadow-sm)'
               }}
-              placeholder="Type your question (e.g. How does pickup work? Commission? Digital bill?)..."
+              placeholder="Type your question (e.g. How does pickup work? Verification? Digital bill?)..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />

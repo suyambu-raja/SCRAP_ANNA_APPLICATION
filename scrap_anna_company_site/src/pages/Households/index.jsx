@@ -1,7 +1,7 @@
 import React from 'react';
 import { 
   Home, CheckCircle2, Scale, ShieldCheck, Receipt, 
-  MapPin, Clock, ArrowRight, Sparkles, HelpCircle, Package 
+  Clock, ArrowRight, Sparkles 
 } from 'lucide-react';
 import SEO from '../../components/common/SEO';
 import PageHero from '../../components/common/PageHero';
@@ -9,7 +9,6 @@ import SectionHeader from '../../components/common/SectionHeader';
 import CTASection from '../../components/common/CTASection';
 import Button from '../../components/common/Button';
 import { useJoinModal } from '../../components/layout/Layout';
-import { faqData } from '../../data/siteData';
 
 export default function HouseholdsPage() {
   const { openJoinModal } = useJoinModal();
@@ -205,39 +204,6 @@ export default function HouseholdsPage() {
                 </h3>
                 <p style={{ fontSize: 'var(--text-small)', color: 'var(--color-text-secondary)', lineHeight: 1.5, margin: 0 }}>
                   {mat.items}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* HOUSEHOLD FAQS */}
-      <section className="section bg-offwhite" style={{ borderTop: '1px solid var(--color-border)' }}>
-        <div className="container-narrow">
-          <SectionHeader
-            eyebrow="Got Questions?"
-            title="Frequently Asked by Residents"
-            subtitle="Common questions about household scrap collection and payments."
-          />
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            {faqData.household.map((item, idx) => (
-              <div 
-                key={idx}
-                style={{
-                  backgroundColor: 'var(--color-white)',
-                  padding: '1.5rem',
-                  borderRadius: 'var(--radius-md)',
-                  border: '1px solid var(--color-border)'
-                }}
-              >
-                <h3 style={{ fontSize: '1.1rem', color: 'var(--color-graphite-dark)', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <HelpCircle size={18} style={{ color: 'var(--color-primary-yellow)' }} />
-                  <span>{item.q}</span>
-                </h3>
-                <p style={{ fontSize: 'var(--text-small)', color: 'var(--color-text-secondary)', lineHeight: 1.6, margin: 0, paddingLeft: '1.65rem' }}>
-                  {item.a}
                 </p>
               </div>
             ))}

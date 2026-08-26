@@ -1,7 +1,7 @@
 import React from 'react';
 import { 
   Store, TrendingUp, ShieldCheck, MapPin, Receipt, 
-  Smartphone, Award, CheckCircle2, ArrowRight, HelpCircle, Users,
+  Smartphone, Award, CheckCircle2, ArrowRight, Users,
   ShoppingBag, Package
 } from 'lucide-react';
 import SEO from '../../components/common/SEO';
@@ -10,7 +10,6 @@ import SectionHeader from '../../components/common/SectionHeader';
 import CTASection from '../../components/common/CTASection';
 import Button from '../../components/common/Button';
 import { useJoinModal } from '../../components/layout/Layout';
-import { faqData } from '../../data/siteData';
 
 export default function MerchantsPage() {
   const { openJoinModal } = useJoinModal();
@@ -429,39 +428,6 @@ export default function MerchantsPage() {
                 </h3>
                 <p style={{ fontSize: 'var(--text-small)', color: 'var(--color-text-secondary)', lineHeight: 1.6, margin: 0 }}>
                   {step.desc}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* MERCHANT FAQS */}
-      <section className="section bg-offwhite" style={{ borderTop: '1px solid var(--color-border)' }}>
-        <div className="container-narrow">
-          <SectionHeader
-            eyebrow="Partner Clarifications"
-            title="Merchant Partner FAQs"
-            subtitle="Answers to common queries regarding lead allocation, verification, and payment."
-          />
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            {faqData.merchant.map((item, idx) => (
-              <div 
-                key={idx}
-                style={{
-                  backgroundColor: 'var(--color-white)',
-                  padding: '1.5rem',
-                  borderRadius: 'var(--radius-md)',
-                  border: '1px solid var(--color-border)'
-                }}
-              >
-                <h3 style={{ fontSize: '1.1rem', color: 'var(--color-graphite-dark)', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <HelpCircle size={18} style={{ color: 'var(--color-primary-yellow)' }} />
-                  <span>{item.q}</span>
-                </h3>
-                <p style={{ fontSize: 'var(--text-small)', color: 'var(--color-text-secondary)', lineHeight: 1.6, margin: 0, paddingLeft: '1.65rem' }}>
-                  {item.a}
                 </p>
               </div>
             ))}

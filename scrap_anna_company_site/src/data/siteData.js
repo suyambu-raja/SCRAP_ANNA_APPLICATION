@@ -3,10 +3,9 @@ export const siteConfig = {
   tagline: "Connect • Collect • Recycle",
   shortDesc: "A trusted digital scrap network launching first in Chennai, Tamil Nadu, connecting households, merchants, and industries for transparent recycling and fair prices.",
   contact: {
-    phone: "+91 98400 XXXXX (Support)",
-    email: "contact@scrapanna.com",
-    address: "Anna Salai, Guindy Industrial Estate, Chennai, Tamil Nadu 600032, India",
-    workingHours: "Monday - Saturday: 8:00 AM - 7:00 PM IST"
+    phone: "+91 73389 95341",
+    email: "scrap.anna.shop@gmail.com",
+    address: "Chennai, Tamil Nadu, India"
   },
   socials: {
     linkedin: "https://linkedin.com/company/scrap-anna",
@@ -263,10 +262,6 @@ export const faqData = {
       a: "Basic KYC, identity verification (Aadhaar/PAN), trade license/local verification, and calibration check of digital weighing equipment."
     },
     {
-      q: "How does the commission and lead model work?",
-      a: "Scrap Anna provides high-intent, structured pickup leads directly on your phone. Transparent platform charges and subscription options are detailed during onboarding without hidden fees."
-    },
-    {
       q: "How are pickup leads assigned?",
       a: "Leads are routed based on geographical proximity, merchant availability, equipment capability, and performance ratings."
     }
@@ -289,10 +284,6 @@ export const faqData = {
     {
       q: "How does OTP and location verification work?",
       a: "Every collection requires a two-way digital handshake: the merchant confirms their location on arrival, and the pickup completes only when you verify weights and exchange a secure one-time OTP."
-    },
-    {
-      q: "What happens if there is a discrepancy in weight or pricing?",
-      a: "All weights are measured on digital scales. If any dispute arises, our customer resolution team steps in with digital logs, photo evidence, and dispute redressal protocols."
     },
     {
       q: "Is Scrap Anna physically collecting the scrap?",

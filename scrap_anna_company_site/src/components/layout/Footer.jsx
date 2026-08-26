@@ -157,7 +157,9 @@ export default function Footer({ onOpenJoinModal }) {
                 </div>
                 <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
                   <Phone size={16} style={{ color: 'var(--color-primary-yellow)', flexShrink: 0 }} />
-                  <span>{siteConfig.contact.phone}</span>
+                  <a href={`tel:${siteConfig.contact.phone.replace(/[\s-]/g, '')}`} className="footer-link" style={{ color: '#9CA3AF' }}>
+                    {siteConfig.contact.phone}
+                  </a>
                 </div>
               </div>
             </div>
