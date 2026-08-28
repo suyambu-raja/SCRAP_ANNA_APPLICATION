@@ -1,0 +1,79 @@
+.banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  background: var(--color-graphite);
+  color: var(--color-white);
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  margin-bottom: 1rem;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.icon {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-graphite);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.title {
+  font-size: var(--text-small);
+  font-weight: 700;
+  color: var(--color-white);
+}
+
+.sub {
+  font-size: var(--text-xs);
+  color: var(--color-text-light);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.closeBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-light);
+  padding: 0.25rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+.closeBtn:hover {
+  color: var(--color-white);
+}
+
+@media (max-width: 640px) {
+  .sub {
+    display: none;
+  }
+}

@@ -1,0 +1,70 @@
+.pageTitle {
+  font-size: var(--text-h2);
+  font-weight: 700;
+  margin-bottom: 1.25rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 560px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.label {
+  font-size: var(--text-small);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+
+.chipGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.chip {
+  padding: 0.4rem 0.75rem;
+  font-size: var(--text-small);
+  font-weight: 500;
+  color: var(--color-text-muted);
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+.chip:hover { border-color: var(--color-primary-border); }
+.chipActive {
+  background: var(--color-primary-light);
+  border-color: var(--color-primary);
+  color: var(--color-graphite);
+  font-weight: 600;
+}
+
+.photoBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.5rem;
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+  color: var(--color-text-muted);
+  font-size: var(--text-small);
+  cursor: pointer;
+  transition: border-color var(--transition-fast);
+  justify-content: center;
+}
+.photoBtn:hover { border-color: var(--color-primary); }
+
+.timeSlots {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.4rem;
+}

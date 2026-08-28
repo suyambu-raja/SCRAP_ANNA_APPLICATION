@@ -1,0 +1,85 @@
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.welcomeSection {
+  padding: 0.5rem 0;
+}
+.welcomeTitle {
+  font-size: var(--text-h2);
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.sectionTitle {
+  font-size: var(--text-h4);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+.viewAll {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: var(--text-small);
+  font-weight: 600;
+  color: var(--color-graphite);
+}
+.viewAll:hover { color: var(--color-primary-hover); }
+
+/* Quick Actions */
+.quickActions {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 0.75rem;
+}
+.quickActions a { text-decoration: none; }
+.quickAction {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  text-align: center;
+  font-size: var(--text-small);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  padding: 0.5rem 0;
+}
+.qaIcon { color: var(--color-primary-hover); }
+
+/* Price Grid */
+.priceGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.75rem;
+}
+
+/* Cards list */
+.cardList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Feature cards */
+.featureCards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.75rem;
+}
+
+@media (max-width: 640px) {
+  .quickActions { grid-template-columns: repeat(3, 1fr); }
+  .priceGrid { grid-template-columns: repeat(2, 1fr); }
+}
