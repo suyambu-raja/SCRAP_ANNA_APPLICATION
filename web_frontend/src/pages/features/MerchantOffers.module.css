@@ -1,0 +1,138 @@
+.header {
+  margin-bottom: 1.25rem;
+}
+
+.title {
+  font-size: var(--text-h2);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.privacyNotice {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  background: var(--color-surface-subtle);
+  padding: 0.3rem 0.6rem;
+  border-radius: var(--radius-pill);
+}
+
+.requestContext {
+  background: var(--color-primary-light);
+  border: 1px solid var(--color-primary-border);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+  font-size: var(--text-small);
+  margin-bottom: 1.5rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.contextLabel {
+  color: var(--color-graphite);
+  font-weight: 600;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.offerCard {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.offerTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.merchantName {
+  font-size: var(--text-body-lg);
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.date {
+  font-size: var(--text-xs);
+  color: var(--color-text-light);
+}
+
+.priceBreakdown {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  background: var(--color-surface-subtle);
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius-md);
+}
+
+.metric {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.metricLabel {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.metricValue {
+  font-size: var(--text-body);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.metricValueTotal {
+  font-size: var(--text-body-lg);
+  font-weight: 700;
+  color: var(--color-success);
+}
+
+.notes {
+  font-size: var(--text-small);
+  color: var(--color-text-secondary);
+  line-height: 1.4;
+}
+
+.pickupDate {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding-top: 0.5rem;
+}
+
+.acceptedTag {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-success);
+  font-size: var(--text-small);
+  font-weight: 600;
+  background: var(--color-success-light);
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-sm);
+}
+
+@media (max-width: 640px) {
+  .priceBreakdown {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+}

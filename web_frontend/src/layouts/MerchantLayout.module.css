@@ -1,0 +1,48 @@
+/* Merchant Layout Shell */
+.merchantLayoutRoot {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  background-color: #ffffff;
+  color: #1e293b;
+  position: relative;
+  font-family: var(--font-family, 'Inter', -apple-system, BlinkMacSystemFont, sans-serif);
+}
+
+.mainWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #ffffff;
+  transition: margin-left 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-sizing: border-box;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+.mainWrapperExpanded {
+  margin-left: 240px;
+  width: calc(100% - 240px);
+}
+
+.mainWrapperCollapsed {
+  margin-left: 72px;
+  width: calc(100% - 72px);
+}
+
+.contentArea {
+  flex: 1;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  background-color: #ffffff;
+}
+
+@media (max-width: 768px) {
+  .mainWrapperExpanded {
+    margin-left: 72px;
+    width: calc(100% - 72px);
+  }
+}

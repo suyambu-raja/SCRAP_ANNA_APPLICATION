@@ -1,0 +1,188 @@
+.marketCard {
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-bottom: 3.5px solid #FBC21A;
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.22s ease;
+  position: relative;
+  text-decoration: none;
+  cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.marketCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.07);
+  border-color: #FBC21A;
+}
+
+/* 1. Large Image Area (occupies 55–60% of card visual height) */
+.imageContainer {
+  width: 100%;
+  aspect-ratio: 16 / 10.5;
+  min-height: 195px;
+  background: #F3F4F6;
+  overflow: hidden;
+  position: relative;
+  border-top-left-radius: 17px;
+  border-top-right-radius: 17px;
+}
+
+.cardImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.25s ease;
+}
+
+.marketCard:hover .cardImage {
+  transform: scale(1.025);
+}
+
+.placeholderContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: #F9FAFB;
+  color: #9CA3AF;
+}
+
+.placeholderIcon {
+  color: #D1D5DB;
+}
+
+.placeholderText {
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #6B7280;
+}
+
+/* 2. Card Content Area */
+.cardContent {
+  padding: 1.15rem 1.35rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  background: #FFFFFF;
+  flex: 1;
+}
+
+/* Title & Location Row */
+.titleLocationRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.materialTitle {
+  font-size: 1.08rem;
+  font-weight: 800;
+  color: #111827;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin: 0;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.locationBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #4B5563;
+  flex-shrink: 0;
+}
+
+.pinIcon {
+  color: #9CA3AF;
+}
+
+/* Subtle Divider */
+.cardDivider {
+  height: 1px;
+  background: #F3F4F6;
+  width: 100%;
+  margin: 0.1rem 0;
+}
+
+/* Market Rate Block */
+.rateBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.rateLabel {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #9CA3AF;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.priceRow {
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+}
+
+.priceRange {
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: #111827;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.priceUnit {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #6B7280;
+}
+
+/* Timestamp Row */
+.timestampRow {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.74rem;
+  font-weight: 500;
+  color: #9CA3AF;
+  margin-top: auto;
+  padding-top: 0.15rem;
+}
+
+.clockIcon {
+  color: #9CA3AF;
+}
+
+@media (max-width: 640px) {
+  .imageContainer {
+    min-height: 175px;
+  }
+  .cardContent {
+    padding: 1rem 1.15rem 1.15rem;
+  }
+  .priceRange {
+    font-size: 1.4rem;
+  }
+}
