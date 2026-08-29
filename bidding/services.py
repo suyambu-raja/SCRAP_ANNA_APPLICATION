@@ -8,7 +8,7 @@ from django.utils import timezone
 from django.db import transaction
 from django.db.models import QuerySet
 
-from bidding.models import CompanyBid, CompanyBill
+from bidding.models import CompanyOffer, CompanyBill
 from pickups.models import PickupRequest
 from accounts.models import Account, MerchantProfile
 from settlements.services import calculate_commission, create_settlement_record, get_active_commission_rate
@@ -54,7 +54,7 @@ def create_company_pickup_request(company_account: Account, category_id: int, la
     return request
 
 
-def get_eligible_merchants_for_bid(pickup_request: PickupRequest) -> QuerySet:
+def get_eligible_merchants_for_offer(pickup_request: PickupRequest) -> QuerySet:
     """
     Finds all active and verified MerchantProfile rows within the default 55km radius.
     All tiers are eligible.
@@ -89,30 +89,30 @@ def get_eligible_merchants_for_bid(pickup_request: PickupRequest) -> QuerySet:
     )
 
 
-def submit_bid(pickup_request_id: int, merchant_account: Account, bid_rate_per_kg: Decimal) -> CompanyBid:
+def submit_offer(pickup_request_id: int, merchant_account: Account, offer_amount: Decimal) -> CompanyOffer:
     """
-    Submits or updates a bid for a specific pickup request.
+    Submits a sealed one-time offer for a specific pickup request.
     
     Args:
         pickup_request_id (int): The ID of the pickup request.
-        merchant_account (Account): The merchant submitting the bid.
-        bid_rate_per_kg (Decimal): The proposed bid amount.
+        merchant_account (Account): The merchant submitting the offer.
+        offer_amount (Decimal): The proposed offer amount.
         
     Returns:
-        CompanyBid: The created or updated CompanyBid.
+        CompanyOffer: The created CompanyOffer.
         
     Raises:
-        PermissionError: If the account is not a MERCHANT or is outside the eligible radius.
-        ValueError: If the bidding window has closed or the bid_rate_per_kg is non-positive.
-        TypeError: If bid_rate_per_kg is not a Decimal.
+        PermissionError: If the account is not a MERCHANT, outside the eligible radius, or has already submitted an offer.
+        ValueError: If the bidding window has closed or the offer_amount is non-positive.
+        TypeError: If offer_amount is not a Decimal.
     """
     if getattr(merchant_account, 'role', None) != Account.Role.MERCHANT:
-        raise PermissionError("Only MERCHANT accounts can submit bids.")
+        raise PermissionError("Only MERCHANT accounts can submit offers.")
         
-    if not isinstance(bid_rate_per_kg, Decimal):
-        raise TypeError("bid_rate_per_kg must be a Decimal.")
-    if bid_rate_per_kg <= Decimal('0'):
-        raise ValueError("bid_rate_per_kg must be a positive Decimal.")
+    if not isinstance(offer_amount, Decimal):
+        raise TypeError("offer_amount must be a Decimal.")
+    if offer_amount <= Decimal('0'):
+        raise ValueError("offer_amount must be a positive Decimal.")
         
     with transaction.atomic():
         try:
@@ -126,32 +126,35 @@ def submit_bid(pickup_request_id: int, merchant_account: Account, bid_rate_per_k
             raise ValueError("The 24-hour bidding window for this request has closed.")
             
         # Verify merchant eligibility via radius
-        eligible_merchants = get_eligible_merchants_for_bid(pickup_request)
+        eligible_merchants = get_eligible_merchants_for_offer(pickup_request)
         if not eligible_merchants.filter(account=merchant_account).exists():
             raise PermissionError("You are outside the eligible 55km radius for this pickup request.")
             
-        # Enforce unique_together constraint gracefully with update_or_create
-        bid, created = CompanyBid.objects.update_or_create(
+        # Enforce sealed one-time offer rule
+        if CompanyOffer.objects.filter(pickup_request=pickup_request, merchant=merchant_account).exists():
+            raise PermissionError("Only one sealed offer is allowed per merchant per order. You cannot revise or resubmit.")
+            
+        # Create the offer (database unique constraint still acts as a backstop)
+        offer = CompanyOffer.objects.create(
             pickup_request=pickup_request,
             merchant=merchant_account,
-            defaults={'bid_rate_per_kg': bid_rate_per_kg}
+            offer_amount=offer_amount
         )
         
-        action = "Submitted" if created else "Updated"
-        logger.info(f"{action} bid of {bid_rate_per_kg} by merchant {merchant_account.phone_number} on PickupRequest {pickup_request_id}.")
-        return bid
+        logger.info(f"Submitted offer of {offer_amount} by merchant {merchant_account.phone_number} on PickupRequest {pickup_request_id}.")
+        return offer
 
 
-def close_bidding_window(pickup_request_id: int) -> CompanyBid:
+def close_bidding_window(pickup_request_id: int) -> CompanyOffer:
     """
-    Selects the winning bid for a pickup request once the 24-hour window has closed.
+    Selects the winning offer for a pickup request once the 24-hour window has closed.
     This will be called by a Celery task.
     
     Args:
         pickup_request_id (int): The ID of the pickup request to close.
         
     Returns:
-        CompanyBid: The winning CompanyBid, or None if no bids were received.
+        CompanyOffer: The winning CompanyOffer, or None if no offers were received.
         
     Raises:
         ValueError: If the pickup request does not exist.
@@ -162,32 +165,32 @@ def close_bidding_window(pickup_request_id: int) -> CompanyBid:
         except PickupRequest.DoesNotExist:
             raise ValueError(f"PickupRequest {pickup_request_id} does not exist.")
             
-        # Select the bid with the highest amount. 
-        # Tie-breaking rule: If multiple bids have the same highest amount, 
+        # Select the offer with the highest amount. 
+        # Tie-breaking rule: If multiple offers have the same highest amount, 
         # the earliest submitted_at breaks the tie.
-        winning_bid = CompanyBid.objects.filter(pickup_request=pickup_request).order_by('-bid_rate_per_kg', 'submitted_at').first()
+        winning_offer = CompanyOffer.objects.filter(pickup_request=pickup_request).order_by('-offer_amount', 'submitted_at').first()
         
-        if not winning_bid:
-            # Handle gracefully if no bids were received
+        if not winning_offer:
+            # Handle gracefully if no offers were received
             pickup_request.status = PickupRequest.Status.CLOSED
             pickup_request.save(update_fields=['status'])
             
-            # TODO: No bids found. This should notify the Company and Admin to handle the unfulfilled request.
+            # TODO: No offers found. This should notify the Company and Admin to handle the unfulfilled request.
             # Actual notification delivery is out of scope for this function.
-            logger.warning(f"No bids received for Company PickupRequest {pickup_request_id}. Closed request.")
+            logger.warning(f"No offers received for Company PickupRequest {pickup_request_id}. Closed request.")
             return None
             
-        winning_bid.is_winner = True
-        winning_bid.save(update_fields=['is_winner'])
+        winning_offer.is_winner = True
+        winning_offer.save(update_fields=['is_winner'])
         
         pickup_request.status = PickupRequest.Status.ACCEPTED
         pickup_request.save(update_fields=['status'])
         
         logger.info(
-            f"Selected winning bid for PickupRequest {pickup_request_id}: "
-            f"Merchant {winning_bid.merchant.phone_number} with {winning_bid.bid_rate_per_kg}."
+            f"Selected winning offer for PickupRequest {pickup_request_id}: "
+            f"Merchant {winning_offer.merchant.phone_number} with {winning_offer.offer_amount}."
         )
-        return winning_bid
+        return winning_offer
 
 
 def get_bidding_windows_ready_to_close() -> QuerySet:
@@ -206,34 +209,34 @@ def get_bidding_windows_ready_to_close() -> QuerySet:
     )
 
 
-def finalize_company_bill(company_bid: CompanyBid, actual_weight_kg: Decimal) -> CompanyBill:
+def finalize_company_bill(company_offer: CompanyOffer, actual_weight_kg: Decimal) -> CompanyBill:
     """
-    Finalizes the transaction and calculates commission for the winning company bid,
+    Finalizes the transaction and calculates commission for the winning company offer,
     using the actual collected weight to generate a proper CompanyBill.
     
     Args:
-        company_bid (CompanyBid): The winning bid to finalize.
+        company_offer (CompanyOffer): The winning offer to finalize.
         actual_weight_kg (Decimal): The actual weight collected at pickup.
         
     Returns:
         CompanyBill: The generated company bill.
         
     Raises:
-        ValueError: If the company bid is not the winner.
+        ValueError: If the company offer is not the winner.
         TypeError: If actual_weight_kg is not a Decimal.
     """
     if not isinstance(actual_weight_kg, Decimal):
         raise TypeError("actual_weight_kg must be a Decimal.")
         
-    if not company_bid.is_winner:
-        raise ValueError("Cannot finalize a bill for a bid that has not won.")
+    if not company_offer.is_winner:
+        raise ValueError("Cannot finalize a bill for an offer that has not won.")
         
     with transaction.atomic():
-        # NOTE: Since the CompanyBid model does not distinguish between a per-unit rate
-        # and a flat total bid, and since actual weight is only known at pickup time,
-        # CompanyBid.bid_rate_per_kg inherently acts as a per-unit rate. We calculate the
-        # actual total amount by multiplying the actual weight by the bid amount.
-        total_amount = actual_weight_kg * company_bid.bid_rate_per_kg
+        # NOTE: Since the CompanyOffer model does not distinguish between a per-unit rate
+        # and a flat total offer, and since actual weight is only known at pickup time,
+        # CompanyOffer.offer_amount inherently acts as a per-unit rate. We calculate the
+        # actual total amount by multiplying the actual weight by the offer amount.
+        total_amount = actual_weight_kg * company_offer.offer_amount
         
         transaction_type = "COMPANY_PICKUP"
         commission_amount = calculate_commission(total_amount, transaction_type)
@@ -242,8 +245,8 @@ def finalize_company_bill(company_bid: CompanyBid, actual_weight_kg: Decimal) ->
         payment_reference = f"CBILL-{uuid.uuid4().hex[:12].upper()}"
         
         bill = CompanyBill.objects.create(
-            company_bid=company_bid,
-            merchant=company_bid.merchant,
+            company_offer=company_offer,
+            merchant=company_offer.merchant,
             weight_kg=actual_weight_kg,
             total_amount=total_amount,
             commission_rate=commission_rate,
@@ -253,16 +256,108 @@ def finalize_company_bill(company_bid: CompanyBid, actual_weight_kg: Decimal) ->
         )
         
         create_settlement_record(
-            merchant_account=company_bid.merchant,
+            merchant_account=company_offer.merchant,
             gross_transacted_value=total_amount,
             transaction_type=transaction_type,
             source_reference_id=str(bill.id)
         )
         
         logger.info(
-            f"Finalized CompanyBill {bill.id} for CompanyBid {company_bid.id} "
+            f"Finalized CompanyBill {bill.id} for CompanyOffer {company_offer.id} "
             f"with actual weight {actual_weight_kg}kg, total amount {total_amount}, "
             f"and commission {commission_amount}."
         )
         
         return bill
+
+
+def send_offer_window_reminders() -> dict:
+    """
+    Sends reminders for open Company PickupRequests at 0, 12, and 21 hours elapsed.
+    """
+    now = timezone.now()
+    open_requests = PickupRequest.objects.filter(
+        source__role=Account.Role.COMPANY,
+        status=PickupRequest.Status.PENDING
+    )
+    
+    # Local import to prevent circular dependencies
+    from notifications.services import notify
+    
+    requests_processed = 0
+    reminders_sent = 0
+    
+    for pickup_request in open_requests:
+        hours_elapsed = (now - pickup_request.requested_at).total_seconds() / 3600.0
+        
+        time_remaining = None
+        mark_start = False
+        mark_halfway = False
+        mark_final = False
+        
+        # Use elif branching so only the most relevant/latest-due threshold fires.
+        # If the task didn't run for a while, we retroactive-catch-up the earlier flags.
+        # e.g., if we hit >= 12, we mark both start and halfway sent so start doesn't fire later.
+        if hours_elapsed >= 21 and not pickup_request.offer_reminder_final_sent:
+            time_remaining = "3 hours"
+            mark_start = True
+            mark_halfway = True
+            mark_final = True
+        elif hours_elapsed >= 12 and not pickup_request.offer_reminder_halfway_sent:
+            time_remaining = "12 hours"
+            mark_start = True
+            mark_halfway = True
+        elif hours_elapsed >= 0 and not pickup_request.offer_reminder_start_sent:
+            time_remaining = "24 hours"
+            mark_start = True
+            
+        if not time_remaining:
+            continue
+            
+        requests_processed += 1
+        
+        # Get eligible merchants and exclude those who already offered
+        eligible_merchants = get_eligible_merchants_for_offer(pickup_request)
+        already_offered_merchant_ids = CompanyOffer.objects.filter(
+            pickup_request=pickup_request
+        ).values_list('merchant_id', flat=True)
+        
+        merchants_to_notify = eligible_merchants.exclude(
+            account_id__in=already_offered_merchant_ids
+        )
+        
+        category_name = pickup_request.category.name if pickup_request.category else "Scrap"
+        
+        for merchant_prof in merchants_to_notify:
+            try:
+                notify(
+                    account=merchant_prof.account,
+                    notification_type="OFFER_WINDOW_CLOSING",
+                    context={
+                        "category": category_name,
+                        "time_remaining": time_remaining
+                    }
+                )
+                reminders_sent += 1
+            except Exception as e:
+                logger.warning(f"Failed to send OFFER_WINDOW_CLOSING to {merchant_prof.account.phone_number}: {e}")
+                
+        # Save the appropriate flag(s) as True
+        update_fields = []
+        if mark_start and not pickup_request.offer_reminder_start_sent:
+            pickup_request.offer_reminder_start_sent = True
+            update_fields.append('offer_reminder_start_sent')
+        if mark_halfway and not pickup_request.offer_reminder_halfway_sent:
+            pickup_request.offer_reminder_halfway_sent = True
+            update_fields.append('offer_reminder_halfway_sent')
+        if mark_final and not pickup_request.offer_reminder_final_sent:
+            pickup_request.offer_reminder_final_sent = True
+            update_fields.append('offer_reminder_final_sent')
+            
+        if update_fields:
+            pickup_request.save(update_fields=update_fields)
+            
+    return {
+        "requests_processed": requests_processed,
+        "reminders_sent": reminders_sent
+    }

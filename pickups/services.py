@@ -89,6 +89,30 @@ def resolve_radius_km(user_profile: UserProfile) -> Decimal:
         raise ValueError(f"Unexpected location_type: {loc_type}")
 
 
+def _get_eligible_merchants_for_pickup(lat: float, lon: float, radius_km: float) -> QuerySet:
+    """
+    Helper to find eligible merchants within a bounding box based on latitude, longitude, and radius.
+    """
+    radius = float(radius_km)
+    lat_diff = radius / 111.0
+    cos_lat = math.cos(math.radians(lat))
+    lon_diff = radius / (111.0 * cos_lat) if cos_lat != 0 else 0
+    
+    min_lat = Decimal(str(lat - lat_diff))
+    max_lat = Decimal(str(lat + lat_diff))
+    min_lon = Decimal(str(lon - lon_diff))
+    max_lon = Decimal(str(lon + lon_diff))
+    
+    return MerchantProfile.objects.filter(
+        account__is_active=True,
+        account__is_verified=True,
+        latitude__gte=min_lat,
+        latitude__lte=max_lat,
+        longitude__gte=min_lon,
+        longitude__lte=max_lon
+    )
+
+
 def broadcast_lead_to_merchants(pickup_request: PickupRequest) -> List[Lead]:
     """
     Finds eligible merchants within the resolved radius and creates a Lead for each.
@@ -110,27 +134,7 @@ def broadcast_lead_to_merchants(pickup_request: PickupRequest) -> List[Lead]:
     lon = float(pickup_request.longitude)
     radius = float(radius_km)
     
-    # Calculate simple bounding box for latitude/longitude
-    # 1 degree latitude is approx 111 km. 
-    # 1 degree longitude is approx 111 * cos(latitude) km.
-    lat_diff = radius / 111.0
-    cos_lat = math.cos(math.radians(lat))
-    lon_diff = radius / (111.0 * cos_lat) if cos_lat != 0 else 0
-    
-    min_lat = Decimal(str(lat - lat_diff))
-    max_lat = Decimal(str(lat + lat_diff))
-    min_lon = Decimal(str(lon - lon_diff))
-    max_lon = Decimal(str(lon + lon_diff))
-    
-    # Find active & verified merchants within the bounding box
-    eligible_merchants = MerchantProfile.objects.filter(
-        account__is_active=True,
-        account__is_verified=True,
-        latitude__gte=min_lat,
-        latitude__lte=max_lat,
-        longitude__gte=min_lon,
-        longitude__lte=max_lon
-    )
+    eligible_merchants = _get_eligible_merchants_for_pickup(lat, lon, radius_km)
     
     created_leads = []
     
@@ -158,6 +162,27 @@ def broadcast_lead_to_merchants(pickup_request: PickupRequest) -> List[Lead]:
         pickup_request.status = PickupRequest.Status.BROADCASTED
         pickup_request.save(update_fields=['status'])
         
+    # Local import to prevent circular dependencies
+    from notifications.services import notify
+
+    # Notify merchants after the atomic block completes successfully.
+    # We use the search radius as a simple, accurate location string.
+    location_str = f"within {radius_km}km"
+    category_name = pickup_request.category.name if pickup_request.category else "Scrap"
+    
+    for lead in created_leads:
+        try:
+            notify(
+                account=lead.merchant,
+                notification_type="NEW_LEAD",
+                context={
+                    "category": category_name,
+                    "location": location_str
+                }
+            )
+        except Exception as e:
+            logger.warning(f"Failed to send NEW_LEAD notification to {lead.merchant.phone_number}: {e}")
+            
     # TODO: Pushing this broadcast over WebSocket happens in the realtime app's consumer,
     # not here. This function only creates the necessary database records.
     return created_leads
@@ -239,7 +264,7 @@ def get_expired_leads() -> QuerySet:
     )
 
 
-def record_weight_and_price(lead_id: int, weight_kg: Decimal, price_per_unit: Decimal) -> Bill:
+def record_weight_and_price(lead_id: int, weight_kg: Decimal, price_per_unit: Decimal, merchant_account: Account) -> Bill:
     """
     Records the final weight and price for an accepted lead, generating a Bill and Settlement.
     
@@ -247,12 +272,14 @@ def record_weight_and_price(lead_id: int, weight_kg: Decimal, price_per_unit: De
         lead_id (int): The ID of the accepted lead.
         weight_kg (Decimal): The recorded weight in kilograms.
         price_per_unit (Decimal): The merchant-entered price per unit.
+        merchant_account (Account): The merchant submitting the weight and price.
         
     Returns:
         Bill: The generated bill.
         
     Raises:
         TypeError: If weight_kg or price_per_unit are not Decimals.
+        PermissionError: If the calling merchant is not the one assigned to this lead.
         ValueError: If the lead is not ACCEPTED or if the price is outside the allowed catalog range.
     """
     if not isinstance(weight_kg, Decimal) or not isinstance(price_per_unit, Decimal):
@@ -263,6 +290,9 @@ def record_weight_and_price(lead_id: int, weight_kg: Decimal, price_per_unit: De
             lead = Lead.objects.select_related('pickup_request', 'merchant').get(id=lead_id)
         except Lead.DoesNotExist:
             raise ValueError(f"Lead {lead_id} does not exist.")
+            
+        if lead.merchant != merchant_account:
+            raise PermissionError("This lead is not assigned to your account. You may not record weight and price for it.")
             
         if lead.status != Lead.Status.ACCEPTED:
             raise ValueError(f"Lead must be in ACCEPTED status to record weight and price. Current status is {lead.status}.")
@@ -354,3 +384,74 @@ def apply_range_override(pickup_request_id: int, new_radius_km: Decimal, admin_a
     )
     
     return override
+
+
+def reassign_expired_lead(lead: Lead) -> dict:
+    """
+    Reassigns an accepted lead that has passed its collection deadline.
+    """
+    if lead.status != Lead.Status.ACCEPTED:
+        raise ValueError(f"Lead must be in ACCEPTED status to be reassigned. Current status is {lead.status}.")
+        
+    with transaction.atomic():
+        lead.status = Lead.Status.EXPIRED
+        lead.save(update_fields=['status'])
+        
+        pickup_request = lead.pickup_request
+        radius_km = lead.radius_used_km
+        
+        eligible_merchants = _get_eligible_merchants_for_pickup(
+            float(pickup_request.latitude), 
+            float(pickup_request.longitude), 
+            float(radius_km)
+        )
+        
+        # Exclude merchants who already failed to collect (have an EXPIRED lead for this request)
+        failed_merchant_ids = Lead.objects.filter(
+            pickup_request=pickup_request,
+            status=Lead.Status.EXPIRED
+        ).values_list('merchant_id', flat=True)
+        
+        merchants_to_offer = eligible_merchants.exclude(account_id__in=failed_merchant_ids)
+        
+        if not merchants_to_offer.exists():
+            pickup_request.status = PickupRequest.Status.CLOSED
+            pickup_request.save(update_fields=['status'])
+            # TODO: No eligible merchants left to reassign. This should notify Admin/the source 
+            # that the request could not be fulfilled.
+            logger.warning(f"No eligible merchants left for reassigning PickupRequest {pickup_request.id}. Closed request.")
+            return {"reassigned": False, "new_leads_count": 0}
+            
+        created_leads = []
+        for merchant_prof in merchants_to_offer:
+            new_lead = Lead.objects.create(
+                pickup_request=pickup_request,
+                merchant=merchant_prof.account,
+                radius_used_km=radius_km,
+                status=Lead.Status.BROADCASTED
+            )
+            created_leads.append(new_lead)
+            
+        pickup_request.status = PickupRequest.Status.BROADCASTED
+        pickup_request.save(update_fields=['status'])
+        
+    # Local import to prevent circular dependencies
+    from notifications.services import notify
+
+    location_str = f"within {radius_km}km"
+    category_name = pickup_request.category.name if pickup_request.category else "Scrap"
+    
+    for new_lead in created_leads:
+        try:
+            notify(
+                account=new_lead.merchant,
+                notification_type="NEW_LEAD",
+                context={
+                    "category": category_name,
+                    "location": location_str
+                }
+            )
+        except Exception as e:
+            logger.warning(f"Failed to send NEW_LEAD notification to {new_lead.merchant.phone_number}: {e}")
+            
+    return {"reassigned": True, "new_leads_count": len(created_leads)}

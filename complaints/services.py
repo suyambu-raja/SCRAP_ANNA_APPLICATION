@@ -231,4 +231,16 @@ def resolve_complaint(complaint_id: int, admin_account: Account, resolution_outc
             # are NEVER penalized. Skipping any penalty call here explicitly.
             logger.info(f"Complaint {complaint_id} resolved AGAINST_SOURCE. Sources are never penalized per asymmetric trust rule.")
             
-        return complaint
+    # Local import to prevent circular dependencies
+    from notifications.services import notify
+    
+    try:
+        notify(complaint.raised_by, "COMPLAINT_UPDATE", {
+            "complaint_id": str(complaint.id),
+            "complaint_type": complaint.complaint_type,
+            "status": complaint.status
+        })
+    except Exception as e:
+        logger.warning(f"Failed to send COMPLAINT_UPDATE notification to {complaint.raised_by.phone_number}: {e}")
+        
+    return complaint

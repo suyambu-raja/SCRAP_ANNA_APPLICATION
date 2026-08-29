@@ -57,6 +57,17 @@ class UserProfile(BaseModel):
     def __str__(self):
         return self.name
 
+class RegistrationStatus(models.TextChoices):
+    PENDING_REVIEW = 'PENDING_REVIEW', 'Pending Review'
+    APPROVED = 'APPROVED', 'Approved'
+    REJECTED = 'REJECTED', 'Rejected'
+    PERMANENTLY_REJECTED = 'PERMANENTLY_REJECTED', 'Permanently Rejected'
+
+class Language(models.TextChoices):
+    EN = 'EN', 'English'
+    TA = 'TA', 'Tamil'
+
+
 class CompanyProfile(BaseModel):
     account = models.OneToOneField(Account, on_delete=models.CASCADE, related_name="company_profile")
     company_name = models.CharField(max_length=255)
@@ -64,6 +75,28 @@ class CompanyProfile(BaseModel):
     address = models.TextField()
     latitude = models.DecimalField(max_digits=9, decimal_places=6, db_index=True)
     longitude = models.DecimalField(max_digits=9, decimal_places=6, db_index=True)
+    
+    shop_photo_url = models.URLField(max_length=500, null=True, blank=True)
+    registration_status = models.CharField(
+        max_length=30, 
+        choices=RegistrationStatus.choices, 
+        default=RegistrationStatus.PENDING_REVIEW, 
+        db_index=True
+    )
+    resubmission_count = models.PositiveIntegerField(default=0)
+    rejection_reason = models.TextField(null=True, blank=True)
+    reviewed_by = models.ForeignKey(
+        Account, 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        blank=True, 
+        related_name="company_profiles_reviewed", 
+        limit_choices_to={"role": "ADMIN"}
+    )
+    reviewed_at = models.DateTimeField(null=True, blank=True)
+    
+    language_preference = models.CharField(max_length=5, choices=Language.choices, default=Language.EN)
+    voice_call_enabled = models.BooleanField(default=True)
 
     def __str__(self):
         return self.company_name
@@ -91,6 +124,28 @@ class MerchantProfile(BaseModel):
     free_trial_end_date = models.DateTimeField(null=True, blank=True)
     trust_score = models.DecimalField(max_digits=4, decimal_places=2, default=5.00)
     kyc_status = models.CharField(max_length=20, choices=KYCStatus.choices, default=KYCStatus.PENDING, db_index=True)
+    
+    shop_photo_url = models.URLField(max_length=500, null=True, blank=True)
+    registration_status = models.CharField(
+        max_length=30, 
+        choices=RegistrationStatus.choices, 
+        default=RegistrationStatus.PENDING_REVIEW, 
+        db_index=True
+    )
+    resubmission_count = models.PositiveIntegerField(default=0)
+    rejection_reason = models.TextField(null=True, blank=True)
+    reviewed_by = models.ForeignKey(
+        Account, 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        blank=True, 
+        related_name="merchant_profiles_reviewed", 
+        limit_choices_to={"role": "ADMIN"}
+    )
+    reviewed_at = models.DateTimeField(null=True, blank=True)
+
+    language_preference = models.CharField(max_length=5, choices=Language.choices, default=Language.EN)
+    voice_call_enabled = models.BooleanField(default=True)
 
     class Meta:
         indexes = [
@@ -106,3 +161,26 @@ class AdminProfile(BaseModel):
 
     def __str__(self):
         return f"Admin Profile for {self.account}"
+
+class MerchantBranch(BaseModel):
+    branch_account = models.OneToOneField(Account, on_delete=models.CASCADE, related_name="merchant_branch")
+    parent_merchant = models.ForeignKey(
+        Account, 
+        on_delete=models.CASCADE, 
+        related_name="branches", 
+        db_index=True, 
+        limit_choices_to={"role": "MERCHANT"}
+    )
+    branch_name = models.CharField(max_length=150)
+    latitude = models.DecimalField(max_digits=9, decimal_places=6, db_index=True)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6, db_index=True)
+    is_active = models.BooleanField(default=True)
+    created_by_owner_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['latitude', 'longitude']),
+        ]
+
+    def __str__(self):
+        return f"{self.branch_name} ({self.parent_merchant.phone_number})"

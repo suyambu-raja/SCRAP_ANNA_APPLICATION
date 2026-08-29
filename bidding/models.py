@@ -3,27 +3,27 @@ from common.models import BaseModel
 from accounts.models import Account
 from pickups.models import PickupRequest
 
-class CompanyBid(BaseModel):
-    pickup_request = models.ForeignKey(PickupRequest, on_delete=models.CASCADE, related_name="bids", db_index=True)
-    merchant = models.ForeignKey(Account, on_delete=models.PROTECT, related_name="bids_submitted", db_index=True)
-    bid_rate_per_kg = models.DecimalField(max_digits=10, decimal_places=2)
+class CompanyOffer(BaseModel):
+    pickup_request = models.ForeignKey(PickupRequest, on_delete=models.CASCADE, related_name="offers", db_index=True)
+    merchant = models.ForeignKey(Account, on_delete=models.PROTECT, related_name="offers_submitted", db_index=True)
+    offer_amount = models.DecimalField(max_digits=10, decimal_places=2)
     submitted_at = models.DateTimeField(auto_now_add=True)
     is_winner = models.BooleanField(default=False, db_index=True)
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['pickup_request', 'merchant'], name='unique_bid_per_merchant')
+            models.UniqueConstraint(fields=['pickup_request', 'merchant'], name='unique_offer_per_merchant')
         ]
 
     def __str__(self):
-        return f"Bid by {self.merchant} on {self.pickup_request.id}"
+        return f"Offer by {self.merchant} on {self.pickup_request.id}"
 
 class CompanyBill(BaseModel):
     class Status(models.TextChoices):
         PENDING = 'PENDING', 'Pending'
         PAID = 'PAID', 'Paid'
 
-    company_bid = models.OneToOneField(CompanyBid, on_delete=models.PROTECT, related_name="bill")
+    company_offer = models.OneToOneField(CompanyOffer, on_delete=models.PROTECT, related_name="bill")
     merchant = models.ForeignKey(Account, on_delete=models.PROTECT, related_name="company_bills_issued", db_index=True)
     weight_kg = models.DecimalField(max_digits=10, decimal_places=3)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)

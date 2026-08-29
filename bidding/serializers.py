@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from bidding.models import CompanyBid, CompanyBill
+from bidding.models import CompanyOffer, CompanyBill
 
 class CreateCompanyPickupRequestSerializer(serializers.Serializer):
     """
@@ -11,21 +11,21 @@ class CreateCompanyPickupRequestSerializer(serializers.Serializer):
     longitude = serializers.DecimalField(max_digits=9, decimal_places=6)
 
 
-class SubmitBidSerializer(serializers.Serializer):
+class SubmitOfferSerializer(serializers.Serializer):
     """
-    Serializer for a merchant submitting a bid on a Company pickup request.
+    Serializer for a merchant submitting an offer on a Company pickup request.
     """
-    bid_rate_per_kg = serializers.DecimalField(max_digits=10, decimal_places=2)
+    offer_amount = serializers.DecimalField(max_digits=10, decimal_places=2)
 
 
-class CompanyBidSerializer(serializers.ModelSerializer):
+class CompanyOfferSerializer(serializers.ModelSerializer):
     """
-    Output serializer for CompanyBid.
+    Output serializer for CompanyOffer.
     """
     class Meta:
-        model = CompanyBid
+        model = CompanyOffer
         fields = '__all__'
-        read_only_fields = [f.name for f in CompanyBid._meta.fields]
+        read_only_fields = [f.name for f in CompanyOffer._meta.fields]
 
 
 class FinalizeCompanyBillSerializer(serializers.Serializer):

@@ -63,6 +63,7 @@ LOCAL_APPS = [
     "realtime",
     "feature_flags",
     "common",
+    "notifications",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -244,6 +245,14 @@ CASHFREE_ENV = config("CASHFREE_ENV", default="TEST")
 # ------------------------------------------------------------------
 KYC_PROVIDER_API_KEY = config("KYC_PROVIDER_API_KEY", default="")
 KYC_PROVIDER_BASE_URL = config("KYC_PROVIDER_BASE_URL", default="")
+
+
+# ------------------------------------------------------------------
+# Voice Call provider
+# ------------------------------------------------------------------
+VOICE_CALL_PROVIDER_API_KEY = config("VOICE_CALL_PROVIDER_API_KEY", default="")
+VOICE_CALL_PROVIDER_BASE_URL = config("VOICE_CALL_PROVIDER_BASE_URL", default="")
+VOICE_CALL_PROVIDER_NAME = config("VOICE_CALL_PROVIDER_NAME", default="")
 
 
 # ------------------------------------------------------------------

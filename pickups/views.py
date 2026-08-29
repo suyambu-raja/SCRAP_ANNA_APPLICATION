@@ -114,7 +114,8 @@ class RecordWeightAndPriceView(APIView):
         bill = record_weight_and_price(
             lead_id=lead_id,
             weight_kg=weight_kg,
-            price_per_unit=price_per_unit
+            price_per_unit=price_per_unit,
+            merchant_account=request.user
         )
         
         serializer_out = BillSerializer(bill)

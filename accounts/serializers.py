@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from phonenumber_field.serializerfields import PhoneNumberField
 
-from accounts.models import Account, UserProfile, CompanyProfile, MerchantProfile
+from accounts.models import Account, UserProfile, CompanyProfile, MerchantProfile, MerchantBranch
 
 class RequestOTPSerializer(serializers.Serializer):
     """
@@ -33,7 +33,7 @@ class CompanyProfileDataSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = CompanyProfile
-        fields = ['company_name', 'registration_number', 'address', 'latitude', 'longitude']
+        fields = ['company_name', 'registration_number', 'address', 'latitude', 'longitude', 'shop_photo_url']
 
 
 class MerchantProfileDataSerializer(serializers.ModelSerializer):
@@ -43,7 +43,7 @@ class MerchantProfileDataSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = MerchantProfile
-        fields = ['name', 'has_storage', 'latitude', 'longitude']
+        fields = ['name', 'has_storage', 'latitude', 'longitude', 'shop_photo_url']
 
 
 class RegisterAccountSerializer(serializers.Serializer):
@@ -104,3 +104,61 @@ class TokenResponseSerializer(serializers.Serializer):
     """
     access = serializers.CharField()
     refresh = serializers.CharField()
+
+class CompanyProfileSummarySerializer(serializers.ModelSerializer):
+    """
+    Read-only serializer for Company Profile summary in admin view.
+    """
+    account = serializers.CharField(source='account.phone_number', read_only=True)
+
+    class Meta:
+        model = CompanyProfile
+        fields = ['id', 'account', 'company_name', 'registration_number', 'address', 'latitude', 'longitude', 'shop_photo_url', 'registration_status', 'resubmission_count', 'rejection_reason', 'created_at']
+        read_only_fields = fields
+
+class MerchantProfileSummarySerializer(serializers.ModelSerializer):
+    """
+    Read-only serializer for Merchant Profile summary in admin view.
+    """
+    account = serializers.CharField(source='account.phone_number', read_only=True)
+
+    class Meta:
+        model = MerchantProfile
+        fields = ['id', 'account', 'name', 'has_storage', 'latitude', 'longitude', 'shop_photo_url', 'registration_status', 'resubmission_count', 'rejection_reason', 'created_at']
+        read_only_fields = fields
+
+class PendingRegistrationsSerializer(serializers.Serializer):
+    """
+    Serializer for the dict of pending registrations.
+    """
+    companies = CompanyProfileSummarySerializer(many=True)
+    merchants = MerchantProfileSummarySerializer(many=True)
+
+class RejectRegistrationSerializer(serializers.Serializer):
+    """
+    Serializer for rejecting a registration.
+    """
+    reason = serializers.CharField(required=True)
+
+class ResubmitRegistrationSerializer(serializers.Serializer):
+    """
+    Serializer for resubmitting a registration.
+    """
+    updated_profile_data = serializers.JSONField(required=True)
+
+class CreateMerchantBranchSerializer(serializers.Serializer):
+    """
+    Serializer for creating a new merchant branch.
+    """
+    branch_phone_number = PhoneNumberField()
+    branch_name = serializers.CharField(max_length=150)
+    latitude = serializers.DecimalField(max_digits=9, decimal_places=6)
+    longitude = serializers.DecimalField(max_digits=9, decimal_places=6)
+
+class MerchantBranchSerializer(serializers.ModelSerializer):
+    """
+    Read-only serializer for a merchant branch.
+    """
+    class Meta:
+        model = MerchantBranch
+        fields = '__all__'

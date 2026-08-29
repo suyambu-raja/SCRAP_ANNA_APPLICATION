@@ -4,6 +4,7 @@ from django.db import transaction
 from django.utils import timezone
 
 from accounts.models import Account, MerchantProfile
+from accounts.services import get_profile_for_account
 from kyc.models import KYCRecord
 
 logger = logging.getLogger(__name__)
@@ -49,6 +50,10 @@ def submit_kyc(account: Account, provider_name: str, document_reference: str) ->
     """
     if account.role not in [Account.Role.MERCHANT, Account.Role.COMPANY]:
         raise PermissionError("Only MERCHANT and COMPANY accounts can submit KYC.")
+        
+    profile = get_profile_for_account(account)
+    if profile.registration_status != 'APPROVED':
+        raise ValueError(f"Registration must be approved by an Admin before KYC can be submitted. Current status: {profile.registration_status}")
         
     if check_for_duplicate_document(document_reference, excluding_account=account):
         raise ValueError(f"Document reference {document_reference} is already verified by another account.")
@@ -135,7 +140,22 @@ def handle_provider_callback(kyc_record_id: int, provider_status: str, recycle_c
         kyc_record.save(update_fields=update_fields)
         
         logger.info(f"KYC record {kyc_record.id} updated to {provider_status}.")
-        return kyc_record
+        
+    # Local import to prevent circular dependencies
+    from notifications.services import notify
+    
+    if provider_status == KYCRecord.Status.VERIFIED:
+        try:
+            notify(kyc_record.account, "KYC_VERIFIED", {})
+        except Exception as e:
+            logger.warning(f"Failed to send KYC_VERIFIED notification to {kyc_record.account.phone_number}: {e}")
+    elif provider_status == KYCRecord.Status.REJECTED:
+        try:
+            notify(kyc_record.account, "KYC_REJECTED", {})
+        except Exception as e:
+            logger.warning(f"Failed to send KYC_REJECTED notification to {kyc_record.account.phone_number}: {e}")
+            
+    return kyc_record
 
 
 def get_kyc_status(account: Account) -> Optional[KYCRecord]:

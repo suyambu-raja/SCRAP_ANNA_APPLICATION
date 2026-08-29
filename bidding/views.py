@@ -8,18 +8,18 @@ from pickups.models import PickupRequest
 from pickups.serializers import PickupRequestSerializer
 from accounts.models import Account
 
-from bidding.models import CompanyBid
+from bidding.models import CompanyOffer
 from bidding.serializers import (
     CreateCompanyPickupRequestSerializer,
-    SubmitBidSerializer,
-    CompanyBidSerializer,
+    SubmitOfferSerializer,
+    CompanyOfferSerializer,
     FinalizeCompanyBillSerializer,
     CompanyBillSerializer
 )
 from bidding.services import (
     create_company_pickup_request,
-    get_eligible_merchants_for_bid,
-    submit_bid,
+    get_eligible_merchants_for_offer,
+    submit_offer,
     close_bidding_window,
     finalize_company_bill
 )
@@ -62,9 +62,9 @@ class MyCompanyPickupRequestsView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class EligibleBidRequestsView(APIView):
+class EligibleOfferRequestsView(APIView):
     """
-    Merchant endpoint to list all open Company pickup requests they are eligible to bid on.
+    Merchant endpoint to list all open Company pickup requests they are eligible to submit an offer on.
     """
     permission_classes = [IsMerchantRole]
 
@@ -81,63 +81,63 @@ class EligibleBidRequestsView(APIView):
         # Consider optimizing this by reversing the query (e.g. using distance filters directly on PickupRequest) 
         # as the platform scales.
         for req in open_requests:
-            if get_eligible_merchants_for_bid(req).filter(account=request.user).exists():
+            if get_eligible_merchants_for_offer(req).filter(account=request.user).exists():
                 eligible_requests.append(req)
                 
         serializer = PickupRequestSerializer(eligible_requests, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class SubmitBidView(APIView):
+class SubmitOfferView(APIView):
     """
-    Merchant endpoint to submit or update a bid on a Company pickup request.
+    Merchant endpoint to submit or update an offer on a Company pickup request.
     """
     permission_classes = [IsMerchantRole]
 
     def post(self, request, pickup_request_id):
-        serializer = SubmitBidSerializer(data=request.data)
+        serializer = SubmitOfferSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         
-        bid_rate_per_kg = serializer.validated_data['bid_rate_per_kg']
+        offer_amount = serializer.validated_data['offer_amount']
         
-        bid = submit_bid(
+        offer = submit_offer(
             pickup_request_id=pickup_request_id,
             merchant_account=request.user,
-            bid_rate_per_kg=bid_rate_per_kg
+            offer_amount=offer_amount
         )
         
-        return Response(CompanyBidSerializer(bid).data, status=status.HTTP_201_CREATED)
+        return Response(CompanyOfferSerializer(offer).data, status=status.HTTP_201_CREATED)
 
 
-class MyBidsView(APIView):
+class MyOffersView(APIView):
     """
-    Merchant endpoint to view all their submitted bids.
+    Merchant endpoint to view all their submitted offers.
     """
     permission_classes = [IsMerchantRole]
 
     def get(self, request):
-        bids = CompanyBid.objects.filter(merchant=request.user).order_by('-submitted_at')
-        serializer = CompanyBidSerializer(bids, many=True)
+        offers = CompanyOffer.objects.filter(merchant=request.user).order_by('-submitted_at')
+        serializer = CompanyOfferSerializer(offers, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class CloseBiddingWindowView(APIView):
     """
-    Admin-only endpoint to manually close a bidding window and select the winning bid.
+    Admin-only endpoint to manually close a bidding window and select the winning offer.
     Normally handled by an automated Celery task.
     """
     permission_classes = [IsAdminRole]
 
     def post(self, request, pickup_request_id):
-        winning_bid = close_bidding_window(pickup_request_id=pickup_request_id)
+        winning_offer = close_bidding_window(pickup_request_id=pickup_request_id)
         
-        if winning_bid is None:
+        if winning_offer is None:
             return Response(
-                {"detail": "No bids received. Bidding window closed and request marked as closed."}, 
+                {"detail": "No offers received. Bidding window closed and request marked as closed."}, 
                 status=status.HTTP_200_OK
             )
             
-        return Response(CompanyBidSerializer(winning_bid).data, status=status.HTTP_200_OK)
+        return Response(CompanyOfferSerializer(winning_offer).data, status=status.HTTP_200_OK)
 
 
 class FinalizeCompanyBillView(APIView):
@@ -147,22 +147,22 @@ class FinalizeCompanyBillView(APIView):
     """
     permission_classes = [IsMerchantRole]
 
-    def post(self, request, company_bid_id):
+    def post(self, request, company_offer_id):
         serializer = FinalizeCompanyBillSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         
         try:
-            company_bid = CompanyBid.objects.get(id=company_bid_id)
-        except CompanyBid.DoesNotExist:
-            return Response({"detail": "CompanyBid not found."}, status=status.HTTP_404_NOT_FOUND)
+            company_offer = CompanyOffer.objects.get(id=company_offer_id)
+        except CompanyOffer.DoesNotExist:
+            raise ValueError(f"CompanyOffer {company_offer_id} not found.")
             
-        if company_bid.merchant != request.user:
-            raise PermissionError("You are not the merchant who owns this bid.")
+        if company_offer.merchant != request.user:
+            raise PermissionError("You are not the merchant who owns this offer.")
             
         actual_weight_kg = serializer.validated_data['actual_weight_kg']
         
         bill = finalize_company_bill(
-            company_bid=company_bid,
+            company_offer=company_offer,
             actual_weight_kg=actual_weight_kg
         )
         

@@ -18,6 +18,11 @@ class PickupRequest(BaseModel):
     latitude = models.DecimalField(max_digits=9, decimal_places=6, db_index=True)
     longitude = models.DecimalField(max_digits=9, decimal_places=6, db_index=True)
     requested_at = models.DateTimeField(auto_now_add=True)
+    
+    # Flags to prevent duplicate reminder notifications for Company sealed-offer orders
+    offer_reminder_start_sent = models.BooleanField(default=False)
+    offer_reminder_halfway_sent = models.BooleanField(default=False)
+    offer_reminder_final_sent = models.BooleanField(default=False)
 
     class Meta:
         indexes = [

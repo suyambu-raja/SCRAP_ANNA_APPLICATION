@@ -187,3 +187,52 @@ def create_marketplace_settlement_record(merchant_account: Account, marketplace_
     )
     
     return record
+
+
+def send_settlement_reminders() -> dict:
+    """
+    Identifies merchants with outstanding PENDING commission settlements and sends a reminder notification.
+    """
+    # Find distinct merchant accounts with pending settlement records
+    merchants_with_pending_sr = SettlementRecord.objects.filter(
+        payment_status=SettlementRecord.PaymentStatus.PENDING
+    ).values_list('merchant', flat=True)
+    
+    merchants_with_pending_msr = MarketplaceSettlementRecord.objects.filter(
+        payment_status=MarketplaceSettlementRecord.PaymentStatus.PENDING
+    ).values_list('merchant', flat=True)
+    
+    # Combine and distinct the merchant IDs
+    merchant_ids = set(merchants_with_pending_sr) | set(merchants_with_pending_msr)
+    
+    # Note: importing calculate_total_commission_owed creates a settlements -> payments dependency.
+    # It is safe because payments does not import from settlements.services.
+    from payments.services import calculate_total_commission_owed
+    
+    # Local import to prevent circular dependencies
+    from notifications.services import notify
+    
+    merchants_notified = 0
+    total_checked = len(merchant_ids)
+    
+    for merchant_id in merchant_ids:
+        merchant_account = Account.objects.get(id=merchant_id)
+        total_owed = calculate_total_commission_owed(merchant_account)
+        
+        if total_owed > Decimal('0.00'):
+            try:
+                notify(
+                    account=merchant_account,
+                    notification_type="SETTLEMENT_REMINDER",
+                    context={"amount_owed": f"₹{total_owed:.2f}"}
+                )
+                merchants_notified += 1
+            except Exception as e:
+                logger.warning(f"Failed to send SETTLEMENT_REMINDER to merchant {merchant_account.phone_number}: {e}")
+                
+    logger.info(f"Sent {merchants_notified} settlement reminders out of {total_checked} pending merchants.")
+    
+    return {
+        "merchants_notified": merchants_notified,
+        "total_checked": total_checked
+    }

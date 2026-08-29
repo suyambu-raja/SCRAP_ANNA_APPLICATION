@@ -1,27 +1,69 @@
-from rest_framework import permissions
+from rest_framework.permissions import BasePermission
 from accounts.models import Account
 
-class IsUserRole(permissions.IsAuthenticated):
-    """Allows access only to accounts with the USER role."""
-    def has_permission(self, request, view):
-        return super().has_permission(request, view) and getattr(request.user, 'role', None) == Account.Role.USER
 
-class IsCompanyRole(permissions.IsAuthenticated):
-    """Allows access only to accounts with the COMPANY role."""
+class IsUserRole(BasePermission):
+    """
+    Allows access only to authenticated accounts with the USER role.
+    Used for endpoints meant for individual household consumers.
+    """
     def has_permission(self, request, view):
-        return super().has_permission(request, view) and getattr(request.user, 'role', None) == Account.Role.COMPANY
+        return bool(
+            request.user and 
+            request.user.is_authenticated and 
+            getattr(request.user, 'role', None) == Account.Role.USER
+        )
 
-class IsMerchantRole(permissions.IsAuthenticated):
-    """Allows access only to accounts with the MERCHANT role."""
-    def has_permission(self, request, view):
-        return super().has_permission(request, view) and getattr(request.user, 'role', None) == Account.Role.MERCHANT
 
-class IsAdminRole(permissions.IsAuthenticated):
-    """Allows access only to accounts with the ADMIN role."""
+class IsCompanyRole(BasePermission):
+    """
+    Allows access only to authenticated accounts with the COMPANY role.
+    Used for endpoints meant for corporate/enterprise clients.
+    """
     def has_permission(self, request, view):
-        return super().has_permission(request, view) and getattr(request.user, 'role', None) == Account.Role.ADMIN
+        return bool(
+            request.user and 
+            request.user.is_authenticated and 
+            getattr(request.user, 'role', None) == Account.Role.COMPANY
+        )
 
-class IsVerifiedMerchant(IsMerchantRole):
-    """Allows access only to MERCHANT accounts that have passed KYC verification."""
+
+class IsMerchantRole(BasePermission):
+    """
+    Allows access only to authenticated accounts with the MERCHANT role.
+    Used for endpoints meant for scrap collectors/vendors.
+    """
     def has_permission(self, request, view):
-        return super().has_permission(request, view) and getattr(request.user, 'is_verified', False)
+        return bool(
+            request.user and 
+            request.user.is_authenticated and 
+            getattr(request.user, 'role', None) == Account.Role.MERCHANT
+        )
+
+
+class IsAdminRole(BasePermission):
+    """
+    Allows access only to authenticated accounts with the ADMIN role.
+    Used for internal platform administration endpoints.
+    """
+    def has_permission(self, request, view):
+        return bool(
+            request.user and 
+            request.user.is_authenticated and 
+            getattr(request.user, 'role', None) == Account.Role.ADMIN
+        )
+
+
+class IsVerifiedMerchant(BasePermission):
+    """
+    Allows access only to authenticated accounts with the MERCHANT role 
+    that have also passed KYC verification (is_verified == True).
+    Used for actions that require KYC-cleared merchants (e.g. accepting leads, submitting bids).
+    """
+    def has_permission(self, request, view):
+        return bool(
+            request.user and 
+            request.user.is_authenticated and 
+            getattr(request.user, 'role', None) == Account.Role.MERCHANT and 
+            getattr(request.user, 'is_verified', False) is True
+        )

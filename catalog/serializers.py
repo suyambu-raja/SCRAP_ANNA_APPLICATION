@@ -18,7 +18,7 @@ class CategoryTreeNodeSerializer(serializers.Serializer):
     Serializer purely for documenting the shape of the nested dictionary returned 
     by get_category_tree(). It validates/represents raw dicts, not model instances.
     """
-    id = serializers.IntegerField()
+    id = serializers.UUIDField()
     name = serializers.CharField()
     unit = serializers.CharField()
     # Handle the recursive structure using a MethodField for swagger documentation purposes,
