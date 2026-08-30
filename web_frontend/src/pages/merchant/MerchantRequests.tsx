@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Zap,
   Tag,
@@ -29,8 +30,29 @@ import {
   CheckCircle2,
   Volume2,
   AlertTriangle,
+  Truck,
+  ArrowRight,
 } from 'lucide-react';
+import { CardImageGallery } from '@/components/cards/CardImageGallery';
 import styles from './MerchantRequests.module.css';
+
+export interface QuoteOfferItem {
+  id: string;
+  customerName: string;
+  customerType: 'Industry' | 'Individual';
+  materialName: string;
+  materialCondition: string;
+  image: string;
+  images?: string[];
+  quantity: string;
+  address: string;
+  quotedPrice: number;
+  pickupSlot: string;
+  submittedAgo: string;
+  status: 'Waiting' | 'Accepted' | 'Rejected' | 'Expired';
+  statusType: 'waiting' | 'accepted' | 'rejected' | 'expired';
+  statusBadgeText: string;
+}
 
 export interface RequestItem {
   id: string;
@@ -39,6 +61,7 @@ export interface RequestItem {
   materialName: string;
   materialCondition: 'Mixed' | 'Clean' | 'Segregated';
   image: string;
+  images?: string[];
   quantity: string;
   address: string;
   pickupDate: string;
@@ -59,11 +82,12 @@ export interface RequestItem {
 const INITIAL_INDUSTRY_REQUESTS: RequestItem[] = [
   {
     id: 'REQ-250512-00078',
-    posterName: 'Sri Venkatesh Industries',
+    posterName: 'Sri Venkatesh Heavy Industries',
     requesterType: 'Industry',
-    materialName: 'Metal Scrap',
+    materialName: 'Heavy Melting Steel Scrap',
     materialCondition: 'Mixed',
-    image: '/scrap-iron.png',
+    image: '/industry-steel-scrap.jpg',
+    images: ['/industry-steel-scrap.jpg', '/scrap-quality-steel.jpg', '/scrap-iron.jpg'],
     quantity: '500 – 800 KG',
     address: '24, 5th Main Road, SIDCO Industrial Estate, Guindy, Chennai – 600032',
     pickupDate: '13 May 2025',
@@ -77,9 +101,10 @@ const INITIAL_INDUSTRY_REQUESTS: RequestItem[] = [
     id: 'REQ-250512-00077',
     posterName: 'Ambattur Heavy Foundry Works',
     requesterType: 'Industry',
-    materialName: 'Copper Scrap',
+    materialName: 'Industrial Copper Armature & Cable Scrap',
     materialCondition: 'Clean',
-    image: '/scrap-copper.png',
+    image: '/industry-copper-scrap.jpg',
+    images: ['/industry-copper-scrap.jpg', '/scrap-copper-wire.jpg', '/scrap-burned-copper.jpg'],
     quantity: '100 – 200 KG',
     address: '12/1, Ambattur Industrial Estate, Ambattur, Chennai – 600058',
     pickupDate: '13 May 2025',
@@ -93,9 +118,10 @@ const INITIAL_INDUSTRY_REQUESTS: RequestItem[] = [
     id: 'REQ-250512-00075',
     posterName: 'Precision Tools & Castings Pvt Ltd',
     requesterType: 'Industry',
-    materialName: 'Brass Scrap',
+    materialName: 'Brass Honey & Alloy Turnings Scrap',
     materialCondition: 'Mixed',
-    image: '/scrap-brass.png',
+    image: '/scrap-brass.jpg',
+    images: ['/scrap-brass.jpg', '/scrap-tin.jpg', '/scrap-ma-solid-alloy.jpg'],
     quantity: '50 – 100 KG',
     address: '16, Porur Industrial Bypass, Porur, Chennai – 600116',
     pickupDate: '13 May 2025',
@@ -109,9 +135,10 @@ const INITIAL_INDUSTRY_REQUESTS: RequestItem[] = [
     id: 'REQ-250512-00074',
     posterName: 'Evergreen Packaging Aggregators',
     requesterType: 'Industry',
-    materialName: 'Corrugated Paper Scrap',
+    materialName: 'Industrial Corrugated Box & Paper Scrap',
     materialCondition: 'Segregated',
-    image: '/scrap-cardboard.png',
+    image: '/scrap-cardboard.jpg',
+    images: ['/scrap-cardboard.jpg', '/scrap-mixed-papers.jpg', '/scrap-color-papers.jpg'],
     quantity: '300 – 600 KG',
     address: 'No. 45, Velachery Industrial Road, Velachery, Chennai – 600042',
     pickupDate: '14 May 2025',
@@ -119,6 +146,23 @@ const INITIAL_INDUSTRY_REQUESTS: RequestItem[] = [
     respondTime: '23:50',
     respondDate: '(14 May 2025, 11:50 AM)',
     requestedAgo: 'Requested 18 mins ago',
+    status: 'pending',
+  },
+  {
+    id: 'REQ-250512-00071',
+    posterName: 'Madras Auto Components & Forgings',
+    requesterType: 'Industry',
+    materialName: 'Commercial Aluminium Profile & Sheet Scrap',
+    materialCondition: 'Clean',
+    image: '/industry-aluminium-scrap.jpg',
+    images: ['/industry-aluminium-scrap.jpg', '/scrap-commercial-aluminium.jpg', '/scrap-household-aluminium.jpg'],
+    quantity: '400 – 750 KG',
+    address: 'Plot 88, Maraimalai Nagar Industrial Corridor, Chennai – 603209',
+    pickupDate: '14 May 2025',
+    pickupTime: '03:00 PM – 05:00 PM',
+    respondTime: '15:20',
+    respondDate: '(14 May 2025, 02:00 PM)',
+    requestedAgo: 'Requested 25 mins ago',
     status: 'pending',
   },
 ];
@@ -131,6 +175,7 @@ const INITIAL_HOUSEHOLD_REQUESTS: RequestItem[] = [
     materialName: 'Steel Utensils & Structural Scrap',
     materialCondition: 'Mixed',
     image: '/scrap-quality-steel.png',
+    images: ['/scrap-quality-steel.png', '/scrap-iron.jpg', '/scrap-low-quality-steel.jpg'],
     quantity: '80 – 150 KG',
     address: '8, Padi High Street, Anna Nagar West Extension, Chennai – 600050',
     pickupDate: '14 May 2025',
@@ -147,6 +192,7 @@ const INITIAL_HOUSEHOLD_REQUESTS: RequestItem[] = [
     materialName: 'Mixed E-Waste & Appliances',
     materialCondition: 'Mixed',
     image: '/scrap-iron.png',
+    images: ['/scrap-cpu.jpg', '/scrap-monitor.jpg', '/scrap-chargers.jpg'],
     quantity: '40 – 70 KG',
     address: 'Flat 3B, Sunshine Apartments, T. Nagar, Chennai – 600017',
     pickupDate: '14 May 2025',
@@ -163,6 +209,7 @@ const INITIAL_HOUSEHOLD_REQUESTS: RequestItem[] = [
     materialName: 'Newspapers & Textbook Paper',
     materialCondition: 'Clean',
     image: '/scrap-cardboard.png',
+    images: ['/scrap-cardboard.png', '/scrap-white-paper.jpg', '/scrap-magazines.jpg'],
     quantity: '50 – 90 KG',
     address: '14, 2nd Avenue, Besant Nagar, Chennai – 600090',
     pickupDate: '15 May 2025',
@@ -178,6 +225,76 @@ export default function MerchantRequests() {
   const [activeTab, setActiveTab] = useState<'Industry' | 'Individual'>('Industry');
   const [industryRequests, setIndustryRequests] = useState<RequestItem[]>(INITIAL_INDUSTRY_REQUESTS);
   const [householdRequests, setHouseholdRequests] = useState<RequestItem[]>(INITIAL_HOUSEHOLD_REQUESTS);
+
+  // Mobile Top Tab Switcher (Available Requests vs My Offers)
+  const [mobileActiveTab, setMobileActiveTab] = useState<'available' | 'offers'>('available');
+
+  const [submittedOffers, setSubmittedOffers] = useState<QuoteOfferItem[]>([
+    {
+      id: 'QUO-250512-00075',
+      customerName: 'Precision Tools & Castings Pvt Ltd',
+      customerType: 'Industry',
+      materialName: 'Brass Scrap',
+      materialCondition: 'Mixed Condition',
+      image: '/scrap-brass.jpg',
+      quantity: '50 – 100 KG',
+      address: '16, Porur Main Road, Porur, Chennai – 600116, Tamil Nadu',
+      quotedPrice: 31200,
+      pickupSlot: '12 May 2025, 01:00 PM – 03:00 PM',
+      submittedAgo: 'Submitted 2 hours ago',
+      status: 'Accepted',
+      statusType: 'accepted',
+      statusBadgeText: 'Customer Accepted',
+    },
+    {
+      id: 'QUO-250512-00078',
+      customerName: 'Sri Venkatesh Heavy Industries',
+      customerType: 'Industry',
+      materialName: 'Heavy Melting Steel Scrap',
+      materialCondition: 'Clean Segregated',
+      image: '/industry-steel-scrap.jpg',
+      quantity: '500 – 800 KG',
+      address: '24, 5th Main Road, SIDCO Industrial Estate, Guindy, Chennai',
+      quotedPrice: 18500,
+      pickupSlot: '13 May 2025, 10:00 AM – 12:00 PM',
+      submittedAgo: 'Submitted 35 mins ago',
+      status: 'Waiting',
+      statusType: 'waiting',
+      statusBadgeText: 'Waiting for Response',
+    },
+    {
+      id: 'QUO-250511-00062',
+      customerName: 'Karthik Raja (Household)',
+      customerType: 'Individual',
+      materialName: 'Copper Scrap',
+      materialCondition: 'Clean',
+      image: '/industry-copper-scrap.jpg',
+      quantity: '15 – 25 KG',
+      address: '7th Avenue, Anna Nagar, Chennai – 600040',
+      quotedPrice: 14200,
+      pickupSlot: '11 May 2025, 04:00 PM',
+      submittedAgo: 'Submitted 1 day ago',
+      status: 'Rejected',
+      statusType: 'rejected',
+      statusBadgeText: 'Higher Offer Chosen',
+    },
+    {
+      id: 'QUO-250510-00054',
+      customerName: 'Apex Precision Tools',
+      customerType: 'Industry',
+      materialName: 'Aluminium Profile Scrap',
+      materialCondition: 'Mixed',
+      image: '/industry-aluminium-scrap.jpg',
+      quantity: '200 – 350 KG',
+      address: 'Industrial Estate, Ambattur, Chennai',
+      quotedPrice: 38000,
+      pickupSlot: '10 May 2025, 11:00 AM',
+      submittedAgo: 'Submitted 2 days ago',
+      status: 'Expired',
+      statusType: 'expired',
+      statusBadgeText: 'Deadline Expired',
+    },
+  ]);
 
   const [countdown, setCountdown] = useState(25);
   const [selectedScrapFilter, setSelectedScrapFilter] = useState('All Types');
@@ -302,6 +419,24 @@ export default function MerchantRequests() {
           : r
       )
     );
+
+    const newOffer: QuoteOfferItem = {
+      id: `QUO-${Date.now().toString().slice(-6)}`,
+      customerName: activeQuoteRequest.posterName,
+      customerType: activeQuoteRequest.requesterType,
+      materialName: activeQuoteRequest.materialName,
+      materialCondition: activeQuoteRequest.materialCondition + ' Condition',
+      image: activeQuoteRequest.image,
+      quantity: activeQuoteRequest.quantity,
+      address: activeQuoteRequest.address,
+      quotedPrice: Number(quotePrice),
+      pickupSlot: `${quotePickupDate}, ${quotePickupTime}`,
+      submittedAgo: 'Just now',
+      status: 'Waiting',
+      statusType: 'waiting',
+      statusBadgeText: 'Waiting for Response',
+    };
+    setSubmittedOffers((prev) => [newOffer, ...prev]);
 
     triggerToast(`✓ Quote of ₹${Number(quotePrice).toLocaleString('en-IN')} submitted to ${activeQuoteRequest.posterName}!`);
     handleCloseQuoteModal();
@@ -458,8 +593,32 @@ export default function MerchantRequests() {
               </div>
             </div>
 
-            {/* 3. Tab Switcher: Industry Requests vs Household Requests */}
-            <div className={styles.tabContainer}>
+            {/* MOBILE TOP TAB SWITCHER (Available Requests vs My Offers) */}
+            <div className={styles.mobileTopTabTrack}>
+              <button
+                type="button"
+                className={`${styles.mobileTabBtn} ${
+                  mobileActiveTab === 'available' ? styles.mobileTabBtnActive : ''
+                }`}
+                onClick={() => setMobileActiveTab('available')}
+              >
+                <span>Available Requests</span>
+                <span className={styles.mobileTabCount}>{industryRequests.length + householdRequests.length}</span>
+              </button>
+              <button
+                type="button"
+                className={`${styles.mobileTabBtn} ${
+                  mobileActiveTab === 'offers' ? styles.mobileTabBtnActive : ''
+                }`}
+                onClick={() => setMobileActiveTab('offers')}
+              >
+                <span>My Offers</span>
+                <span className={styles.mobileTabCountOffers}>{submittedOffers.length}</span>
+              </button>
+            </div>
+
+            {/* 3. Tab Switcher: Industry Requests vs Household Requests (Desktop & Mobile Available Tab) */}
+            <div className={`${styles.tabContainer} ${mobileActiveTab === 'offers' ? styles.tabContainerMobileHidden : ''}`}>
               <div className={styles.tabTrack}>
                 <button
                   type="button"
@@ -493,8 +652,100 @@ export default function MerchantRequests() {
               </div>
             </div>
 
+            {/* MOBILE MY OFFERS FEED (Visible on mobile when My Offers tab is selected) */}
+            {mobileActiveTab === 'offers' && (
+              <div className={styles.mobileOffersSection}>
+                <div className={styles.mobileOffersHeaderRow}>
+                  <h2 className={styles.mobileOffersTitle}>My Submitted Offers ({submittedOffers.length})</h2>
+                  <span className={styles.mobileOffersSub}>Track live response &amp; accepted pickups</span>
+                </div>
+
+                <div className={styles.mobileOffersList}>
+                  {submittedOffers.map((offer) => (
+                    <article
+                      key={offer.id}
+                      className={`${styles.mobileOfferCard} ${
+                        offer.statusType === 'accepted' ? styles.mobileOfferCardAccepted : ''
+                      }`}
+                    >
+                      <div className={styles.mobileOfferHeader}>
+                        <span
+                          className={`${styles.mobileOfferStatusBadge} ${
+                            styles[`statusBadge_${offer.statusType}`]
+                          }`}
+                        >
+                          {offer.statusType === 'accepted' && '✓ '}
+                          {offer.statusBadgeText}
+                        </span>
+                        <span className={styles.mobileOfferId}>ID: {offer.id}</span>
+                      </div>
+
+                      <div className={styles.mobileOfferCustomerRow}>
+                        <span className={styles.mobileCustomerLabel}>Customer:</span>
+                        <strong className={styles.mobileCustomerName}>{offer.customerName}</strong>
+                        <span className={styles.mobileCustomerTypePill}>{offer.customerType}</span>
+                      </div>
+
+                      <div className={styles.mobileOfferBodyGrid}>
+                        <img src={offer.image} alt={offer.materialName} className={styles.mobileOfferThumb} />
+                        <div className={styles.mobileOfferInfoCol}>
+                          <h3 className={styles.mobileOfferMat}>{offer.materialName}</h3>
+                          <span className={styles.mobileOfferCondition}>{offer.materialCondition}</span>
+                          <span className={styles.mobileOfferQty}>
+                            Quantity: <strong>{offer.quantity}</strong>
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className={styles.mobileOfferQuoteBox}>
+                        <div className={styles.mobileQuoteLeft}>
+                          <span className={styles.mobileQuoteLabel}>Your Submitted Offer</span>
+                          <strong className={styles.mobileQuotePrice}>
+                            ₹{offer.quotedPrice.toLocaleString('en-IN')} <small>Total</small>
+                          </strong>
+                        </div>
+                        <div className={styles.mobileQuoteRight}>
+                          <span className={styles.mobileSlotLabel}>Offered Slot:</span>
+                          <span className={styles.mobileSlotText}>{offer.pickupSlot}</span>
+                        </div>
+                      </div>
+
+                      <div className={styles.mobileOfferLocRow}>
+                        <MapPin size={13} className={styles.locIconMuted} />
+                        <span>{offer.address}</span>
+                      </div>
+
+                      {offer.statusType === 'accepted' ? (
+                        <div className={styles.mobileAcceptedActionBox}>
+                          <div className={styles.mobileAcceptedNotice}>
+                            🎉 Customer agreed to ₹{offer.quotedPrice.toLocaleString('en-IN')} offer!
+                          </div>
+                          <Link
+                            to={`/orders?orderId=${offer.id.replace('QUO', 'ORD')}&customer=${encodeURIComponent(offer.customerName)}&rate=${offer.quotedPrice}&action=pickup`}
+                            className={styles.mobileGoToOrderBtn}
+                          >
+                            <Truck size={15} />
+                            <span>Go to Order Details &amp; Start Pickup →</span>
+                          </Link>
+                        </div>
+                      ) : (
+                        <div className={styles.mobileOfferFooterRow}>
+                          <span className={styles.mobileSubmittedTime}>{offer.submittedAgo}</span>
+                          <span className={styles.mobileOfferStatusSub}>
+                            {offer.statusType === 'waiting' && '⏳ Waiting for customer review'}
+                            {offer.statusType === 'rejected' && '❌ Offer not selected'}
+                            {offer.statusType === 'expired' && '⏰ Request time limit passed'}
+                          </span>
+                        </div>
+                      )}
+                    </article>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* 4. Requests Counter Bar & Sorting */}
-            <div className={styles.requestsBar}>
+            <div className={`${styles.requestsBar} ${mobileActiveTab === 'offers' ? styles.requestsBarMobileHidden : ''}`}>
               <div className={styles.countGroup}>
                 <h2 className={styles.countHeading}>
                   {pendingCount} {activeTab === 'Industry' ? 'Industry' : 'Household'} Requests
@@ -509,7 +760,7 @@ export default function MerchantRequests() {
             </div>
 
             {/* 5. Requests List (Redesigned Image-First Cards) */}
-            <div className={styles.requestsList}>
+            <div className={`${styles.requestsList} ${mobileActiveTab === 'offers' ? styles.requestsListMobileHidden : ''}`}>
               {filteredRequests.map((item) => (
                 <article key={item.id} className={styles.requestCard}>
                   {/* Top Poster & Request ID Strip */}
@@ -531,37 +782,23 @@ export default function MerchantRequests() {
 
                   {/* Redesigned Card Body: Prominent Top/Left Image + Clear Scrap Specs */}
                   <div className={styles.cardBodyGrid}>
-                    {/* 1. Large Image Showcase Column */}
+                    {/* 1. Large Image Showcase Column with Multi-Image Swipe */}
                     <div className={styles.imageShowcaseCol}>
-                      <div
-                        className={styles.largeImgFrame}
-                        onClick={() =>
+                      <CardImageGallery
+                        images={item.images || [item.image]}
+                        fallbackImage={item.image || '/logo-icon.png'}
+                        materialName={item.materialName}
+                        materialCondition={item.materialCondition}
+                        onOpenPreview={(src) =>
                           setFloatingImage({
-                            src: item.image,
+                            src,
                             title: item.materialName,
                             condition: item.materialCondition,
                             quantity: item.quantity,
                             posterName: item.posterName,
                           })
                         }
-                        title="Click to view floating photo preview"
-                      >
-                        <img
-                          src={item.image}
-                          alt={item.materialName}
-                          className={styles.largeMaterialImg}
-                          onError={(e) => {
-                            (e.currentTarget as HTMLImageElement).src = '/logo-icon.png';
-                          }}
-                        />
-                        <div className={styles.zoomHoverBadge}>
-                          <Eye size={13} />
-                          <span>View Photo</span>
-                        </div>
-                        <span className={styles.conditionOverlayBadge}>
-                          {item.materialCondition} Condition
-                        </span>
-                      </div>
+                      />
 
                       <div className={styles.materialTitleBlock}>
                         <h3 className={styles.materialTitle}>{item.materialName}</h3>
@@ -750,77 +987,7 @@ export default function MerchantRequests() {
               RIGHT SIDEBAR (30%)
              ================================================================ */}
           <aside className={styles.sidebarCol}>
-            {/* Card 1: Filters */}
-            <div className={styles.sidebarCard}>
-              <div className={styles.sidebarHeaderRow}>
-                <h3 className={styles.sidebarCardTitle}>
-                  <Filter size={16} />
-                  <span>Filters</span>
-                </h3>
-                <button type="button" className={styles.clearAllBtn} onClick={handleClearFilters}>
-                  Clear All
-                </button>
-              </div>
-
-              {/* Filter 1: Scrap Type */}
-              <div className={styles.filterField}>
-                <label className={styles.filterLabel}>Scrap Type</label>
-                <div className={styles.selectWrapper}>
-                  <select
-                    value={selectedScrapFilter}
-                    onChange={(e) => setSelectedScrapFilter(e.target.value)}
-                    className={styles.filterSelect}
-                  >
-                    <option value="All Types">All Types</option>
-                    <option value="Metal">Metal / Iron Scrap</option>
-                    <option value="Copper">Copper Scrap</option>
-                    <option value="Steel">Steel Scrap</option>
-                    <option value="Brass">Brass Scrap</option>
-                    <option value="Paper">Paper / Cardboard</option>
-                  </select>
-                  <ChevronDown size={14} className={styles.selectChevron} />
-                </div>
-              </div>
-
-              {/* Filter 2: Amount / Volume */}
-              <div className={styles.filterField}>
-                <label className={styles.filterLabel}>Quantity Volume</label>
-                <div className={styles.selectWrapper}>
-                  <select
-                    value={selectedAmountFilter}
-                    onChange={(e) => setSelectedAmountFilter(e.target.value)}
-                    className={styles.filterSelect}
-                  >
-                    <option value="All Amounts">All Quantities</option>
-                    <option value="Under 100 KG">Under 100 KG</option>
-                    <option value="100 - 500 KG">100 – 500 KG</option>
-                    <option value="500+ KG">500+ KG (Bulk Industrial)</option>
-                  </select>
-                  <ChevronDown size={14} className={styles.selectChevron} />
-                </div>
-              </div>
-
-              {/* Filter 3: Location */}
-              <div className={styles.filterField}>
-                <label className={styles.filterLabel}>Location Radius</label>
-                <div className={styles.selectWrapper}>
-                  <select
-                    value={selectedLocationFilter}
-                    onChange={(e) => setSelectedLocationFilter(e.target.value)}
-                    className={styles.filterSelect}
-                  >
-                    <option value="All Locations">All Chennai Locations</option>
-                    <option value="Guindy">Guindy / SIDCO (Within 5 km)</option>
-                    <option value="Ambattur">Ambattur Industrial (Within 10 km)</option>
-                    <option value="Porur">Porur / Sriperumbudur (Within 15 km)</option>
-                    <option value="Velachery">Velachery / OMR</option>
-                  </select>
-                  <ChevronDown size={14} className={styles.selectChevron} />
-                </div>
-              </div>
-            </div>
-
-            {/* Card 2: How It Works */}
+            {/* Card 1: How It Works */}
             <div className={styles.sidebarCard}>
               <h3 className={styles.sidebarCardTitle}>How Quoting Works</h3>
               <ol className={styles.stepsList}>

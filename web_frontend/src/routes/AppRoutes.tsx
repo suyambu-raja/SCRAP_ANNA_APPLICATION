@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { LoadingSpinner } from '@/components/common';
 import { MerchantLayout } from '@/layouts/MerchantLayout';
+import { IndustryLayout } from '@/layouts/IndustryLayout';
 import { ProtectedRoute } from './ProtectedRoute';
 
 /* Lazy-loaded pages */
@@ -13,6 +14,7 @@ const Login = lazy(() => import('@/pages/auth/Login'));
 const Signup = lazy(() => import('@/pages/auth/Signup'));
 const RegisterRole = lazy(() => import('@/pages/auth/RegisterRole'));
 const VerifyOTP = lazy(() => import('@/pages/auth/VerifyOTP'));
+const RoleUnavailablePage = lazy(() => import('@/pages/common/RoleUnavailablePage'));
 
 /* Merchant Modern Pages */
 const MerchantDashboard = lazy(() => import('@/pages/dashboard/MerchantDashboard'));
@@ -27,6 +29,16 @@ const MerchantMarketPrices = lazy(() => import('@/pages/merchant/MerchantMarketP
 const Notifications = lazy(() => import('@/pages/Notifications'));
 const Settings = lazy(() => import('@/pages/Settings'));
 
+/* Industry B2B Portal Modern Pages */
+import IndustryDashboard from '@/pages/industry/IndustryDashboard';
+import IndustryMarketPrices from '@/pages/industry/IndustryMarketPrices';
+import IndustryPostRequirement from '@/pages/industry/IndustryPostRequirement';
+import IndustryMyRequests from '@/pages/industry/IndustryMyRequests';
+import IndustryQuotesReceived from '@/pages/industry/IndustryQuotesReceived';
+import IndustryOrders from '@/pages/industry/IndustryOrders';
+import IndustryTransactions from '@/pages/industry/IndustryTransactions';
+import IndustryProfile from '@/pages/industry/IndustryProfile';
+
 function SuspenseWrap({ children }: { children: React.ReactNode }) {
   return <Suspense fallback={<LoadingSpinner text="Loading..." />}>{children}</Suspense>;
 }
@@ -39,13 +51,22 @@ export function AppRoutes() {
         <Route path="/" element={<Splash />} />
         <Route path="/language" element={<LanguageSelection />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/market-prices" element={<MarketPrices />} />
         <Route path="/public-market-prices" element={<MarketPrices />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/register" element={<RegisterRole />} />
         <Route path="/verify-otp" element={<VerifyOTP />} />
 
-        {/* Merchant Dedicated Layout Shell (Sidebar + Slim Top Header) */}
+        {/* Temporary Role Unavailable Placeholders */}
+        <Route path="/household" element={<RoleUnavailablePage roleName="Household" />} />
+        <Route path="/dashboard/household" element={<RoleUnavailablePage roleName="Household" />} />
+        <Route path="/aggregator" element={<RoleUnavailablePage roleName="Aggregator" />} />
+        <Route path="/dashboard/aggregator" element={<RoleUnavailablePage roleName="Aggregator" />} />
+
+        {/* ================================================================
+            Merchant Dedicated Layout Shell (Sidebar + Slim Top Header)
+           ================================================================ */}
         <Route element={<ProtectedRoute><MerchantLayout /></ProtectedRoute>}>
           {/* Dashboard */}
           <Route path="/dashboard/merchant" element={<MerchantDashboard />} />
@@ -54,7 +75,6 @@ export function AppRoutes() {
           <Route path="/app/home" element={<Navigate to="/dashboard/merchant" replace />} />
 
           {/* Market Prices & Merchant Buying Rates */}
-          <Route path="/market-prices" element={<MerchantMarketPrices />} />
           <Route path="/merchant/market-prices" element={<MerchantMarketPrices />} />
           <Route path="/dashboard/merchant/market-prices" element={<MerchantMarketPrices />} />
           <Route path="/app/market-prices" element={<MerchantMarketPrices />} />
@@ -110,9 +130,43 @@ export function AppRoutes() {
           <Route path="/app/settings" element={<Settings />} />
         </Route>
 
+        {/* ================================================================
+            Industry Dedicated Layout Shell (Sidebar + Slim Top Header)
+           ================================================================ */}
+        <Route element={<IndustryLayout />}>
+          {/* Dashboard */}
+          <Route path="/industry" element={<IndustryDashboard />} />
+          <Route path="/industry/dashboard" element={<IndustryDashboard />} />
+
+          {/* Market Prices */}
+          <Route path="/industry/market-prices" element={<IndustryMarketPrices />} />
+
+          {/* Post Requirement 5-Step Flow */}
+          <Route path="/industry/post-requirement" element={<IndustryPostRequirement />} />
+          <Route path="/industry/post" element={<Navigate to="/industry/post-requirement" replace />} />
+
+          {/* My Requests */}
+          <Route path="/industry/requests" element={<IndustryMyRequests />} />
+          <Route path="/industry/my-requests" element={<IndustryMyRequests />} />
+
+          {/* Quotes Received */}
+          <Route path="/industry/quotes" element={<IndustryQuotesReceived />} />
+          <Route path="/industry/quotes-received" element={<IndustryQuotesReceived />} />
+
+          {/* Orders */}
+          <Route path="/industry/orders" element={<IndustryOrders />} />
+
+          {/* Transactions */}
+          <Route path="/industry/transactions" element={<IndustryTransactions />} />
+
+          {/* Profile */}
+          <Route path="/industry/profile" element={<IndustryProfile />} />
+        </Route>
+
         {/* Catch-all: Route back to Merchant Dashboard if authenticated or Home */}
         <Route path="*" element={<Navigate to="/dashboard/merchant" replace />} />
       </Routes>
     </SuspenseWrap>
   );
 }
+

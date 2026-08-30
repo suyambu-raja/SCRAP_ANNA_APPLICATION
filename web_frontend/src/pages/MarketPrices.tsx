@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   ArrowLeft,
@@ -21,6 +21,9 @@ import styles from './MarketPrices.module.css';
 export default function MarketPrices() {
   const { i18n } = useTranslation();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const categoryParam = searchParams.get('category');
+  const itemParam = searchParams.get('item');
 
   const [prices, setPrices] = useState<MarketPrice[]>([]);
   const [categories, setCategories] = useState<ScrapCategory[]>([]);
@@ -33,12 +36,14 @@ export default function MarketPrices() {
       setPrices(priceData);
       setCategories(catData);
       if (priceData.length > 0) {
-        setSelectedCatId(priceData[0].categoryId);
-        setSelectedMaterialId(priceData[0].id);
+        const initialCat = categoryParam || priceData[0].categoryId;
+        const initialItem = itemParam || priceData.find(p => p.categoryId === initialCat)?.id || priceData[0].id;
+        setSelectedCatId(initialCat);
+        setSelectedMaterialId(initialItem);
       }
       setLoading(false);
     });
-  }, []);
+  }, [categoryParam, itemParam]);
 
   const isTamil = i18n.language === 'ta';
 

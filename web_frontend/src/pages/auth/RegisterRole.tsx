@@ -270,8 +270,12 @@ export default function RegisterRole() {
       // Login user into global auth state
       login(res.user, res.token);
 
-      // Navigate to app home dashboard
-      navigate('/app/home', { replace: true });
+      // Navigate to role-specific dashboard
+      if (res.user.role === 'industry') {
+        navigate('/industry/dashboard', { replace: true });
+      } else {
+        navigate('/dashboard/merchant', { replace: true });
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Registration failed. Please try again.');
     } finally {

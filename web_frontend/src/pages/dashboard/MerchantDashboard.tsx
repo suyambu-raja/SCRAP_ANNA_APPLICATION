@@ -31,6 +31,7 @@ import {
   MapPin,
   Calendar,
   Phone,
+  Plus,
 } from 'lucide-react';
 import { MerchantNavbar } from '@/components/navigation/MerchantNavbar';
 import { useAuthStore } from '@/store/useAuthStore';
@@ -247,6 +248,302 @@ export default function MerchantDashboard({ merchantTrustStatus = 'priority' }: 
             </div>
           </div>
         )}
+
+        {/* MOBILE OPERATIONS FEED (Rendered on Mobile Screens Only) */}
+        <section className={styles.mobileOperationsSection}>
+          {/* Welcome Header with View New Requests Action */}
+          <div className={styles.mobileWelcomeCard}>
+            <div className={styles.mobileWelcomeHeaderRow}>
+              <div className={styles.enterpriseBadgeRow}>
+                <span className={styles.enterpriseBadge}>
+                  <ShieldCheck size={13} className={styles.shieldIcon} />
+                  <span>VERIFIED MERCHANT ACCOUNT</span>
+                </span>
+                <span className={styles.gstinTag}>GSTIN: 33AAAAA0000A1Z5</span>
+              </div>
+              <span className={styles.mobileGreeting}>Vanakkam,</span>
+              <h2 className={styles.mobileMerchantName}>{merchantName}</h2>
+              <p className={styles.mobileMerchantSub}>
+                Manage active factory leads, submit quotes, and track pickup weighing.
+              </p>
+
+              <div className={styles.mobileHeroActionRow}>
+                <Link to="/requests" className={styles.mobileViewNewReqBtn}>
+                  <Plus size={16} />
+                  <span>View New Requests</span>
+                  <ArrowRight size={14} />
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          {/* Key Performance Stats Grid directly below the username box */}
+          <div className={styles.mobileStatsGrid}>
+            {/* Stat 1: New Requests */}
+            <div className={styles.mobileStatCard}>
+              <div className={styles.mobileStatIconCircle}>
+                <FileText size={18} />
+              </div>
+              <div className={styles.mobileStatInfoCol}>
+                <span className={styles.mobileStatLabel}>New Requests</span>
+                <strong className={styles.mobileStatVal}>18</strong>
+                <div className={styles.mobileStatTrendRow}>
+                  <span className={styles.mobileStatPeriod}>Today</span>
+                  <span className={styles.mobileStatTrendUp}>
+                    <TrendingUp size={11} /> 20%
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Stat 2: Quotes Sent */}
+            <div className={styles.mobileStatCard}>
+              <div className={styles.mobileStatIconCircle}>
+                <MessageSquare size={18} />
+              </div>
+              <div className={styles.mobileStatInfoCol}>
+                <span className={styles.mobileStatLabel}>Quotes Sent</span>
+                <strong className={styles.mobileStatVal}>32</strong>
+                <div className={styles.mobileStatTrendRow}>
+                  <span className={styles.mobileStatPeriod}>Today</span>
+                  <span className={styles.mobileStatTrendUp}>
+                    <TrendingUp size={11} /> 15%
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Stat 3: Orders Won */}
+            <div className={styles.mobileStatCard}>
+              <div className={styles.mobileStatIconCircle}>
+                <ClipboardCheck size={18} />
+              </div>
+              <div className={styles.mobileStatInfoCol}>
+                <span className={styles.mobileStatLabel}>Orders Won</span>
+                <strong className={styles.mobileStatVal}>22</strong>
+                <div className={styles.mobileStatTrendRow}>
+                  <span className={styles.mobileStatPeriod}>This Month</span>
+                  <span className={styles.mobileStatTrendUp}>
+                    <TrendingUp size={11} /> 22%
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Stat 4: Total Pickups */}
+            <div className={styles.mobileStatCard}>
+              <div className={styles.mobileStatIconCircle}>
+                <Truck size={18} />
+              </div>
+              <div className={styles.mobileStatInfoCol}>
+                <span className={styles.mobileStatLabel}>Total Pickups</span>
+                <strong className={styles.mobileStatVal}>158</strong>
+                <div className={styles.mobileStatTrendRow}>
+                  <span className={styles.mobileStatPeriod}>This Month</span>
+                  <span className={styles.mobileStatTrendUp}>
+                    <TrendingUp size={11} /> 18%
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Stat 5: Total Earnings (Full-Width Highlight Card) */}
+            <div className={`${styles.mobileStatCard} ${styles.mobileStatCardHighlight}`}>
+              <div className={`${styles.mobileStatIconCircle} ${styles.mobileStatIconGold}`}>
+                <span style={{ fontSize: '1.1rem', fontWeight: 900 }}>₹</span>
+              </div>
+              <div className={styles.mobileStatInfoCol}>
+                <span className={styles.mobileStatLabel}>Total Earnings</span>
+                <strong className={styles.mobileStatValGold}>₹ 3,65,780</strong>
+                <div className={styles.mobileStatTrendRow}>
+                  <span className={styles.mobileStatPeriod}>This Month</span>
+                  <span className={styles.mobileStatTrendUp}>
+                    <TrendingUp size={11} /> 24%
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 1. Urgent Action: Today's Scheduled Pickup Card */}
+          <div className={styles.mobileActionCardPrimary}>
+            <div className={styles.mobileCardHeader}>
+              <span className={styles.mobileCardTagPickup}>🚚 TODAY'S PICKUP</span>
+              <span className={styles.mobilePickupTime}>10:00 AM – 12:00 PM</span>
+            </div>
+            <div className={styles.mobileCardBody}>
+              <h3 className={styles.mobileOrderCompany}>Sri Venkatesh Industries</h3>
+              <p className={styles.mobileOrderLoc}>📍 24, SIDCO Industrial Estate, Guindy, Chennai</p>
+              <div className={styles.mobileOrderDetailsPill}>
+                <span>Metal Scrap</span> • <strong>650 KG</strong> • <span className={styles.mobilePriceText}>₹18,500</span>
+              </div>
+            </div>
+            <div className={styles.mobileCardActions}>
+              <Link to="/orders" className={styles.mobileCtaPrimary}>
+                <Truck size={15} />
+                <span>Start Navigation / Order Details</span>
+                <ArrowRight size={14} />
+              </Link>
+            </div>
+          </div>
+
+          {/* 2. Urgent Available Requests Alert Card */}
+          <div className={styles.mobileActionCardRequests}>
+            <div className={styles.mobileCardHeader}>
+              <span className={styles.mobileCardTagRequests}>⚡ 18 NEW REQUESTS</span>
+              <span className={styles.mobilePulseTag}>Live in Chennai</span>
+            </div>
+            <p className={styles.mobileCardDesc}>
+              Bulk scrap requests available nearby in Guindy, Ambattur &amp; Porur. Submit quotes before deadlines expire.
+            </p>
+            <Link to="/requests" className={styles.mobileCtaSecondaryYellow}>
+              <span>Browse &amp; Quote Requests (18)</span>
+              <ArrowRight size={14} />
+            </Link>
+          </div>
+
+          {/* 3. Recently Accepted Quotes Alert */}
+          <div className={styles.mobileActionCardAccepted}>
+            <div className={styles.mobileCardHeader}>
+              <span className={styles.mobileCardTagAccepted}>🎉 OFFER ACCEPTED</span>
+              <span className={styles.mobileTimeAgo}>15m ago</span>
+            </div>
+            <div className={styles.mobileAcceptedBody}>
+              <strong>Precision Tools &amp; Castings</strong> accepted your quote of <strong>₹31,200</strong> (Brass Scrap, 75 KG).
+            </div>
+            <Link
+              to="/orders?orderId=ORD-250512-00075&customer=Precision+Tools+%26+Castings+Pvt+Ltd&rate=31200&action=pickup"
+              className={styles.mobileCtaOutlineGreen}
+            >
+              <CheckCircle2 size={14} />
+              <span>View Accepted Order Details &amp; Start Pickup</span>
+            </Link>
+          </div>
+
+          {/* 4. Trust & Priority Score Widget (Mobile Yellow + Graphite Theme) */}
+          <div className={styles.mobileTrustScoreCard}>
+            <div className={styles.mobileTrustHeader}>
+              <div className={styles.mobileTrustTitleWrap}>
+                <h4 className={styles.mobileTrustTitle}>Trust &amp; Priority Score</h4>
+              </div>
+              <span className={styles.mobileTrustBadgePriority}>
+                <ShieldCheck size={13} />
+                <span>Priority Tier</span>
+              </span>
+            </div>
+
+            <div className={styles.mobileTrustBody}>
+              <div className={styles.mobileTrustRingWrap}>
+                <svg viewBox="0 0 54 54" width="56" height="56">
+                  <circle cx="27" cy="27" r="22" fill="none" stroke="#334155" strokeWidth="4.5" />
+                  <circle
+                    cx="27"
+                    cy="27"
+                    r="22"
+                    fill="none"
+                    stroke="#fbc21a"
+                    strokeWidth="4.5"
+                    strokeDasharray="138.2"
+                    strokeDashoffset="5.5"
+                    strokeLinecap="round"
+                    transform="rotate(-90 27 27)"
+                  />
+                </svg>
+                <span className={styles.mobileTrustRingNumber}>96%</span>
+              </div>
+
+              <div className={styles.mobileTrustFactorsGrid}>
+                <div className={styles.mobileTrustFactorItem}>
+                  <span className={styles.mobileTrustFactorLabel}>On-Time Comm.</span>
+                  <strong className={styles.mobileTrustFactorVal}>100%</strong>
+                </div>
+                <div className={styles.mobileTrustFactorItem}>
+                  <span className={styles.mobileTrustFactorLabel}>Response Rate</span>
+                  <strong className={styles.mobileTrustFactorVal}>94%</strong>
+                </div>
+                <div className={styles.mobileTrustFactorItem}>
+                  <span className={styles.mobileTrustFactorLabel}>Completion</span>
+                  <strong className={styles.mobileTrustFactorVal}>98%</strong>
+                </div>
+              </div>
+            </div>
+
+            <p className={styles.mobileTrustExplanation}>
+              Merchants who pay commissions on time and complete accepted orders get more new requests.
+            </p>
+
+            <Link to="/profile" className={styles.mobileTrustLearnMoreLink}>
+              <span>Learn More About Priority Tier</span>
+              <ArrowRight size={13} />
+            </Link>
+          </div>
+
+          {/* 6. Full Scrap Market Prices & Buying Rates Board */}
+          <div className={styles.mobileMarketBoardCard}>
+            <div className={styles.mobileMarketHeaderRow}>
+              <div className={styles.mobileMarketTitleWrap}>
+                <TrendingUp size={18} className={styles.marketIconYellow} />
+                <div>
+                  <h4 className={styles.mobileMarketTitle}>Live Scrap Market Prices</h4>
+                  <span className={styles.mobileMarketSub}>Chennai Mandi &amp; Your Buying Rates</span>
+                </div>
+              </div>
+              <Link
+                to="/merchant/market-prices"
+                className={styles.mobileEditRatesBtn}
+                title="Open Market Prices page to update your custom rates"
+              >
+                <Edit3 size={13} />
+                <span>Update Price</span>
+              </Link>
+            </div>
+
+            <div className={styles.mobileMarketPricesList}>
+              {SCRAP_PRICES.map((item) => {
+                const userRate = merchantRates[item.id]?.rate;
+                return (
+                  <Link
+                    key={item.id}
+                    to={`/merchant/market-prices?material=${encodeURIComponent(item.id)}&name=${encodeURIComponent(item.name)}`}
+                    className={styles.mobilePriceRowCard}
+                    title="Click to view and edit market price on Market Prices page"
+                  >
+                    <img
+                      src={item.img}
+                      alt={item.name}
+                      className={styles.mobilePriceThumb}
+                      onError={(e) => {
+                        (e.currentTarget as HTMLImageElement).src = '/logo-icon.png';
+                      }}
+                    />
+                    <div className={styles.mobilePriceInfoCol}>
+                      <div className={styles.mobilePriceNameRow}>
+                        <strong className={styles.mobilePriceName}>{item.name}</strong>
+                        <span
+                          className={
+                            item.trend === 'up'
+                              ? styles.mobileTrendUp
+                              : styles.mobileTrendDown
+                          }
+                        >
+                          {item.trend === 'up' ? '↑' : '↓'} {item.change}
+                        </span>
+                      </div>
+                      <span className={styles.mobileMandiRange}>Mandi Range: {item.priceRange}</span>
+                    </div>
+
+                    <div className={styles.mobileMyRateCol}>
+                      <span className={styles.mobileMyRateLabel}>YOUR Price</span>
+                      <strong className={styles.mobileMyRateVal}>
+                        ₹{userRate || item.priceRange.split('-')[0].replace(/[^0-9]/g, '')}<small>/kg</small>
+                      </strong>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        </section>
 
         {/* 2. Hero Welcome Section */}
         <section className={styles.heroSection}>
@@ -496,14 +793,14 @@ export default function MerchantDashboard({ merchantTrustStatus = 'priority' }: 
                 </h2>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                   <Link
-                    to="/market-prices"
+                    to="/merchant/market-prices"
                     className={styles.updateRatesBtn}
                     title="Update your custom buying rates on the Market Prices page"
                   >
                     <Edit3 size={13} />
                     <span>Update My Rates</span>
                   </Link>
-                  <Link to="/market-prices" className={`${styles.viewAllLink} ${styles.viewAllLinkBlue}`}>
+                  <Link to="/merchant/market-prices" className={`${styles.viewAllLink} ${styles.viewAllLinkBlue}`}>
                     <span>View All Prices</span>
                     <ArrowRight size={14} />
                   </Link>

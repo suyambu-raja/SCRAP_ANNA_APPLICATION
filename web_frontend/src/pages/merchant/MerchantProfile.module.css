@@ -123,12 +123,13 @@
   height: 76px;
   border-radius: 50%;
   background-color: #f8fafc;
-  border: 2px solid #e2e8f0;
+  border: 2.5px solid #0f172a;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
   overflow: hidden;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12);
 }
 
 .shopAvatarImg {
@@ -190,21 +191,22 @@
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  background-color: #ffffff;
-  border: 1.5px solid #e2e8f0;
-  color: #1e293b;
+  background-color: #0f172a;
+  border: 1.5px solid #1e293b;
+  color: #fbc21a;
   font-size: 0.825rem;
-  font-weight: 700;
-  padding: 0.5rem 0.95rem;
+  font-weight: 800;
+  padding: 0.5rem 1rem;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.15s ease;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.15);
   white-space: nowrap;
 }
 
 .editProfileBtn:hover {
-  background-color: #f8fafc;
-  border-color: #cbd5e1;
+  background-color: #1e293b;
+  transform: translateY(-1px);
 }
 
 /* 4 Metric Items Strip */
@@ -596,6 +598,38 @@
   color: #2563eb;
 }
 
+.transactionsCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.transactionsSubtext {
+  font-size: 0.8rem;
+  color: #64748b;
+  margin: 4px 0 0 0;
+}
+
+.viewTransactionsBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: #0f172a;
+  color: #ffffff;
+  font-size: 0.825rem;
+  font-weight: 800;
+  padding: 0.6rem 1rem;
+  border-radius: 10px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.viewTransactionsBtn:hover {
+  background: #1e293b;
+}
+
 @media (max-width: 1080px) {
   .profileLayoutGrid {
     grid-template-columns: 1fr;
@@ -608,14 +642,55 @@
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
+  .pageContainer {
+    padding: 0.75rem 0.75rem 2rem 0.75rem;
+  }
+
+  .tabsBar {
+    overflow-x: auto;
+    padding-bottom: 4px;
+    gap: 0.35rem;
+    scrollbar-width: none;
+  }
+
+  .tabsBar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tabItem {
+    white-space: nowrap;
+    padding: 0.5rem 0.85rem;
+    font-size: 0.8rem;
+  }
+
   .metricsStrip {
     grid-template-columns: repeat(2, 1fr);
   }
+
   .businessInfoGrid {
     grid-template-columns: 1fr;
   }
+
   .profileTopRow {
     flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .editProfileBtn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .transactionsCardHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .viewTransactionsBtn {
+    width: 100%;
+    justify-content: center;
   }
 }

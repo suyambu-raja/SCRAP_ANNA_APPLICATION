@@ -93,19 +93,19 @@
   align-items: center;
   gap: 0.5rem;
   background-color: #fbc21a;
-  color: #1e293b;
-  border: none;
+  color: #0f172a;
+  border: 1px solid #e5aa00;
   border-radius: 8px;
   padding: 0.6rem 1.15rem;
   font-size: 0.85rem;
-  font-weight: 700;
+  font-weight: 800;
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(251, 194, 26, 0.25);
   transition: all 0.15s ease;
 }
 
 .downloadReportBtn:hover {
-  background-color: #e5aa00;
+  background-color: #f59e0b;
   transform: translateY(-1px);
 }
 

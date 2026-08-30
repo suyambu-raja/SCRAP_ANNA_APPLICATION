@@ -159,54 +159,8 @@ export function Navbar() {
               </Button>
             </div>
           )}
-
-          {/* Mobile Menu Toggle Button */}
-          <button
-            type="button"
-            className={styles.mobileToggleBtn}
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Toggle navigation menu"
-          >
-            {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
-          </button>
         </div>
       </div>
-
-      {/* Mobile Drawer Menu */}
-      {mobileMenuOpen && (
-        <div className={styles.mobileDrawer}>
-          {NAV_ITEMS.map((item) => (
-            <a
-              key={item.id}
-              href={`#${item.id}`}
-              className={[
-                styles.mobileDrawerLink,
-                activeSection === item.id ? styles.mobileActiveLink : '',
-              ].join(' ')}
-              onClick={(e) => {
-                setMobileMenuOpen(false);
-                handleNavClick(e, item.id);
-              }}
-            >
-              {isTamil ? item.labelTa : item.labelEn}
-            </a>
-          ))}
-          {!isAuthenticated && (
-            <div style={{ marginTop: '0.75rem' }}>
-              <Button
-                fullWidth
-                icon={<ArrowRight size={16} />}
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  navigate('/login');
-                }}
-              >
-                {isTamil ? 'உள்நுழைக' : 'Login'}
-              </Button>
-            </div>
-          )}
-        </div>
-      )}
     </header>
   );
 }

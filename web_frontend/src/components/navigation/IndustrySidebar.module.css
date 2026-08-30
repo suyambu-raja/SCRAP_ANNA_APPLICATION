@@ -1,0 +1,305 @@
+/* ==========================================================================
+   INDUSTRY SIDEBAR NAVIGATION STYLING
+   ========================================================================== */
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  height: 100vh;
+  background-color: #0f172a; /* Premium Graphite Theme */
+  border-right: 1px solid #1e293b;
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+  transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+  box-shadow: 2px 0 16px rgba(0, 0, 0, 0.15);
+}
+
+.sidebarExpanded {
+  width: 250px;
+}
+
+.sidebarCollapsed {
+  width: 74px;
+}
+
+/* Brand Header */
+.brandHeader {
+  height: 70px;
+  padding: 0 1.25rem;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
+}
+
+.brandLink {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  width: 100%;
+}
+
+.logoWrap {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: #ffffff;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.logoIcon {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.brandTextGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.brandTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.brandName {
+  font-size: 1.05rem;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.roleTag {
+  background: #fbc21a;
+  color: #0f172a;
+  font-size: 0.625rem;
+  font-weight: 900;
+  padding: 1px 5px;
+  border-radius: 4px;
+  letter-spacing: 0.06em;
+}
+
+.brandSubtitle {
+  font-size: 0.7rem;
+  color: #94a3b8;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Nav Container */
+.navContainer {
+  flex: 1;
+  padding: 1.25rem 0.85rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.sectionHeading {
+  font-size: 0.675rem;
+  font-weight: 800;
+  color: #64748b;
+  letter-spacing: 0.08em;
+  padding: 0 0.5rem;
+}
+
+.navLinksList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: 10px;
+  text-decoration: none;
+  color: #94a3b8;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all 0.15s ease;
+  position: relative;
+}
+
+.navItem:hover {
+  background-color: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+}
+
+.navItemActive {
+  background-color: #fbc21a !important;
+  color: #0f172a !important;
+  font-weight: 800;
+  box-shadow: 0 4px 12px rgba(251, 194, 26, 0.25);
+}
+
+.navItemActive .navItemIcon {
+  color: #0f172a;
+}
+
+.navItemIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  color: #cbd5e1;
+}
+
+.navItemContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-width: 0;
+}
+
+.navItemLabel {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.navItemBadge {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 0.1rem 0.45rem;
+  border-radius: 9999px;
+}
+
+.navItemActive .navItemBadge {
+  background-color: #0f172a;
+  color: #fbc21a;
+}
+
+/* Post CTA Card in Sidebar */
+.postCtaCard {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%);
+  border: 1px solid rgba(251, 194, 26, 0.3);
+  border-radius: 12px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin-top: auto;
+}
+
+.postCtaHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.postCtaIconBox {
+  color: #fbc21a;
+  display: flex;
+  align-items: center;
+}
+
+.postCtaTitle {
+  font-size: 0.825rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.postCtaDesc {
+  font-size: 0.725rem;
+  color: #94a3b8;
+  line-height: 1.35;
+  margin: 0;
+}
+
+.postCtaBtn {
+  background: #fbc21a;
+  color: #0f172a;
+  font-size: 0.775rem;
+  font-weight: 800;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  text-decoration: none;
+  text-align: center;
+  transition: all 0.15s ease;
+  margin-top: 0.25rem;
+}
+
+.postCtaBtn:hover {
+  background: #f59e0b;
+  transform: translateY(-1px);
+}
+
+/* Footer Wrap */
+.footerWrap {
+  padding: 1rem 0.85rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.enterpriseTrustBadge {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.725rem;
+  color: #94a3b8;
+  font-weight: 600;
+  padding: 0 0.25rem;
+}
+
+.trustIcon {
+  color: #16a34a;
+}
+
+.toggleBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #cbd5e1;
+  padding: 0.55rem;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  font-size: 0.775rem;
+  font-weight: 600;
+  transition: all 0.15s ease;
+}
+
+.toggleBtn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+}
+
+.toggleText {
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    display: none !important;
+  }
+}

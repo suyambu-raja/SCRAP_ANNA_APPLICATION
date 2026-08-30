@@ -17,6 +17,7 @@ export interface PriceCardProps {
   updatedAt?: string;
   onClick?: () => void;
   compact?: boolean;
+  yourPrice?: number;
 }
 
 export function PriceCard({
@@ -30,6 +31,7 @@ export function PriceCard({
   imageUrl,
   imagePlaceholder,
   onClick,
+  yourPrice,
 }: PriceCardProps) {
   const name = materialName || price?.name || price?.category || 'Scrap Material';
   const priceUnit = unit || price?.unit || 'kg';
@@ -102,7 +104,15 @@ export function PriceCard({
 
         {/* Market Rate Block */}
         <div className={styles.rateBlock}>
-          <span className={styles.rateLabel}>MARKET RATE</span>
+          <div className={styles.rateBlockHeaderRow}>
+            <span className={styles.rateLabel}>MARKET RATE</span>
+            {yourPrice !== undefined && (
+              <span className={styles.yourPricePill}>
+                <span className={styles.yourPricePillLabel}>YOUR Price:</span>
+                <strong className={styles.yourPricePillVal}>₹{yourPrice}/{priceUnit}</strong>
+              </span>
+            )}
+          </div>
           <div className={styles.priceRow}>
             <span className={styles.priceRange}>
               ₹{min.toLocaleString('en-IN')} – ₹{max.toLocaleString('en-IN')}
