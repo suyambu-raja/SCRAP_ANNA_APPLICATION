@@ -455,7 +455,11 @@ export default function Home() {
                 <PriceCard
                   key={p.id}
                   price={p}
-                  onClick={() => navigate('/market-prices')}
+                  onClick={() =>
+                    navigate(
+                      `/market-prices?category=${encodeURIComponent(p.categoryId)}&item=${encodeURIComponent(p.id)}`
+                    )
+                  }
                 />
               ))
             ) : (

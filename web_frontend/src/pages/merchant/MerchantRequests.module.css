@@ -360,7 +360,7 @@
 /* Card Body Grid (Image Showcase + Details + Actions) */
 .cardBodyGrid {
   display: grid;
-  grid-template-columns: 200px 1fr 180px;
+  grid-template-columns: 240px 1fr 180px;
   gap: 1.5rem;
   align-items: start;
 }
@@ -374,7 +374,8 @@
 
 .largeImgFrame {
   width: 100%;
-  height: 140px;
+  height: 190px;
+  min-height: 190px;
   border-radius: 12px;
   background-color: #f8fafc;
   border: 1px solid #e2e8f0;
@@ -1807,6 +1808,14 @@
   transform: translateY(-1px);
 }
 
+.mobileTopTabTrack {
+  display: none;
+}
+
+.mobileOffersSection {
+  display: none;
+}
+
 /* Responsive */
 @media (max-width: 1100px) {
   .requestsLayoutGrid {
@@ -1815,19 +1824,385 @@
 }
 
 @media (max-width: 768px) {
+  .mainContainer {
+    padding: 0.75rem 0.75rem 2rem 0.75rem;
+  }
+
+  .pageHeaderRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .highlightsGrid {
+    display: none; /* Streamline on mobile for maximum vertical space */
+  }
+
+  .rightSidebarCol {
+    display: none; /* Hide heavy sidebar filters on mobile, keep clean feed */
+  }
+
+  .mobileTopTabTrack {
+    display: flex;
+    gap: 0.45rem;
+    background: #0f172a;
+    padding: 4px;
+    border-radius: 12px;
+    margin-bottom: 0.85rem;
+    width: 100%;
+  }
+
+  .mobileTabBtn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    font-size: 0.785rem;
+    font-weight: 700;
+    padding: 0.65rem 0.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .mobileTabBtnActive {
+    background: #fbc21a !important;
+    color: #0f172a !important;
+    box-shadow: 0 2px 8px rgba(251, 194, 26, 0.35);
+  }
+
+  .mobileTabCount {
+    background: rgba(255, 255, 255, 0.15);
+    color: inherit;
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 1px 6px;
+    border-radius: 9999px;
+  }
+
+  .mobileTabBtnActive .mobileTabCount {
+    background: rgba(15, 23, 42, 0.15);
+  }
+
+  .mobileTabCountOffers {
+    background: #ef4444;
+    color: #ffffff;
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 1px 6px;
+    border-radius: 9999px;
+  }
+
+  .tabContainerMobileHidden,
+  .requestsBarMobileHidden,
+  .requestsListMobileHidden {
+    display: none !important;
+  }
+
   .cardBodyGrid {
     grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .largeImgFrame {
+    height: 220px !important;
+    min-height: 220px !important;
+    width: 100% !important;
+    border-radius: 14px !important;
   }
 
   .actionsCol {
     align-items: stretch;
   }
 
-  .highlightsGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
   .formGridTwo {
     grid-template-columns: 1fr;
+  }
+
+  /* Mobile Offers Feed */
+  .mobileOffersSection {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+  }
+
+  .mobileOffersHeaderRow {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-bottom: 0.25rem;
+  }
+
+  .mobileOffersTitle {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0;
+  }
+
+  .mobileOffersSub {
+    font-size: 0.75rem;
+    color: #64748b;
+  }
+
+  .mobileOffersList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .mobileOfferCard {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.03);
+  }
+
+  .mobileOfferCardAccepted {
+    border: 1.5px solid #22c55e;
+    box-shadow: 0 4px 16px rgba(34, 197, 94, 0.1);
+  }
+
+  .mobileOfferHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .mobileOfferStatusBadge {
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.02em;
+  }
+
+  .statusBadge_accepted {
+    background: #dcfce7;
+    color: #15803d;
+    border: 1px solid #bbf7d0;
+  }
+
+  .statusBadge_waiting {
+    background: #fef3c7;
+    color: #b45309;
+    border: 1px solid #fde68a;
+  }
+
+  .statusBadge_rejected {
+    background: #fee2e2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+  }
+
+  .statusBadge_expired {
+    background: #f1f5f9;
+    color: #64748b;
+    border: 1px solid #e2e8f0;
+  }
+
+  .mobileOfferId {
+    font-size: 0.7rem;
+    color: #94a3b8;
+    font-family: monospace;
+    font-weight: 700;
+  }
+
+  .mobileOfferCustomerRow {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.825rem;
+  }
+
+  .mobileCustomerLabel {
+    color: #64748b;
+    font-size: 0.75rem;
+  }
+
+  .mobileCustomerName {
+    color: #0f172a;
+  }
+
+  .mobileCustomerTypePill {
+    font-size: 0.65rem;
+    background: #f1f5f9;
+    color: #475569;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-weight: 700;
+    margin-left: auto;
+  }
+
+  .mobileOfferBodyGrid {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+  }
+
+  .mobileOfferThumb {
+    width: 84px;
+    height: 84px;
+    border-radius: 12px;
+    object-fit: cover;
+    border: 1px solid #e2e8f0;
+    flex-shrink: 0;
+  }
+
+  .mobileOfferInfoCol {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .mobileOfferMat {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0;
+  }
+
+  .mobileOfferCondition {
+    font-size: 0.72rem;
+    color: #64748b;
+  }
+
+  .mobileOfferQty {
+    font-size: 0.775rem;
+    color: #334155;
+  }
+
+  .mobileOfferQuoteBox {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 0.65rem 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+
+  .mobileQuoteLeft {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .mobileQuoteLabel {
+    font-size: 0.685rem;
+    color: #64748b;
+    font-weight: 600;
+  }
+
+  .mobileQuotePrice {
+    font-size: 1.05rem;
+    font-weight: 900;
+    color: #16a34a;
+  }
+
+  .mobileQuotePrice small {
+    font-size: 0.7rem;
+    color: #64748b;
+    font-weight: 600;
+  }
+
+  .mobileQuoteRight {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+  }
+
+  .mobileSlotLabel {
+    font-size: 0.685rem;
+    color: #64748b;
+    font-weight: 600;
+  }
+
+  .mobileSlotText {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #0f172a;
+    text-align: right;
+  }
+
+  .mobileOfferLocRow {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.75rem;
+    color: #64748b;
+  }
+
+  .locIconMuted {
+    color: #94a3b8;
+    flex-shrink: 0;
+  }
+
+  .mobileAcceptedActionBox {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 2px;
+  }
+
+  .mobileAcceptedNotice {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #15803d;
+    background: #dcfce7;
+    padding: 0.4rem 0.65rem;
+    border-radius: 6px;
+    border: 1px solid #bbf7d0;
+  }
+
+  .mobileGoToOrderBtn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    background: #16a34a;
+    color: #ffffff;
+    font-size: 0.85rem;
+    font-weight: 800;
+    padding: 0.65rem 1rem;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: all 0.15s ease;
+    box-shadow: 0 2px 8px rgba(22, 163, 74, 0.25);
+  }
+
+  .mobileGoToOrderBtn:hover {
+    background: #15803d;
+  }
+
+  .mobileOfferFooterRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.72rem;
+    color: #64748b;
+    border-top: 1px dashed #e2e8f0;
+    padding-top: 0.5rem;
+  }
+
+  .mobileSubmittedTime {
+    color: #94a3b8;
+  }
+
+  .mobileOfferStatusSub {
+    font-weight: 600;
   }
 }

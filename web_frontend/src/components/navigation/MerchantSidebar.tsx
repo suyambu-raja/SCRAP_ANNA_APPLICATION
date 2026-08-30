@@ -38,7 +38,7 @@ export function MerchantSidebar({ isCollapsed, onToggle }: MerchantSidebarProps)
     {
       id: 'market-prices',
       label: 'Market Prices',
-      to: '/market-prices',
+      to: '/merchant/market-prices',
       icon: <TrendingUp size={19} />,
       isActive: location.pathname.includes('/market-prices'),
     },

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   ArrowLeft,
@@ -29,6 +29,7 @@ import styles from './MerchantMarketPrices.module.css';
 
 export default function MerchantMarketPrices() {
   const { i18n } = useTranslation();
+  const [searchParams] = useSearchParams();
 
   const [prices, setPrices] = useState<MarketPrice[]>([]);
   const [categories, setCategories] = useState<ScrapCategory[]>([]);
@@ -45,22 +46,109 @@ export default function MerchantMarketPrices() {
     Promise.all([getMarketPrices(), getScrapCategories()]).then(([priceData, catData]) => {
       setPrices(priceData);
       setCategories(catData);
-      if (priceData.length > 0) {
-        setSelectedCatId(priceData[0].categoryId);
-        setSelectedMaterialId(priceData[0].id);
 
-        // Initialize merchant rates to middle of market range
-        const initialRates: Record<string, number> = {};
-        priceData.forEach((p) => {
-          const min = p.priceMin ?? Math.round(p.price * 0.9);
-          const max = p.priceMax ?? Math.round(p.price * 1.1);
-          initialRates[p.id] = Math.round((min + max) / 2);
+      const targetMaterial =
+        searchParams.get('material')?.toLowerCase() ||
+        searchParams.get('id')?.toLowerCase() ||
+        searchParams.get('name')?.toLowerCase();
+
+      let initialCat = priceData.length > 0 ? priceData[0].categoryId : 'CAT_IRON';
+      let initialMat = priceData.length > 0 ? priceData[0].id : 'IRON_001';
+
+      if (targetMaterial && priceData.length > 0) {
+        const found = priceData.find((p) => {
+          const mId = p.id.toLowerCase();
+          const mCatId = p.categoryId.toLowerCase();
+          const mName = (p.name || '').toLowerCase();
+          const mCat = (p.category || '').toLowerCase();
+
+          return (
+            mId === targetMaterial ||
+            mCatId.includes(targetMaterial) ||
+            mName.includes(targetMaterial) ||
+            mCat.includes(targetMaterial) ||
+            (targetMaterial === 'iron' && (mCatId.includes('iron') || mName.includes('iron'))) ||
+            (targetMaterial === 'copper' && (mCatId.includes('copper') || mName.includes('copper'))) ||
+            (targetMaterial === 'aluminium' && (mCatId.includes('aluminium') || mName.includes('aluminium'))) ||
+            (targetMaterial === 'brass' && (mCatId.includes('brass') || mName.includes('brass'))) ||
+            (targetMaterial === 'steel' && (mCatId.includes('steel') || mName.includes('steel'))) ||
+            (targetMaterial === 'plastic' && (mCatId.includes('plastic') || mName.includes('plastic'))) ||
+            (targetMaterial === 'paper' && (mCatId.includes('paper') || mCatId.includes('cardboard') || mName.includes('paper'))) ||
+            (targetMaterial === 'ewaste' && (mCatId.includes('ewaste') || mName.includes('cpu') || mName.includes('electronic')))
+          );
         });
-        setMerchantRates(initialRates);
+
+        if (found) {
+          initialCat = found.categoryId;
+          initialMat = found.id;
+        }
       }
+
+      setSelectedCatId(initialCat);
+      setSelectedMaterialId(initialMat);
+
+      // Initialize merchant rates to middle of market range
+      const initialRates: Record<string, number> = {};
+      priceData.forEach((p) => {
+        const min = p.priceMin ?? Math.round(p.price * 0.9);
+        const max = p.priceMax ?? Math.round(p.price * 1.1);
+        initialRates[p.id] = Math.round((min + max) / 2);
+      });
+      setMerchantRates(initialRates);
       setLoading(false);
     });
-  }, []);
+  }, [searchParams]);
+
+  // Sync selected material if search parameters change dynamically
+  useEffect(() => {
+    const targetMaterial =
+      searchParams.get('material')?.toLowerCase() ||
+      searchParams.get('id')?.toLowerCase() ||
+      searchParams.get('name')?.toLowerCase();
+
+    if (targetMaterial && prices.length > 0) {
+      const found = prices.find((p) => {
+        const mId = p.id.toLowerCase();
+        const mCatId = p.categoryId.toLowerCase();
+        const mName = (p.name || '').toLowerCase();
+        const mCat = (p.category || '').toLowerCase();
+
+        return (
+          mId === targetMaterial ||
+          mCatId.includes(targetMaterial) ||
+          mName.includes(targetMaterial) ||
+          mCat.includes(targetMaterial) ||
+          (targetMaterial === 'iron' && (mCatId.includes('iron') || mName.includes('iron'))) ||
+          (targetMaterial === 'copper' && (mCatId.includes('copper') || mName.includes('copper'))) ||
+          (targetMaterial === 'aluminium' && (mCatId.includes('aluminium') || mName.includes('aluminium'))) ||
+          (targetMaterial === 'brass' && (mCatId.includes('brass') || mName.includes('brass'))) ||
+          (targetMaterial === 'steel' && (mCatId.includes('steel') || mName.includes('steel'))) ||
+          (targetMaterial === 'plastic' && (mCatId.includes('plastic') || mName.includes('plastic'))) ||
+          (targetMaterial === 'paper' && (mCatId.includes('paper') || mCatId.includes('cardboard') || mName.includes('paper'))) ||
+          (targetMaterial === 'ewaste' && (mCatId.includes('ewaste') || mName.includes('cpu') || mName.includes('electronic')))
+        );
+      });
+
+      if (found) {
+        setSelectedCatId(found.categoryId);
+        setSelectedMaterialId(found.id);
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth',
+        });
+      }
+    }
+  }, [searchParams, prices]);
+
+  const handleSelectMaterial = (matId: string, scrollToTop = true) => {
+    setSelectedMaterialId(matId);
+    if (scrollToTop) {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+    }
+  };
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -123,7 +211,7 @@ export default function MerchantMarketPrices() {
 
   const handleSaveActiveRate = () => {
     if (!activePrice) return;
-    showToast(`✓ Saved buying rate for ${activePrice.name || activePrice.category}: ₹${currentMerchantRate}/${activePrice.unit}`);
+    showToast(`✓ Saved YOUR Price for ${activePrice.name || activePrice.category}: ₹${currentMerchantRate}/${activePrice.unit}`);
   };
 
   const handleResetToBenchmark = () => {
@@ -168,7 +256,7 @@ export default function MerchantMarketPrices() {
                       (p.category && p.category.toLowerCase().includes(q.toLowerCase()))
                   );
                   if (match) {
-                    setSelectedMaterialId(match.id);
+                    handleSelectMaterial(match.id, true);
                   }
                 }
               }}
@@ -198,7 +286,7 @@ export default function MerchantMarketPrices() {
               ].join(' ')}
               onClick={() => {
                 setSelectedCatId('all');
-                if (prices.length > 0) setSelectedMaterialId(prices[0].id);
+                if (prices.length > 0) handleSelectMaterial(prices[0].id, true);
               }}
             >
               All Categories ({prices.length})
@@ -214,7 +302,7 @@ export default function MerchantMarketPrices() {
                 onClick={() => {
                   setSelectedCatId(cat.id);
                   const firstInCat = prices.find((p) => p.categoryId === cat.id);
-                  if (firstInCat) setSelectedMaterialId(firstInCat.id);
+                  if (firstInCat) handleSelectMaterial(firstInCat.id, true);
                 }}
               >
                 {isTamil ? cat.name_ta : cat.name}
@@ -238,7 +326,7 @@ export default function MerchantMarketPrices() {
                   styles.subMaterialPill,
                   activePrice?.id === mat.id ? styles.subMaterialPillActive : '',
                 ].join(' ')}
-                onClick={() => setSelectedMaterialId(mat.id)}
+                onClick={() => handleSelectMaterial(mat.id, true)}
               >
                 {mat.name || mat.category}
               </button>
@@ -337,8 +425,8 @@ export default function MerchantMarketPrices() {
               <div className={styles.merchantRateUpdaterCard}>
                 <div className={styles.updaterHeaderRow}>
                   <div>
-                    <span className={styles.updaterLabel}>YOUR BUYING RATE (SHOWN TO CUSTOMERS)</span>
-                    <h3 className={styles.updaterSub}>Set what you pay to win more pickup orders</h3>
+                    <span className={styles.updaterLabel}>YOUR PRICE</span>
+                    <h3 className={styles.updaterSub}>Set YOUR Price to win more customer pickup orders</h3>
                   </div>
                   <span
                     className={
@@ -413,7 +501,7 @@ export default function MerchantMarketPrices() {
                     onClick={handleSaveActiveRate}
                   >
                     <Save size={15} />
-                    <span>Save My Rate</span>
+                    <span>Save YOUR Price</span>
                   </button>
                 </div>
               </div>
@@ -422,7 +510,7 @@ export default function MerchantMarketPrices() {
               <div className={styles.priceNoticeBox}>
                 <Info size={16} />
                 <span>
-                  <strong>Merchant Tip:</strong> Your rate is displayed on search results to customers in your service area. Updating daily keeps your quotes competitive.
+                  <strong>Merchant Tip:</strong> YOUR Price is displayed on search results to customers in your service area. Updating daily keeps your quotes competitive.
                 </span>
               </div>
             </div>
@@ -437,23 +525,28 @@ export default function MerchantMarketPrices() {
                 All Materials in {activeCategory?.name || 'this category'} ({categoryMaterials.length})
               </h3>
               <p className={styles.relatedSectionSub}>
-                Click any material card below to inspect its large image and adjust your buying rate.
+                Click any material card below to inspect its large image and adjust YOUR Price.
               </p>
             </div>
 
             <div className={styles.relatedGrid}>
-              {categoryMaterials.map((mat) => (
-                <div
-                  key={mat.id}
-                  onClick={() => setSelectedMaterialId(mat.id)}
-                  className={[
-                    styles.relatedCardWrapper,
-                    activePrice?.id === mat.id ? styles.relatedCardActive : '',
-                  ].join(' ')}
-                >
-                  <PriceCard price={mat} />
-                </div>
-              ))}
+              {categoryMaterials.map((mat) => {
+                const matMin = mat.priceMin ?? Math.round(mat.price * 0.9);
+                const matMax = mat.priceMax ?? Math.round(mat.price * 1.1);
+                const matRate = merchantRates[mat.id] || Math.round((matMin + matMax) / 2);
+                return (
+                  <div
+                    key={mat.id}
+                    onClick={() => handleSelectMaterial(mat.id, true)}
+                    className={[
+                      styles.relatedCardWrapper,
+                      activePrice?.id === mat.id ? styles.relatedCardActive : '',
+                    ].join(' ')}
+                  >
+                    <PriceCard price={mat} yourPrice={matRate} onClick={() => handleSelectMaterial(mat.id, true)} />
+                  </div>
+                );
+              })}
             </div>
           </section>
         )}

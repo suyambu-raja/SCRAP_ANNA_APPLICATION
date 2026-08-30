@@ -294,9 +294,8 @@
 }
 
 .quoteCardAccepted {
-  border-left: 5px solid #16a34a !important;
-  background-color: #fcfdfc;
-  box-shadow: 0 6px 20px rgba(22, 163, 74, 0.08);
+  background-color: #ffffff;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
 }
 
 .quoteCard:hover {
@@ -306,57 +305,71 @@
   transform: translateY(-2px);
 }
 
-/* Accepted Priority Alert Banner */
+/* Accepted Priority Alert Banner (White background + Blinking Green Border + Simple Green Button) */
 .acceptedPriorityBanner {
-  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-  border: 1px solid #bbf7d0;
+  background: #ffffff;
+  border: 1.5px solid #22c55e;
   border-radius: 12px;
-  padding: 0.75rem 1rem;
+  padding: 0.75rem 1.15rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
   margin-bottom: -0.25rem;
+  animation: blinkGreenBorder 2s infinite ease-in-out;
+}
+
+@keyframes blinkGreenBorder {
+  0%, 100% {
+    border-color: #22c55e;
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.35);
+  }
+  50% {
+    border-color: #16a34a;
+    box-shadow: 0 0 0 4.5px rgba(34, 197, 94, 0.18);
+  }
 }
 
 .acceptedPriorityLeft {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
 }
 
 .acceptedPriorityTag {
-  font-size: 0.72rem;
-  font-weight: 900;
-  color: #15803d;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  font-size: 0.785rem;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: 0.02em;
 }
 
 .acceptedPrioritySub {
-  font-size: 0.785rem;
-  color: #166534;
-  font-weight: 600;
+  font-size: 0.775rem;
+  color: #475569;
+  font-weight: 500;
 }
 
 .acceptedRouteLink {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.4rem;
   background: #16a34a;
   color: #ffffff;
-  font-size: 0.785rem;
-  font-weight: 800;
-  padding: 0.4rem 0.85rem;
-  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.45rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #15803d;
   text-decoration: none;
   white-space: nowrap;
   transition: all 0.15s ease;
+  box-shadow: 0 2px 6px rgba(22, 163, 74, 0.2);
 }
 
 .acceptedRouteLink:hover {
   background: #15803d;
   transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(22, 163, 74, 0.3);
 }
 
 .badgeAcceptedTag {

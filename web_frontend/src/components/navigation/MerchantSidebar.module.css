@@ -1,18 +1,18 @@
-/* Merchant Left Sidebar Styling */
+/* Merchant Left Sidebar Styling (Dark Graphite + Yellow Theme) */
 .sidebarContainer {
   position: fixed;
   top: 0;
   left: 0;
   bottom: 0;
   height: 100vh;
-  background-color: #ffffff;
-  border-right: 1px solid #edf2f7;
+  background-color: #0f172a; /* Dark Graphite */
+  border-right: 1px solid #1e293b;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   z-index: 150;
   transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.02);
+  box-shadow: 2px 0 16px rgba(0, 0, 0, 0.15);
   overflow-x: hidden;
 }
 
@@ -36,9 +36,9 @@
   display: flex;
   align-items: center;
   padding: 0 1.25rem;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   text-decoration: none;
-  color: #0f172a;
+  color: #ffffff;
   overflow: hidden;
   transition: padding 0.25s ease;
 }
@@ -59,6 +59,7 @@
   width: 36px;
   height: 36px;
   border-radius: 8px;
+  background: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -66,8 +67,8 @@
 }
 
 .logoImg {
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   object-fit: contain;
 }
 
@@ -88,7 +89,7 @@
   font-size: 1.05rem;
   font-weight: 900;
   letter-spacing: -0.02em;
-  color: #1e293b;
+  color: #ffffff;
   line-height: 1.1;
 }
 
@@ -97,11 +98,16 @@
 }
 
 .brandSubtitle {
-  font-size: 0.55rem;
-  font-weight: 700;
+  font-size: 0.48rem;
+  font-weight: 600;
   letter-spacing: 0.05em;
-  color: #94a3b8;
-  margin-top: 1px;
+  color: #ffffff;
+  background: transparent;
+  padding: 0;
+  margin-top: 2px;
+  width: fit-content;
+  text-transform: uppercase;
+  opacity: 0.75;
 }
 
 /* Navigation Links List */
@@ -123,7 +129,7 @@
   padding: 0.65rem 0.85rem;
   border-radius: 10px;
   text-decoration: none;
-  color: #64748b;
+  color: #94a3b8;
   font-size: 0.875rem;
   font-weight: 600;
   position: relative;
@@ -138,48 +144,36 @@
 }
 
 .navLink:hover {
-  background-color: #f8fafc;
-  color: #0f172a;
+  background-color: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
 }
 
-/* Active Nav Link */
+/* Active Nav Link: Solid Gold Yellow with Dark Graphite Text */
 .navLinkActive {
-  background-color: #fffdf5 !important;
+  background-color: #fbc21a !important;
   color: #0f172a !important;
-  font-weight: 700;
+  font-weight: 800;
 }
 
 .activeAccentBar {
-  position: absolute;
-  left: -0.75rem;
-  top: 15%;
-  bottom: 15%;
-  width: 3.5px;
-  background-color: #fbc21a;
-  border-radius: 0 4px 4px 0;
-}
-
-.sidebarCollapsed .activeAccentBar {
-  left: 0;
-  top: 10%;
-  bottom: 10%;
+  display: none;
 }
 
 .navIcon {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #64748b;
+  color: #94a3b8;
   flex-shrink: 0;
   transition: color 0.15s ease;
 }
 
 .navLink:hover .navIcon {
-  color: #0f172a;
+  color: #ffffff;
 }
 
 .navLinkActive .navIcon {
-  color: #d97706 !important;
+  color: #0f172a !important;
 }
 
 .navLabel {
@@ -194,14 +188,21 @@
 
 /* Nav Numeric Badge */
 .navBadge {
-  background-color: #fef3c7;
-  color: #d97706;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fbc21a;
   font-size: 0.7rem;
   font-weight: 800;
   padding: 0.1rem 0.45rem;
   border-radius: 9999px;
-  border: 1px solid #fde68a;
+  border: 1px solid rgba(251, 194, 26, 0.3);
   margin-left: auto;
+}
+
+.navLinkActive .navBadge {
+  background-color: #0f172a;
+  color: #fbc21a;
+  border-color: #0f172a;
+  font-weight: 900;
 }
 
 .sidebarCollapsed .navBadge {
@@ -217,8 +218,8 @@
   font-size: 0.685rem;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: #94a3b8;
+  letter-spacing: 0.06em;
+  color: #64748b;
   padding: 0.75rem 0.85rem 0.25rem 0.85rem;
 }
 
@@ -239,8 +240,8 @@
 /* Promo Card in Sidebar */
 .promoCard {
   margin: 1rem 0.75rem;
-  background-color: #fffdf5;
-  border: 1px solid #fde68a;
+  background-color: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
   padding: 0.85rem;
   display: flex;
@@ -255,12 +256,12 @@
 .promoTitle {
   font-size: 0.785rem;
   font-weight: 800;
-  color: #0f172a;
+  color: #ffffff;
 }
 
 .promoSub {
   font-size: 0.7rem;
-  color: #64748b;
+  color: #94a3b8;
   line-height: 1.3;
 }
 
@@ -270,19 +271,19 @@
   justify-content: center;
   gap: 0.35rem;
   background-color: #fbc21a;
-  color: #1e293b;
+  color: #0f172a;
   font-size: 0.75rem;
-  font-weight: 700;
+  font-weight: 800;
   padding: 0.45rem;
   border-radius: 6px;
   border: none;
   cursor: pointer;
   text-decoration: none;
-  transition: background-color 0.15s ease;
+  transition: all 0.15s ease;
 }
 
 .promoBtn:hover {
-  background-color: #e5aa00;
+  background-color: #f59e0b;
 }
 
 .profileStrengthRow {
@@ -290,7 +291,7 @@
   align-items: center;
   justify-content: space-between;
   font-size: 0.685rem;
-  color: #64748b;
+  color: #94a3b8;
   font-weight: 600;
   margin-top: 0.25rem;
 }
@@ -298,7 +299,7 @@
 .strengthBarTrack {
   width: 100%;
   height: 5px;
-  background-color: #e2e8f0;
+  background-color: rgba(255, 255, 255, 0.1);
   border-radius: 4px;
   overflow: hidden;
   margin-top: 3px;
@@ -314,10 +315,10 @@
 /* Bottom Controls (Collapse Toggle) */
 .sidebarBottom {
   padding: 0.75rem;
-  border-top: 1px solid #f1f5f9;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
   align-items: center;
-  background-color: #ffffff;
+  background-color: #0f172a;
 }
 
 .collapseToggleBtn {
@@ -327,10 +328,10 @@
   justify-content: center;
   gap: 0.65rem;
   padding: 0.6rem 0.75rem;
-  background-color: #f8fafc;
-  border: 1px solid #e2e8f0;
+  background-color: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
-  color: #64748b;
+  color: #cbd5e1;
   font-size: 0.8rem;
   font-weight: 600;
   cursor: pointer;
@@ -338,11 +339,16 @@
 }
 
 .collapseToggleBtn:hover {
-  background-color: #f1f5f9;
-  color: #0f172a;
-  border-color: #cbd5e1;
+  background-color: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
 }
 
 .sidebarCollapsed .toggleText {
   display: none;
+}
+
+@media (max-width: 768px) {
+  .sidebarContainer {
+    display: none !important;
+  }
 }

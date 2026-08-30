@@ -9,6 +9,10 @@ import {
   Settings,
   LogOut,
   Plus,
+  HelpCircle,
+  Gift,
+  CreditCard,
+  Receipt,
 } from 'lucide-react';
 import { useAuthStore } from '@/store/useAuthStore';
 import styles from './MerchantTopHeader.module.css';
@@ -46,14 +50,28 @@ export function MerchantTopHeader() {
     if (path.includes('/transactions') || (path.includes('/profile') && location.search.includes('transactions'))) return 'Transactions';
     if (path.includes('/reusable-products') || path.includes('/marketplace')) return 'Reusable Marketplace';
     if (path.includes('/profile')) return 'Merchant Profile';
+    if (path.includes('/support')) return 'Support Desk';
     if (path.includes('/settings')) return 'Settings';
     return 'Dashboard';
   };
 
   return (
     <header className={styles.topHeader}>
-      {/* Left: Dynamic Page Title */}
+      {/* Left: Mobile Brand Logo & Name / Desktop Dynamic Page Title */}
       <div className={styles.leftCol}>
+        <Link to="/dashboard/merchant" className={styles.mobileBrandLink}>
+          <img src="/logo-icon.png" alt="Scrap Anna" className={styles.mobileLogoImg} />
+          <div className={styles.mobileBrandTextWrap}>
+            <div className={styles.mobileBrandRow}>
+              <span className={styles.mobileBrandTitle}>
+                <span className={styles.brandTitleScrap}>Scrap </span>
+                <span className={styles.brandTitleAnna}>Anna</span>
+              </span>
+              <span className={styles.mobileRoleBadge}>MERCHANT</span>
+            </div>
+            <span className={styles.mobileShopName}>CONNECT • COLLECT • RECYCLE</span>
+          </div>
+        </Link>
         <h1 className={styles.pageTitle}>{getPageTitle()}</h1>
       </div>
 
@@ -71,7 +89,7 @@ export function MerchantTopHeader() {
           className={styles.iconBtn}
           title="Language: English"
           aria-label="Change language"
-          onClick={() => {}}
+          onClick={() => { }}
         >
           <Globe size={18} />
         </button>
@@ -82,7 +100,7 @@ export function MerchantTopHeader() {
           className={styles.iconBtn}
           title="3 New Notifications"
           aria-label="3 new notifications"
-          onClick={() => {}}
+          onClick={() => { }}
         >
           <Bell size={18} />
           <span className={styles.badgeCount}>3</span>
@@ -121,7 +139,31 @@ export function MerchantTopHeader() {
                 onClick={() => setDropdownOpen(false)}
               >
                 <User size={15} />
-                <span>Merchant Profile</span>
+                <span>Profile</span>
+              </Link>
+              <Link
+                to="/transactions"
+                className={styles.dropdownItem}
+                onClick={() => setDropdownOpen(false)}
+              >
+                <CreditCard size={15} />
+                <span>Transactions &amp; Ledger</span>
+              </Link>
+              <Link
+                to="/support"
+                className={styles.dropdownItem}
+                onClick={() => setDropdownOpen(false)}
+              >
+                <HelpCircle size={15} />
+                <span>Support</span>
+              </Link>
+              <Link
+                to="/profile"
+                className={styles.dropdownItem}
+                onClick={() => setDropdownOpen(false)}
+              >
+                <Gift size={15} />
+                <span>Refer &amp; Earn</span>
               </Link>
               <Link
                 to="/settings"

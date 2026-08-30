@@ -23,7 +23,17 @@ export function DevRoleSwitcher() {
     if (!user) return;
 
     login(user, `mock-jwt-${user.id}-${Date.now()}`);
-    navigate('/app/home');
+    if (user.role === 'industry') {
+      navigate('/industry/dashboard');
+    } else if (user.role === 'merchant') {
+      navigate('/dashboard/merchant');
+    } else if (user.role === 'aggregator') {
+      navigate('/dashboard/aggregator');
+    } else if (user.role === 'household') {
+      navigate('/dashboard/household');
+    } else {
+      navigate('/dashboard/' + user.role);
+    }
     setIsOpen(false);
   };
 

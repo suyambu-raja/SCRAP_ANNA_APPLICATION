@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Store,
   CheckCircle2,
@@ -16,6 +17,9 @@ import {
   Mail,
   ArrowRight,
   Circle,
+  Receipt,
+  HelpCircle,
+  Settings,
 } from 'lucide-react';
 import styles from './MerchantProfile.module.css';
 
@@ -40,7 +44,7 @@ export default function MerchantProfile() {
       <div className={styles.headerRow}>
         <h1 className={styles.pageTitle}>Merchant Profile</h1>
         <p className={styles.pageSubtitle}>
-          Manage your business profile, documents and account settings.
+          Manage your business profile, documents, bank details, and transactions ledger.
         </p>
       </div>
 
@@ -74,6 +78,12 @@ export default function MerchantProfile() {
         >
           Bank &amp; Payments
         </button>
+        <Link
+          to="/transactions"
+          className={styles.tabItem}
+        >
+          Transactions Ledger
+        </Link>
         <button
           type="button"
           className={`${styles.tabItem} ${activeTab === 'preferences' ? styles.tabActive : ''}`}
@@ -329,6 +339,22 @@ export default function MerchantProfile() {
               </div>
             </div>
           </article>
+
+          {/* Card 4: Direct Transactions & Settlement Access */}
+          <article className={styles.contentCard}>
+            <div className={styles.transactionsCardHeader}>
+              <div>
+                <h3 className={styles.cardSectionTitle}>Transactions &amp; Settlement Ledger</h3>
+                <p className={styles.transactionsSubtext}>
+                  Access your full digital payouts history, bank settlements, and GST tax invoice slips.
+                </p>
+              </div>
+              <Link to="/transactions" className={styles.viewTransactionsBtn}>
+                <CreditCard size={15} />
+                <span>View Full Ledger →</span>
+              </Link>
+            </div>
+          </article>
         </section>
 
         {/* ================================================================
@@ -424,6 +450,10 @@ export default function MerchantProfile() {
           <div className={styles.sidebarCard}>
             <h3 className={styles.sidebarCardTitle}>Quick Actions</h3>
             <div className={styles.quickActionsList}>
+              <Link to="/transactions" className={styles.quickActionItem}>
+                <Receipt size={15} color="#16a34a" />
+                <span>Transactions &amp; Settlement Ledger</span>
+              </Link>
               <a href="#edit" className={styles.quickActionItem} onClick={(e) => e.preventDefault()}>
                 <Edit size={15} color="#d97706" />
                 <span>Edit Profile</span>
@@ -434,7 +464,7 @@ export default function MerchantProfile() {
               </a>
               <a href="#bank" className={styles.quickActionItem} onClick={(e) => e.preventDefault()}>
                 <CreditCard size={15} color="#16a34a" />
-                <span>Add Bank Details</span>
+                <span>Bank Details &amp; Payouts</span>
               </a>
               <a href="#vehicles" className={styles.quickActionItem} onClick={(e) => e.preventDefault()}>
                 <Truck size={15} color="#9333ea" />

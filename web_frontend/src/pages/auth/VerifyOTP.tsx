@@ -81,7 +81,11 @@ export default function VerifyOTP() {
       if (res.user) {
         // Existing user -> Directly to product app shell
         login(res.user, res.token);
-        navigate('/app/home', { replace: true });
+        if (res.user.role === 'industry') {
+          navigate('/industry/dashboard', { replace: true });
+        } else {
+          navigate('/dashboard/merchant', { replace: true });
+        }
       } else {
         // New user -> Choose User Type & Role Registration
         localStorage.setItem('sa_unregistered_phone', phone);
