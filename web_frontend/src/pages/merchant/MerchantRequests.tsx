@@ -315,7 +315,7 @@ export default function MerchantRequests() {
   const [recordingSeconds, setRecordingSeconds] = useState(0);
   const [hasRecordedAudio, setHasRecordedAudio] = useState(false);
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
-  const recordingTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const recordingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Details Modal State
   const [detailsModalRequest, setDetailsModalRequest] = useState<RequestItem | null>(null);

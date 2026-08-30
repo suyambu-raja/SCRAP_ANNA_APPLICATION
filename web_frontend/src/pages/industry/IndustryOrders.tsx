@@ -897,7 +897,7 @@ export default function IndustryOrders() {
                           <span className={styles.partyTypeHeader}>COLLECTED BY (CERTIFIED BUYER)</span>
                           <strong className={styles.partyName}>{order.merchantName}</strong>
                           <p className={styles.partyAddress}>
-                            {order.merchantShop || 'SIDCO Industrial Scrap Yard #12, Guindy'}<br />
+                            {order.shopName || 'SIDCO Industrial Scrap Yard #12, Guindy'}<br />
                             Chennai, Tamil Nadu – 600032
                           </p>
                           <span className={styles.partyGst}>GSTIN: 33XYZAB9876C1Z2</span>

@@ -536,7 +536,9 @@ export default function IndustryPostRequirement() {
                         type="file"
                         accept="image/*"
                         multiple
-                        ref={(el) => (fileInputRefs.current[item.id] = el)}
+                        ref={(el) => {
+                          fileInputRefs.current[item.id] = el;
+                        }}
                         style={{ display: 'none' }}
                         onChange={(e) => handleFilesSelected(item.id, e.target.files)}
                       />

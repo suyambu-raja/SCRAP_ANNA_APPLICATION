@@ -6,9 +6,6 @@ import { UserCheck, ChevronUp, ChevronDown, RotateCcw } from 'lucide-react';
 import styles from './DevRoleSwitcher.module.css';
 
 export function DevRoleSwitcher() {
-  // Only render in development mode
-  if (!import.meta.env.DEV) return null;
-
   const [isOpen, setIsOpen] = useState(false);
   const currentUser = useAuthStore((s) => s.user);
   const login = useAuthStore((s) => s.login);
