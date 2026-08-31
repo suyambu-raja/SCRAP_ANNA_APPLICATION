@@ -295,50 +295,50 @@ export default function IndustryDashboard() {
         </div>
       </section>
 
-      {/* 2. Top 5 Key Stats Strip */}
+      {/* 2. Top 4 Key Stats Strip */}
       <section className={styles.statsBar}>
         <div className={styles.statCard}>
-          <div className={`${styles.statIconWrap} ${styles.iconYellow}`}>
-            <ClipboardList size={22} />
-          </div>
-          <div className={styles.statContent}>
+          <div className={styles.statCardTopRow}>
             <span className={styles.statLabel}>Active Requirements</span>
-            <strong className={styles.statValue}>4</strong>
-            <span className={styles.statSub}>Across 2 Factory Sites</span>
+            <div className={styles.statIconBadge}>
+              <ClipboardList size={17} />
+            </div>
           </div>
+          <strong className={styles.statValue}>4</strong>
+          <span className={styles.statSub}>Across 2 Factory Sites</span>
         </div>
 
         <div className={styles.statCard}>
-          <div className={`${styles.statIconWrap} ${styles.iconGreen}`}>
-            <Sparkles size={22} />
-          </div>
-          <div className={styles.statContent}>
+          <div className={styles.statCardTopRow}>
             <span className={styles.statLabel}>Quotes Received</span>
-            <strong className={styles.statValue}>7</strong>
-            <span className={styles.statSub}>From 5 Verified Buyers</span>
+            <div className={styles.statIconBadge}>
+              <Sparkles size={17} />
+            </div>
           </div>
+          <strong className={styles.statValue}>7</strong>
+          <span className={styles.statSub}>From 5 Verified Buyers</span>
         </div>
 
         <div className={styles.statCard}>
-          <div className={`${styles.statIconWrap} ${styles.iconBlue}`}>
-            <Truck size={22} />
-          </div>
-          <div className={styles.statContent}>
+          <div className={styles.statCardTopRow}>
             <span className={styles.statLabel}>Scheduled Pickups</span>
-            <strong className={styles.statValue}>1</strong>
-            <span className={styles.statSub}>Tata 407 (Gate 2)</span>
+            <div className={styles.statIconBadge}>
+              <Truck size={17} />
+            </div>
           </div>
+          <strong className={styles.statValue}>1</strong>
+          <span className={styles.statSub}>Tata 407 (Gate 2)</span>
         </div>
 
         <div className={styles.statCard}>
-          <div className={`${styles.statIconWrap} ${styles.iconGold}`}>
-            <CheckCircle2 size={22} />
-          </div>
-          <div className={styles.statContent}>
+          <div className={styles.statCardTopRow}>
             <span className={styles.statLabel}>Fulfilled Pickups</span>
-            <strong className={styles.statValue}>28</strong>
-            <span className={styles.statSub}>Lifetime Dispatched</span>
+            <div className={styles.statIconBadge}>
+              <CheckCircle2 size={17} />
+            </div>
           </div>
+          <strong className={styles.statValue}>28</strong>
+          <span className={styles.statSub}>Lifetime Dispatched</span>
         </div>
       </section>
 

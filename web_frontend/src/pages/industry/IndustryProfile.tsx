@@ -146,13 +146,6 @@ export default function IndustryProfile() {
           <Settings size={15} />
           <span>Account Preferences</span>
         </button>
-
-        {/* Transactions & Invoices Link (Inside Profile) */}
-        <Link to="/industry/transactions" className={styles.tabTransactionsLink}>
-          <Receipt size={15} />
-          <span>Transactions &amp; Invoices</span>
-          <ArrowRight size={13} />
-        </Link>
       </div>
 
       {/* 3. Tab Content Area */}

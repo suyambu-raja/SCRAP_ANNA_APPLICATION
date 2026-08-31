@@ -9,7 +9,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 1.25rem;
+  padding: 0 0.75rem 0 1.25rem;
   z-index: 1000;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
   transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, left 0.25s ease;
@@ -38,7 +38,8 @@
     right: 0 !important;
     width: 100% !important;
     height: 58px;
-    padding: 0 0.75rem;
+    padding: 0 0.35rem 0 0.75rem;
+    gap: 0.35rem;
   }
 }
 
@@ -338,6 +339,17 @@
     display: none;
   }
 
+  .userMenuBtn {
+    padding: 0.15rem;
+    border: none;
+    background: transparent;
+    gap: 0;
+  }
+
+  .chevron {
+    display: none;
+  }
+
   .addProductBtn {
     display: none; /* Managed inside mobile Reusable Products page */
   }
@@ -350,5 +362,11 @@
   .iconBtn {
     width: 32px;
     height: 32px;
+  }
+
+  .dropdownMenu {
+    right: 0;
+    top: calc(100% + 6px);
+    width: 220px;
   }
 }
