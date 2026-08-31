@@ -91,8 +91,46 @@ export function Navbar() {
     };
   }, [location.pathname]);
 
+  const [isVisible, setIsVisible] = useState(true);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  // Smart Hide on Scroll Down, Immediate Reveal on Scroll Up (Backward)
+  useEffect(() => {
+    let lastScrollY = window.scrollY || document.documentElement.scrollTop;
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY || document.documentElement.scrollTop;
+      const delta = currentScrollY - lastScrollY;
+
+      if (currentScrollY <= 30) {
+        setIsVisible(true);
+        setIsScrolled(false);
+      } else {
+        setIsScrolled(true);
+        if (delta < -1) {
+          setIsVisible(true);
+        } else if (delta > 4 && currentScrollY > 50) {
+          setIsVisible(false);
+        }
+      }
+
+      lastScrollY = currentScrollY <= 0 ? 0 : currentScrollY;
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    document.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      document.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
-    <header className={styles.navbarWrapper}>
+    <header
+      className={`${styles.navbarWrapper} ${!isVisible ? styles.navbarHidden : ''} ${
+        isScrolled ? styles.navbarScrolled : ''
+      }`}
+    >
       <div className={styles.navbarContainer}>
         {/* Brand / Logo */}
         <Link to="/home" className={styles.brandLink} aria-label="Scrap Anna Home">

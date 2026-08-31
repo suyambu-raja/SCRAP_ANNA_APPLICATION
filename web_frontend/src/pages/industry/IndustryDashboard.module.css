@@ -1255,33 +1255,71 @@
 
 @media (max-width: 768px) {
   .pageContainer {
-    padding: 0.85rem;
+    padding: 0.85rem 0.85rem 6rem 0.85rem;
     gap: 1rem;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
-  .welcomeCard {
+  .heroSection {
+    display: flex;
+    flex-direction: column;
     padding: 1.25rem 1rem;
+    width: 100%;
+    box-sizing: border-box;
+    gap: 1.25rem;
+    border-radius: 16px;
+  }
+  .heroLeftContent {
+    width: 100%;
+    max-width: 100%;
   }
   .welcomeTitle {
-    font-size: 1.25rem;
+    font-size: 1.3rem;
+    line-height: 1.2;
+  }
+  .heroDescription {
+    font-size: 0.8rem;
   }
   .heroActionRow {
     flex-direction: column;
     width: 100%;
+    gap: 0.65rem;
   }
   .primaryPostBtn,
-  .secondaryViewBidsBtn {
+  .secondaryExploreBtn {
     width: 100%;
     justify-content: center;
+    text-align: center;
+    box-sizing: border-box;
+  }
+  .heroRightCard {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 1rem;
   }
   .statsBar {
     grid-template-columns: 1fr 1fr;
     gap: 0.65rem;
+    width: 100%;
   }
   .statCard {
     padding: 0.85rem 0.75rem;
+    box-sizing: border-box;
   }
   .statValue {
     font-size: 1.35rem;
+  }
+  .dashboardGrid {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 1rem;
+  }
+  .leftCol,
+  .rightCol {
+    width: 100%;
+    max-width: 100%;
   }
   .requirementRowCard {
     flex-direction: column;

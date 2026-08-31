@@ -1,19 +1,45 @@
-/* Merchant Slim Top Header */
 .topHeader {
-  position: sticky;
+  position: fixed;
   top: 0;
   right: 0;
+  left: 240px;
   height: 64px;
   background-color: #ffffff;
   border-bottom: 1px solid #edf2f7;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 1.75rem;
-  z-index: 100;
+  padding: 0 1.25rem;
+  z-index: 1000;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
-  transition: all 0.25s ease;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, left 0.25s ease;
   box-sizing: border-box;
+  transform: translateY(0);
+}
+
+.topHeaderHidden {
+  transform: translateY(-100%) !important;
+  box-shadow: none !important;
+}
+
+.topHeaderScrolled {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+@media (max-width: 1024px) {
+  .topHeader {
+    left: 72px;
+  }
+}
+
+@media (max-width: 768px) {
+  .topHeader {
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    height: 58px;
+    padding: 0 0.75rem;
+  }
 }
 
 .leftCol {
@@ -33,7 +59,8 @@
 .rightActions {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.65rem;
+  margin-left: auto;
 }
 
 .addProductBtn {
@@ -278,10 +305,14 @@
   }
 
   .mobileBrandTitle {
-    font-size: 1.02rem;
+    font-size: 1.15rem;
     font-weight: 900;
     letter-spacing: -0.02em;
     line-height: 1.1;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 3px;
   }
 
   .brandTitleScrap {
@@ -292,23 +323,15 @@
     color: #f59e0b;
   }
 
-  .mobileRoleBadge {
-    background: #fbc21a;
-    color: #0f172a;
-    font-size: 0.55rem;
-    font-weight: 900;
-    padding: 1px 4px;
-    border-radius: 3px;
-    letter-spacing: 0.05em;
-  }
-
   .mobileShopName {
-    font-size: 0.55rem;
+    font-size: 0.38rem;
     color: #64748b;
-    font-weight: 800;
-    letter-spacing: 0.05em;
+    font-weight: 700;
+    letter-spacing: 0.01em;
     line-height: 1;
     text-transform: uppercase;
+    white-space: nowrap;
+    opacity: 0.9;
   }
 
   .userInfo {

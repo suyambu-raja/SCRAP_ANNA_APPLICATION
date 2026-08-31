@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
   Bell,
@@ -15,6 +15,45 @@ import styles from './IndustryTopHeader.module.css';
 export function IndustryTopHeader() {
   const location = useLocation();
   const [showNotifications, setShowNotifications] = useState(false);
+
+  const [isVisible, setIsVisible] = useState(true);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  // Smart Hide on Scroll Down, Immediate Reveal on Scroll Up (Backward)
+  useEffect(() => {
+    let lastScrollY = window.scrollY || document.documentElement.scrollTop;
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY || document.documentElement.scrollTop;
+      const delta = currentScrollY - lastScrollY;
+
+      // Always visible when near the top
+      if (currentScrollY <= 30) {
+        setIsVisible(true);
+        setIsScrolled(false);
+      } else {
+        setIsScrolled(true);
+        // Scrolling UP (Backward) -> Immediately show
+        if (delta < -1) {
+          setIsVisible(true);
+        }
+        // Scrolling DOWN -> Slide navbar up out of view
+        else if (delta > 4 && currentScrollY > 50) {
+          setIsVisible(false);
+        }
+      }
+
+      lastScrollY = currentScrollY;
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    document.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      document.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   // Dynamic Page Title mapping
   const getPageMeta = () => {
@@ -46,7 +85,11 @@ export function IndustryTopHeader() {
   const pageMeta = getPageMeta();
 
   return (
-    <header className={styles.topHeader}>
+    <header
+      className={`${styles.topHeader} ${!isVisible ? styles.topHeaderHidden : ''} ${
+        isScrolled ? styles.topHeaderScrolled : ''
+      }`}
+    >
       {/* 1. Left: Mobile Brand Logo & Name / Desktop Page Meta */}
       <div className={styles.titleCol}>
         <Link to="/industry/dashboard" className={styles.mobileBrandLink}>
@@ -57,9 +100,8 @@ export function IndustryTopHeader() {
                 <span className={styles.brandTitleScrap}>Scrap </span>
                 <span className={styles.brandTitleAnna}>Anna</span>
               </span>
-              <span className={styles.mobileRoleBadge}>INDUSTRY</span>
             </div>
-            <span className={styles.mobileBrandTagline}>Enterprise Scrap Portal</span>
+            <span className={styles.mobileShopName}>CONNECT • COLLECT • RECYCLE</span>
           </div>
         </Link>
 

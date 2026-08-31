@@ -152,6 +152,24 @@
   color: var(--color-error);
 }
 
+@media (max-width: 768px) {
+  .container {
+    bottom: calc(70px + env(safe-area-inset-bottom, 0px));
+    right: 0.65rem;
+    z-index: 1001;
+  }
+
+  .toggleBtn {
+    padding: 0.35rem 0.65rem;
+    font-size: 0.685rem;
+    gap: 0.35rem;
+  }
+
+  .popover {
+    width: 260px;
+  }
+}
+
 @media (min-width: 1024px) {
   .container {
     bottom: 1.5rem;

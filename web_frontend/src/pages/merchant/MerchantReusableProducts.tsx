@@ -18,6 +18,10 @@ import {
   Plus,
   CheckCircle2,
   Sparkles,
+  RefreshCw,
+  X,
+  Phone,
+  MessageSquare,
 } from 'lucide-react';
 import AddProductModal from './AddProductModal';
 import styles from './MerchantReusableProducts.module.css';
@@ -153,6 +157,7 @@ export default function MerchantReusableProducts() {
   const [favorites, setFavorites] = useState<Record<string, boolean>>({});
   const [activePage, setActivePage] = useState(1);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [detailsProduct, setDetailsProduct] = useState<ProductItem | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const triggerToast = (msg: string) => {
@@ -194,7 +199,10 @@ export default function MerchantReusableProducts() {
       {/* Page Header */}
       <div className={styles.headerRow}>
         <div className={styles.headerLeft}>
-          <span className={styles.headerIconLeaf}>🍃</span>
+          <div className={styles.animatedHeaderBadge} title="Reusable Circular Marketplace">
+            <div className={styles.pulseRing} />
+            <RefreshCw size={20} className={styles.spinIcon} />
+          </div>
           <div className={styles.titleGroup}>
             <h1 className={styles.pageTitle}>Reusable Products</h1>
             <p className={styles.pageSubtitle}>
@@ -216,49 +224,49 @@ export default function MerchantReusableProducts() {
       {/* 4 Summary Stat Cards */}
       <div className={styles.statsGrid}>
         <div className={styles.statCard}>
-          <div className={`${styles.statIconCircle} ${styles.iconBlue}`}>
-            <ShieldCheck size={22} />
-          </div>
-          <div className={styles.statContent}>
+          <div className={styles.statCardTopRow}>
             <span className={styles.statLabel}>Total Products</span>
-            <span className={styles.statValue}>32</span>
-            <span className={styles.statSublabel}>
-              <span className={styles.sublabelGreen}>🍃 Active listings</span>
-            </span>
+            <div className={styles.statIconCircle}>
+              <ShieldCheck size={18} />
+            </div>
+          </div>
+          <div className={styles.statValue}>32</div>
+          <div className={styles.statSublabel}>
+            <span className={styles.sublabelGreen}>✓ Active listings</span>
           </div>
         </div>
 
         <div className={styles.statCard}>
-          <div className={`${styles.statIconCircle} ${styles.iconPurple}`}>
-            <Eye size={22} />
-          </div>
-          <div className={styles.statContent}>
+          <div className={styles.statCardTopRow}>
             <span className={styles.statLabel}>Total Views</span>
-            <span className={styles.statValue}>1,245</span>
-            <span className={styles.statSublabel}>This Month 🍃</span>
+            <div className={styles.statIconCircle}>
+              <Eye size={18} />
+            </div>
           </div>
+          <div className={styles.statValue}>1,245</div>
+          <div className={styles.statSublabel}>This Month</div>
         </div>
 
         <div className={styles.statCard}>
-          <div className={`${styles.statIconCircle} ${styles.iconAmber}`}>
-            <MessageCircle size={22} />
-          </div>
-          <div className={styles.statContent}>
+          <div className={styles.statCardTopRow}>
             <span className={styles.statLabel}>Total Inquiries</span>
-            <span className={styles.statValue}>86</span>
-            <span className={styles.statSublabel}>This Month 🍃</span>
+            <div className={styles.statIconCircle}>
+              <MessageCircle size={18} />
+            </div>
           </div>
+          <div className={styles.statValue}>86</div>
+          <div className={styles.statSublabel}>This Month</div>
         </div>
 
         <div className={styles.statCard}>
-          <div className={`${styles.statIconCircle} ${styles.iconGreen}`}>
-            <ShoppingBag size={22} />
-          </div>
-          <div className={styles.statContent}>
+          <div className={styles.statCardTopRow}>
             <span className={styles.statLabel}>Total Sales</span>
-            <span className={styles.statValue}>18</span>
-            <span className={styles.statSublabel}>This Month 🍃</span>
+            <div className={styles.statIconCircle}>
+              <ShoppingBag size={18} />
+            </div>
           </div>
+          <div className={styles.statValue}>18</div>
+          <div className={styles.statSublabel}>This Month</div>
         </div>
       </div>
 
@@ -378,7 +386,11 @@ export default function MerchantReusableProducts() {
                   </div>
 
                   <div className={styles.cardActionsRow}>
-                    <button type="button" className={styles.viewDetailsBtn}>
+                    <button
+                      type="button"
+                      className={styles.viewDetailsBtn}
+                      onClick={() => setDetailsProduct(product)}
+                    >
                       View Details
                     </button>
                     <button
@@ -540,6 +552,137 @@ export default function MerchantReusableProducts() {
           </div>
         </aside>
       </div>
+
+      {/* Product Details Modal */}
+      {detailsProduct && (
+        <div className={styles.modalOverlay} onClick={() => setDetailsProduct(null)}>
+          <div
+            className={styles.detailsModalCard}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className={styles.detailsModalHeader}>
+              <div className={styles.detailsHeaderLeft}>
+                <span className={styles.detailsCategoryPill}>
+                  {detailsProduct.categoryIcon} {detailsProduct.category}
+                </span>
+                <span
+                  className={
+                    detailsProduct.status === 'Active'
+                      ? styles.badgeActive
+                      : styles.badgeLowStock
+                  }
+                >
+                  {detailsProduct.status}
+                </span>
+              </div>
+              <button
+                type="button"
+                className={styles.modalCloseBtn}
+                onClick={() => setDetailsProduct(null)}
+                aria-label="Close modal"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className={styles.detailsModalBody}>
+              {/* Product Image Preview */}
+              <div className={styles.detailsImgFrame}>
+                <img
+                  src={detailsProduct.image}
+                  alt={detailsProduct.name}
+                  className={styles.detailsModalImg}
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = '/logo.png';
+                  }}
+                />
+              </div>
+
+              {/* Product Name & Price */}
+              <div className={styles.detailsTitleSection}>
+                <h2 className={styles.detailsProductTitle}>{detailsProduct.name}</h2>
+                <div className={styles.detailsPriceTag}>{detailsProduct.price}</div>
+              </div>
+
+              {/* Specs Grid */}
+              <div className={styles.detailsSpecsGrid}>
+                <div className={styles.specBox}>
+                  <span className={styles.specLabel}>Stock Status</span>
+                  <strong className={styles.specValue}>{detailsProduct.stockText}</strong>
+                </div>
+                <div className={styles.specBox}>
+                  <span className={styles.specLabel}>Location</span>
+                  <strong className={styles.specValue}>📍 {detailsProduct.location}</strong>
+                </div>
+                <div className={styles.specBox}>
+                  <span className={styles.specLabel}>Listing Type</span>
+                  <strong className={styles.specValue}>Verified Reusable</strong>
+                </div>
+                <div className={styles.specBox}>
+                  <span className={styles.specLabel}>Direct Inquiries</span>
+                  <strong className={styles.specValueGreen}>✓ Enabled</strong>
+                </div>
+              </div>
+
+              {/* Description */}
+              <div className={styles.detailsDescSection}>
+                <h4 className={styles.descHeading}>Product Description</h4>
+                <p className={styles.descText}>
+                  {detailsProduct.description ||
+                    'High quality refurbished industrial reusable product inspected and certified for direct commercial reuse. Available for immediate pickup or dispatch.'}
+                </p>
+              </div>
+
+              {/* Contact / Pickup Info */}
+              <div className={styles.detailsContactBox}>
+                <div className={styles.contactRow}>
+                  <MapPin size={16} className={styles.contactIcon} />
+                  <div>
+                    <span className={styles.contactLabel}>Pickup Address</span>
+                    <p className={styles.contactText}>
+                      {detailsProduct.address ||
+                        '24, 5th Main Road, SIDCO Industrial Estate, Guindy, Chennai – 600032'}
+                    </p>
+                  </div>
+                </div>
+                <div className={styles.contactRow}>
+                  <Phone size={16} className={styles.contactIcon} />
+                  <div>
+                    <span className={styles.contactLabel}>Contact Helpline</span>
+                    <p className={styles.contactText}>
+                      {detailsProduct.contactNumber || '+91 98401 23456'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Modal Footer Actions */}
+            <div className={styles.detailsModalFooter}>
+              <button
+                type="button"
+                className={styles.modalSecondaryBtn}
+                onClick={() => setDetailsProduct(null)}
+              >
+                Close
+              </button>
+              <button
+                type="button"
+                className={styles.modalPrimaryBtn}
+                onClick={() => {
+                  triggerToast(`Inquiry desk opened for ${detailsProduct.name}`);
+                  setDetailsProduct(null);
+                }}
+              >
+                <MessageSquare size={16} />
+                <span>Manage Inquiries</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Add New Product Modal */}
       <AddProductModal

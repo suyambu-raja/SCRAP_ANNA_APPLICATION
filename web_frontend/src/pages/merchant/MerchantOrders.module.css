@@ -2900,13 +2900,38 @@
 
 @media (max-width: 768px) {
   .mainContainer {
-    padding: 0.75rem 0.75rem 2rem 0.75rem;
+    padding: 0.85rem 1rem 2.5rem 1rem;
+    gap: 1rem;
+  }
+
+  .ordersLayoutGrid {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 100%;
+    gap: 1rem;
+  }
+
+  .mainCol {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
   }
 
   .pageHeaderRow {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.5rem;
+    gap: 0.35rem;
+  }
+
+  .pageTitle {
+    font-size: 1.5rem;
+    line-height: 1.15;
+  }
+
+  .pageSubtitle {
+    font-size: 0.825rem;
+    line-height: 1.4;
   }
 
   .statsStripGrid {
@@ -2914,7 +2939,7 @@
   }
 
   .sidebarCol {
-    display: none; /* Hide heavy desktop filter sidebar on mobile */
+    display: none !important; /* Hide heavy desktop filter sidebar on mobile */
   }
 
   .tabsBar {

@@ -1,12 +1,11 @@
 .marketCard {
   background: #FFFFFF;
-  border: 1px solid #E5E7EB;
-  border-bottom: 3.5px solid #FBC21A;
+  border: 1.5px solid #FBC21A;
   border-radius: 14px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 2px 10px rgba(251, 194, 26, 0.12);
   transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
               box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1),
               border-color 0.22s ease;

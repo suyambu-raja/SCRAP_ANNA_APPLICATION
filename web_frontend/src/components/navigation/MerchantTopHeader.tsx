@@ -2,7 +2,6 @@ import { useState, useRef, useEffect } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import {
   Bell,
-  Globe,
   Store,
   ChevronDown,
   User,
@@ -25,6 +24,10 @@ export function MerchantTopHeader() {
   const user = useAuthStore((s) => s.user);
   const logout = useAuthStore((s) => s.logout);
 
+  const [isVisible, setIsVisible] = useState(true);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const lastScrollYRef = useRef(0);
+
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -33,6 +36,42 @@ export function MerchantTopHeader() {
     }
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Smart Hide on Scroll Down, Immediate Reveal on Scroll Up (Backward)
+  useEffect(() => {
+    let lastScrollY = window.scrollY || document.documentElement.scrollTop;
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY || document.documentElement.scrollTop;
+      const delta = currentScrollY - lastScrollY;
+
+      // Always visible when near the top
+      if (currentScrollY <= 30) {
+        setIsVisible(true);
+        setIsScrolled(false);
+      } else {
+        setIsScrolled(true);
+        // Scrolling UP (Backward) -> Immediately show
+        if (delta < -1) {
+          setIsVisible(true);
+        }
+        // Scrolling DOWN -> Slide navbar up out of view
+        else if (delta > 4 && currentScrollY > 50) {
+          setIsVisible(false);
+          setDropdownOpen(false);
+        }
+      }
+
+      lastScrollY = currentScrollY <= 0 ? 0 : currentScrollY;
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    document.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      document.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   const handleLogout = () => {
@@ -56,7 +95,11 @@ export function MerchantTopHeader() {
   };
 
   return (
-    <header className={styles.topHeader}>
+    <header
+      className={`${styles.topHeader} ${!isVisible ? styles.topHeaderHidden : ''} ${
+        isScrolled ? styles.topHeaderScrolled : ''
+      }`}
+    >
       {/* Left: Mobile Brand Logo & Name / Desktop Dynamic Page Title */}
       <div className={styles.leftCol}>
         <Link to="/dashboard/merchant" className={styles.mobileBrandLink}>
@@ -67,7 +110,6 @@ export function MerchantTopHeader() {
                 <span className={styles.brandTitleScrap}>Scrap </span>
                 <span className={styles.brandTitleAnna}>Anna</span>
               </span>
-              <span className={styles.mobileRoleBadge}>MERCHANT</span>
             </div>
             <span className={styles.mobileShopName}>CONNECT • COLLECT • RECYCLE</span>
           </div>
@@ -83,16 +125,6 @@ export function MerchantTopHeader() {
             <span>Add New Product</span>
           </button>
         )}
-        {/* Language Globe */}
-        <button
-          type="button"
-          className={styles.iconBtn}
-          title="Language: English"
-          aria-label="Change language"
-          onClick={() => { }}
-        >
-          <Globe size={18} />
-        </button>
 
         {/* Notification Bell */}
         <button
