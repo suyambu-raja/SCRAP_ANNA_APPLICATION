@@ -6,7 +6,8 @@ from bidding.views import (
     SubmitOfferView,
     MyOffersView,
     CloseBiddingWindowView,
-    FinalizeCompanyBillView
+    FinalizeCompanyBillView,
+    OfferRouteView,
 )
 
 app_name = 'bidding'
@@ -20,4 +21,5 @@ urlpatterns = [
     
     path('offers/mine/', MyOffersView.as_view(), name='my-offers'),
     path('offers/<uuid:company_offer_id>/finalize/', FinalizeCompanyBillView.as_view(), name='finalize-company-bill'),
+    path('offers/<uuid:company_offer_id>/route/', OfferRouteView.as_view(), name='offer-route'),
 ]

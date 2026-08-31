@@ -23,6 +23,8 @@ from bidding.services import (
     close_bidding_window,
     finalize_company_bill
 )
+from accounts.services import get_effective_merchant_profile
+from maps.services import get_route_and_eta
 
 logger = logging.getLogger(__name__)
 
@@ -167,3 +169,45 @@ class FinalizeCompanyBillView(APIView):
         )
         
         return Response(CompanyBillSerializer(bill).data, status=status.HTTP_201_CREATED)
+
+
+class OfferRouteView(APIView):
+    """
+    Merchant endpoint: returns the driving route and ETA from the merchant's
+    registered profile location to the pickup address of a won CompanyOffer.
+
+    Architecture constraint (PRD §11.2):
+        On-demand "show me the route to my job" action. The route is only
+        meaningful once the merchant has won the bid — a pending or losing
+        offer has no committed job to navigate to.
+
+    Ownership: only the merchant who submitted this offer may fetch its route
+    (same check as FinalizeCompanyBillView).
+    """
+    permission_classes = [IsMerchantRole]
+
+    def get(self, request, company_offer_id):
+        try:
+            offer = CompanyOffer.objects.select_related("pickup_request").get(
+                id=company_offer_id
+            )
+        except CompanyOffer.DoesNotExist:
+            raise ValueError(f"CompanyOffer {company_offer_id} not found.")
+
+        if offer.merchant != request.user:
+            raise PermissionError("You are not the merchant who owns this offer.")
+
+        if not offer.is_winner:
+            raise ValueError(
+                "Route lookup is only available for winning offers. "
+                "This offer has not been selected as the winner."
+            )
+
+        profile = get_effective_merchant_profile(request.user)
+        result = get_route_and_eta(
+            origin_lat=profile.latitude,
+            origin_lng=profile.longitude,
+            dest_lat=offer.pickup_request.latitude,
+            dest_lng=offer.pickup_request.longitude,
+        )
+        return Response(result, status=status.HTTP_200_OK)

@@ -4,7 +4,8 @@ from appliances.views import (
     MyApplianceListingsView,
     VisibleListingsForMerchantView,
     AcceptListingView,
-    RecordFinalPriceView
+    RecordFinalPriceView,
+    ListingRouteView,
 )
 
 app_name = 'appliances'
@@ -15,4 +16,5 @@ urlpatterns = [
     path('listings/visible/', VisibleListingsForMerchantView.as_view(), name='visible-listings'),
     path('listings/<uuid:listing_id>/accept/', AcceptListingView.as_view(), name='accept-listing'),
     path('listings/<uuid:listing_id>/record-price/', RecordFinalPriceView.as_view(), name='record-final-price'),
+    path('listings/<uuid:listing_id>/route/', ListingRouteView.as_view(), name='listing-route'),
 ]

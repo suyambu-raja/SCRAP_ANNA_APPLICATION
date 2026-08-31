@@ -17,6 +17,8 @@ from appliances.services import (
     accept_listing,
     record_final_price
 )
+from accounts.services import get_effective_merchant_profile
+from maps.services import get_route_and_eta
 
 logger = logging.getLogger(__name__)
 
@@ -101,3 +103,47 @@ class RecordFinalPriceView(APIView):
         )
         
         return Response(ApplianceBillSerializer(bill).data, status=status.HTTP_201_CREATED)
+
+
+class ListingRouteView(APIView):
+    """
+    Merchant endpoint: returns the driving route and ETA from the merchant's
+    registered profile location to the user's registered address for an
+    accepted appliance listing.
+
+    Architecture constraint (PRD §11.2):
+        On-demand "show me the route to my job" action. Only callable after
+        the merchant has accepted the listing. Must NEVER be called during
+        discovery or matching.
+
+    Ownership: only the merchant who accepted this listing may fetch its route
+    (same check pattern as RecordFinalPriceView via accept_listing service).
+
+    Destination: listing.user.user_profile.latitude / longitude
+        The UserProfile is a OneToOne on Account (related_name='user_profile')
+        and holds the household user's registered address coordinates.
+    """
+    permission_classes = [IsVerifiedMerchant]
+
+    def get(self, request, listing_id):
+        try:
+            listing = ApplianceListing.objects.select_related(
+                "user__user_profile"
+            ).get(id=listing_id)
+        except ApplianceListing.DoesNotExist:
+            raise ValueError(f"ApplianceListing {listing_id} not found.")
+
+        if listing.accepted_merchant != request.user:
+            raise PermissionError(
+                "You are not the merchant who accepted this listing."
+            )
+
+        profile = get_effective_merchant_profile(request.user)
+        user_profile = listing.user.user_profile
+        result = get_route_and_eta(
+            origin_lat=profile.latitude,
+            origin_lng=profile.longitude,
+            dest_lat=user_profile.latitude,
+            dest_lng=user_profile.longitude,
+        )
+        return Response(result, status=status.HTTP_200_OK)

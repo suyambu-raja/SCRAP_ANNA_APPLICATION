@@ -5,7 +5,8 @@ from pickups.views import (
     MerchantLeadsView,
     AcceptLeadView,
     RecordWeightAndPriceView,
-    ApplyRangeOverrideView
+    ApplyRangeOverrideView,
+    LeadRouteView,
 )
 
 app_name = 'pickups'
@@ -18,4 +19,5 @@ urlpatterns = [
     path('leads/mine/', MerchantLeadsView.as_view(), name='merchant-leads'),
     path('leads/<uuid:lead_id>/accept/', AcceptLeadView.as_view(), name='accept-lead'),
     path('leads/<uuid:lead_id>/record-weight-price/', RecordWeightAndPriceView.as_view(), name='record-weight-price'),
+    path('leads/<uuid:lead_id>/route/', LeadRouteView.as_view(), name='lead-route'),
 ]
