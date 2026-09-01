@@ -532,7 +532,7 @@ export default function MerchantMarketPrices() {
         )}
 
         {/* 3. Browse More Items in this Category Grid */}
-        {categoryMaterials.length > 1 && (
+        {categoryMaterials.length > 0 && (
           <section className={styles.relatedMaterialsSection}>
             <div className={styles.relatedSectionHeader}>
               <h3 className={styles.relatedSectionTitle}>
@@ -558,7 +558,12 @@ export default function MerchantMarketPrices() {
                       activePrice?.id === mat.id ? styles.relatedCardActive : '',
                     ].join(' ')}
                   >
-                    <PriceCard price={mat} yourPrice={matRate} onClick={() => handleSelectMaterial(mat.id, true)} />
+                    <PriceCard
+                      price={mat}
+                      yourPrice={matRate}
+                      isActive={activePrice?.id === mat.id}
+                      onClick={() => handleSelectMaterial(mat.id, true)}
+                    />
                   </div>
                 );
               })}

@@ -8,3 +8,4 @@ export { ErrorState } from './ErrorState';
 export { StatusBadge } from './StatusBadge';
 export { LanguageSelector } from './LanguageSelector';
 export { Navbar } from './Navbar';
+export { RequestAdditionalRoleModal } from './RequestAdditionalRoleModal';

@@ -26,7 +26,7 @@ export function HouseholdSidebar({ isCollapsed, onToggle }: HouseholdSidebarProp
   const mainNavLinks = [
     {
       id: 'dashboard',
-      label: 'Dashboard',
+      label: 'Home',
       to: '/household',
       icon: <LayoutDashboard size={19} />,
       isActive:
@@ -37,7 +37,7 @@ export function HouseholdSidebar({ isCollapsed, onToggle }: HouseholdSidebarProp
     },
     {
       id: 'market-rates',
-      label: 'Market Rates',
+      label: 'Market Prices',
       to: '/household/rates',
       icon: <TrendingUp size={19} />,
       isActive:
@@ -56,7 +56,7 @@ export function HouseholdSidebar({ isCollapsed, onToggle }: HouseholdSidebarProp
       label: 'Orders',
       to: '/household/orders',
       icon: <ShoppingBag size={19} />,
-      badge: '2',
+      badge: '1',
       isActive: location.pathname === '/household/orders',
     },
     {
@@ -67,17 +67,12 @@ export function HouseholdSidebar({ isCollapsed, onToggle }: HouseholdSidebarProp
       badge: '12',
       isActive: location.pathname.includes('/household/history'),
     },
-    {
-      id: 'notifications',
-      label: 'Notifications',
-      to: '/household/notifications',
-      icon: <Bell size={19} />,
-      badge: '3',
-      isActive: location.pathname.includes('/household/notifications'),
-    },
+  ];
+
+  const secondaryNavLinks = [
     {
       id: 'profile',
-      label: 'Household Profile',
+      label: 'My Profile',
       to: '/household/profile',
       icon: <User size={19} />,
       isActive: location.pathname.includes('/household/profile'),
@@ -92,7 +87,7 @@ export function HouseholdSidebar({ isCollapsed, onToggle }: HouseholdSidebarProp
     },
     {
       id: 'support',
-      label: 'Help & Support',
+      label: 'Support',
       to: '/household/support',
       icon: <Headphones size={19} />,
       isActive: location.pathname.includes('/household/support'),
@@ -135,6 +130,30 @@ export function HouseholdSidebar({ isCollapsed, onToggle }: HouseholdSidebarProp
 
         <nav className={styles.navLinksList}>
           {mainNavLinks.map((item) => (
+            <NavLink
+              key={item.id}
+              to={item.to}
+              className={`${styles.navItem} ${item.isActive ? styles.navItemActive : ''}`}
+              title={isCollapsed ? item.label : undefined}
+            >
+              <div className={styles.navItemIcon}>{item.icon}</div>
+
+              {!isCollapsed && (
+                <div className={styles.navItemContent}>
+                  <span className={styles.navItemLabel}>{item.label}</span>
+                  {item.badge && <span className={styles.navItemBadge}>{item.badge}</span>}
+                </div>
+              )}
+            </NavLink>
+          ))}
+        </nav>
+
+        <div className={styles.sectionHeading} style={{ marginTop: '0.75rem' }}>
+          {!isCollapsed ? 'ACCOUNT' : '•••'}
+        </div>
+
+        <nav className={styles.navLinksList}>
+          {secondaryNavLinks.map((item) => (
             <NavLink
               key={item.id}
               to={item.to}

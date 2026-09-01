@@ -79,6 +79,36 @@ import IndustryOrders from '@/pages/industry/IndustryOrders';
 import IndustryTransactions from '@/pages/industry/IndustryTransactions';
 import IndustryProfile from '@/pages/industry/IndustryProfile';
 
+import { useAuthStore } from '@/store/useAuthStore';
+
+function RootRedirect() {
+  const user = useAuthStore((s) => s.user);
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const isLoading = useAuthStore((s) => s.isLoading);
+
+  if (isLoading) return null;
+
+  if (isAuthenticated && user?.role) {
+    return <Navigate to={`/dashboard/${user.role}`} replace />;
+  }
+
+  return <Splash />;
+}
+
+function FallbackRedirect() {
+  const user = useAuthStore((s) => s.user);
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const isLoading = useAuthStore((s) => s.isLoading);
+
+  if (isLoading) return null;
+
+  if (isAuthenticated && user?.role) {
+    return <Navigate to={`/dashboard/${user.role}`} replace />;
+  }
+
+  return <Navigate to="/home" replace />;
+}
+
 function SuspenseWrap({ children }: { children: React.ReactNode }) {
   return <Suspense fallback={<LoadingSpinner text="Loading..." />}>{children}</Suspense>;
 }
@@ -88,7 +118,7 @@ export function AppRoutes() {
     <SuspenseWrap>
       <Routes>
         {/* Public Marketing & Informational Routes */}
-        <Route path="/" element={<Splash />} />
+        <Route path="/" element={<RootRedirect />} />
         <Route path="/language" element={<LanguageSelection />} />
         <Route path="/home" element={<Home />} />
         <Route path="/market-prices" element={<MarketPrices />} />
@@ -104,7 +134,7 @@ export function AppRoutes() {
         {/* ================================================================
             Household Dedicated Portal Shell (Graphite Sidebar + Top Header)
            ================================================================ */}
-        <Route element={<HouseholdLayout />}>
+        <Route element={<ProtectedRoute><HouseholdLayout /></ProtectedRoute>}>
           <Route path="/household" element={<HouseholdDashboard />} />
           <Route path="/dashboard/household" element={<HouseholdDashboard />} />
           <Route path="/household/home" element={<HouseholdDashboard />} />
@@ -190,10 +220,11 @@ export function AppRoutes() {
         {/* ================================================================
             Industry Dedicated Layout Shell (Sidebar + Slim Top Header)
            ================================================================ */}
-        <Route element={<IndustryLayout />}>
+        <Route element={<ProtectedRoute><IndustryLayout /></ProtectedRoute>}>
           {/* Dashboard */}
           <Route path="/industry" element={<IndustryDashboard />} />
           <Route path="/industry/dashboard" element={<IndustryDashboard />} />
+          <Route path="/dashboard/industry" element={<IndustryDashboard />} />
 
           {/* Market Prices */}
           <Route path="/industry/market-prices" element={<IndustryMarketPrices />} />
@@ -220,8 +251,8 @@ export function AppRoutes() {
           <Route path="/industry/profile" element={<IndustryProfile />} />
         </Route>
 
-        {/* Catch-all: Route back to Merchant Dashboard if authenticated or Home */}
-        <Route path="*" element={<Navigate to="/dashboard/merchant" replace />} />
+        {/* Catch-all: Route back to user role dashboard if authenticated, or Home if visitor */}
+        <Route path="*" element={<FallbackRedirect />} />
       </Routes>
     </SuspenseWrap>
   );

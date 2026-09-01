@@ -251,9 +251,11 @@ export default function RegisterRole() {
 
       // Navigate to role-specific dashboard
       if (res.user.role === 'industry') {
-        navigate('/industry/dashboard', { replace: true });
-      } else {
+        navigate('/dashboard/industry', { replace: true });
+      } else if (res.user.role === 'merchant') {
         navigate('/dashboard/merchant', { replace: true });
+      } else {
+        navigate('/dashboard/household', { replace: true });
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Registration failed. Please try again.');

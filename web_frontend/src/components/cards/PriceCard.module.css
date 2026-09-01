@@ -1,14 +1,15 @@
 .marketCard {
   background: #FFFFFF;
-  border: 1.5px solid #FBC21A;
-  border-radius: 14px;
+  border: 1.5px solid #E2E8F0;
+  border-bottom: 4px solid #FBC21A;
+  border-radius: 16px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 2px 10px rgba(251, 194, 26, 0.12);
-  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.22s ease;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+  transition: transform 0.2s ease,
+              box-shadow 0.2s ease,
+              border-color 0.2s ease;
   position: relative;
   text-decoration: none;
   cursor: pointer;
@@ -17,9 +18,14 @@
 }
 
 .marketCard:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.07);
-  border-color: #FBC21A;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+}
+
+.marketCardActive {
+  border: 2.5px solid #FBC21A !important;
+  border-bottom: 2.5px solid #FBC21A !important;
+  box-shadow: 0 8px 24px rgba(251, 194, 26, 0.18) !important;
 }
 
 /* 1. Large Image Area (occupies 55–60% of card visual height) */
@@ -78,6 +84,10 @@
   gap: 0.6rem;
   background: #FFFFFF;
   flex: 1;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 /* Title & Location Row */
@@ -86,10 +96,14 @@
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .materialTitle {
-  font-size: 1.08rem;
+  font-size: 1.05rem;
   font-weight: 800;
   color: #111827;
   text-transform: uppercase;
@@ -99,6 +113,8 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  min-width: 0;
+  flex: 1;
 }
 
 .locationBadge {
@@ -109,10 +125,12 @@
   font-weight: 600;
   color: #4B5563;
   flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .pinIcon {
   color: #9CA3AF;
+  flex-shrink: 0;
 }
 
 /* Subtle Divider */
@@ -128,6 +146,10 @@
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .rateBlockHeaderRow {
@@ -135,6 +157,10 @@
   align-items: center;
   justify-content: space-between;
   gap: 0.4rem;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .rateLabel {
@@ -143,6 +169,7 @@
   color: #9CA3AF;
   letter-spacing: 0.06em;
   text-transform: uppercase;
+  flex-shrink: 0;
 }
 
 .yourPricePill {
@@ -154,6 +181,7 @@
   padding: 1px 6px;
   border-radius: 6px;
   font-size: 0.72rem;
+  flex-shrink: 0;
 }
 
 .yourPricePillLabel {
@@ -170,20 +198,27 @@
   display: flex;
   align-items: baseline;
   gap: 0.25rem;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  flex-wrap: wrap;
 }
 
 .priceRange {
-  font-size: 1.55rem;
+  font-size: 1.45rem;
   font-weight: 800;
   color: #111827;
   letter-spacing: -0.03em;
   line-height: 1.1;
+  min-width: 0;
 }
 
 .priceUnit {
   font-size: 0.85rem;
   font-weight: 600;
   color: #6B7280;
+  flex-shrink: 0;
 }
 
 /* Timestamp Row */

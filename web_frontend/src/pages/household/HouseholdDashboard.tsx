@@ -4,7 +4,6 @@ import {
   ShieldCheck,
   TrendingUp,
   Plus,
-  ArrowRight,
   Calendar,
   CheckCircle2,
   IndianRupee,
@@ -12,13 +11,11 @@ import {
   Star,
   Send,
   Clock,
-  MapPin,
   ChevronRight,
   ChevronLeft,
   X,
   Eye,
   Maximize2,
-  Layers,
 } from 'lucide-react';
 import { useAuthStore } from '@/store/useAuthStore';
 import styles from './HouseholdDashboard.module.css';
@@ -30,70 +27,70 @@ interface LiveScrapRateItem {
   unit: string;
   trend: string;
   trendType: 'positive' | 'negative' | 'neutral';
-  type: 'iron' | 'copper' | 'aluminum' | 'plastic' | 'cardboard' | 'brass';
+  imageUrl: string;
   iconBg: string;
 }
 
 const LIVE_SCRAP_RATES: LiveScrapRateItem[] = [
   {
-    id: 'rate-1',
-    name: 'Scrap Iron (Heavy Melting Steel)',
-    price: '₹38.50',
+    id: 'COP_001',
+    name: 'Copper Scrap',
+    price: '₹720.00',
     unit: '/ kg',
     trend: '+1.8%',
     trendType: 'positive',
-    type: 'iron',
-    iconBg: '#F1F5F9',
-  },
-  {
-    id: 'rate-2',
-    name: 'Copper Scrap (Bright Wire)',
-    price: '₹720.00',
-    unit: '/ kg',
-    trend: '+1.5%',
-    trendType: 'positive',
-    type: 'copper',
+    imageUrl: '/scrap-copper.jpg',
     iconBg: '#FFF7ED',
   },
   {
-    id: 'rate-3',
-    name: 'Commercial Aluminium Scrap',
+    id: 'BRS_001',
+    name: 'Brass Scrap',
+    price: '₹490.00',
+    unit: '/ kg',
+    trend: '+1.5%',
+    trendType: 'positive',
+    imageUrl: '/scrap-brass.jpg',
+    iconBg: '#FEFCE8',
+  },
+  {
+    id: 'IRON_001',
+    name: 'Scrap Iron',
+    price: '₹42.00',
+    unit: '/ kg',
+    trend: '+2.5%',
+    trendType: 'positive',
+    imageUrl: '/scrap-iron.png',
+    iconBg: '#F1F5F9',
+  },
+  {
+    id: 'ALU_001',
+    name: 'household aluminium',
     price: '₹135.00',
     unit: '/ kg',
-    trend: '-0.8%',
-    trendType: 'negative',
-    type: 'aluminum',
+    trend: '+2.1%',
+    trendType: 'positive',
+    imageUrl: '/scrap-household-aluminium.png',
     iconBg: '#F8FAFC',
   },
   {
-    id: 'rate-4',
-    name: 'HDPE Blue Chemical Drums',
-    price: '₹380.00',
-    unit: '/ pc',
-    trend: '+2.1%',
+    id: 'PLS_007',
+    name: 'Mixed plastic',
+    price: '₹18.00',
+    unit: '/ kg',
+    trend: '+0.5%',
     trendType: 'positive',
-    type: 'plastic',
+    imageUrl: '/scrap-mixed-plastic.png',
     iconBg: '#EFF6FF',
   },
   {
-    id: 'rate-5',
-    name: 'Corrugated Packaging Cartons',
-    price: '₹14.50',
+    id: 'CRD_001',
+    name: 'carboard',
+    price: '₹13.00',
     unit: '/ kg',
-    trend: '0.0%',
-    trendType: 'neutral',
-    type: 'cardboard',
-    iconBg: '#FEF3C7',
-  },
-  {
-    id: 'rate-6',
-    name: 'Brass Honey Scrap',
-    price: '₹460.00',
-    unit: '/ kg',
-    trend: '+1.2%',
+    trend: '+1.0%',
     trendType: 'positive',
-    type: 'brass',
-    iconBg: '#FEFCE8',
+    imageUrl: '/scrap-cardboard.png',
+    iconBg: '#FEF3C7',
   },
 ];
 
@@ -204,6 +201,7 @@ const ACTIVE_PICKUPS: ActivePickup[] = [
 ];
 
 export function HouseholdDashboard() {
+  const navigate = useNavigate();
   const user = useAuthStore((s) => s.user);
   const displayName = user?.name || 'Ramesh Kumar';
 
@@ -277,70 +275,13 @@ export function HouseholdDashboard() {
 
   const handleBookOrder = (e: React.FormEvent) => {
     e.preventDefault();
-    setBookingSuccess(true);
-    setTimeout(() => {
-      setBookingSuccess(false);
-      setIsBookModalOpen(false);
-    }, 2000);
-  };
-
-  const renderRateThumb = (type: string) => {
-    switch (type) {
-      case 'copper':
-        return (
-          <img
-            src="/scrap-copper.jpg"
-            alt="Copper Scrap"
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-          />
-        );
-      case 'aluminum':
-        return (
-          <img
-            src="/scrap-household-aluminium.jpg"
-            alt="Aluminium Scrap"
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-          />
-        );
-      case 'brass':
-        return (
-          <img
-            src="/scrap-brass.jpg"
-            alt="Brass Scrap"
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-          />
-        );
-      case 'iron':
-        return (
-          <img
-            src="/scrap-iron.jpg"
-            alt="Iron Scrap"
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-          />
-        );
-      case 'plastic':
-        return (
-          <img
-            src="/scrap-plastic-barrel.jpg"
-            alt="Plastic Scrap"
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-          />
-        );
-      case 'cardboard':
-      default:
-        return (
-          <img
-            src="/scrap-cardboard.jpg"
-            alt="Cardboard Scrap"
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-          />
-        );
-    }
+    setIsBookModalOpen(false);
+    navigate('/household/post-scrap');
   };
 
   return (
     <div className={styles.pageContainer}>
-      {/* 1. HERO WELCOME SECTION (DARK GRAPHITE THEME MATCHING INDUSTRY SCREENSHOT) */}
+      {/* 1. HERO WELCOME SECTION (DARK GRAPHITE THEME) */}
       <section className={styles.heroSection}>
         <div className={styles.heroLeftContent}>
           <div className={styles.enterpriseBadgeRow}>
@@ -358,14 +299,10 @@ export function HouseholdDashboard() {
           </p>
 
           <div className={styles.heroActionRow}>
-            <button
-              type="button"
-              onClick={() => setIsBookModalOpen(true)}
-              className={styles.primaryPostBtn}
-            >
+            <Link to="/household/post-scrap" className={styles.primaryPostBtn}>
               <Plus size={16} />
               <span>Post Scrap</span>
-            </button>
+            </Link>
 
             <Link to="/household/rates" className={styles.secondaryRatesBtn}>
               <TrendingUp size={16} />
@@ -452,9 +389,6 @@ export function HouseholdDashboard() {
             <div className={styles.sectionHeaderRow}>
               <div className={styles.sectionTitleGroup}>
                 <h3 className={styles.sectionTitle}>Active Scrap Pickups</h3>
-                <p className={styles.sectionSub}>
-                  Your open doorstep scrap pickups with live executive tracking. Click photo for detailed vision.
-                </p>
               </div>
 
               <Link to="/household/orders" className={styles.viewAllLink}>
@@ -538,12 +472,12 @@ export function HouseholdDashboard() {
         </div>
 
         {/* Right Column: Household Market Prices Widget FIRST, then Share Your Review */}
-        <div className={styles.rightSectionCol} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-          {/* 1. Household Market Prices */}
+        <div className={styles.rightSectionCol}>
+          {/* 1. Market Prices */}
           <div className={styles.ratesSectionCard}>
             <div className={styles.ratesHeaderRow}>
               <div className={styles.ratesTitleGroup}>
-                <h3 className={styles.ratesMainTitle}>Household Market Prices</h3>
+                <h3 className={styles.ratesMainTitle}>Market Prices</h3>
                 <p className={styles.ratesSubtitle}>Chennai Doorstep Scrap Rates</p>
               </div>
 
@@ -568,7 +502,14 @@ export function HouseholdDashboard() {
                 >
                   <div className={styles.rateRowLeft}>
                     <div className={styles.rateRowThumb} style={{ background: item.iconBg }}>
-                      {renderRateThumb(item.type)}
+                      <img
+                        src={item.imageUrl}
+                        alt={item.name}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = '/logo.png';
+                        }}
+                      />
                     </div>
 
                     <div className={styles.rateRowMeta}>
@@ -599,7 +540,7 @@ export function HouseholdDashboard() {
             </div>
           </div>
 
-          {/* 2. Share Your Review Card (After Market Rates) */}
+          {/* 2. Share Your Review Card */}
           <div className={styles.reviewCard}>
             <div className={styles.reviewHeader}>
               <h3 className={styles.reviewTitle}>
@@ -674,260 +615,189 @@ export function HouseholdDashboard() {
                 type="button"
                 className={styles.lightboxCloseBtn}
                 onClick={() => setSelectedGalleryPickup(null)}
-                title="Close Photo Viewer (ESC)"
+                aria-label="Close Lightbox"
               >
                 <X size={20} />
               </button>
             </div>
 
-            {/* Main Active Photo Viewport */}
-            <div className={styles.lightboxMainStage}>
-              <img
-                src={selectedGalleryPickup.photos[activePhotoIndex]?.imageUrl}
-                alt={selectedGalleryPickup.photos[activePhotoIndex]?.title}
-                className={styles.lightboxActiveImg}
-              />
+            {/* Main Active Image Viewport */}
+            <div className={styles.lightboxViewer}>
+              <div className={styles.lightboxImageStage}>
+                <img
+                  src={selectedGalleryPickup.photos[activePhotoIndex]?.imageUrl}
+                  alt={selectedGalleryPickup.photos[activePhotoIndex]?.title}
+                  className={styles.lightboxMainImg}
+                />
 
-              {/* Navigation Chevrons */}
-              {selectedGalleryPickup.photos.length > 1 && (
-                <>
-                  <button
-                    type="button"
-                    className={`${styles.lightboxNavBtn} ${styles.navPrev}`}
-                    onClick={handlePrevPhoto}
-                    title="Previous Photo (Left Arrow)"
-                  >
-                    <ChevronLeft size={22} />
-                  </button>
+                {/* Arrow Nav Buttons */}
+                {selectedGalleryPickup.photos.length > 1 && (
+                  <>
+                    <button
+                      type="button"
+                      className={`${styles.lightboxNavArrow} ${styles.lightboxNavPrev}`}
+                      onClick={handlePrevPhoto}
+                      title="Previous Photo"
+                    >
+                      <ChevronLeft size={22} />
+                    </button>
 
-                  <button
-                    type="button"
-                    className={`${styles.lightboxNavBtn} ${styles.navNext}`}
-                    onClick={handleNextPhoto}
-                    title="Next Photo (Right Arrow)"
-                  >
-                    <ChevronRight size={22} />
-                  </button>
-                </>
-              )}
-
-              {/* Photo Counter Badge */}
-              <div className={styles.lightboxImgCount}>
-                {activePhotoIndex + 1} / {selectedGalleryPickup.photos.length}
+                    <button
+                      type="button"
+                      className={`${styles.lightboxNavArrow} ${styles.lightboxNavNext}`}
+                      onClick={handleNextPhoto}
+                      title="Next Photo"
+                    >
+                      <ChevronRight size={22} />
+                    </button>
+                  </>
+                )}
               </div>
 
-              {/* Caption Overlay */}
-              <div className={styles.lightboxCaptionBar}>
-                <h4 className={styles.captionItemName}>
-                  {selectedGalleryPickup.photos[activePhotoIndex]?.title} ({selectedGalleryPickup.photos[activePhotoIndex]?.weight})
+              {/* Photo Description Metadata Caption Box */}
+              <div className={styles.photoCaptionBox}>
+                <div className={styles.captionTopRow}>
+                  <span className={styles.photoIndexTag}>
+                    PHOTO {activePhotoIndex + 1} OF {selectedGalleryPickup.photos.length}
+                  </span>
+                  <span className={styles.photoWeightBadge}>
+                    {selectedGalleryPickup.photos[activePhotoIndex]?.weight}
+                  </span>
+                </div>
+
+                <h4 className={styles.photoCaptionTitle}>
+                  {selectedGalleryPickup.photos[activePhotoIndex]?.title}
                 </h4>
-                <p className={styles.captionItemDetail}>
+
+                <p className={styles.photoRateInfo}>
                   {selectedGalleryPickup.photos[activePhotoIndex]?.rateInfo}
                 </p>
               </div>
             </div>
 
-            {/* Thumbnail Strip Selector */}
+            {/* Thumbnail Strip */}
             <div className={styles.lightboxThumbStrip}>
               {selectedGalleryPickup.photos.map((photo, idx) => (
                 <div
                   key={photo.id}
-                  className={`${styles.lightboxThumbItem} ${
-                    activePhotoIndex === idx ? styles.lightboxThumbItemActive : ''
+                  className={`${styles.stripThumbCard} ${
+                    idx === activePhotoIndex ? styles.stripThumbActive : ''
                   }`}
                   onClick={() => setActivePhotoIndex(idx)}
-                  title={photo.title}
                 >
-                  <img src={photo.imageUrl} alt={photo.title} className={styles.lightboxThumbImg} />
+                  <img
+                    src={photo.imageUrl}
+                    alt={photo.title}
+                    className={styles.stripThumbImg}
+                  />
+                  <div className={styles.stripThumbLabel}>
+                    <span className={styles.stripThumbWeight}>{photo.weight}</span>
+                  </div>
                 </div>
               ))}
-            </div>
-
-            {/* Lightbox Footer Bar */}
-            <div className={styles.lightboxBottomBar}>
-              <div className={styles.lightboxMetaCol}>
-                <div>
-                  <span style={{ fontSize: '0.72rem', color: '#94a3b8', display: 'block' }}>ESTIMATED PAYOUT</span>
-                  <span className={styles.lightboxPayoutText}>₹{selectedGalleryPickup.estimatedAmount.toLocaleString()}</span>
-                </div>
-                <div style={{ borderLeft: '1px solid #334155', paddingLeft: '1rem' }}>
-                  <span style={{ fontSize: '0.72rem', color: '#94a3b8', display: 'block' }}>EXECUTIVE ASSIGNED</span>
-                  <span style={{ fontWeight: 700, color: '#f8fafc' }}>{selectedGalleryPickup.executiveInfo}</span>
-                </div>
-              </div>
-
-              <div style={{ display: 'flex', gap: '0.5rem' }}>
-                <Link
-                  to="/household/orders"
-                  className={styles.primaryPostBtn}
-                  style={{ padding: '0.55rem 1.15rem', fontSize: '0.8rem' }}
-                >
-                  <Truck size={15} />
-                  <span>Track Vehicle Live</span>
-                </Link>
-                <button
-                  type="button"
-                  onClick={() => setSelectedGalleryPickup(null)}
-                  className={styles.secondaryRatesBtn}
-                  style={{ padding: '0.55rem 1rem', fontSize: '0.8rem' }}
-                >
-                  Close Viewer
-                </button>
-              </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* POST SCRAP MODAL */}
+      {/* QUICK POST SCRAP MODAL */}
       {isBookModalOpen && (
         <div className={styles.modalOverlay} onClick={() => setIsBookModalOpen(false)}>
-          <div className={styles.modalBox} onClick={(e) => e.stopPropagation()}>
+          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
             <div className={styles.modalHeader}>
-              <h3 className={styles.modalTitle}>Post Scrap for Doorstep Pickup</h3>
+              <div>
+                <h3 className={styles.modalTitle}>Post Doorstep Scrap</h3>
+                <p className={styles.modalSubtitle}>
+                  Schedule doorstep pickup with verified digital weighing
+                </p>
+              </div>
               <button
                 type="button"
-                className={styles.closeBtn}
+                className={styles.modalCloseBtn}
                 onClick={() => setIsBookModalOpen(false)}
               >
-                <X size={20} />
+                <X size={18} />
               </button>
             </div>
 
             {bookingSuccess ? (
-              <div style={{ textAlign: 'center', padding: '1.5rem 0' }}>
-                <CheckCircle2 size={54} color="#10b981" style={{ margin: '0 auto 1rem' }} />
-                <h4 style={{ margin: '0 0 0.5rem', fontSize: '1.2rem', fontWeight: 800 }}>
-                  Scrap Requirement Posted!
-                </h4>
-                <p style={{ color: '#64748b', fontSize: '0.88rem' }}>
-                  Our verified executive will arrive on {pickupDate} ({pickupSlot}).
+              <div className={styles.bookingSuccessState}>
+                <CheckCircle2 size={44} color="#10b981" />
+                <h4 className={styles.successTitle}>Scrap Posted Successfully!</h4>
+                <p className={styles.successDesc}>
+                  Nearby verified scrap executives have been notified. You can track this in Orders.
                 </p>
               </div>
             ) : (
-              <form
-                onSubmit={handleBookOrder}
-                style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
-              >
-                <div>
-                  <label
-                    style={{
-                      display: 'block',
-                      fontSize: '0.82rem',
-                      fontWeight: 700,
-                      color: '#334155',
-                      marginBottom: '0.35rem',
-                    }}
-                  >
-                    Primary Scrap Material
-                  </label>
+              <form onSubmit={handleBookOrder} className={styles.modalForm}>
+                <div className={styles.formGroup}>
+                  <label className={styles.formLabel}>Selected Scrap Material</label>
                   <input
                     type="text"
+                    className={styles.formInput}
                     value={selectedMaterial}
                     onChange={(e) => setSelectedMaterial(e.target.value)}
-                    style={{
-                      width: '100%',
-                      padding: '0.65rem',
-                      borderRadius: '8px',
-                      border: '1px solid #cbd5e1',
-                      boxSizing: 'border-box',
-                      fontWeight: 700,
-                    }}
-                  />
-                </div>
-
-                <div>
-                  <label
-                    style={{
-                      display: 'block',
-                      fontSize: '0.82rem',
-                      fontWeight: 700,
-                      color: '#334155',
-                      marginBottom: '0.35rem',
-                    }}
-                  >
-                    Approximate Weight (KG)
-                  </label>
-                  <input
-                    type="number"
-                    value={approxWeight}
-                    onChange={(e) => setApproxWeight(e.target.value)}
-                    style={{
-                      width: '100%',
-                      padding: '0.65rem',
-                      borderRadius: '8px',
-                      border: '1px solid #cbd5e1',
-                      boxSizing: 'border-box',
-                    }}
-                    min="1"
                     required
                   />
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                  <div>
-                    <label
-                      style={{
-                        display: 'block',
-                        fontSize: '0.82rem',
-                        fontWeight: 700,
-                        color: '#334155',
-                        marginBottom: '0.35rem',
-                      }}
-                    >
-                      Pickup Date
-                    </label>
+                <div className={styles.formRow}>
+                  <div className={styles.formGroup}>
+                    <label className={styles.formLabel}>Approx Weight (KG)</label>
                     <input
-                      type="date"
-                      value={pickupDate}
-                      onChange={(e) => setPickupDate(e.target.value)}
-                      style={{
-                        width: '100%',
-                        padding: '0.65rem',
-                        borderRadius: '8px',
-                        border: '1px solid #cbd5e1',
-                        boxSizing: 'border-box',
-                      }}
+                      type="number"
+                      className={styles.formInput}
+                      value={approxWeight}
+                      onChange={(e) => setApproxWeight(e.target.value)}
+                      placeholder="e.g. 15"
+                      min="1"
                       required
                     />
                   </div>
 
-                  <div>
-                    <label
-                      style={{
-                        display: 'block',
-                        fontSize: '0.82rem',
-                        fontWeight: 700,
-                        color: '#334155',
-                        marginBottom: '0.35rem',
-                      }}
-                    >
-                      Time Slot
-                    </label>
-                    <select
-                      value={pickupSlot}
-                      onChange={(e) => setPickupSlot(e.target.value)}
-                      style={{
-                        width: '100%',
-                        padding: '0.65rem',
-                        borderRadius: '8px',
-                        border: '1px solid #cbd5e1',
-                      }}
-                    >
-                      <option>Morning (09:00 AM - 12:00 PM)</option>
-                      <option>Afternoon (01:00 PM - 04:00 PM)</option>
-                      <option>Evening (04:00 PM - 07:00 PM)</option>
-                    </select>
+                  <div className={styles.formGroup}>
+                    <label className={styles.formLabel}>Preferred Date</label>
+                    <input
+                      type="date"
+                      className={styles.formInput}
+                      value={pickupDate}
+                      onChange={(e) => setPickupDate(e.target.value)}
+                      required
+                    />
                   </div>
                 </div>
 
-                <button
-                  type="submit"
-                  className={styles.primaryPostBtn}
-                  style={{ width: '100%', justifyContent: 'center', marginTop: '0.5rem' }}
-                >
-                  Submit Post Scrap
-                </button>
+                <div className={styles.formGroup}>
+                  <label className={styles.formLabel}>Time Slot</label>
+                  <select
+                    className={styles.formSelect}
+                    value={pickupSlot}
+                    onChange={(e) => setPickupSlot(e.target.value)}
+                  >
+                    <option value="Morning (09:00 AM - 12:00 PM)">
+                      Morning (09:00 AM - 12:00 PM)
+                    </option>
+                    <option value="Afternoon (12:00 PM - 04:00 PM)">
+                      Afternoon (12:00 PM - 04:00 PM)
+                    </option>
+                    <option value="Evening (04:00 PM - 07:00 PM)">
+                      Evening (04:00 PM - 07:00 PM)
+                    </option>
+                  </select>
+                </div>
+
+                <div className={styles.modalFooter}>
+                  <button
+                    type="button"
+                    className={styles.modalCancelBtn}
+                    onClick={() => setIsBookModalOpen(false)}
+                  >
+                    Cancel
+                  </button>
+                  <button type="submit" className={styles.modalSubmitBtn}>
+                    <span>Schedule Pickup</span>
+                  </button>
+                </div>
               </form>
             )}
           </div>

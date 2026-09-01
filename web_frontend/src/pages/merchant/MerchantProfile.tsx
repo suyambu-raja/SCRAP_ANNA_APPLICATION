@@ -20,11 +20,18 @@ import {
   Receipt,
   HelpCircle,
   Settings,
+  ShieldCheck,
+  Plus,
+  LogOut,
 } from 'lucide-react';
+import { useAuthStore } from '@/store/useAuthStore';
+import { RequestAdditionalRoleModal } from '@/components/common';
 import styles from './MerchantProfile.module.css';
 
 export default function MerchantProfile() {
   const [activeTab, setActiveTab] = useState<'overview' | 'documents' | 'business' | 'bank' | 'preferences'>('overview');
+  const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
+  const logout = useAuthStore((s) => s.logout);
 
   const scrapTypes = [
     'Iron',
@@ -477,6 +484,61 @@ export default function MerchantProfile() {
             </div>
           </div>
 
+          {/* Card: Account Role & Multi-Profile */}
+          <div className={styles.sidebarCard}>
+            <h3 className={styles.sidebarCardTitle}>Account Role & Verification</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '0.5rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.65rem 0.85rem', background: '#F8FAFC', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
+                <span style={{ fontSize: '0.8rem', fontWeight: 750, color: '#0F172A' }}>Merchant Profile</span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem', background: '#DCFCE7', color: '#15803D', padding: '0.2rem 0.5rem', borderRadius: '6px', fontSize: '0.7rem', fontWeight: 750 }}>
+                  <ShieldCheck size={12} /> VERIFIED
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsRoleModalOpen(true)}
+                style={{
+                  background: '#0F172A',
+                  color: '#FBC21A',
+                  border: 'none',
+                  borderRadius: '8px',
+                  padding: '0.6rem 0.85rem',
+                  fontSize: '0.78rem',
+                  fontWeight: 800,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.4rem',
+                }}
+              >
+                <span>Request Additional Role</span>
+                <Plus size={14} />
+              </button>
+              <button
+                type="button"
+                onClick={logout}
+                style={{
+                  background: '#FEE2E2',
+                  border: '1px solid #FECACA',
+                  color: '#DC2626',
+                  borderRadius: '8px',
+                  padding: '0.5rem 0.85rem',
+                  fontSize: '0.78rem',
+                  fontWeight: 800,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.4rem',
+                }}
+              >
+                <LogOut size={14} />
+                <span>Logout</span>
+              </button>
+            </div>
+          </div>
+
           {/* Card 4: Need Help? */}
           <div className={styles.helpCard}>
             <h3 className={styles.sidebarCardTitle}>Need Help?</h3>
@@ -495,6 +557,12 @@ export default function MerchantProfile() {
           </div>
         </aside>
       </div>
+
+      {/* Request Additional Role Modal */}
+      <RequestAdditionalRoleModal
+        isOpen={isRoleModalOpen}
+        onClose={() => setIsRoleModalOpen(false)}
+      />
     </div>
   );
 }

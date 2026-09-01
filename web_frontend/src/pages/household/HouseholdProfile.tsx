@@ -20,8 +20,10 @@ import {
   Sparkles,
   CheckCircle2,
   X,
+  Store,
 } from 'lucide-react';
 import { useAuthStore } from '@/store/useAuthStore';
+import { RequestAdditionalRoleModal } from '@/components/common';
 import styles from './HouseholdProfile.module.css';
 
 interface SavedAddress {
@@ -58,6 +60,7 @@ export function HouseholdProfile() {
 
   // Tab State
   const [activeTab, setActiveTab] = useState<'personal' | 'addresses' | 'payment' | 'notifications'>('personal');
+  const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
 
   // Personal Info Form State
   const [fullName, setFullName] = useState(user?.name || 'Ramesh Kumar');
@@ -296,36 +299,69 @@ export function HouseholdProfile() {
             </form>
           </div>
 
-          {/* Right Side: Account Security Card */}
+          {/* Right Side: Account Security & Roles Card */}
           <div className={styles.contentCard}>
             <div className={styles.cardHeaderGroup}>
-              <h3 className={styles.cardTitle}>Account Security</h3>
+              <h3 className={styles.cardTitle}>Role & Account Security</h3>
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.85rem', background: '#f8fafc', borderRadius: '10px', border: '1px solid #e2e8f0' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <Lock size={18} color="#0f172a" />
-                  <div>
-                    <span style={{ fontSize: '0.84rem', fontWeight: 700, color: '#0f172a', display: 'block' }}>
-                      Password & OTP Login
-                    </span>
-                    <span style={{ fontSize: '0.74rem', color: '#64748b' }}>Secured via Mobile OTP</span>
-                  </div>
-                </div>
-                <button type="button" style={{ background: '#ffffff', border: '1px solid #cbd5e1', padding: '0.35rem 0.75rem', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer' }}>
-                  Update
-                </button>
-              </div>
-
+              {/* Current Active Role & Verification Status */}
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.85rem', background: '#f8fafc', borderRadius: '10px', border: '1px solid #e2e8f0' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   <ShieldCheck size={18} color="#059669" />
                   <div>
                     <span style={{ fontSize: '0.84rem', fontWeight: 700, color: '#0f172a', display: 'block' }}>
-                      Verified Household Kyc
+                      Current Role: Household Profile
                     </span>
-                    <span style={{ fontSize: '0.74rem', color: '#059669' }}>Active & Certified</span>
+                    <span style={{ fontSize: '0.74rem', color: '#059669', fontWeight: 600 }}>✓ Verified & Active</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Request Additional Role button */}
+              <div style={{ padding: '0.85rem', background: '#FFFDF5', borderRadius: '10px', border: '1.5px solid #FDE68A', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
+                  <Store size={16} color="#D97706" />
+                  <span style={{ fontSize: '0.84rem', fontWeight: 750, color: '#92400E' }}>
+                    Need Merchant or Industry Profile?
+                  </span>
+                </div>
+                <p style={{ fontSize: '0.75rem', color: '#78350F', margin: 0, lineHeight: 1.4 }}>
+                  Apply for a verified Merchant or Industry account under your mobile number.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setIsRoleModalOpen(true)}
+                  style={{
+                    background: '#0F172A',
+                    color: '#FBC21A',
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '0.5rem',
+                    fontSize: '0.78rem',
+                    fontWeight: 800,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '0.35rem',
+                    marginTop: '0.25rem',
+                  }}
+                >
+                  <span>Request Additional Role</span>
+                  <Plus size={14} />
+                </button>
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.85rem', background: '#f8fafc', borderRadius: '10px', border: '1px solid #e2e8f0' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <Lock size={18} color="#0f172a" />
+                  <div>
+                    <span style={{ fontSize: '0.84rem', fontWeight: 700, color: '#0f172a', display: 'block' }}>
+                      Mobile OTP Login
+                    </span>
+                    <span style={{ fontSize: '0.74rem', color: '#64748b' }}>Password-free secure auth</span>
                   </div>
                 </div>
               </div>
@@ -716,6 +752,12 @@ export function HouseholdProfile() {
           </div>
         </div>
       )}
+
+      {/* Request Additional Role Verification Modal */}
+      <RequestAdditionalRoleModal
+        isOpen={isRoleModalOpen}
+        onClose={() => setIsRoleModalOpen(false)}
+      />
     </div>
   );
 }

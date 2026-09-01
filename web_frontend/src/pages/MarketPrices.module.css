@@ -3,6 +3,10 @@
   background: var(--color-offwhite);
   display: flex;
   flex-direction: column;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 .detailMainContainer {
@@ -12,30 +16,41 @@
   padding: 2rem 2rem 4.5rem;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.75rem;
   flex: 1;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 /* Top Navigation Bar */
 .topNavRow {
   display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.85rem;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.backLinkRow {
+  display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 1.5rem;
-  flex-wrap: wrap;
 }
 
 .backLink {
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
-  font-size: 0.875rem;
+  font-size: 0.825rem;
   font-weight: 700;
   color: var(--color-graphite);
   text-decoration: none;
   background: var(--color-white);
   border: 1px solid var(--color-border);
-  padding: 0.5rem 1rem;
+  padding: 0.45rem 0.9rem;
   border-radius: var(--radius-pill);
   transition: all var(--transition-fast);
 }
@@ -45,29 +60,37 @@
   transform: translateX(-2px);
 }
 
-/* Category Switcher Pills */
+/* Category Switcher Pills (Single Horizontal Scrollable Track) */
 .categoryPillsTrack {
   display: flex;
   align-items: center;
-  gap: 0.45rem;
+  gap: 0.5rem;
   overflow-x: auto;
-  padding-bottom: 0.25rem;
+  white-space: nowrap;
+  padding-bottom: 0.35rem;
   scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  flex-shrink: 0;
 }
 .categoryPillsTrack::-webkit-scrollbar {
   display: none;
 }
 
 .materialPillBtn {
-  padding: 0.45rem 1.05rem;
-  font-size: 0.82rem;
-  font-weight: 600;
+  padding: 0.5rem 1.15rem;
+  font-size: 0.85rem;
+  font-weight: 700;
   border-radius: var(--radius-pill);
   border: 1px solid var(--color-border);
   background: var(--color-white);
   color: var(--color-text-secondary);
   cursor: pointer;
   white-space: nowrap;
+  flex-shrink: 0;
   transition: all var(--transition-fast);
 }
 .materialPillBtn:hover {
@@ -78,20 +101,28 @@
   background: var(--color-graphite-dark) !important;
   border-color: var(--color-graphite-dark) !important;
   color: var(--color-primary) !important;
-  font-weight: 700 !important;
+  font-weight: 800 !important;
 }
 
-/* Sub-Material Quick Selector Pills */
+/* Sub-Material Quick Selector Pills (Single Horizontal Scrollable Track) */
 .subMaterialTrack {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   overflow-x: auto;
-  padding: 0.65rem 1rem;
+  white-space: nowrap;
+  padding: 0.75rem 1rem;
   background: var(--color-white);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-xl);
+  border-radius: 14px;
   scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  flex-shrink: 0;
 }
 .subMaterialTrack::-webkit-scrollbar {
   display: none;
@@ -102,24 +133,26 @@
   align-items: center;
   gap: 0.35rem;
   font-size: 0.75rem;
-  font-weight: 700;
+  font-weight: 800;
   color: var(--color-text-muted);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   white-space: nowrap;
-  margin-right: 0.25rem;
+  flex-shrink: 0;
+  margin-right: 0.35rem;
 }
 
 .subMaterialPill {
-  padding: 0.35rem 0.85rem;
-  font-size: 0.78rem;
-  font-weight: 600;
+  padding: 0.4rem 0.95rem;
+  font-size: 0.8rem;
+  font-weight: 700;
   border-radius: var(--radius-pill);
   border: 1px solid var(--color-border);
   background: var(--color-surface-subtle);
   color: var(--color-text-primary);
   cursor: pointer;
   white-space: nowrap;
+  flex-shrink: 0;
   transition: all var(--transition-fast);
 }
 .subMaterialPill:hover {
@@ -130,7 +163,7 @@
   background: var(--color-primary) !important;
   border-color: var(--color-primary) !important;
   color: var(--color-graphite-dark) !important;
-  font-weight: 700 !important;
+  font-weight: 800 !important;
   box-shadow: 0 2px 8px rgba(251, 194, 26, 0.25);
 }
 
@@ -499,17 +532,21 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .relatedCardWrapper {
   cursor: pointer;
-  border-radius: 18px;
+  border-radius: 16px;
   transition: all 0.2s ease;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
 }
 
 .relatedCardActive {
-  outline: 2.5px solid #FBC21A;
-  outline-offset: 3px;
+  /* Active styling handled by PriceCard marketCardActive */
 }
 
 /* Responsive adjustments */
@@ -523,13 +560,82 @@
   }
   .relatedGrid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .detailPageWrapper {
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+  .detailMainContainer {
+    padding: 1rem 0.85rem 3.5rem;
+    gap: 1.15rem;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
+  .topNavRow {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  .categoryPillsTrack {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding-bottom: 0.25rem;
+  }
+  .detailGridDesktop,
+  .subMaterialTrack {
+    display: none !important;
+  }
+  .relatedMaterialsSection {
+    margin-top: 0.5rem;
+    padding-top: 0;
+    border-top: none;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
+  }
+  .relatedSectionHeader {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  .relatedSectionTitle {
+    font-size: 1.25rem;
+    word-break: break-word;
+  }
+  .relatedSectionSub {
+    font-size: 0.82rem;
+  }
+  .relatedGrid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  .relatedCardWrapper {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 }
 
 @media (max-width: 640px) {
-  .detailMainContainer {
-    padding: 1.25rem 1rem 3.5rem;
-  }
   .materialHeading {
     font-size: 1.85rem;
   }
@@ -537,9 +643,6 @@
     font-size: 1.95rem;
   }
   .quickInfoGrid {
-    grid-template-columns: 1fr;
-  }
-  .relatedGrid {
     grid-template-columns: 1fr;
   }
   .bottomActionCard {

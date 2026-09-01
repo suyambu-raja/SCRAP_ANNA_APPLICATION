@@ -11,13 +11,41 @@ import {
   Plus,
   CheckCircle2,
   Package,
-  Layers,
   ArrowRight,
   Maximize2,
   RefreshCw,
-  Sparkles,
+  Edit2,
+  Check,
 } from 'lucide-react';
 import styles from './HouseholdPostScrap.module.css';
+
+interface SavedAddress {
+  id: string;
+  tag: string;
+  fullAddress: string;
+  landmark: string;
+  pincode: string;
+  isDefault: boolean;
+}
+
+const DEFAULT_SAVED_ADDRESSES: SavedAddress[] = [
+  {
+    id: 'addr-1',
+    tag: 'Home (Primary)',
+    fullAddress: 'No. 42, 2nd Avenue, Anna Nagar East, Chennai, Tamil Nadu',
+    landmark: 'Near Roundtana & Metro Station',
+    pincode: '600040',
+    isDefault: true,
+  },
+  {
+    id: 'addr-2',
+    tag: "Parent's House",
+    fullAddress: 'Plot 18, 5th Cross Street, Shenoy Nagar, Chennai, Tamil Nadu',
+    landmark: 'Opposite Shenoy Park',
+    pincode: '600030',
+    isDefault: false,
+  },
+];
 
 interface UploadedMediaItem {
   id: string;
@@ -105,14 +133,34 @@ export function HouseholdPostScrap() {
     return () => clearInterval(interval);
   }, []);
 
-  // Form states
-  const [address, setAddress] = useState('No. 42, 2nd Avenue, Anna Nagar, Chennai - 600040');
-  const [preferredDate, setPreferredDate] = useState('2025-05-16');
+  // --------------------------------------------------------------------------
+  // 1. ADDRESS STATE (SAVED ADDRESSES + EDIT OPTION)
+  // --------------------------------------------------------------------------
+  const [savedAddresses, setSavedAddresses] = useState<SavedAddress[]>(DEFAULT_SAVED_ADDRESSES);
+  const [selectedAddressId, setSelectedAddressId] = useState<string>('addr-1');
+  const [isEditingAddress, setIsEditingAddress] = useState(false);
+  const [customFullAddress, setCustomFullAddress] = useState('');
+  const [customLandmark, setCustomLandmark] = useState('');
+  const [customPincode, setCustomPincode] = useState('600040');
+
+  const activeSavedAddress = savedAddresses.find((a) => a.id === selectedAddressId) || savedAddresses[0];
+
+  // --------------------------------------------------------------------------
+  // 2. PREFERRED DATE STATE (TODAY / TOMORROW / CUSTOM DATE)
+  // --------------------------------------------------------------------------
+  const [dateOption, setDateOption] = useState<'today' | 'tomorrow' | 'custom'>('today');
+  const [customDateValue, setCustomDateValue] = useState<string>(() => {
+    const d = new Date();
+    d.setDate(d.getDate() + 2);
+    return d.toISOString().split('T')[0];
+  });
   const [preferredSlot, setPreferredSlot] = useState('Morning (09:00 AM - 12:00 PM)');
   const [notes, setNotes] = useState('');
-  const [uploadedList, setUploadedList] = useState<UploadedMediaItem[]>(INITIAL_UPLOADED_MEDIA);
 
-  // Modal / Detail Vision / Camera states
+  // --------------------------------------------------------------------------
+  // 3. MEDIA STATE (PHOTOS & VIDEOS & CAMERA)
+  // --------------------------------------------------------------------------
+  const [uploadedList, setUploadedList] = useState<UploadedMediaItem[]>(INITIAL_UPLOADED_MEDIA);
   const [selectedPhoto, setSelectedPhoto] = useState<UploadedMediaItem | null>(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [isCameraModalOpen, setIsCameraModalOpen] = useState(false);
@@ -120,8 +168,35 @@ export function HouseholdPostScrap() {
   const [facingMode, setFacingMode] = useState<'user' | 'environment'>('environment');
   const [cameraError, setCameraError] = useState<string | null>(null);
 
+  // Address Save Handlers
+  const handleStartEditAddress = () => {
+    setCustomFullAddress(activeSavedAddress.fullAddress);
+    setCustomLandmark(activeSavedAddress.landmark);
+    setCustomPincode(activeSavedAddress.pincode);
+    setIsEditingAddress(true);
+  };
+
+  const handleSaveEditedAddress = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!customFullAddress.trim()) return;
+
+    setSavedAddresses((prev) =>
+      prev.map((addr) =>
+        addr.id === selectedAddressId
+          ? {
+              ...addr,
+              fullAddress: customFullAddress,
+              landmark: customLandmark,
+              pincode: customPincode,
+            }
+          : addr
+      )
+    );
+    setIsEditingAddress(false);
+  };
+
   // --------------------------------------------------------------------------
-  // WORKABLE FILE UPLOAD HANDLERS
+  // FILE UPLOAD HANDLERS
   // --------------------------------------------------------------------------
   const handlePhotoUploadClick = () => {
     photoInputRef.current?.click();
@@ -148,8 +223,6 @@ export function HouseholdPostScrap() {
     });
 
     setUploadedList((prev) => [...newMediaItems, ...prev]);
-    // Reset file input so user can re-upload same file if desired
-    e.target.value = '';
   };
 
   const handleVideoFilesSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -169,55 +242,59 @@ export function HouseholdPostScrap() {
     });
 
     setUploadedList((prev) => [...newMediaItems, ...prev]);
-    e.target.value = '';
   };
 
   // --------------------------------------------------------------------------
-  // WORKABLE LIVE CAMERA HANDLERS
+  // LIVE CAMERA CAPTURE (WebRTC)
   // --------------------------------------------------------------------------
-  const startCamera = async (mode: 'user' | 'environment' = facingMode) => {
+  const startCamera = async (mode: 'user' | 'environment') => {
     setCameraError(null);
-    try {
-      if (cameraStream) {
-        cameraStream.getTracks().forEach((track) => track.stop());
-      }
+    if (cameraStream) {
+      cameraStream.getTracks().forEach((track) => track.stop());
+    }
 
+    try {
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: mode, width: { ideal: 1280 }, height: { ideal: 720 } },
+        video: {
+          facingMode: mode,
+          width: { ideal: 1280 },
+          height: { ideal: 720 },
+        },
         audio: false,
       });
 
       setCameraStream(stream);
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
+        videoRef.current.play();
       }
     } catch (err: any) {
-      console.warn('Webcam permission not granted or device not found:', err);
-      setCameraError('Camera access unavailable. You can use the device camera file picker instead.');
+      console.warn('Direct webcam access failed. Using fallback:', err);
+      setCameraError('Camera access not supported or denied. Please use the upload button.');
+      cameraFallbackInputRef.current?.click();
     }
   };
 
-  const openCameraModal = () => {
+  const handleOpenCameraModal = () => {
     setIsCameraModalOpen(true);
     startCamera(facingMode);
   };
 
-  const closeCameraModal = () => {
+  const handleCloseCameraModal = () => {
     if (cameraStream) {
       cameraStream.getTracks().forEach((track) => track.stop());
       setCameraStream(null);
     }
     setIsCameraModalOpen(false);
-    setCameraError(null);
   };
 
-  const toggleCameraFacingMode = () => {
+  const handleSwitchCamera = () => {
     const nextMode = facingMode === 'environment' ? 'user' : 'environment';
     setFacingMode(nextMode);
     startCamera(nextMode);
   };
 
-  const capturePhotoFromCamera = () => {
+  const handleCaptureSnapshot = () => {
     if (!videoRef.current || !canvasRef.current) return;
 
     const video = videoRef.current;
@@ -225,25 +302,25 @@ export function HouseholdPostScrap() {
     canvas.width = video.videoWidth || 640;
     canvas.height = video.videoHeight || 480;
 
-    const context = canvas.getContext('2d');
-    if (!context) return;
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
 
-    context.drawImage(video, 0, 0, canvas.width, canvas.height);
-    const dataUrl = canvas.toDataURL('image/jpeg', 0.92);
+      const capturedItem: UploadedMediaItem = {
+        id: `camera-${Date.now()}`,
+        type: 'photo',
+        title: `Camera Snapshot ${new Date().toLocaleTimeString()}`,
+        imageUrl: dataUrl,
+        isCustom: true,
+      };
 
-    const capturedItem: UploadedMediaItem = {
-      id: `camera-snap-${Date.now()}`,
-      type: 'photo',
-      title: `Camera Snapshot (${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })})`,
-      imageUrl: dataUrl,
-      isCustom: true,
-    };
-
-    setUploadedList((prev) => [capturedItem, ...prev]);
-    closeCameraModal();
+      setUploadedList((prev) => [capturedItem, ...prev]);
+      handleCloseCameraModal();
+    }
   };
 
-  const handleRemovePhoto = (id: string, e: React.MouseEvent) => {
+  const handleRemoveMedia = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
     setUploadedList((prev) => prev.filter((item) => item.id !== id));
   };
@@ -252,350 +329,454 @@ export function HouseholdPostScrap() {
     e.preventDefault();
     if (cooldownSeconds > 0) return;
 
-    // Set 10-minute cooldown (600 seconds)
-    const cooldownExpiry = Date.now() + 10 * 60 * 1000;
-    localStorage.setItem('scrap_household_cooldown', String(cooldownExpiry));
+    const cooldownEndTime = Date.now() + 10 * 60 * 1000;
+    localStorage.setItem('scrap_household_cooldown', cooldownEndTime.toString());
     setCooldownSeconds(600);
+
     setShowSuccessModal(true);
   };
 
-  const handleResetCooldownDemo = () => {
-    localStorage.removeItem('scrap_household_cooldown');
-    setCooldownSeconds(0);
+  const formatCooldownTime = (secs: number) => {
+    const m = Math.floor(secs / 60);
+    const s = secs % 60;
+    return `${m}:${s < 10 ? '0' : ''}${s}`;
   };
 
-  const formatTime = (totalSec: number) => {
-    const mins = Math.floor(totalSec / 60);
-    const secs = totalSec % 60;
-    return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+  const getResolvedDateText = () => {
+    if (dateOption === 'today') return 'Today';
+    if (dateOption === 'tomorrow') return 'Tomorrow';
+    return customDateValue;
   };
 
   return (
     <div className={styles.pageContainer}>
-      {/* Hidden File Inputs for Native Workable Uploads */}
-      <input
-        ref={photoInputRef}
-        type="file"
-        accept="image/png,image/jpeg,image/jpg,image/webp,image/*"
-        multiple
-        style={{ display: 'none' }}
-        onChange={handlePhotoFilesSelected}
-      />
-      <input
-        ref={videoInputRef}
-        type="file"
-        accept="video/mp4,video/mov,video/quicktime,video/webm,video/*"
-        multiple
-        style={{ display: 'none' }}
-        onChange={handleVideoFilesSelected}
-      />
-      <input
-        ref={cameraFallbackInputRef}
-        type="file"
-        accept="image/*"
-        capture="environment"
-        style={{ display: 'none' }}
-        onChange={handlePhotoFilesSelected}
-      />
-
-      {/* Hidden Canvas for Camera Frame Capture */}
-      <canvas ref={canvasRef} style={{ display: 'none' }} />
-
-      {/* 1. Header Section (Clean Frame, No Hero Illustration) */}
+      {/* 1. Header Section */}
       <div className={styles.headerBlock}>
         <div className={styles.headerIconCircle}>
           <Package size={26} />
         </div>
         <div className={styles.headerTitles}>
-          <h1 className={styles.mainTitle}>Schedule a New Pickup</h1>
+          <h1 className={styles.mainTitle}>Post Scrap For Doorstep Pickup</h1>
           <p className={styles.mainSubtitle}>
-            Fill in the details and we'll pick up your scrap from your location with verified digital weighing.
+            Schedule doorstep pickup with verified digital weighing. Upload photos/videos so nearby scrap executives can verify and dispatch vehicles.
           </p>
         </div>
       </div>
 
-      {/* 10-Minute Cooldown Alert Notification */}
-      {cooldownSeconds > 0 && (
-        <div
-          style={{
-            background: '#fffbeb',
-            border: '1.5px solid #fde68a',
-            borderRadius: '14px',
-            padding: '1rem 1.25rem',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: '1rem',
-            flexWrap: 'wrap',
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-            <Clock size={20} color="#b45309" />
-            <div>
-              <span style={{ fontSize: '0.86rem', fontWeight: 800, color: '#92400e', display: 'block' }}>
-                10-Minute Order Cooldown Active ({formatTime(cooldownSeconds)} remaining)
-              </span>
-              <span style={{ fontSize: '0.76rem', color: '#b45309' }}>
-                You recently placed an order. Please wait for the cooldown to complete so nearby merchants can review and accept it.
-              </span>
-            </div>
-          </div>
+      {/* Hidden File Inputs for Working File/Video/Camera Selectors */}
+      <input
+        type="file"
+        ref={photoInputRef}
+        onChange={handlePhotoFilesSelected}
+        multiple
+        accept="image/*"
+        style={{ display: 'none' }}
+      />
+      <input
+        type="file"
+        ref={videoInputRef}
+        onChange={handleVideoFilesSelected}
+        multiple
+        accept="video/*"
+        style={{ display: 'none' }}
+      />
+      <input
+        type="file"
+        ref={cameraFallbackInputRef}
+        onChange={handlePhotoFilesSelected}
+        accept="image/*"
+        capture="environment"
+        style={{ display: 'none' }}
+      />
 
-          <button
-            type="button"
-            onClick={handleResetCooldownDemo}
-            style={{
-              background: '#ffffff',
-              border: '1px solid #f59e0b',
-              color: '#d97706',
-              fontSize: '0.74rem',
-              fontWeight: 800,
-              padding: '0.35rem 0.75rem',
-              borderRadius: '6px',
-              cursor: 'pointer',
-            }}
-          >
-            Reset Cooldown (Demo)
-          </button>
-        </div>
-      )}
-
-      {/* 2. Main Post Scrap Form Card */}
+      {/* 2. Main Form Card */}
       <form onSubmit={handleSubmit} className={styles.formCard}>
-        {/* Pickup Address & Preferred Date / Slot Row */}
-        <div className={styles.formFieldsGrid}>
-          {/* Address */}
-          <div className={styles.fieldGroup}>
-            <label className={styles.fieldLabel}>Pickup Address</label>
-            <div className={styles.inputWithIcon}>
-              <MapPin size={18} className={styles.inputIcon} />
-              <input
-                type="text"
-                className={styles.textInput}
-                placeholder="Enter your complete address"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                required
-              />
-            </div>
+        {/* Section 1: Pickup Location & Slot */}
+        <div className={styles.sectionHeadingGroup}>
+          <h2 className={styles.sectionHeading}>1. Doorstep Pickup Details</h2>
+          <p className={styles.sectionSubheading}>
+            Select your saved doorstep address in Chennai, preferred pickup date, and convenient time slot.
+          </p>
+        </div>
+
+        {/* 1A. Saved Address Selection with Edit Option */}
+        <div className={styles.addressSectionBox}>
+          <div className={styles.addressSectionHeader}>
+            <label className={styles.fieldLabel}>
+              <MapPin size={16} color="#d97706" />
+              <span>Doorstep Pickup Address</span>
+            </label>
+
+            {!isEditingAddress && (
+              <button
+                type="button"
+                className={styles.editAddressBtn}
+                onClick={handleStartEditAddress}
+              >
+                <Edit2 size={13} />
+                <span>Edit / Change Address</span>
+              </button>
+            )}
           </div>
 
-          {/* Preferred Date */}
-          <div className={styles.fieldGroup}>
-            <label className={styles.fieldLabel}>Preferred Date</label>
-            <div className={styles.inputWithIcon}>
-              <Calendar size={18} className={styles.inputIcon} />
-              <input
-                type="date"
-                className={styles.textInput}
-                value={preferredDate}
-                onChange={(e) => setPreferredDate(e.target.value)}
-                required
-              />
+          {!isEditingAddress ? (
+            /* Saved Address Cards */
+            <div className={styles.savedAddressesGrid}>
+              {savedAddresses.map((addr) => (
+                <div
+                  key={addr.id}
+                  className={`${styles.savedAddressCard} ${
+                    selectedAddressId === addr.id ? styles.savedAddressActive : ''
+                  }`}
+                  onClick={() => setSelectedAddressId(addr.id)}
+                  role="button"
+                  tabIndex={0}
+                >
+                  <div className={styles.addressCardTop}>
+                    <div className={styles.addressRadioCircle}>
+                      {selectedAddressId === addr.id && <div className={styles.radioDot} />}
+                    </div>
+                    <span className={styles.addressTagBadge}>{addr.tag}</span>
+                    {addr.isDefault && (
+                      <span className={styles.defaultTagBadge}>Default</span>
+                    )}
+                  </div>
+
+                  <p className={styles.addressFullText}>{addr.fullAddress}</p>
+                  <span className={styles.addressMetaText}>
+                    Landmark: {addr.landmark} • PIN: {addr.pincode}
+                  </span>
+                </div>
+              ))}
             </div>
+          ) : (
+            /* Edit Address Form */
+            <div className={styles.editAddressFormWrap}>
+              <div className={styles.formGroup}>
+                <label className={styles.subFieldLabel}>Full Address / Street / Door No.</label>
+                <input
+                  type="text"
+                  className={styles.inputField}
+                  value={customFullAddress}
+                  onChange={(e) => setCustomFullAddress(e.target.value)}
+                  placeholder="Enter house no, street name, area..."
+                  required
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label className={styles.subFieldLabel}>Landmark</label>
+                <input
+                  type="text"
+                  className={styles.inputField}
+                  value={customLandmark}
+                  onChange={(e) => setCustomLandmark(e.target.value)}
+                  placeholder="Nearby metro, temple, school..."
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label className={styles.subFieldLabel}>PIN Code</label>
+                <input
+                  type="text"
+                  className={styles.inputField}
+                  value={customPincode}
+                  onChange={(e) => setCustomPincode(e.target.value)}
+                  placeholder="e.g. 600040"
+                  required
+                />
+              </div>
+
+              <div className={styles.editAddressActions}>
+                <button
+                  type="button"
+                  className={styles.cancelEditBtn}
+                  onClick={() => setIsEditingAddress(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  className={styles.saveEditBtn}
+                  onClick={handleSaveEditedAddress}
+                >
+                  <Check size={14} />
+                  <span>Update Address</span>
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* 1B. Preferred Date (Today, Tomorrow, Custom Date) & Time Slot */}
+        <div className={styles.dateTimeGrid}>
+          {/* Preferred Date Pill Selector */}
+          <div className={styles.fieldGroup}>
+            <label className={styles.fieldLabel}>
+              <Calendar size={15} color="#d97706" />
+              <span>Preferred Pickup Date</span>
+            </label>
+
+            <div className={styles.datePillsRow}>
+              <button
+                type="button"
+                className={`${styles.datePillBtn} ${
+                  dateOption === 'today' ? styles.datePillActive : ''
+                }`}
+                onClick={() => setDateOption('today')}
+              >
+                Today
+              </button>
+
+              <button
+                type="button"
+                className={`${styles.datePillBtn} ${
+                  dateOption === 'tomorrow' ? styles.datePillActive : ''
+                }`}
+                onClick={() => setDateOption('tomorrow')}
+              >
+                Tomorrow
+              </button>
+
+              <button
+                type="button"
+                className={`${styles.datePillBtn} ${
+                  dateOption === 'custom' ? styles.datePillActive : ''
+                }`}
+                onClick={() => setDateOption('custom')}
+              >
+                Custom Date
+              </button>
+            </div>
+
+            {/* If Custom Date is selected, show date picker */}
+            {dateOption === 'custom' && (
+              <div style={{ marginTop: '0.45rem' }}>
+                <input
+                  type="date"
+                  className={styles.inputField}
+                  value={customDateValue}
+                  onChange={(e) => setCustomDateValue(e.target.value)}
+                  min={new Date().toISOString().split('T')[0]}
+                  required
+                />
+              </div>
+            )}
           </div>
 
           {/* Preferred Time Slot */}
           <div className={styles.fieldGroup}>
-            <label className={styles.fieldLabel}>Preferred Time Slot</label>
-            <div className={styles.inputWithIcon}>
-              <Clock size={18} className={styles.inputIcon} />
-              <select
-                className={styles.selectInput}
-                value={preferredSlot}
-                onChange={(e) => setPreferredSlot(e.target.value)}
-              >
-                <option>Morning (09:00 AM - 12:00 PM)</option>
-                <option>Afternoon (01:00 PM - 04:00 PM)</option>
-                <option>Evening (04:00 PM - 07:00 PM)</option>
-              </select>
-            </div>
+            <label className={styles.fieldLabel}>
+              <Clock size={15} color="#d97706" />
+              <span>Preferred Time Slot</span>
+            </label>
+            <select
+              className={styles.selectField}
+              value={preferredSlot}
+              onChange={(e) => setPreferredSlot(e.target.value)}
+            >
+              <option value="Morning (09:00 AM - 12:00 PM)">
+                Morning (09:00 AM - 12:00 PM)
+              </option>
+              <option value="Afternoon (12:00 PM - 04:00 PM)">
+                Afternoon (12:00 PM - 04:00 PM)
+              </option>
+              <option value="Evening (04:00 PM - 07:00 PM)">
+                Evening (04:00 PM - 07:00 PM)
+              </option>
+            </select>
           </div>
         </div>
 
-        {/* 3. Upload Photos or Videos Section (WORKABLE BUTTONS) */}
-        <div className={styles.uploadSection}>
-          <div className={styles.uploadTitleRow}>
-            <span>Upload Photos or Videos</span>
-            <span className={styles.uploadSubtext}>(Add images or videos of your scrap items)</span>
+        {/* Section 2: Upload Scrap Photos & Videos (Older Format) */}
+        <div className={styles.sectionHeadingGroup} style={{ marginTop: '0.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }}>
+            <h2 className={styles.sectionHeading}>2. Scrap Photos &amp; Videos</h2>
+            <span style={{ fontSize: '0.8rem', color: '#059669', fontWeight: 800 }}>
+              ✓ {uploadedList.length} Media Uploaded
+            </span>
           </div>
-
-          <div className={styles.dropzoneGrid}>
-            {/* Dropzone 1: Upload Photos */}
-            <div
-              className={styles.dropzoneCard}
-              onClick={handlePhotoUploadClick}
-              role="button"
-              tabIndex={0}
-              title="Click to browse and upload scrap photos from your device"
-            >
-              <div className={`${styles.dropIconWrap} ${styles.dropIconOrange}`}>
-                <ImageIcon size={22} />
-              </div>
-              <h4 className={styles.dropTitle}>Upload Photos</h4>
-              <p className={styles.dropSub}>PNG, JPG, JPEG (Max 5MB)</p>
-            </div>
-
-            {/* Dropzone 2: Upload Videos */}
-            <div
-              className={styles.dropzoneCard}
-              onClick={handleVideoUploadClick}
-              role="button"
-              tabIndex={0}
-              title="Click to browse and upload scrap videos from your device"
-            >
-              <div className={`${styles.dropIconWrap} ${styles.dropIconBlue}`}>
-                <VideoIcon size={22} />
-              </div>
-              <h4 className={styles.dropTitle}>Upload Videos</h4>
-              <p className={styles.dropSub}>MP4, MOV (Max 20MB)</p>
-            </div>
-
-            {/* Dropzone 3: Open Camera */}
-            <div
-              className={styles.dropzoneCard}
-              onClick={openCameraModal}
-              role="button"
-              tabIndex={0}
-              title="Click to open camera and take a live scrap photo"
-            >
-              <div className={`${styles.dropIconWrap} ${styles.dropIconGreen}`}>
-                <Camera size={22} />
-              </div>
-              <h4 className={styles.dropTitle}>Open Camera</h4>
-              <p className={styles.dropSub}>Take a photo</p>
-            </div>
-          </div>
+          <p className={styles.sectionSubheading}>
+            Upload scrap images, record videos, or capture live photos with your camera. Click any thumbnail for high resolution Detail Vision.
+          </p>
         </div>
 
-        {/* 4. Uploaded Items Grid */}
-        <div className={styles.uploadedSection}>
-          <h4 className={styles.uploadedHeader}>Uploaded ({uploadedList.length})</h4>
+        {/* Action Upload Buttons Toolbar (Older Format) */}
+        <div className={styles.uploadActionToolbar}>
+          <button
+            type="button"
+            className={styles.uploadButtonPhoto}
+            onClick={handlePhotoUploadClick}
+          >
+            <ImageIcon size={17} />
+            <span>Upload Photos</span>
+          </button>
 
-          <div className={styles.uploadedGrid}>
-            {uploadedList.map((item) => (
-              <div
-                key={item.id}
-                className={styles.uploadedCard}
-                onClick={() => setSelectedPhoto(item)}
-                title="Click to view detailed photo"
-              >
-                {item.type === 'video' ? (
-                  <video
-                    src={item.imageUrl}
-                    className={styles.uploadedImg}
-                    muted
-                    preload="metadata"
-                  />
-                ) : (
-                  <img src={item.imageUrl} alt={item.title} className={styles.uploadedImg} />
-                )}
+          <button
+            type="button"
+            className={styles.uploadButtonVideo}
+            onClick={handleVideoUploadClick}
+          >
+            <VideoIcon size={17} />
+            <span>Upload Videos</span>
+          </button>
 
-                {/* Remove button */}
+          <button
+            type="button"
+            className={styles.uploadButtonCamera}
+            onClick={handleOpenCameraModal}
+          >
+            <Camera size={17} />
+            <span>Open Camera</span>
+          </button>
+        </div>
+
+        {/* Media Grid / Detail Vision Gallery (Older Format) */}
+        <div className={styles.uploadedMediaGrid}>
+          {uploadedList.map((item) => (
+            <div
+              key={item.id}
+              className={styles.mediaCard}
+              onClick={() => setSelectedPhoto(item)}
+              role="button"
+              tabIndex={0}
+              title="Click to open Detail Vision"
+            >
+              <div className={styles.mediaThumbContainer}>
+                <img
+                  src={item.imageUrl}
+                  alt={item.title}
+                  className={styles.mediaThumbnail}
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = '/household-scrap-bundle.jpg';
+                  }}
+                />
+
+                <div className={styles.mediaTypeBadge}>
+                  {item.type === 'video' ? <VideoIcon size={13} /> : <ImageIcon size={13} />}
+                  <span>{item.type === 'video' ? 'VIDEO' : 'PHOTO'}</span>
+                </div>
+
+                <div className={styles.detailVisionHint}>
+                  <Maximize2 size={15} />
+                </div>
+
                 <button
                   type="button"
-                  className={styles.removePhotoBtn}
-                  onClick={(e) => handleRemovePhoto(item.id, e)}
-                  title="Remove this item"
+                  className={styles.removeMediaBtn}
+                  onClick={(e) => handleRemoveMedia(item.id, e)}
+                  title="Remove media"
                 >
-                  <X size={13} />
+                  <X size={14} />
                 </button>
-
-                {/* Media type tag */}
-                <div className={styles.mediaTypeBadge}>
-                  {item.type === 'photo' ? <ImageIcon size={11} /> : <VideoIcon size={11} />}
-                  <span>{item.type === 'photo' ? 'Photo' : 'Video'}</span>
-                </div>
               </div>
-            ))}
-          </div>
+
+              <div className={styles.mediaMeta}>
+                <span className={styles.mediaTitle}>{item.title}</span>
+                <span className={styles.mediaSubtext}>Click to view high-res photo</span>
+              </div>
+            </div>
+          ))}
         </div>
 
-        {/* 5. Note Section (Optional) */}
-        <div className={styles.noteSection}>
-          <label className={styles.fieldLabel}>Note (Optional)</label>
+        {/* Section 3: Additional Notes */}
+        <div className={styles.fieldGroupFull}>
+          <label className={styles.fieldLabel}>
+            <span>Additional Scrap Description (Optional)</span>
+          </label>
           <textarea
-            className={styles.noteTextarea}
-            placeholder="Any additional instructions? (e.g. scrap located on 2nd floor, elevator available, please bring digital weigh scale)"
+            className={styles.textareaField}
+            rows={3}
+            placeholder="e.g. 2 bundles of copper wire, old aluminium vessels, newspapers in tied stacks, AC compressor in backyard..."
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
-            rows={3}
           />
         </div>
 
-        {/* 6. Action Row */}
-        <div className={styles.actionRow}>
+        {/* Cooldown Warning Notice */}
+        {cooldownSeconds > 0 && (
+          <div className={styles.cooldownAlertBox}>
+            <Clock size={18} />
+            <div className={styles.cooldownTextWrap}>
+              <strong>Request Cooldown Active ({formatCooldownTime(cooldownSeconds)} remaining)</strong>
+              <span>
+                To ensure quality pickup scheduling, please wait before submitting another doorstep request.
+              </span>
+            </div>
+          </div>
+        )}
+
+        {/* Submit Action Bar */}
+        <div className={styles.formFooterActions}>
           <button
             type="submit"
-            className={styles.submitPostScrapBtn}
-            disabled={cooldownSeconds > 0}
-            style={
-              cooldownSeconds > 0
-                ? {
-                    background: '#cbd5e1',
-                    color: '#64748b',
-                    cursor: 'not-allowed',
-                    boxShadow: 'none',
-                  }
-                : {}
-            }
+            className={styles.submitPostBtn}
+            disabled={cooldownSeconds > 0 || uploadedList.length === 0}
           >
-            <span>
-              {cooldownSeconds > 0
-                ? `Cooldown Active (${formatTime(cooldownSeconds)})`
-                : 'Post Scrap'}
-            </span>
+            {cooldownSeconds > 0 ? (
+              <span>Cooldown Active ({formatCooldownTime(cooldownSeconds)})</span>
+            ) : (
+              <>
+                <span>Post Scrap for Pickup</span>
+                <ArrowRight size={17} />
+              </>
+            )}
           </button>
         </div>
       </form>
 
-      {/* LIVE CAMERA VIEWFINDER MODAL */}
-      {isCameraModalOpen && (
-        <div className={styles.lightboxOverlay} onClick={closeCameraModal}>
-          <div className={styles.cameraModalBox} onClick={(e) => e.stopPropagation()}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Camera size={20} color="#fbc21a" />
-                <h3 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 800 }}>
-                  Take Live Scrap Photo
-                </h3>
+      {/* DETAIL VISION LIGHTBOX MODAL */}
+      {selectedPhoto && (
+        <div className={styles.lightboxOverlay} onClick={() => setSelectedPhoto(null)}>
+          <div className={styles.lightboxBox} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.lightboxHeader}>
+              <div>
+                <h3 className={styles.lightboxTitle}>{selectedPhoto.title}</h3>
+                <span className={styles.lightboxSubtitle}>
+                  Verified scrap photo for doorstep vehicle dispatch & weighing
+                </span>
               </div>
               <button
                 type="button"
-                onClick={closeCameraModal}
-                style={{
-                  background: 'rgba(255,255,255,0.1)',
-                  border: 'none',
-                  color: '#ffffff',
-                  borderRadius: '8px',
-                  padding: '0.35rem',
-                  cursor: 'pointer',
-                }}
+                className={styles.lightboxCloseBtn}
+                onClick={() => setSelectedPhoto(null)}
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <div className={styles.lightboxImageStage}>
+              <img
+                src={selectedPhoto.imageUrl}
+                alt={selectedPhoto.title}
+                className={styles.lightboxMainImg}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* LIVE CAMERA CAPTURE MODAL */}
+      {isCameraModalOpen && (
+        <div className={styles.modalOverlay} onClick={handleCloseCameraModal}>
+          <div className={styles.cameraModalContent} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.cameraHeader}>
+              <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 900, color: '#0f172a' }}>
+                Capture Scrap Photo
+              </h3>
+              <button
+                type="button"
+                className={styles.lightboxCloseBtn}
+                onClick={handleCloseCameraModal}
               >
                 <X size={18} />
               </button>
             </div>
 
-            {/* Video Viewfinder */}
-            <div className={styles.cameraViewfinderWrap}>
+            <div className={styles.cameraViewport}>
               {cameraError ? (
-                <div style={{ textAlign: 'center', padding: '1.5rem', color: '#cbd5e1' }}>
-                  <p style={{ margin: '0 0 1rem', fontSize: '0.85rem' }}>{cameraError}</p>
-                  <button
-                    type="button"
-                    onClick={() => cameraFallbackInputRef.current?.click()}
-                    style={{
-                      background: '#fbc21a',
-                      color: '#0f172a',
-                      border: 'none',
-                      padding: '0.5rem 1rem',
-                      borderRadius: '8px',
-                      fontWeight: 800,
-                      cursor: 'pointer',
-                    }}
-                  >
-                    Open Device Camera File Picker
-                  </button>
+                <div style={{ color: '#ef4444', textAlign: 'center', padding: '2rem 1rem' }}>
+                  {cameraError}
                 </div>
               ) : (
                 <video
@@ -603,145 +784,83 @@ export function HouseholdPostScrap() {
                   autoPlay
                   playsInline
                   muted
-                  className={styles.cameraVideoFeed}
+                  className={styles.cameraVideo}
                 />
               )}
+              <canvas ref={canvasRef} style={{ display: 'none' }} />
             </div>
 
-            {/* Camera Actions (Shutter & Flip) */}
-            {!cameraError && (
-              <div className={styles.cameraActionsRow}>
-                <button
-                  type="button"
-                  className={styles.switchCamBtn}
-                  onClick={toggleCameraFacingMode}
-                  title="Switch Camera (Front / Back)"
-                >
-                  <RefreshCw size={20} />
-                </button>
-
-                <button
-                  type="button"
-                  className={styles.shutterBtn}
-                  onClick={capturePhotoFromCamera}
-                  title="Take Photo Snapshot"
-                >
-                  <Camera size={28} />
-                </button>
-
-                <div style={{ width: '44px' }} />
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* DETAIL VISION LIGHTBOX MODAL */}
-      {selectedPhoto && (
-        <div className={styles.lightboxOverlay} onClick={() => setSelectedPhoto(null)}>
-          <div className={styles.lightboxBox} onClick={(e) => e.stopPropagation()}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h3 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 800 }}>
-                {selectedPhoto.title}
-              </h3>
+            <div className={styles.cameraControls}>
               <button
                 type="button"
-                onClick={() => setSelectedPhoto(null)}
-                style={{
-                  background: 'rgba(255,255,255,0.1)',
-                  border: 'none',
-                  color: '#ffffff',
-                  borderRadius: '8px',
-                  padding: '0.35rem',
-                  cursor: 'pointer',
-                }}
+                className={styles.switchCamBtn}
+                onClick={handleSwitchCamera}
+                title="Switch front/back camera"
               >
-                <X size={18} />
+                <RefreshCw size={18} />
+                <span>Switch Camera</span>
               </button>
-            </div>
 
-            <div className={styles.lightboxStage}>
-              {selectedPhoto.type === 'video' ? (
-                <video
-                  src={selectedPhoto.imageUrl}
-                  controls
-                  autoPlay
-                  style={{ width: '100%', height: '100%', maxHeight: '420px', objectFit: 'contain' }}
-                />
-              ) : (
-                <img src={selectedPhoto.imageUrl} alt={selectedPhoto.title} className={styles.lightboxImg} />
-              )}
-            </div>
-
-            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
               <button
                 type="button"
-                onClick={() => setSelectedPhoto(null)}
-                style={{
-                  background: '#fbc21a',
-                  color: '#0f172a',
-                  fontWeight: 800,
-                  fontSize: '0.82rem',
-                  padding: '0.5rem 1.25rem',
-                  borderRadius: '8px',
-                  border: 'none',
-                  cursor: 'pointer',
-                }}
+                className={styles.captureSnapBtn}
+                onClick={handleCaptureSnapshot}
               >
-                Close Preview
+                <Camera size={20} />
+                <span>Take Photo</span>
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* CONFIRMATION SUCCESS MODAL */}
+      {/* SUBMIT SUCCESS MODAL */}
       {showSuccessModal && (
-        <div className={styles.modalOverlay} onClick={() => setShowSuccessModal(false)}>
-          <div className={styles.modalBox} onClick={(e) => e.stopPropagation()}>
-            <CheckCircle2 size={64} color="#10b981" />
-            <h3 style={{ margin: 0, fontSize: '1.4rem', fontWeight: 900, color: '#0f172a' }}>
-              Scrap Requirement Posted!
-            </h3>
-            <p style={{ margin: 0, fontSize: '0.88rem', color: '#64748b', lineHeight: 1.45 }}>
-              Your scrap requirement has been successfully created with Reference ID:{' '}
-              <strong style={{ color: '#0f172a' }}>SA123456</strong>. Verified executives will arrive at your address on{' '}
-              <strong>{preferredDate}</strong> ({preferredSlot}).
+        <div className={styles.modalOverlay}>
+          <div className={styles.successModalContent}>
+            <div className={styles.successIconBox}>
+              <CheckCircle2 size={48} color="#10b981" />
+            </div>
+
+            <h3 className={styles.successModalTitle}>Scrap Posted Successfully!</h3>
+            <p className={styles.successModalText}>
+              Your doorstep scrap pickup request has been dispatched to nearby verified scrap executives in Anna Nagar, Chennai.
             </p>
 
-            <div style={{ display: 'flex', gap: '0.75rem', width: '100%', marginTop: '0.5rem' }}>
-              <Link
-                to="/household"
-                style={{
-                  flex: 1,
-                  textAlign: 'center',
-                  padding: '0.65rem',
-                  borderRadius: '8px',
-                  border: '1.5px solid #e2e8f0',
-                  color: '#334155',
-                  fontWeight: 700,
-                  fontSize: '0.85rem',
-                  textDecoration: 'none',
+            <div className={styles.successDetailsBox}>
+              <div className={styles.successDetailRow}>
+                <span>Pickup Address:</span>
+                <strong>{activeSavedAddress.fullAddress} ({activeSavedAddress.tag})</strong>
+              </div>
+              <div className={styles.successDetailRow}>
+                <span>Scheduled Time:</span>
+                <strong>{getResolvedDateText()} • {preferredSlot}</strong>
+              </div>
+              <div className={styles.successDetailRow}>
+                <span>Scrap Photos:</span>
+                <strong>{uploadedList.length} Items Attached</strong>
+              </div>
+              <div className={styles.successDetailRow}>
+                <span>Digital Weighing:</span>
+                <strong style={{ color: '#059669' }}>Guaranteed 100% Calibrated Scale</strong>
+              </div>
+            </div>
+
+            <div className={styles.successModalActions}>
+              <Link to="/household/orders" className={styles.trackOrdersBtn}>
+                <span>Track in Orders</span>
+                <ArrowRight size={16} />
+              </Link>
+              <button
+                type="button"
+                className={styles.closeSuccessBtn}
+                onClick={() => {
+                  setShowSuccessModal(false);
+                  navigate('/household/orders');
                 }}
               >
-                Dashboard
-              </Link>
-              <Link
-                to="/household/history"
-                style={{
-                  flex: 1,
-                  textAlign: 'center',
-                  padding: '0.65rem',
-                  borderRadius: '8px',
-                  background: '#0f172a',
-                  color: '#fbc21a',
-                  fontWeight: 800,
-                  fontSize: '0.85rem',
-                  textDecoration: 'none',
-                }}
-              >
-                History →
-              </Link>
+                Done
+              </button>
             </div>
           </div>
         </div>

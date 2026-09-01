@@ -18,6 +18,8 @@ export interface PriceCardProps {
   onClick?: () => void;
   compact?: boolean;
   yourPrice?: number;
+  isActive?: boolean;
+  className?: string;
 }
 
 export function PriceCard({
@@ -32,6 +34,8 @@ export function PriceCard({
   imagePlaceholder,
   onClick,
   yourPrice,
+  isActive,
+  className,
 }: PriceCardProps) {
   const name = materialName || price?.name || price?.category || 'Scrap Material';
   const priceUnit = unit || price?.unit || 'kg';
@@ -62,7 +66,13 @@ export function PriceCard({
 
   return (
     <div
-      className={styles.marketCard}
+      className={[
+        styles.marketCard,
+        isActive ? styles.marketCardActive : '',
+        className || '',
+      ]
+        .filter(Boolean)
+        .join(' ')}
       onClick={onClick}
       role={onClick ? 'button' : undefined}
       tabIndex={onClick ? 0 : undefined}

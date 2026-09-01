@@ -14,6 +14,7 @@ import styles from './Navbar.module.css';
 const NAV_ITEMS = [
   { id: 'home', labelEn: 'Home', labelTa: 'முகப்பு' },
   { id: 'who-we-serve', labelEn: 'For Users', labelTa: 'பயனாளர்கள்' },
+  { id: 'how-it-works', labelEn: 'How It Works', labelTa: 'செயல்முறை' },
   { id: 'market-prices', labelEn: 'Market Prices', labelTa: 'சந்தை விலைகள்' },
   { id: 'why-choose-us', labelEn: 'Why Us', labelTa: 'நன்மைகள்' },
   { id: 'accessibility', labelEn: 'Accessibility', labelTa: 'தமிழ் ஆதரவு' },

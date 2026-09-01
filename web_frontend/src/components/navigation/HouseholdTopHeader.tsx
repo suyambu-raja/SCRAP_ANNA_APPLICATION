@@ -205,21 +205,12 @@ export function HouseholdTopHeader() {
               </Link>
 
               <Link
-                to="/household/orders"
-                className={styles.dropdownItem}
-                onClick={() => setProfileDropdownOpen(false)}
-              >
-                <Clock size={16} />
-                <span>My Orders</span>
-              </Link>
-
-              <Link
                 to="/household/refer-earn"
                 className={styles.dropdownItem}
                 onClick={() => setProfileDropdownOpen(false)}
               >
                 <Gift size={16} color="#d97706" />
-                <span>Refer & Earn (₹50)</span>
+                <span>Refer & Earn</span>
               </Link>
 
               <Link
@@ -228,7 +219,7 @@ export function HouseholdTopHeader() {
                 onClick={() => setProfileDropdownOpen(false)}
               >
                 <Headphones size={16} color="#2563eb" />
-                <span>Help & Support</span>
+                <span>Support</span>
               </Link>
 
               <button

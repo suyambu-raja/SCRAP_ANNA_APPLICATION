@@ -21,13 +21,17 @@ import {
   Phone,
   ChevronDown,
   Info,
+  UploadCloud,
+  Truck,
+  Zap,
+  CheckCircle2,
 } from 'lucide-react';
 import { Button, Navbar } from '@/components/common';
 import { PriceCard } from '@/components/cards/PriceCard';
 import { SkeletonCard } from '@/components/common/SkeletonLoader';
-import { getMarketPrices, getScrapCategories, getAggregatorData } from '@/services';
+import { getMarketPrices, getScrapCategories } from '@/services';
 import { useAuthStore } from '@/store/useAuthStore';
-import type { MarketPrice, ScrapCategory, AggregatorData } from '@/types';
+import type { MarketPrice, ScrapCategory } from '@/types';
 import styles from './Home.module.css';
 
 export default function Home() {
@@ -38,30 +42,47 @@ export default function Home() {
 
   const [prices, setPrices] = useState<MarketPrice[]>([]);
   const [, setCategories] = useState<ScrapCategory[]>([]);
-  const [aggData, setAggData] = useState<AggregatorData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [selectedCatId, setSelectedCatId] = useState('all');
   const [showVideoModal, setShowVideoModal] = useState(false);
+  const [selectedTrustCard, setSelectedTrustCard] = useState<number | null>(null);
+  const [selectedRoleCard, setSelectedRoleCard] = useState<number | null>(null);
+  const [selectedStepCard, setSelectedStepCard] = useState<number | null>(null);
+  const [accessibilityActive, setAccessibilityActive] = useState(false);
 
   const isTamil = i18n.language === 'ta';
+
+  useEffect(() => {
+    if (isAuthenticated && user?.role) {
+      navigate(`/dashboard/${user.role}`, { replace: true });
+    }
+  }, [isAuthenticated, user, navigate]);
 
   useEffect(() => {
     Promise.all([
       getMarketPrices(),
       getScrapCategories(),
-      getAggregatorData(),
-    ]).then(([priceData, catData, statsData]) => {
+    ]).then(([priceData, catData]) => {
       setPrices(priceData);
       setCategories(catData);
-      setAggData(statsData);
       setLoading(false);
     });
   }, []);
 
-  const displayedPrices =
-    selectedCatId === 'all'
-      ? prices.slice(0, 6)
-      : prices.filter((p) => p.categoryId === selectedCatId);
+  if (isAuthenticated && user?.role) {
+    return null;
+  }
+
+  const SELECTIVE_MATERIAL_IDS = [
+    'COP_001', // Copper Scrap
+    'BRS_001', // Brass Scrap
+    'IRON_001', // Scrap Iron
+    'PLS_007', // Mixed plastic
+    'CRD_001', // Corrugated Cardboard
+  ];
+
+  const displayedPrices = SELECTIVE_MATERIAL_IDS.map((id) =>
+    prices.find((p) => p.id === id)
+  ).filter((p): p is MarketPrice => Boolean(p));
 
   return (
     <div className={styles.desktopPlatform}>
@@ -75,7 +96,7 @@ export default function Home() {
           <div className={styles.heroLeftExact}>
             <div className={styles.badgeWrapper}>
               <span className={styles.badgeYellow}>
-                <MapPin size={13} />
+                <MapPin size={13} className={styles.locationPinAnim} />
                 Launching in Chennai, Tamil Nadu
               </span>
             </div>
@@ -207,9 +228,15 @@ export default function Home() {
             </p>
           </div>
 
-          <div className={styles.fourColumnGrid}>
+          <div className={styles.threeColumnGrid}>
             {/* Household */}
-            <div className={styles.roleBox}>
+            <div
+              className={[
+                styles.roleBox,
+                selectedRoleCard === 0 ? styles.roleBoxActive : '',
+              ].join(' ')}
+              onClick={() => setSelectedRoleCard(selectedRoleCard === 0 ? null : 0)}
+            >
               <div className={styles.roleHeader}>
                 <div className={styles.roleIconWrap}>
                   <HomeIcon size={20} />
@@ -217,21 +244,19 @@ export default function Home() {
                 <span className={styles.rolePill}>Household</span>
               </div>
               <h3 className={styles.roleHeading}>Households & Apartments</h3>
-              <div className={styles.roleDetailGroup}>
-                <div className={styles.roleDetailItem}>
-                  <strong>WHO:</strong> Residents, apartments & gated communities.
-                </div>
-                <div className={styles.roleDetailItem}>
-                  <strong>WHAT:</strong> Doorstep pickups, digital scales, instant UPI payouts.
-                </div>
-                <div className={styles.roleDetailItem}>
-                  <strong>WHY:</strong> Guaranteed accurate rates with zero manual deductions.
-                </div>
-              </div>
+              <p className={styles.roleDescText}>
+                Doorstep scrap pickups with calibrated digital scales, instant UPI payouts, and guaranteed fair benchmark rates with zero manual deductions.
+              </p>
             </div>
 
             {/* Merchant */}
-            <div className={styles.roleBox}>
+            <div
+              className={[
+                styles.roleBox,
+                selectedRoleCard === 1 ? styles.roleBoxActive : '',
+              ].join(' ')}
+              onClick={() => setSelectedRoleCard(selectedRoleCard === 1 ? null : 1)}
+            >
               <div className={styles.roleHeader}>
                 <div className={styles.roleIconWrap}>
                   <Store size={20} />
@@ -239,21 +264,19 @@ export default function Home() {
                 <span className={styles.rolePill}>Merchant</span>
               </div>
               <h3 className={styles.roleHeading}>Scrap Merchants & Shops</h3>
-              <div className={styles.roleDetailGroup}>
-                <div className={styles.roleDetailItem}>
-                  <strong>WHO:</strong> Local scrap dealers & recycling yards.
-                </div>
-                <div className={styles.roleDetailItem}>
-                  <strong>WHAT:</strong> Access industrial leads, submit sealed bids, sell refurbished stock.
-                </div>
-                <div className={styles.roleDetailItem}>
-                  <strong>WHY:</strong> Expand daily supply volume across Chennai easily.
-                </div>
-              </div>
+              <p className={styles.roleDescText}>
+                Direct access to residential pickup leads and verified industrial supply across Chennai, with private quoting and expanded trading volume.
+              </p>
             </div>
 
             {/* Industry */}
-            <div className={styles.roleBox}>
+            <div
+              className={[
+                styles.roleBox,
+                selectedRoleCard === 2 ? styles.roleBoxActive : '',
+              ].join(' ')}
+              onClick={() => setSelectedRoleCard(selectedRoleCard === 2 ? null : 2)}
+            >
               <div className={styles.roleHeader}>
                 <div className={styles.roleIconWrap}>
                   <Building2 size={20} />
@@ -261,50 +284,114 @@ export default function Home() {
                 <span className={styles.rolePill}>Industry</span>
               </div>
               <h3 className={styles.roleHeading}>Industries & Factories</h3>
-              <div className={styles.roleDetailGroup}>
-                <div className={styles.roleDetailItem}>
-                  <strong>WHO:</strong> Manufacturing plants, fabrication units & workshops.
-                </div>
-                <div className={styles.roleDetailItem}>
-                  <strong>WHAT:</strong> Post bulk requisitions, compare sealed merchant quotes.
-                </div>
-                <div className={styles.roleDetailItem}>
-                  <strong>WHY:</strong> Maximize scrap revenue with weighbridge accountability.
-                </div>
-              </div>
+              <p className={styles.roleDescText}>
+                Post bulk manufacturing scrap requisitions, compare sealed merchant quotes, and maximize recycling returns with weighbridge transparency.
+              </p>
             </div>
           </div>
         </section>
 
-        {/* 4. Platform Statistics Bar */}
-        <section className={styles.impactStatsBar}>
-          <div className={styles.statsGridDesktop}>
-            <div className={styles.statCell}>
-              <div className={styles.statFigure}>
-                {aggData ? `${(aggData.network_statistics.activeHouseholds / 1000).toFixed(0)}k+` : '10,000+'}
+        {/* 4. How It Works — 3-Step Process (Upload -> Merchant Pickup -> Instant Payment) */}
+        <section id="how-it-works" className={styles.contentSection}>
+          <div className={styles.sectionHeaderCentered}>
+            <span className={styles.sectionCategoryTag}>Simple 3-Step Process</span>
+            <h2 className={styles.sectionMainHeading}>
+              How It <span className={styles.yellowText}>Works</span>
+            </h2>
+            <p className={styles.sectionLeadText}>
+              Recycling your scrap in Chennai is seamless and transparent. From doorstep pickup to instant payment in 3 simple steps.
+            </p>
+          </div>
+
+          <div className={styles.howItWorksGrid}>
+            {/* Step 1: Upload */}
+            <div
+              className={[
+                styles.howItWorksCard,
+                selectedStepCard === 0 ? styles.howItWorksCardActive : '',
+              ].join(' ')}
+              onClick={() => setSelectedStepCard(selectedStepCard === 0 ? null : 0)}
+            >
+              <div className={styles.stepTopRow}>
+                <div className={styles.stepIconWrap}>
+                  <UploadCloud size={24} strokeWidth={2.2} />
+                </div>
+                <span className={styles.stepBadgePill}>STEP 01</span>
               </div>
-              <div className={styles.statDescription}>Active Households in Chennai</div>
+              <h3 className={styles.stepCardTitle}>1. Upload Scrap</h3>
+              <p className={styles.stepCardDesc}>
+                Take a quick photo or select your recyclable scrap items and quantity. Receive live indicative rate estimates instantly.
+              </p>
+              <div className={styles.stepFeatureList}>
+                <div className={styles.stepFeatureItem}>
+                  <CheckCircle2 size={15} className={styles.stepCheckIcon} />
+                  <span>Photo or text material upload</span>
+                </div>
+                <div className={styles.stepFeatureItem}>
+                  <CheckCircle2 size={15} className={styles.stepCheckIcon} />
+                  <span>Instant live benchmark rates</span>
+                </div>
+              </div>
             </div>
 
-            <div className={styles.statCell}>
-              <div className={styles.statFigure}>
-                {aggData ? `${(aggData.network_statistics.activeMerchants / 1000).toFixed(1)}k+` : '2,000+'}
+            {/* Step 2: Merchant Pickup */}
+            <div
+              className={[
+                styles.howItWorksCard,
+                selectedStepCard === 1 ? styles.howItWorksCardActive : '',
+              ].join(' ')}
+              onClick={() => setSelectedStepCard(selectedStepCard === 1 ? null : 1)}
+            >
+              <div className={styles.stepTopRow}>
+                <div className={styles.stepIconWrap}>
+                  <Truck size={24} strokeWidth={2.2} />
+                </div>
+                <span className={styles.stepBadgePill}>STEP 02</span>
               </div>
-              <div className={styles.statDescription}>Verified Scrap Merchants</div>
+              <h3 className={styles.stepCardTitle}>2. Merchant Pickup</h3>
+              <p className={styles.stepCardDesc}>
+                A verified Scrap Anna merchant partner arrives at your doorstep on your chosen date and weighs items using 100% digital scales.
+              </p>
+              <div className={styles.stepFeatureList}>
+                <div className={styles.stepFeatureItem}>
+                  <CheckCircle2 size={15} className={styles.stepCheckIcon} />
+                  <span>Verified doorstep partner</span>
+                </div>
+                <div className={styles.stepFeatureItem}>
+                  <CheckCircle2 size={15} className={styles.stepCheckIcon} />
+                  <span>100% calibrated digital scale</span>
+                </div>
+              </div>
             </div>
 
-            <div className={styles.statCell}>
-              <div className={styles.statFigure}>
-                {aggData ? `${aggData.network_statistics.connectedIndustries}+` : '500+'}
+            {/* Step 3: Instant Payment */}
+            <div
+              className={[
+                styles.howItWorksCard,
+                selectedStepCard === 2 ? styles.howItWorksCardActive : '',
+              ].join(' ')}
+              onClick={() => setSelectedStepCard(selectedStepCard === 2 ? null : 2)}
+            >
+              <div className={styles.stepTopRow}>
+                <div className={styles.stepIconWrap}>
+                  <Zap size={24} strokeWidth={2.2} />
+                </div>
+                <span className={styles.stepBadgePill}>STEP 03</span>
               </div>
-              <div className={styles.statDescription}>Industrial & Factory Partners</div>
-            </div>
-
-            <div className={styles.statCell}>
-              <div className={styles.statFigure}>
-                {aggData ? `${(aggData.network_statistics.recycledTons / 1000).toFixed(0)}k+` : '25,000+'} Tons
+              <h3 className={styles.stepCardTitle}>3. Instant Payment</h3>
+              <p className={styles.stepCardDesc}>
+                Get paid immediately to your UPI or bank account with an instant digital invoice before the material leaves your premises.
+              </p>
+              <div className={styles.stepFeatureList}>
+                <div className={styles.stepFeatureItem}>
+                  <CheckCircle2 size={15} className={styles.stepCheckIcon} />
+                  <span>Direct UPI & bank transfer</span>
+                </div>
+                <div className={styles.stepFeatureItem}>
+                  <CheckCircle2 size={15} className={styles.stepCheckIcon} />
+                  <span>Digital weight receipt & invoice</span>
+                </div>
               </div>
-              <div className={styles.statDescription}>Materials Diverted from Landfills</div>
             </div>
           </div>
         </section>
@@ -328,100 +415,6 @@ export default function Home() {
                 <ChevronDown size={14} className={styles.locChevronIcon} />
               </div>
             </div>
-          </div>
-
-          {/* Category Filter Pills Row */}
-          <div className={styles.marketPillsRow}>
-            <button
-              type="button"
-              className={[
-                styles.compactPill,
-                selectedCatId === 'all' ? styles.compactPillActive : '',
-              ].join(' ')}
-              onClick={() => setSelectedCatId('all')}
-            >
-              All
-            </button>
-            <button
-              type="button"
-              className={[
-                styles.compactPill,
-                selectedCatId === 'CAT_IRON' ? styles.compactPillActive : '',
-              ].join(' ')}
-              onClick={() => setSelectedCatId('CAT_IRON')}
-            >
-              Iron
-            </button>
-            <button
-              type="button"
-              className={[
-                styles.compactPill,
-                selectedCatId === 'CAT_PLASTIC' ? styles.compactPillActive : '',
-              ].join(' ')}
-              onClick={() => setSelectedCatId('CAT_PLASTIC')}
-            >
-              Plastic
-            </button>
-            <button
-              type="button"
-              className={[
-                styles.compactPill,
-                selectedCatId === 'CAT_MATERIAL' ? styles.compactPillActive : '',
-              ].join(' ')}
-              onClick={() => setSelectedCatId('CAT_MATERIAL')}
-            >
-              Material
-            </button>
-            <button
-              type="button"
-              className={[
-                styles.compactPill,
-                selectedCatId === 'CAT_PAPER_CARDBOARD' ? styles.compactPillActive : '',
-              ].join(' ')}
-              onClick={() => setSelectedCatId('CAT_PAPER_CARDBOARD')}
-            >
-              Cardboard & Paper
-            </button>
-            <button
-              type="button"
-              className={[
-                styles.compactPill,
-                selectedCatId === 'CAT_BATTERY' ? styles.compactPillActive : '',
-              ].join(' ')}
-              onClick={() => setSelectedCatId('CAT_BATTERY')}
-            >
-              Battery
-            </button>
-            <button
-              type="button"
-              className={[
-                styles.compactPill,
-                selectedCatId === 'CAT_HOME_APPLIANCES' ? styles.compactPillActive : '',
-              ].join(' ')}
-              onClick={() => setSelectedCatId('CAT_HOME_APPLIANCES')}
-            >
-              Home Appliances
-            </button>
-            <button
-              type="button"
-              className={[
-                styles.compactPill,
-                selectedCatId === 'CAT_EWASTE' ? styles.compactPillActive : '',
-              ].join(' ')}
-              onClick={() => setSelectedCatId('CAT_EWASTE')}
-            >
-              E-wastes
-            </button>
-            <button
-              type="button"
-              className={[
-                styles.compactPill,
-                selectedCatId === 'CAT_WIRES' ? styles.compactPillActive : '',
-              ].join(' ')}
-              onClick={() => setSelectedCatId('CAT_WIRES')}
-            >
-              Wires
-            </button>
           </div>
 
           {/* 3-Column Desktop Market Snapshot Grid */}
@@ -481,7 +474,13 @@ export default function Home() {
           </div>
 
           <div className={styles.fourColumnGrid}>
-            <div className={styles.trustAssuranceCard}>
+            <div
+              className={[
+                styles.trustAssuranceCard,
+                selectedTrustCard === 0 ? styles.trustAssuranceCardActive : '',
+              ].join(' ')}
+              onClick={() => setSelectedTrustCard(selectedTrustCard === 0 ? null : 0)}
+            >
               <Scale size={26} className={styles.trustFeatureIcon} />
               <h3 className={styles.trustFeatureTitle}>Certified Digital Scales</h3>
               <p className={styles.trustFeatureText}>
@@ -489,7 +488,13 @@ export default function Home() {
               </p>
             </div>
 
-            <div className={styles.trustAssuranceCard}>
+            <div
+              className={[
+                styles.trustAssuranceCard,
+                selectedTrustCard === 1 ? styles.trustAssuranceCardActive : '',
+              ].join(' ')}
+              onClick={() => setSelectedTrustCard(selectedTrustCard === 1 ? null : 1)}
+            >
               <ShieldCheck size={26} className={styles.trustFeatureIcon} />
               <h3 className={styles.trustFeatureTitle}>Verified Partner Network</h3>
               <p className={styles.trustFeatureText}>
@@ -497,7 +502,13 @@ export default function Home() {
               </p>
             </div>
 
-            <div className={styles.trustAssuranceCard}>
+            <div
+              className={[
+                styles.trustAssuranceCard,
+                selectedTrustCard === 2 ? styles.trustAssuranceCardActive : '',
+              ].join(' ')}
+              onClick={() => setSelectedTrustCard(selectedTrustCard === 2 ? null : 2)}
+            >
               <Lock size={26} className={styles.trustFeatureIcon} />
               <h3 className={styles.trustFeatureTitle}>Sealed Private Quoting</h3>
               <p className={styles.trustFeatureText}>
@@ -505,7 +516,13 @@ export default function Home() {
               </p>
             </div>
 
-            <div className={styles.trustAssuranceCard}>
+            <div
+              className={[
+                styles.trustAssuranceCard,
+                selectedTrustCard === 3 ? styles.trustAssuranceCardActive : '',
+              ].join(' ')}
+              onClick={() => setSelectedTrustCard(selectedTrustCard === 3 ? null : 3)}
+            >
               <DollarSign size={26} className={styles.trustFeatureIcon} />
               <h3 className={styles.trustFeatureTitle}>Direct Instant Payouts</h3>
               <p className={styles.trustFeatureText}>
@@ -516,19 +533,23 @@ export default function Home() {
         </section>
 
         {/* 7. Tamil & English Accessibility */}
-        <section id="accessibility" className={styles.bilingualAccessibilityBanner}>
+        <section
+          id="accessibility"
+          className={[
+            styles.bilingualAccessibilityBanner,
+            accessibilityActive ? styles.bilingualAccessibilityBannerActive : '',
+          ].join(' ')}
+          onClick={() => setAccessibilityActive(!accessibilityActive)}
+        >
           <div className={styles.accessIconContainer}>
-            <Globe size={32} />
+            <Globe size={28} />
           </div>
           <div className={styles.accessTextContainer}>
             <h3 className={styles.accessTitle}>
-              {isTamil ? 'தமிழ் மற்றும் ஆங்கிலத்தில் முழு ஆதரவு' : 'Full Support in English & தமிழ்'}
-            </h3>
-            <p className={styles.accessDescription}>
               {isTamil
-                ? 'அனைவருக்கும் எளிதில் புரியும் வகையிலான இடைமுகம், இருமொழி உதவி மற்றும் வாய்ஸ் அசிஸ்டண்ட் ஆதரவு.'
-                : 'Scrap Anna is built from the ground up for Tamil Nadu, with complete bilingual language support and voice-assisted guidance for merchants.'}
-            </p>
+                ? 'தமிழ் மற்றும் ஆங்கில (English) ஆதரவுடன் வாய்ஸ் உதவி'
+                : 'Tamil & English Support with Voice Assistance'}
+            </h3>
           </div>
           <div className={styles.voiceBadgePill}>
             <Volume2 size={16} /> Tamil Voice Assisted
@@ -615,13 +636,89 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Column 2: Platform Solutions */}
+          {/* Column 2: Home Sections */}
           <div className={styles.footerNavCol}>
-            <h4 className={styles.footerNavTitle}>Platform Solutions</h4>
-            <a href="#who-we-serve" className={styles.footerNavLink}>For Households</a>
-            <a href="#who-we-serve" className={styles.footerNavLink}>For Merchants</a>
-            <a href="#who-we-serve" className={styles.footerNavLink}>For Industries</a>
-            <a href="#market-prices" className={styles.footerNavLink}>Market Reference Rates</a>
+            <h4 className={styles.footerNavTitle}>Home Sections</h4>
+            <a
+              href="#who-we-serve"
+              className={styles.footerNavLink}
+              onClick={(e) => {
+                e.preventDefault();
+                const el = document.getElementById('who-we-serve');
+                if (el) {
+                  const offset = 76;
+                  const top = el.getBoundingClientRect().top + window.pageYOffset - offset;
+                  window.scrollTo({ top, behavior: 'smooth' });
+                  window.history.pushState(null, '', '#who-we-serve');
+                }
+              }}
+            >
+              Who We Serve
+            </a>
+            <a
+              href="#how-it-works"
+              className={styles.footerNavLink}
+              onClick={(e) => {
+                e.preventDefault();
+                const el = document.getElementById('how-it-works');
+                if (el) {
+                  const offset = 76;
+                  const top = el.getBoundingClientRect().top + window.pageYOffset - offset;
+                  window.scrollTo({ top, behavior: 'smooth' });
+                  window.history.pushState(null, '', '#how-it-works');
+                }
+              }}
+            >
+              How It Works
+            </a>
+            <a
+              href="#market-prices"
+              className={styles.footerNavLink}
+              onClick={(e) => {
+                e.preventDefault();
+                const el = document.getElementById('market-prices');
+                if (el) {
+                  const offset = 76;
+                  const top = el.getBoundingClientRect().top + window.pageYOffset - offset;
+                  window.scrollTo({ top, behavior: 'smooth' });
+                  window.history.pushState(null, '', '#market-prices');
+                }
+              }}
+            >
+              Scrap Market Rates
+            </a>
+            <a
+              href="#why-choose-us"
+              className={styles.footerNavLink}
+              onClick={(e) => {
+                e.preventDefault();
+                const el = document.getElementById('why-choose-us');
+                if (el) {
+                  const offset = 76;
+                  const top = el.getBoundingClientRect().top + window.pageYOffset - offset;
+                  window.scrollTo({ top, behavior: 'smooth' });
+                  window.history.pushState(null, '', '#why-choose-us');
+                }
+              }}
+            >
+              Why Choose Us
+            </a>
+            <a
+              href="#accessibility"
+              className={styles.footerNavLink}
+              onClick={(e) => {
+                e.preventDefault();
+                const el = document.getElementById('accessibility');
+                if (el) {
+                  const offset = 76;
+                  const top = el.getBoundingClientRect().top + window.pageYOffset - offset;
+                  window.scrollTo({ top, behavior: 'smooth' });
+                  window.history.pushState(null, '', '#accessibility');
+                }
+              }}
+            >
+              Language Support
+            </a>
           </div>
 
           {/* Column 3: Legal & Trust */}

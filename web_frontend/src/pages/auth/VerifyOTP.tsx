@@ -79,12 +79,14 @@ export default function VerifyOTP() {
       const res = await verifyMobileOTP(phone, otp);
 
       if (res.user) {
-        // Existing user -> Directly to product app shell
+        // Existing user -> Directly to role-based dashboard
         login(res.user, res.token);
         if (res.user.role === 'industry') {
-          navigate('/industry/dashboard', { replace: true });
-        } else {
+          navigate('/dashboard/industry', { replace: true });
+        } else if (res.user.role === 'merchant') {
           navigate('/dashboard/merchant', { replace: true });
+        } else {
+          navigate('/dashboard/household', { replace: true });
         }
       } else {
         // New user -> Choose User Type & Role Registration

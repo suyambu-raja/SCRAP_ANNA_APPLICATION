@@ -474,7 +474,10 @@
 .relatedCardWrapper {
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  border-radius: 14px;
+  border-radius: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
 }
 
 .relatedCardWrapper:hover {
@@ -482,8 +485,7 @@
 }
 
 .relatedCardActive {
-  box-shadow: 0 0 0 2.5px #0f172a, 0 8px 24px rgba(15, 23, 42, 0.12);
-  border-radius: 14px;
+  /* Active styling handled by PriceCard marketCardActive */
 }
 
 /* Responsive */
@@ -514,22 +516,14 @@
     width: 100%;
     justify-content: center;
   }
-  .detailGridDesktop {
-    padding: 1rem;
-    gap: 1.25rem;
+  .detailGridDesktop,
+  .subMaterialTrack {
+    display: none !important;
   }
-  .largeImageFrame {
-    height: 220px;
-  }
-  .largePriceRange {
-    font-size: 1.85rem;
-  }
-  .materialHeading {
-    font-size: 1.35rem;
-  }
-  .ctaYellowBtn {
-    width: 100%;
-    justify-content: center;
+  .relatedMaterialsSection {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
   }
   .relatedGrid {
     grid-template-columns: 1fr;

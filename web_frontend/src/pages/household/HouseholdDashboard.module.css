@@ -283,9 +283,12 @@
    -------------------------------------------------------------------------- */
 .mainContentGrid {
   display: grid;
-  grid-template-columns: 1.4fr 0.95fr;
+  grid-template-columns: 1.35fr 0.95fr;
   gap: 1.5rem;
   align-items: start;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 /* Left Column: Active Pickups & Reviews */
@@ -293,6 +296,19 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Right Column: Market Prices & Reviews */
+.rightSectionCol {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .sectionCard {
@@ -589,11 +605,14 @@
   background: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 20px;
-  padding: 1.5rem 1.5rem;
+  padding: 1.35rem 1.35rem;
   box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1.15rem;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .ratesHeaderRow {
@@ -601,20 +620,28 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: 0.5rem;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .ratesTitleGroup {
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
+  min-width: 0;
+  flex: 1;
 }
 
 .ratesMainTitle {
-  font-size: 1.15rem;
+  font-size: 1.12rem;
   font-weight: 900;
   color: #0f172a;
   margin: 0;
   letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .ratesSubtitle {
@@ -633,6 +660,7 @@
   text-decoration: none;
   transition: all 0.15s ease;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .exploreAllLink:hover {
@@ -644,21 +672,27 @@
   display: flex;
   flex-direction: column;
   gap: 0.65rem;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .rateRowCard {
   background: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 14px;
-  padding: 0.75rem 0.95rem;
+  padding: 0.75rem 0.85rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.75rem;
+  gap: 0.65rem;
   cursor: pointer;
   transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 1px 4px rgba(15, 23, 42, 0.02);
   text-decoration: none;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .rateRowCard:hover {
@@ -670,13 +704,15 @@
 .rateRowLeft {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.65rem;
   min-width: 0;
+  flex: 1;
+  overflow: hidden;
 }
 
 .rateRowThumb {
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   border-radius: 10px;
   background: #f8fafc;
   border: 1px solid #f1f5f9;
@@ -688,8 +724,8 @@
 }
 
 .rateRowThumbSvg {
-  width: 32px;
-  height: 32px;
+  width: 30px;
+  height: 30px;
 }
 
 .rateRowMeta {
@@ -697,33 +733,36 @@
   flex-direction: column;
   gap: 0.15rem;
   min-width: 0;
+  flex: 1;
+  overflow: hidden;
 }
 
 .rateRowName {
-  font-size: 0.85rem;
+  font-size: 0.83rem;
   font-weight: 800;
   color: #0f172a;
   margin: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 140px;
+  width: 100%;
 }
 
 .rateRowPrice {
-  font-size: 0.92rem;
+  font-size: 0.88rem;
   font-weight: 900;
   color: #059669;
   margin: 0;
+  white-space: nowrap;
 }
 
 .rateTrendBadge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.25rem 0.55rem;
+  padding: 0.2rem 0.5rem;
   border-radius: 6px;
-  font-size: 0.76rem;
+  font-size: 0.74rem;
   font-weight: 800;
   white-space: nowrap;
   flex-shrink: 0;
