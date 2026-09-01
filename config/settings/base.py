@@ -64,6 +64,7 @@ LOCAL_APPS = [
     "feature_flags",
     "common",
     "notifications",
+    "maps",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -245,6 +246,12 @@ CASHFREE_ENV = config("CASHFREE_ENV", default="TEST")
 # ------------------------------------------------------------------
 KYC_PROVIDER_API_KEY = config("KYC_PROVIDER_API_KEY", default="")
 KYC_PROVIDER_BASE_URL = config("KYC_PROVIDER_BASE_URL", default="")
+
+
+# ------------------------------------------------------------------
+# Google Maps Platform (Routes API)
+# ------------------------------------------------------------------
+GOOGLE_MAPS_API_KEY = config("GOOGLE_MAPS_API_KEY", default="")
 
 
 # ------------------------------------------------------------------

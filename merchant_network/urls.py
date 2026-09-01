@@ -7,7 +7,8 @@ from merchant_network.views import (
     OffersForMyBulkOrderView,
     SelectOfferView,
     ConfirmActualWeightView,
-    CompleteSaleView
+    CompleteSaleView,
+    SaleRouteView,
 )
 
 app_name = 'merchant_network'
@@ -27,4 +28,5 @@ urlpatterns = [
     
     path('sales/<uuid:sale_id>/confirm-weight/', ConfirmActualWeightView.as_view(), name='confirm-weight'),
     path('sales/<uuid:sale_id>/complete/', CompleteSaleView.as_view(), name='complete-sale'),
+    path('sales/<uuid:sale_id>/route/', SaleRouteView.as_view(), name='sale-route'),
 ]

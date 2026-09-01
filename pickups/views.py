@@ -21,6 +21,8 @@ from pickups.services import (
     record_weight_and_price,
     apply_range_override
 )
+from accounts.services import get_effective_merchant_profile
+from maps.services import get_route_and_eta
 
 logger = logging.getLogger(__name__)
 
@@ -142,3 +144,36 @@ class ApplyRangeOverrideView(APIView):
         
         serializer_out = RangeOverrideSerializer(override)
         return Response(serializer_out.data, status=status.HTTP_201_CREATED)
+
+
+class LeadRouteView(APIView):
+    """
+    Merchant endpoint: returns the driving route and ETA from the merchant's
+    registered profile location to the pickup address of an accepted lead.
+
+    Architecture constraint (PRD §11.2):
+        On-demand "show me the route to my job" action. Must NEVER be called
+        during matching or broadcast — only after the merchant has accepted.
+
+    Ownership: only the merchant assigned to this lead may fetch its route
+    (same check as AcceptLeadView).
+    """
+    permission_classes = [IsVerifiedMerchant]
+
+    def get(self, request, lead_id):
+        try:
+            lead = Lead.objects.select_related("pickup_request").get(id=lead_id)
+        except Lead.DoesNotExist:
+            raise ValueError(f"Lead {lead_id} not found.")
+
+        if lead.merchant != request.user:
+            raise PermissionError("You are not the merchant assigned to this lead.")
+
+        profile = get_effective_merchant_profile(request.user)
+        result = get_route_and_eta(
+            origin_lat=profile.latitude,
+            origin_lng=profile.longitude,
+            dest_lat=lead.pickup_request.latitude,
+            dest_lng=lead.pickup_request.longitude,
+        )
+        return Response(result, status=status.HTTP_200_OK)

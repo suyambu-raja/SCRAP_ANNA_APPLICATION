@@ -23,6 +23,8 @@ from merchant_network.services import (
     confirm_actual_weight,
     complete_sale
 )
+from accounts.services import get_effective_merchant_profile
+from maps.services import get_route_and_eta
 
 logger = logging.getLogger(__name__)
 
@@ -191,3 +193,54 @@ class CompleteSaleView(APIView):
         sale_result = complete_sale(sale_id=sale_id)
         
         return Response(MerchantToMerchantSaleSerializer(sale_result).data, status=status.HTTP_200_OK)
+
+
+class SaleRouteView(APIView):
+    """
+    Merchant endpoint: returns the driving route and ETA for a PICKUP-fulfillment
+    merchant-to-merchant sale.
+
+    The Big Merchant is the one travelling to collect the scrap, so:
+        - Origin  = Big Merchant's registered profile location
+        - Destination = Source Merchant's registered profile location
+
+    For DELIVERY fulfillment the source merchant brings the scrap to the big
+    merchant — no route lookup is needed by the big merchant, so this endpoint
+    raises a clear error for that case rather than returning a misleading result.
+
+    Architecture constraint (PRD §11.2):
+        On-demand "show me the route to my job" action, only callable after a
+        sale has been created (i.e. an offer has been selected). Must NEVER be
+        called during matching or offer evaluation.
+
+    Ownership: either party to the sale may fetch the route
+    (same check as CompleteSaleView).
+    """
+    permission_classes = [IsVerifiedMerchant]
+
+    def get(self, request, sale_id):
+        try:
+            sale = MerchantToMerchantSale.objects.get(id=sale_id)
+        except MerchantToMerchantSale.DoesNotExist:
+            raise ValueError(f"Sale {sale_id} does not exist.")
+
+        if request.user != sale.source_merchant and request.user != sale.big_merchant:
+            raise PermissionError("You are not a party to this sale.")
+
+        if sale.fulfillment_method != MerchantToMerchantSale.FulfillmentMethod.PICKUP:
+            raise ValueError(
+                "Route lookup only applies to PICKUP fulfillment. "
+                "For DELIVERY fulfillment the source merchant brings the scrap — "
+                "no outbound route is needed by the big merchant."
+            )
+
+        big_merchant_profile = get_effective_merchant_profile(sale.big_merchant)
+        source_merchant_profile = get_effective_merchant_profile(sale.source_merchant)
+
+        result = get_route_and_eta(
+            origin_lat=big_merchant_profile.latitude,
+            origin_lng=big_merchant_profile.longitude,
+            dest_lat=source_merchant_profile.latitude,
+            dest_lng=source_merchant_profile.longitude,
+        )
+        return Response(result, status=status.HTTP_200_OK)
