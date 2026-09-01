@@ -1,0 +1,1299 @@
+/* ==========================================================================
+   HOUSEHOLD DASHBOARD STYLING (MATCHING INDUSTRY DASHBOARD DESIGN)
+   ========================================================================== */
+
+.pageContainer {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1.5rem 1.75rem 4rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  box-sizing: border-box;
+  font-family: inherit;
+  color: #0f172a;
+}
+
+/* --------------------------------------------------------------------------
+   1. HERO WELCOME SECTION (DARK GRAPHITE THEME)
+   -------------------------------------------------------------------------- */
+.heroSection {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  border-radius: 20px;
+  padding: 1.75rem 2rem;
+  display: grid;
+  grid-template-columns: 1.35fr 0.65fr;
+  gap: 2rem;
+  align-items: center;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+  border: 1px solid #334155;
+}
+
+.heroLeftContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.enterpriseBadgeRow {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.enterpriseBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(251, 194, 26, 0.15);
+  color: #fbc21a;
+  border: 1px solid rgba(251, 194, 26, 0.35);
+  font-size: 0.7rem;
+  font-weight: 900;
+  padding: 0.25rem 0.65rem;
+  border-radius: 6px;
+  letter-spacing: 0.05em;
+}
+
+.shieldIcon {
+  color: #fbc21a;
+}
+
+.gstinTag {
+  font-size: 0.725rem;
+  color: #cbd5e1;
+  font-family: monospace;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  display: inline-flex;
+  align-items: center;
+}
+
+.welcomeTitle {
+  font-size: 1.65rem;
+  font-weight: 900;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+.heroDescription {
+  font-size: 0.85rem;
+  color: #cbd5e1;
+  margin: 0;
+  line-height: 1.45;
+  max-width: 560px;
+}
+
+.heroActionRow {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-top: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.primaryPostBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: #fbc21a;
+  color: #0f172a;
+  font-size: 0.825rem;
+  font-weight: 900;
+  padding: 0.65rem 1.35rem;
+  border-radius: 8px;
+  text-decoration: none;
+  border: 1.5px solid #e5aa00;
+  transition: all 0.15s ease;
+  box-shadow: 0 4px 12px rgba(251, 194, 26, 0.35);
+  cursor: pointer;
+}
+
+.primaryPostBtn:hover {
+  background: #f59e0b;
+  transform: translateY(-1px);
+}
+
+.secondaryRatesBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+  font-size: 0.825rem;
+  font-weight: 800;
+  padding: 0.65rem 1.25rem;
+  border-radius: 8px;
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.15s ease;
+}
+
+.secondaryRatesBtn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: #fbc21a;
+  color: #fbc21a;
+}
+
+.heroMetricsCard {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  backdrop-filter: blur(8px);
+}
+
+.metricItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.metricLabel {
+  font-size: 0.685rem;
+  font-weight: 800;
+  color: #94a3b8;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.metricValueGold {
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: #fbc21a;
+  margin: 0;
+  line-height: 1.1;
+}
+
+.metricValueWhite {
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.1;
+}
+
+.metricSubtext {
+  font-size: 0.725rem;
+  color: #cbd5e1;
+  margin: 0;
+}
+
+.metricDivider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  width: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   2. 4 KPI STATS CARDS ROW
+   -------------------------------------------------------------------------- */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+}
+
+.statCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 1.25rem 1.35rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.statCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.07);
+}
+
+.statLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.statLabel {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #64748b;
+  margin: 0;
+}
+
+.statNumber {
+  font-size: 1.65rem;
+  font-weight: 900;
+  color: #0f172a;
+  margin: 0;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.statCaption {
+  font-size: 0.725rem;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.statIconCircle {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.iconCircleGold {
+  background: #fffbeb;
+  color: #d97706;
+}
+
+.iconCircleGreen {
+  background: #ecfdf5;
+  color: #059669;
+}
+
+.iconCirclePurple {
+  background: #f5f3ff;
+  color: #7c3aed;
+}
+
+.iconCircleBlue {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+/* --------------------------------------------------------------------------
+   3. TWO-COLUMN MAIN CONTENT SECTION
+   -------------------------------------------------------------------------- */
+.mainContentGrid {
+  display: grid;
+  grid-template-columns: 1.4fr 0.95fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+/* Left Column: Active Pickups & Reviews */
+.leftSectionCol {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.sectionCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 1.5rem 1.75rem;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.sectionHeaderRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.sectionTitleGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.sectionTitle {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: #0f172a;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.sectionSub {
+  font-size: 0.825rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.viewAllLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #334155;
+  font-size: 0.825rem;
+  font-weight: 800;
+  padding: 0.4rem 0.85rem;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.viewAllLink:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+/* Pickup Listing Card */
+.pickupCardsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.pickupItemCard {
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 1.25rem;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transition: all 0.18s ease;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.02);
+}
+
+.pickupItemCard:hover {
+  border-color: #fbc21a;
+  box-shadow: 0 6px 20px rgba(251, 194, 26, 0.12);
+}
+
+.pickupCardTop {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.pickupThumbFrame {
+  width: 84px;
+  height: 84px;
+  border-radius: 14px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pickupThumbFrame:hover {
+  transform: scale(1.03);
+  border-color: #fbc21a;
+  box-shadow: 0 4px 14px rgba(251, 194, 26, 0.25);
+}
+
+.pickupThumbImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.25s ease;
+}
+
+.pickupThumbFrame:hover .pickupThumbImg {
+  transform: scale(1.08);
+}
+
+.thumbOverlayIcon {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  color: #ffffff;
+  font-size: 0.7rem;
+  font-weight: 800;
+  gap: 0.25rem;
+}
+
+.pickupThumbFrame:hover .thumbOverlayIcon {
+  opacity: 1;
+}
+
+.thumbCountBadge {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(2px);
+  color: #fbc21a;
+  font-size: 0.65rem;
+  font-weight: 900;
+  padding: 0.15rem 0.4rem;
+  border-radius: 6px;
+  border: 1px solid rgba(251, 194, 26, 0.4);
+  z-index: 2;
+}
+
+.pickupCardInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  flex: 1;
+}
+
+.pickupTitle {
+  font-size: 0.98rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  line-height: 1.35;
+}
+
+.statusPillRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.statusBadgeGreen {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #ecfdf5;
+  color: #059669;
+  border: 1px solid #a7f3d0;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+}
+
+.statusBadgeBlue {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #eff6ff;
+  color: #2563eb;
+  border: 1px solid #bfdbfe;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+}
+
+.pickupScheduleText {
+  font-size: 0.78rem;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0;
+}
+
+.pickupCardBottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 0.85rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.payoutGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.payoutLabel {
+  font-size: 0.7rem;
+  color: #94a3b8;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.payoutAmount {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #059669;
+}
+
+.cardActionBtns {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.trackGoldBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #fbc21a;
+  color: #0f172a;
+  font-size: 0.78rem;
+  font-weight: 900;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #e5aa00;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-decoration: none;
+}
+
+.trackGoldBtn:hover {
+  background: #f59e0b;
+}
+
+.detailsOutlineBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #ffffff;
+  color: #475569;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.5rem 0.85rem;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-decoration: none;
+}
+
+.detailsOutlineBtn:hover {
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+/* --------------------------------------------------------------------------
+   RIGHT COLUMN: LIVE INDUSTRIAL SCRAP RATES
+   -------------------------------------------------------------------------- */
+.ratesSectionCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 1.5rem 1.5rem;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.ratesHeaderRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.ratesTitleGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.ratesMainTitle {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #0f172a;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.ratesSubtitle {
+  font-size: 0.78rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.exploreAllLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: #b45309;
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-decoration: none;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.exploreAllLink:hover {
+  color: #d97706;
+  transform: translateX(2px);
+}
+
+.rateRowsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.rateRowCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 0.75rem 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  cursor: pointer;
+  transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.02);
+  text-decoration: none;
+}
+
+.rateRowCard:hover {
+  transform: translateY(-2px);
+  border-color: #fbc21a;
+  box-shadow: 0 6px 16px rgba(251, 194, 26, 0.15);
+}
+
+.rateRowLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.rateRowThumb {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: #f8fafc;
+  border: 1px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.rateRowThumbSvg {
+  width: 32px;
+  height: 32px;
+}
+
+.rateRowMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.rateRowName {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 140px;
+}
+
+.rateRowPrice {
+  font-size: 0.92rem;
+  font-weight: 900;
+  color: #059669;
+  margin: 0;
+}
+
+.rateTrendBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem 0.55rem;
+  border-radius: 6px;
+  font-size: 0.76rem;
+  font-weight: 800;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.trendGreen {
+  background: #ecfdf5;
+  color: #059669;
+  border: 1px solid #a7f3d0;
+}
+
+.trendRed {
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.trendNeutral {
+  background: #f0fdf4;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
+}
+
+/* --------------------------------------------------------------------------
+   SHARE YOUR REVIEW CARD
+   -------------------------------------------------------------------------- */
+.reviewCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 1.5rem 1.75rem;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.reviewHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.reviewTitle {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.reviewSubtitle {
+  font-size: 0.825rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.starRatingRow {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.starBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.15rem;
+  color: #cbd5e1;
+  transition: transform 0.12s ease, color 0.12s ease;
+}
+
+.starBtn:hover,
+.starActive {
+  color: #f59e0b;
+  transform: scale(1.15);
+}
+
+.reviewTextarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  font-family: inherit;
+  font-size: 0.86rem;
+  color: #0f172a;
+  resize: vertical;
+  box-sizing: border-box;
+  outline: none;
+  transition: all 0.15s ease;
+}
+
+.reviewTextarea:focus {
+  background: #ffffff;
+  border-color: #f59e0b;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+}
+
+.reviewActionRow {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.submitReviewBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: #ffffff;
+  border: 1.5px solid #f59e0b;
+  color: #d97706;
+  font-size: 0.825rem;
+  font-weight: 800;
+  padding: 0.5rem 1.25rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.submitReviewBtn:hover {
+  background: #f59e0b;
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(245, 158, 11, 0.3);
+}
+
+/* --------------------------------------------------------------------------
+   MODAL (BOOK SCRAP PICKUP)
+   -------------------------------------------------------------------------- */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  z-index: 9999;
+}
+
+.modalBox {
+  background: #ffffff;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 540px;
+  padding: 1.75rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.2);
+  border: 1px solid #e2e8f0;
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modalTitle {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 6px;
+}
+
+.closeBtn:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+/* --------------------------------------------------------------------------
+   DETAIL VISION IMAGE LIGHTBOX / GALLERY MODAL
+   -------------------------------------------------------------------------- */
+.lightboxOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  z-index: 10000;
+}
+
+.lightboxBox {
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 820px;
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+  color: #ffffff;
+}
+
+.lightboxHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 1rem;
+}
+
+.lightboxTitleGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.lightboxTitle {
+  font-size: 1.2rem;
+  font-weight: 900;
+  color: #ffffff;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.orderPillBadge {
+  background: #fbc21a;
+  color: #0f172a;
+  font-size: 0.7rem;
+  font-weight: 900;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+
+.lightboxSubtitle {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.lightboxCloseBtn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #cbd5e1;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.lightboxCloseBtn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.lightboxMainStage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  max-height: 420px;
+  border-radius: 14px;
+  background: #020617;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #1e293b;
+}
+
+.lightboxActiveImg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.lightboxNavBtn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  backdrop-filter: blur(4px);
+  z-index: 5;
+}
+
+.lightboxNavBtn:hover {
+  background: #fbc21a;
+  color: #0f172a;
+  border-color: #fbc21a;
+}
+
+.navPrev {
+  left: 14px;
+}
+
+.navNext {
+  right: 14px;
+}
+
+.lightboxImgCount {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #cbd5e1;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  z-index: 5;
+}
+
+.lightboxCaptionBar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0) 100%);
+  padding: 1.5rem 1.25rem 0.85rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.captionItemName {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+}
+
+.captionItemDetail {
+  font-size: 0.78rem;
+  color: #fbc21a;
+  margin: 0;
+  font-weight: 600;
+}
+
+/* Thumbnail Strip */
+.lightboxThumbStrip {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  padding: 0.25rem 0;
+}
+
+.lightboxThumbItem {
+  width: 90px;
+  height: 68px;
+  border-radius: 10px;
+  border: 2px solid #1e293b;
+  overflow: hidden;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+  opacity: 0.65;
+}
+
+.lightboxThumbItem:hover {
+  opacity: 0.9;
+  border-color: #cbd5e1;
+}
+
+.lightboxThumbItemActive {
+  opacity: 1 !important;
+  border-color: #fbc21a !important;
+  box-shadow: 0 0 0 2px rgba(251, 194, 26, 0.4);
+}
+
+.lightboxThumbImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Lightbox Bottom Actions Bar */
+.lightboxBottomBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 1rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.lightboxMetaCol {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  font-size: 0.82rem;
+  color: #cbd5e1;
+}
+
+.lightboxPayoutText {
+  color: #10b981;
+  font-weight: 900;
+  font-size: 1.1rem;
+}
+
+/* --------------------------------------------------------------------------
+   RESPONSIVE BREAKPOINTS (MATCHING INDUSTRY DASHBOARD RESPONSIVENESS)
+   -------------------------------------------------------------------------- */
+@media (max-width: 1100px) {
+  .heroSection {
+    grid-template-columns: 1fr;
+  }
+
+  .mainContentGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .rateRowName {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 900px) {
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .pageContainer {
+    padding: 1rem 0.85rem 6rem 0.85rem !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+    gap: 1.15rem;
+    box-sizing: border-box;
+  }
+
+  .heroSection {
+    display: flex;
+    flex-direction: column;
+    padding: 1.25rem 1rem;
+    width: 100%;
+    box-sizing: border-box;
+    gap: 1.25rem;
+    border-radius: 16px;
+  }
+
+  .heroLeftContent {
+    width: 100%;
+  }
+
+  .welcomeTitle {
+    font-size: 1.35rem;
+    line-height: 1.25;
+  }
+
+  .heroDescription {
+    font-size: 0.82rem;
+  }
+
+  .heroActionRow {
+    flex-direction: column;
+    width: 100%;
+    gap: 0.65rem;
+  }
+
+  .primaryPostBtn,
+  .secondaryRatesBtn {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+    box-sizing: border-box;
+  }
+
+  .heroMetricsCard {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 1rem;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .metricDivider {
+    width: 100%;
+    height: 1px;
+  }
+
+  .statsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 0.65rem !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .statCard {
+    padding: 0.85rem 0.75rem !important;
+    min-width: 0 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+    border-radius: 14px;
+  }
+
+  .statNumber {
+    font-size: 1.35rem !important;
+  }
+
+  .mainContentGrid {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 1rem;
+  }
+
+  .leftSectionCol,
+  .ratesSectionCard {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .pickupCardTop {
+    flex-direction: column;
+  }
+
+  .pickupThumbFrame {
+    width: 100%;
+    height: 120px;
+  }
+
+  .pickupCardBottom {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.65rem;
+  }
+
+  .cardActionBtns {
+    width: 100% !important;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .detailsOutlineBtn,
+  .trackGoldBtn {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+    box-sizing: border-box;
+  }
+}

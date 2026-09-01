@@ -38,8 +38,8 @@ export default function MerchantMarketPrices() {
   const [selectedMaterialId, setSelectedMaterialId] = useState<string>('IRON_001');
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Merchant Custom Rates State
-  const [merchantRates, setMerchantRates] = useState<Record<string, number>>({});
+  // Merchant Custom Rates State (allows string for fluid backspacing/typing)
+  const [merchantRates, setMerchantRates] = useState<Record<string, number | string>>({});
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   useEffect(() => {
@@ -52,8 +52,8 @@ export default function MerchantMarketPrices() {
         searchParams.get('id')?.toLowerCase() ||
         searchParams.get('name')?.toLowerCase();
 
-      let initialCat = priceData.length > 0 ? priceData[0].categoryId : 'CAT_IRON';
-      let initialMat = priceData.length > 0 ? priceData[0].id : 'IRON_001';
+      let initialCat = 'CAT_IRON';
+      let initialMat = 'IRON_001';
 
       if (targetMaterial && priceData.length > 0) {
         const found = priceData.find((p) => {
@@ -87,12 +87,10 @@ export default function MerchantMarketPrices() {
       setSelectedCatId(initialCat);
       setSelectedMaterialId(initialMat);
 
-      // Initialize merchant rates to middle of market range
-      const initialRates: Record<string, number> = {};
+      // Initialize default merchant custom rates to 0
+      const initialRates: Record<string, number | string> = {};
       priceData.forEach((p) => {
-        const min = p.priceMin ?? Math.round(p.price * 0.9);
-        const max = p.priceMax ?? Math.round(p.price * 1.1);
-        initialRates[p.id] = Math.round((min + max) / 2);
+        initialRates[p.id] = 0;
       });
       setMerchantRates(initialRates);
       setLoading(false);
@@ -192,33 +190,47 @@ export default function MerchantMarketPrices() {
   const currentMerchantRate =
     activePrice && merchantRates[activePrice.id] !== undefined
       ? merchantRates[activePrice.id]
-      : Math.round((minPrice + maxPrice) / 2);
+      : 0;
 
-  // Rate change handlers
-  const handleRateChange = (materialId: string, val: number) => {
-    if (val < 1) return;
+  // Rate change handlers (supports fluid typing & complete deletion of 0)
+  const handleRateChange = (materialId: string, val: string) => {
+    if (val === '') {
+      setMerchantRates((prev) => ({
+        ...prev,
+        [materialId]: '',
+      }));
+      return;
+    }
+    const num = Math.max(0, Math.min(10000, Number(val)));
     setMerchantRates((prev) => ({
       ...prev,
-      [materialId]: val,
+      [materialId]: isNaN(num) ? '' : num,
     }));
   };
 
   const handleStepRate = (materialId: string, step: number) => {
-    const current = merchantRates[materialId] || Math.round((minPrice + maxPrice) / 2);
-    const nextVal = Math.max(1, current + step);
-    handleRateChange(materialId, nextVal);
+    const raw = merchantRates[materialId];
+    const current = raw === '' || raw === undefined ? 0 : Number(raw);
+    const nextVal = Math.min(10000, Math.max(0, current + step));
+    setMerchantRates((prev) => ({
+      ...prev,
+      [materialId]: nextVal,
+    }));
   };
 
   const handleSaveActiveRate = () => {
     if (!activePrice) return;
-    showToast(`✓ Saved YOUR Price for ${activePrice.name || activePrice.category}: ₹${currentMerchantRate}/${activePrice.unit}`);
+    const savedRate = Number(merchantRates[activePrice.id]) || 0;
+    showToast(`✓ Saved YOUR Price for ${activePrice.name || activePrice.category}: ₹${savedRate}/${activePrice.unit}`);
   };
 
   const handleResetToBenchmark = () => {
     if (!activePrice) return;
-    const avg = Math.round((minPrice + maxPrice) / 2);
-    handleRateChange(activePrice.id, avg);
-    showToast(`Reset ${activePrice.name || activePrice.category} to benchmark: ₹${avg}/${activePrice.unit}`);
+    setMerchantRates((prev) => ({
+      ...prev,
+      [activePrice.id]: 0,
+    }));
+    showToast(`Reset YOUR Price for ${activePrice.name || activePrice.category} to ₹0/${activePrice.unit}`);
   };
 
   return (
@@ -430,12 +442,12 @@ export default function MerchantMarketPrices() {
                   </div>
                   <span
                     className={
-                      currentMerchantRate >= Math.round((minPrice + maxPrice) / 2)
+                      Number(currentMerchantRate) >= Math.round((minPrice + maxPrice) / 2) && Number(currentMerchantRate) > 0
                         ? styles.rateCompetitiveTag
                         : styles.rateStandardTag
                     }
                   >
-                    {currentMerchantRate >= Math.round((minPrice + maxPrice) / 2)
+                    {Number(currentMerchantRate) >= Math.round((minPrice + maxPrice) / 2) && Number(currentMerchantRate) > 0
                       ? '🔥 Competitive Rate'
                       : 'Standard Rate'}
                   </span>
@@ -460,10 +472,12 @@ export default function MerchantMarketPrices() {
                     <span className={styles.inputCurrency}>₹</span>
                     <input
                       type="number"
-                      min="1"
+                      min="0"
+                      max="10000"
                       value={currentMerchantRate}
+                      placeholder="0"
                       onChange={(e) =>
-                        handleRateChange(activePrice.id, Number(e.target.value))
+                        handleRateChange(activePrice.id, e.target.value)
                       }
                       className={styles.priceNumberInput}
                     />
@@ -533,7 +547,8 @@ export default function MerchantMarketPrices() {
               {categoryMaterials.map((mat) => {
                 const matMin = mat.priceMin ?? Math.round(mat.price * 0.9);
                 const matMax = mat.priceMax ?? Math.round(mat.price * 1.1);
-                const matRate = merchantRates[mat.id] || Math.round((matMin + matMax) / 2);
+                const rawMatRate = merchantRates[mat.id];
+                const matRate = rawMatRate === '' || rawMatRate === undefined ? 0 : Number(rawMatRate);
                 return (
                   <div
                     key={mat.id}

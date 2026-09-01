@@ -888,6 +888,8 @@
   padding: 1rem;
   box-sizing: border-box;
   animation: modalFadeIn 0.2s ease-out;
+  overscroll-behavior: contain;
+  touch-action: none;
 }
 
 @keyframes modalFadeIn {
@@ -911,6 +913,8 @@
   border: 1px solid #e2e8f0;
   overflow: hidden;
   animation: modalSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  overscroll-behavior: contain;
+  touch-action: pan-y;
 }
 
 @keyframes modalSlideUp {
@@ -977,6 +981,8 @@
   flex-direction: column;
   gap: 1rem;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
   scrollbar-width: thin;
 }
 

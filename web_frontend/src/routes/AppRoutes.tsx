@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { LoadingSpinner } from '@/components/common';
 import { MerchantLayout } from '@/layouts/MerchantLayout';
 import { IndustryLayout } from '@/layouts/IndustryLayout';
+import { HouseholdLayout } from '@/layouts/HouseholdLayout';
 import { ProtectedRoute } from './ProtectedRoute';
 
 /* Lazy-loaded pages */
@@ -15,6 +16,45 @@ const Signup = lazy(() => import('@/pages/auth/Signup'));
 const RegisterRole = lazy(() => import('@/pages/auth/RegisterRole'));
 const VerifyOTP = lazy(() => import('@/pages/auth/VerifyOTP'));
 const RoleUnavailablePage = lazy(() => import('@/pages/common/RoleUnavailablePage'));
+
+/* Household Pages */
+const HouseholdDashboard = lazy(() =>
+  import('@/pages/household/HouseholdDashboard').then((m) => ({ default: m.HouseholdDashboard }))
+);
+const HouseholdHistory = lazy(() =>
+  import('@/pages/household/HouseholdHistory').then((m) => ({ default: m.HouseholdHistory }))
+);
+const HouseholdOrders = lazy(() =>
+  import('@/pages/household/HouseholdOrders').then((m) => ({ default: m.HouseholdOrders }))
+);
+const HouseholdNotifications = lazy(() =>
+  import('@/pages/household/HouseholdNotifications').then((m) => ({
+    default: m.HouseholdNotifications,
+  }))
+);
+const HouseholdProfile = lazy(() =>
+  import('@/pages/household/HouseholdProfile').then((m) => ({ default: m.HouseholdProfile }))
+);
+const HouseholdRates = lazy(() =>
+  import('@/pages/household/HouseholdRates').then((m) => ({
+    default: m.HouseholdRates,
+  }))
+);
+const HouseholdPostScrap = lazy(() =>
+  import('@/pages/household/HouseholdPostScrap').then((m) => ({
+    default: m.HouseholdPostScrap,
+  }))
+);
+const HouseholdReferEarn = lazy(() =>
+  import('@/pages/household/HouseholdReferEarn').then((m) => ({
+    default: m.HouseholdReferEarn,
+  }))
+);
+const HouseholdSupport = lazy(() =>
+  import('@/pages/household/HouseholdSupport').then((m) => ({
+    default: m.HouseholdSupport,
+  }))
+);
 
 /* Merchant Modern Pages */
 const MerchantDashboard = lazy(() => import('@/pages/dashboard/MerchantDashboard'));
@@ -58,11 +98,28 @@ export function AppRoutes() {
         <Route path="/register" element={<RegisterRole />} />
         <Route path="/verify-otp" element={<VerifyOTP />} />
 
-        {/* Temporary Role Unavailable Placeholders */}
-        <Route path="/household" element={<RoleUnavailablePage roleName="Household" />} />
-        <Route path="/dashboard/household" element={<RoleUnavailablePage roleName="Household" />} />
-        <Route path="/aggregator" element={<RoleUnavailablePage roleName="Aggregator" />} />
-        <Route path="/dashboard/aggregator" element={<RoleUnavailablePage roleName="Aggregator" />} />
+        <Route path="/aggregator" element={<Navigate to="/home" replace />} />
+        <Route path="/dashboard/aggregator" element={<Navigate to="/home" replace />} />
+
+        {/* ================================================================
+            Household Dedicated Portal Shell (Graphite Sidebar + Top Header)
+           ================================================================ */}
+        <Route element={<HouseholdLayout />}>
+          <Route path="/household" element={<HouseholdDashboard />} />
+          <Route path="/dashboard/household" element={<HouseholdDashboard />} />
+          <Route path="/household/home" element={<HouseholdDashboard />} />
+          <Route path="/household/rates" element={<HouseholdRates />} />
+          <Route path="/household/market-prices" element={<HouseholdRates />} />
+          <Route path="/household/post-scrap" element={<HouseholdPostScrap />} />
+          <Route path="/household/history" element={<HouseholdHistory />} />
+          <Route path="/household/orders" element={<HouseholdOrders />} />
+          <Route path="/household/notifications" element={<HouseholdNotifications />} />
+          <Route path="/household/profile" element={<HouseholdProfile />} />
+          <Route path="/household/refer-earn" element={<HouseholdReferEarn />} />
+          <Route path="/household/refer" element={<HouseholdReferEarn />} />
+          <Route path="/household/support" element={<HouseholdSupport />} />
+          <Route path="/household/help" element={<HouseholdSupport />} />
+        </Route>
 
         {/* ================================================================
             Merchant Dedicated Layout Shell (Sidebar + Slim Top Header)
@@ -169,4 +226,3 @@ export function AppRoutes() {
     </SuspenseWrap>
   );
 }
-

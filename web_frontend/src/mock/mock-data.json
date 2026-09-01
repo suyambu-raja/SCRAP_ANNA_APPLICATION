@@ -68,23 +68,6 @@
       "avatar": null,
       "verified": true,
       "status": "active"
-    },
-    {
-      "id": "USR004",
-      "role": "aggregator",
-      "name": "Tamil Nadu Recycling Network",
-      "email": "aggregator@example.com",
-      "phone": "+919876543213",
-      "language": "ta",
-      "location": {
-        "area": "Perungudi",
-        "city": "Chennai",
-        "state": "Tamil Nadu",
-        "pincode": "600096"
-      },
-      "avatar": null,
-      "verified": true,
-      "status": "active"
     }
   ],
   "demo_accounts": {
@@ -103,11 +86,6 @@
       {
         "userId": "USR003",
         "login": "industry@example.com",
-        "password": "demo123"
-      },
-      {
-        "userId": "USR004",
-        "login": "aggregator@example.com",
         "password": "demo123"
       }
     ]

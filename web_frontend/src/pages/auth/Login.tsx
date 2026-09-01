@@ -129,14 +129,6 @@ export default function Login() {
                 <strong>Industry</strong>
                 <span>98765 43212</span>
               </button>
-              <button
-                type="button"
-                className={styles.demoBtn}
-                onClick={() => setDemoNumber('9876543213')}
-              >
-                <strong>Aggregator</strong>
-                <span>98765 43213</span>
-              </button>
             </div>
             <p className={styles.demoHint}>
               Tip: Enter any other number (e.g. 9988776655) to test the <strong>New User</strong> flow!

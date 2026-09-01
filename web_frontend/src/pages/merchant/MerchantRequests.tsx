@@ -6,6 +6,7 @@ import {
   ShieldCheck,
   RotateCw,
   ChevronDown,
+  ChevronUp,
   User,
   Building,
   MapPin,
@@ -32,9 +33,26 @@ import {
   AlertTriangle,
   Truck,
   ArrowRight,
+  Search,
+  Plus,
+  Layers,
+  Sparkles,
 } from 'lucide-react';
 import { CardImageGallery } from '@/components/cards/CardImageGallery';
+import { MARKET_SCRAP_CATEGORIES, type MarketScrapSubItem } from './MerchantOrders';
 import styles from './MerchantRequests.module.css';
+
+export interface QuoteProductLine {
+  id: string;
+  name: string;
+  quantity: string;
+  unit: string;
+  estimatedQtyNumber: number;
+  ratePerUnit: number;
+  marketRate?: number;
+  categoryIcon?: string;
+  categoryName?: string;
+}
 
 export interface QuoteOfferItem {
   id: string;
@@ -305,7 +323,10 @@ export default function MerchantRequests() {
 
   // Quote Submission Modal State
   const [activeQuoteRequest, setActiveQuoteRequest] = useState<RequestItem | null>(null);
-  const [quotePrice, setQuotePrice] = useState<string>('');
+  const [quoteProductLines, setQuoteProductLines] = useState<QuoteProductLine[]>([]);
+  const [quoteSearchQuery, setQuoteSearchQuery] = useState<string>('');
+  const [selectedQuoteCatId, setSelectedQuoteCatId] = useState<string>('CAT_IRON');
+  const [showCategoryExplorer, setShowCategoryExplorer] = useState<boolean>(false);
   const [quotePickupDate, setQuotePickupDate] = useState<string>('2025-05-13');
   const [quotePickupTime, setQuotePickupTime] = useState<string>('10:00 AM – 12:00 PM');
   const [quoteNote, setQuoteNote] = useState<string>('');
@@ -351,23 +372,150 @@ export default function MerchantRequests() {
     };
   }, [isRecording]);
 
+  // Lock background screen scroll when modals are open
+  useEffect(() => {
+    const isModalOpen = !!(activeQuoteRequest || detailsModalRequest || floatingImage);
+    if (isModalOpen) {
+      document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+    };
+  }, [activeQuoteRequest, detailsModalRequest, floatingImage]);
+
   const triggerToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 3500);
   };
 
+  // Helper to parse estimated numeric quantity and unit
+  const parseQtyInfo = (qStr: string): { num: number; unit: string } => {
+    const unitMatch = qStr.match(/(KG|TONS?|PIECES?|CAN|UNITS?)/i);
+    const unit = unitMatch ? unitMatch[0].toUpperCase() : 'KG';
+    const numbers = qStr.match(/\d+/g);
+    if (numbers && numbers.length > 0) {
+      const avg = numbers.reduce((a, b) => a + Number(b), 0) / numbers.length;
+      return { num: Math.round(avg), unit };
+    }
+    return { num: 100, unit: 'KG' };
+  };
+
+  // Helper to match scrap catalog item
+  const findMatchingMarketItem = (name: string) => {
+    const lower = name.toLowerCase();
+    for (const cat of MARKET_SCRAP_CATEGORIES) {
+      for (const item of cat.items) {
+        if (lower.includes(item.name.toLowerCase()) || item.name.toLowerCase().includes(lower)) {
+          return { item, cat };
+        }
+      }
+    }
+    if (lower.includes('copper')) return { item: { id: 'COP_001', name: 'Copper Scrap', defaultRate: 720, unit: 'KG' }, cat: MARKET_SCRAP_CATEGORIES[1] };
+    if (lower.includes('steel') || lower.includes('iron')) return { item: { id: 'IRON_001', name: 'Scrap Iron', defaultRate: 42, unit: 'KG' }, cat: MARKET_SCRAP_CATEGORIES[0] };
+    if (lower.includes('brass')) return { item: { id: 'BRS_001', name: 'Brass Scrap (Honey)', defaultRate: 490, unit: 'KG' }, cat: MARKET_SCRAP_CATEGORIES[1] };
+    if (lower.includes('aluminium')) return { item: { id: 'ALU_003', name: 'Commercial Aluminium', defaultRate: 165, unit: 'KG' }, cat: MARKET_SCRAP_CATEGORIES[1] };
+    if (lower.includes('paper') || lower.includes('cardboard') || lower.includes('box')) return { item: { id: 'CRD_001', name: 'Cardboard (Corrugated Box)', defaultRate: 13, unit: 'KG' }, cat: MARKET_SCRAP_CATEGORIES[2] };
+    return { item: { id: 'GEN_001', name, defaultRate: 45, unit: 'KG' }, cat: MARKET_SCRAP_CATEGORIES[0] };
+  };
+
   const handleOpenQuoteModal = (req: RequestItem) => {
     setActiveQuoteRequest(req);
-    // Pre-populate with reasonable default based on material
-    setQuotePrice('');
+    const { num, unit } = parseQtyInfo(req.quantity);
+    const match = findMatchingMarketItem(req.materialName);
+
+    setQuoteProductLines([
+      {
+        id: `PROD-${Date.now()}-1`,
+        name: req.materialName,
+        quantity: req.quantity,
+        unit: match.item.unit || unit,
+        estimatedQtyNumber: num,
+        ratePerUnit: match.item.defaultRate,
+        marketRate: match.item.defaultRate,
+        categoryIcon: match.cat.icon,
+        categoryName: match.cat.name,
+      },
+    ]);
+    setQuoteSearchQuery('');
+    setSelectedQuoteCatId(match.cat.id || 'CAT_IRON');
+    setShowCategoryExplorer(false);
     setQuotePickupDate('2025-05-13');
     setQuotePickupTime(req.pickupTime || '10:00 AM – 12:00 PM');
-    setQuoteNote('We bring calibrated digital scales and provide instant spot UPI payment.');
+    setQuoteNote('We bring calibrated digital scales and provide instant spot settlement.');
     setIsRecording(false);
     setRecordingSeconds(0);
     setHasRecordedAudio(false);
     setIsPlayingAudio(false);
   };
+
+  const handleAddProductFromCatalog = (subItem: MarketScrapSubItem, catIcon?: string, catName?: string) => {
+    const existing = quoteProductLines.find((p) => p.name.toLowerCase() === subItem.name.toLowerCase());
+    if (existing) {
+      triggerToast(`ℹ️ ${subItem.name} is already in your quote items list.`);
+      return;
+    }
+    setQuoteProductLines((prev) => [
+      ...prev,
+      {
+        id: `PROD-${Date.now()}-${prev.length + 1}`,
+        name: subItem.name,
+        quantity: `100 ${subItem.unit}`,
+        unit: subItem.unit,
+        estimatedQtyNumber: 100,
+        ratePerUnit: subItem.defaultRate,
+        marketRate: subItem.defaultRate,
+        categoryIcon: catIcon || '📦',
+        categoryName: catName || 'General Scrap',
+      },
+    ]);
+    setQuoteSearchQuery('');
+    triggerToast(`+ Added ${subItem.name} (₹${subItem.defaultRate}/${subItem.unit}) to quote!`);
+  };
+
+  const handleAddCustomQuoteProduct = () => {
+    if (!quoteSearchQuery.trim()) return;
+    const name = quoteSearchQuery.trim();
+    setQuoteProductLines((prev) => [
+      ...prev,
+      {
+        id: `PROD-${Date.now()}-${prev.length + 1}`,
+        name,
+        quantity: '100 KG',
+        unit: 'KG',
+        estimatedQtyNumber: 100,
+        ratePerUnit: 50,
+        marketRate: 50,
+        categoryIcon: '✨',
+        categoryName: 'Custom Scrap',
+      },
+    ]);
+    setQuoteSearchQuery('');
+    triggerToast(`+ Added custom item "${name}" to quote!`);
+  };
+
+  const handleUpdateProductRate = (id: string, newRate: number) => {
+    setQuoteProductLines((prev) =>
+      prev.map((p) => (p.id === id ? { ...p, ratePerUnit: Math.max(0, newRate) } : p))
+    );
+  };
+
+  const handleRemoveQuoteProduct = (id: string) => {
+    if (quoteProductLines.length <= 1) {
+      triggerToast('⚠️ At least one product rate must be quoted.');
+      return;
+    }
+    setQuoteProductLines((prev) => prev.filter((p) => p.id !== id));
+  };
+
+  const totalQuoteEstAmount = quoteProductLines.reduce(
+    (sum, p) => sum + p.estimatedQtyNumber * (p.ratePerUnit || 0),
+    0
+  );
 
   const handleCloseQuoteModal = () => {
     setActiveQuoteRequest(null);
@@ -397,8 +545,8 @@ export default function MerchantRequests() {
   const handleSubmitQuote = (e: React.FormEvent) => {
     e.preventDefault();
     if (!activeQuoteRequest) return;
-    if (!quotePrice || Number(quotePrice) <= 0) {
-      triggerToast('⚠️ Please enter a valid quote price.');
+    if (quoteProductLines.length === 0 || quoteProductLines.some((p) => !p.ratePerUnit || p.ratePerUnit <= 0)) {
+      triggerToast('⚠️ Please enter a valid per-unit price for all quoted products.');
       return;
     }
 
@@ -409,7 +557,7 @@ export default function MerchantRequests() {
               ...r,
               status: 'accepted',
               submittedQuote: {
-                price: Number(quotePrice),
+                price: totalQuoteEstAmount,
                 pickupDate: quotePickupDate,
                 pickupTime: quotePickupTime,
                 hasVoiceNote: hasRecordedAudio,
@@ -420,16 +568,18 @@ export default function MerchantRequests() {
       )
     );
 
+    const summaryNames = quoteProductLines.map((p) => `${p.name} (₹${p.ratePerUnit}/${p.unit})`).join(', ');
+
     const newOffer: QuoteOfferItem = {
       id: `QUO-${Date.now().toString().slice(-6)}`,
       customerName: activeQuoteRequest.posterName,
       customerType: activeQuoteRequest.requesterType,
-      materialName: activeQuoteRequest.materialName,
+      materialName: summaryNames,
       materialCondition: activeQuoteRequest.materialCondition + ' Condition',
       image: activeQuoteRequest.image,
       quantity: activeQuoteRequest.quantity,
       address: activeQuoteRequest.address,
-      quotedPrice: Number(quotePrice),
+      quotedPrice: totalQuoteEstAmount,
       pickupSlot: `${quotePickupDate}, ${quotePickupTime}`,
       submittedAgo: 'Just now',
       status: 'Waiting',
@@ -438,7 +588,7 @@ export default function MerchantRequests() {
     };
     setSubmittedOffers((prev) => [newOffer, ...prev]);
 
-    triggerToast(`✓ Quote of ₹${Number(quotePrice).toLocaleString('en-IN')} submitted to ${activeQuoteRequest.posterName}!`);
+    triggerToast(`✓ Quote with ${quoteProductLines.length} committed product rate(s) submitted to ${activeQuoteRequest.posterName}!`);
     handleCloseQuoteModal();
   };
 
@@ -924,62 +1074,6 @@ export default function MerchantRequests() {
                   </div>
                 </article>
               ))}
-
-              {/* Extension Strip */}
-              <div className={styles.extensionStrip}>
-                <div className={styles.extensionLeft}>
-                  <div className={styles.extensionIconCircle}>
-                    <Clock size={18} />
-                  </div>
-                  <div className={styles.extensionTextCol}>
-                    <div className={styles.extensionTitle}>Need more time to calculate?</div>
-                    <div className={styles.extensionSub}>
-                      Request an extension once to keep your priority slot active.
-                    </div>
-                  </div>
-                </div>
-
-                <div className={styles.extensionRight}>
-                  <div className={styles.extensionControls}>
-                    <select
-                      value={extensionTime}
-                      onChange={(e) => setExtensionTime(e.target.value)}
-                      className={styles.extensionSelect}
-                      aria-label="Extend Response Time"
-                    >
-                      <option value="+ 15 minutes">+ 15 minutes</option>
-                      <option value="+ 30 minutes">+ 30 minutes</option>
-                      <option value="+ 1 hour">+ 1 hour</option>
-                    </select>
-
-                    <button
-                      type="button"
-                      className={styles.extensionBtn}
-                      onClick={handleRequestExtension}
-                    >
-                      Request Extension
-                    </button>
-                  </div>
-                  <span className={styles.extensionNote}>
-                    Customer will be notified of your extended review window.
-                  </span>
-                </div>
-              </div>
-
-              {/* Bottom Banner */}
-              <div className={styles.bottomBanner}>
-                <div className={styles.bannerLeft}>
-                  <div className={styles.bannerIconCircle}>
-                    <TrendingUp size={22} />
-                  </div>
-                  <div className={styles.bannerTextCol}>
-                    <div className={styles.bannerTitle}>Respond within 15 minutes to win 3x more deals</div>
-                    <div className={styles.bannerSub}>
-                      Merchants who quote first with realistic market pricing close 82% of all assigned scrap pickups.
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
           </section>
 
@@ -1092,29 +1186,240 @@ export default function MerchantRequests() {
                 </div>
               </div>
 
-              {/* 1. Required Field: Your Price (₹) */}
-              <div className={styles.formGroup}>
-                <label className={styles.formLabel}>
-                  <span>Your Price (Total Offer in ₹)</span>
-                  <span className={styles.requiredStar}>*</span>
-                </label>
-                <div className={styles.priceInputWrapper}>
-                  <span className={styles.currencyPrefix}>₹</span>
-                  <input
-                    type="number"
-                    min="1"
-                    step="any"
-                    placeholder="Enter total offer amount (e.g. 12500)"
-                    value={quotePrice}
-                    onChange={(e) => setQuotePrice(e.target.value)}
-                    className={styles.formInputPrice}
-                    required
-                    autoFocus
-                  />
+              {/* 1. Offered Scrap Rates (Per-Product / Per-KG Pricing) */}
+              <div className={styles.quoteProductsSection}>
+                <div className={styles.sectionHeaderBetween}>
+                  <div>
+                    <label className={styles.formLabel}>
+                      <span>1. Quoted Scrap Materials &amp; Offered Rates</span>
+                      <span className={styles.requiredStar}>*</span>
+                    </label>
+                    <span className={styles.formHelperText}>
+                      Specify your committed purchase rate (₹ / KG or unit) for each requested item.
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    className={styles.toggleCatalogBtn}
+                    onClick={() => setShowCategoryExplorer(!showCategoryExplorer)}
+                  >
+                    <Plus size={14} />
+                    <span>{showCategoryExplorer ? 'Hide Scrap Catalog' : '+ Add from Catalog'}</span>
+                  </button>
                 </div>
-                <span className={styles.formHelperText}>
-                  Enter the total purchase amount you are offering for this entire batch.
-                </span>
+
+                {/* List of Product Lines being Quoted */}
+                <div className={styles.quoteProductsList}>
+                  {quoteProductLines.map((prod) => (
+                    <div key={prod.id} className={styles.quoteProductCard}>
+                      <div className={styles.quoteProductTop}>
+                        <div className={styles.productTitleGroup}>
+                          <span className={styles.productCatIcon}>{prod.categoryIcon || '📦'}</span>
+                          <div>
+                            <strong className={styles.productNameText}>{prod.name}</strong>
+                            <div className={styles.productMetaTags}>
+                              <span className={styles.reqQtyPill}>Req: {prod.quantity}</span>
+                              {prod.categoryName && (
+                                <span className={styles.catNamePill}>{prod.categoryName}</span>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+
+                        {quoteProductLines.length > 1 && (
+                          <button
+                            type="button"
+                            className={styles.removeProdBtn}
+                            onClick={() => handleRemoveQuoteProduct(prod.id)}
+                            title="Remove product"
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        )}
+                      </div>
+
+                      <div className={styles.quoteRateInputRow}>
+                        <div className={styles.rateInputCol}>
+                          <label className={styles.rateSubLabel}>
+                            Your Offered Rate (₹ / {prod.unit})
+                          </label>
+                          <div className={styles.priceInputWrapper}>
+                            <span className={styles.currencyPrefix}>₹</span>
+                            <input
+                              type="number"
+                              min="1"
+                              step="any"
+                              placeholder={`Enter rate per ${prod.unit}`}
+                              value={prod.ratePerUnit || ''}
+                              onChange={(e) => handleUpdateProductRate(prod.id, parseFloat(e.target.value) || 0)}
+                              className={styles.formInputPrice}
+                              required
+                            />
+                            <span className={styles.unitSuffix}>/ {prod.unit}</span>
+                          </div>
+                        </div>
+
+                        <div className={styles.rateSubtotalCol}>
+                          <span className={styles.rateSubtotalLabel}>Est. Item Total</span>
+                          <strong className={styles.rateSubtotalVal}>
+                            ₹{((prod.estimatedQtyNumber || 100) * (prod.ratePerUnit || 0)).toLocaleString('en-IN')}
+                          </strong>
+                          {prod.marketRate && (
+                            <span className={styles.marketBenchmarkTag}>
+                              Market Rate: ₹{prod.marketRate} / {prod.unit}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Category Explorer & Universal Search (Same as Billing) */}
+                {showCategoryExplorer && (
+                  <div className={styles.quoteCategoryExplorerWrapper}>
+                    {/* Top Universal Search Input */}
+                    <div className={styles.scrapSearchInputWrapper}>
+                      <Search size={16} className={styles.scrapSearchIcon} />
+                      <input
+                        type="text"
+                        value={quoteSearchQuery}
+                        onChange={(e) => setQuoteSearchQuery(e.target.value)}
+                        placeholder="Search any scrap (e.g. Iron, Tin, Copper, Aluminium, Cardboard, Battery, Wires...)"
+                        className={styles.scrapSearchInput}
+                      />
+                      {quoteSearchQuery && (
+                        <button
+                          type="button"
+                          className={styles.clearSearchQueryBtn}
+                          onClick={() => setQuoteSearchQuery('')}
+                          title="Clear search"
+                        >
+                          <X size={14} />
+                        </button>
+                      )}
+                    </div>
+
+                    {/* Live Search Results OR Category Tabs Explorer */}
+                    {quoteSearchQuery.trim() ? (
+                      <div className={styles.searchResultsGrid}>
+                        {MARKET_SCRAP_CATEGORIES.flatMap((c) =>
+                          c.items
+                            .filter((item) =>
+                              item.name.toLowerCase().includes(quoteSearchQuery.toLowerCase()) ||
+                              c.name.toLowerCase().includes(quoteSearchQuery.toLowerCase()) ||
+                              (item.quality && item.quality.toLowerCase().includes(quoteSearchQuery.toLowerCase()))
+                            )
+                            .map((item) => ({ ...item, categoryName: c.name, categoryIcon: c.icon }))
+                        ).map((item) => (
+                          <div
+                            key={item.id}
+                            className={styles.subCategoryCard}
+                            onClick={() => handleAddProductFromCatalog(item, item.categoryIcon, item.categoryName)}
+                          >
+                            <div className={styles.subCategoryCardTop}>
+                              <span className={styles.subCategoryCategoryTag}>
+                                {item.categoryIcon} {item.categoryName}
+                              </span>
+                              <span className={styles.subCategoryPriceBadge}>
+                                ₹{item.defaultRate} / {item.unit}
+                              </span>
+                            </div>
+                            <strong className={styles.subCategoryName}>{item.name}</strong>
+                            <button type="button" className={styles.addSubItemBtn}>
+                              <Plus size={12} />
+                              <span>+ Add to Quote</span>
+                            </button>
+                          </div>
+                        ))}
+
+                        <div
+                          className={styles.customAddSubCard}
+                          onClick={handleAddCustomQuoteProduct}
+                        >
+                          <span className={styles.customAddTag}>Custom Scrap</span>
+                          <strong className={styles.customAddTitle}>+ Add "{quoteSearchQuery.trim()}"</strong>
+                          <button type="button" className={styles.addSubItemBtn}>
+                            <Plus size={12} />
+                            <span>+ Add Custom</span>
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className={styles.categoryExplorerInner}>
+                        {/* Horizontal Category Selector Tabs */}
+                        <div className={styles.billingCategoryTabsTrack}>
+                          {MARKET_SCRAP_CATEGORIES.map((cat) => (
+                            <button
+                              key={cat.id}
+                              type="button"
+                              className={`${styles.billingCategoryTabBtn} ${
+                                selectedQuoteCatId === cat.id ? styles.billingCategoryTabActive : ''
+                              }`}
+                              onClick={() => setSelectedQuoteCatId(cat.id)}
+                            >
+                              <span className={styles.billingCategoryTabIcon}>{cat.icon}</span>
+                              <span className={styles.billingCategoryTabLabel}>{cat.name}</span>
+                            </button>
+                          ))}
+                        </div>
+
+                        {/* Subcategories Grid for Selected Category */}
+                        {(() => {
+                          const activeCat =
+                            MARKET_SCRAP_CATEGORIES.find((c) => c.id === selectedQuoteCatId) ||
+                            MARKET_SCRAP_CATEGORIES[0];
+                          return (
+                            <div className={styles.subCategoryCardsGrid}>
+                              {activeCat.items.map((subItem) => (
+                                <div
+                                  key={subItem.id}
+                                  className={styles.subCategoryCard}
+                                  onClick={() => handleAddProductFromCatalog(subItem, activeCat.icon, activeCat.name)}
+                                >
+                                  <div className={styles.subCategoryCardTop}>
+                                    <strong className={styles.subCategoryName}>{subItem.name}</strong>
+                                    <span className={styles.subCategoryPriceBadge}>
+                                      ₹{subItem.defaultRate} / {subItem.unit}
+                                    </span>
+                                  </div>
+                                  <span className={styles.subCategoryQuality}>{subItem.quality}</span>
+                                  <div className={styles.subCategoryCardBottom}>
+                                    <span className={styles.marketStandardTag}>Market Standard</span>
+                                    <button type="button" className={styles.addSubItemBtn}>
+                                      <Plus size={12} />
+                                      <span>+ Add</span>
+                                    </button>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          );
+                        })()}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Total Summary Strip */}
+                <div className={styles.quoteTotalSummaryStrip}>
+                  <div className={styles.quoteTotalRatesPreview}>
+                    <span className={styles.totalSummaryLabel}>COMMITTED RATES:</span>
+                    <div className={styles.ratesPillsRow}>
+                      {quoteProductLines.map((p) => (
+                        <span key={p.id} className={styles.rateSummaryPill}>
+                          {p.name.split(' ')[0]}: <strong>₹{p.ratePerUnit || 0}/{p.unit}</strong>
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  <div className={styles.quoteTotalAmountBlock}>
+                    <span className={styles.totalAmountSubLabel}>Total Estimated Offer</span>
+                    <strong className={styles.totalAmountBig}>
+                      ₹{totalQuoteEstAmount.toLocaleString('en-IN')}
+                    </strong>
+                  </div>
+                </div>
               </div>
 
               {/* 2. Required Field: Available Pickup Time */}

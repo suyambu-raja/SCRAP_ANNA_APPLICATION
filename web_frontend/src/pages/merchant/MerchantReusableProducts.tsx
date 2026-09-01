@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   ShieldCheck,
   Eye,
@@ -185,6 +185,21 @@ export default function MerchantReusableProducts() {
 
     return matchesSearch && matchesCategory && matchesAvailability;
   });
+
+  // Lock background screen scroll when modal is open
+  useEffect(() => {
+    if (detailsProduct || isAddModalOpen) {
+      document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+    };
+  }, [detailsProduct, isAddModalOpen]);
 
   return (
     <div className={styles.pageContainer}>

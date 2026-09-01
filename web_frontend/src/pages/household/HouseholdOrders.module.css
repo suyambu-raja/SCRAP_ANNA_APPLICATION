@@ -1,0 +1,1072 @@
+/* ==========================================================================
+   HOUSEHOLD ORDERS PAGE STYLING (MATCHING ATTACHED SCREENSHOT & PENDING STATE)
+   ========================================================================== */
+
+.pageContainer {
+  width: 100%;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 1.5rem 2rem 4rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  box-sizing: border-box;
+  font-family: inherit;
+  color: #0f172a;
+}
+
+/* Header Section */
+.headerBanner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.headerTitleGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.mainTitle {
+  font-size: 1.65rem;
+  font-weight: 900;
+  color: #0f172a;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.mainSubtitle {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.postScrapBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: #fbc21a;
+  color: #0f172a;
+  font-size: 0.825rem;
+  font-weight: 900;
+  padding: 0.6rem 1.25rem;
+  border-radius: 8px;
+  text-decoration: none;
+  border: 1.5px solid #e5aa00;
+  transition: all 0.15s ease;
+  box-shadow: 0 2px 8px rgba(251, 194, 26, 0.25);
+  cursor: pointer;
+}
+
+.postScrapBtn:hover {
+  background: #f59e0b;
+  transform: translateY(-1px);
+}
+
+/* Order Tabs Track */
+.orderTabsTrack {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  overflow-x: auto;
+  padding-bottom: 0.35rem;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+}
+
+.orderTabsTrack::-webkit-scrollbar {
+  display: none;
+}
+
+.orderTabBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.6rem 1rem;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: inherit;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.orderTabBtn:hover {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+}
+
+.orderTabActive {
+  background: #0f172a !important;
+  border-color: #0f172a !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.15);
+}
+
+.tabOrderNumber {
+  font-weight: 800;
+  font-size: 0.85rem;
+}
+
+.tabStatusPillGreen {
+  background: #ecfdf5;
+  color: #059669;
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 0.15rem 0.5rem;
+  border-radius: 9999px;
+  border: 1px solid #a7f3d0;
+}
+
+.orderTabActive .tabStatusPillGreen {
+  background: #fbc21a;
+  color: #0f172a;
+  border-color: #fbc21a;
+}
+
+.tabStatusPillYellow {
+  background: #fffbeb;
+  color: #b45309;
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 0.15rem 0.5rem;
+  border-radius: 9999px;
+  border: 1px solid #fde68a;
+}
+
+/* --------------------------------------------------------------------------
+   CONFIRMATION TOP STATUS BANNER (MATCHING ATTACHED SCREENSHOT)
+   -------------------------------------------------------------------------- */
+.topStatusCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.topStatusLeft {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.checkCircleIcon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #ecfdf5;
+  color: #10b981;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1.5px solid #a7f3d0;
+}
+
+.topStatusTitles {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.statusHeading {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #0f172a;
+  margin: 0;
+}
+
+.statusSubheading {
+  font-size: 0.82rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.topStatusRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.15rem;
+  text-align: right;
+}
+
+.orderIdText {
+  font-size: 0.86rem;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.bookedDateText {
+  font-size: 0.76rem;
+  color: #64748b;
+}
+
+/* --------------------------------------------------------------------------
+   MAIN 2-COLUMN ORDER DETAILS GRID (MATCHING ATTACHED SCREENSHOT)
+   -------------------------------------------------------------------------- */
+.orderContentGrid {
+  display: grid;
+  grid-template-columns: 0.95fr 1.45fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+/* Left Column: Pickup Details & Merchant Details */
+.leftColStack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Pickup Details Card */
+.detailsCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.cardTitle {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+.infoRowsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.infoRowItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+}
+
+.infoRowIcon {
+  color: #64748b;
+  margin-top: 0.15rem;
+  flex-shrink: 0;
+}
+
+.infoRowContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.infoRowLabel {
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.infoRowValue {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.35;
+}
+
+.statusPillOnWay {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #ecfdf5;
+  color: #059669;
+  font-size: 0.78rem;
+  font-weight: 800;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  border: 1px solid #a7f3d0;
+  width: fit-content;
+}
+
+.statusPillSearching {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #fffbeb;
+  color: #b45309;
+  font-size: 0.78rem;
+  font-weight: 800;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  border: 1px solid #fde68a;
+  width: fit-content;
+}
+
+/* Merchant Details Card (Only shown after confirmation) */
+.merchantDetailsCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.merchantProfileRow {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.merchantAvatarWrap {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #f1f5f9;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.merchantNameCol {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.merchantNameText {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+.merchantRatingText {
+  font-size: 0.76rem;
+  color: #d97706;
+  font-weight: 700;
+}
+
+.merchantPhoneText {
+  font-size: 0.78rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.arrivingBox {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 0.85rem;
+}
+
+.arrivingLabel {
+  font-size: 0.74rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.arrivingTimeBig {
+  font-size: 1.55rem;
+  font-weight: 900;
+  color: #059669;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.arrivingDistanceSub {
+  font-size: 0.76rem;
+  color: #64748b;
+}
+
+/* --------------------------------------------------------------------------
+   LIVE MERCHANT LOCATION MAP (MATCHING ATTACHED SCREENSHOT)
+   -------------------------------------------------------------------------- */
+.mapCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.mapHeaderRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.mapTitleGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.mapMainTitle {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.liveGreenPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: #ecfdf5;
+  color: #059669;
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 0.15rem 0.45rem;
+  border-radius: 6px;
+}
+
+.mapSubtitle {
+  font-size: 0.8rem;
+  color: #64748b;
+  margin: 0;
+}
+
+/* Vector Map Viewport Container */
+.mapViewportFrame {
+  position: relative;
+  width: 100%;
+  height: 420px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+}
+
+.vectorMapSvg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Live Truck Overlay Marker Card on Map */
+.mapTruckMarkerWrap {
+  position: absolute;
+  top: 38%;
+  left: 42%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  cursor: pointer;
+}
+
+.truckPopupCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.15);
+  border-radius: 8px;
+  padding: 0.45rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.truckPopupName {
+  font-size: 0.76rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.truckPopupSub {
+  font-size: 0.68rem;
+  color: #64748b;
+}
+
+.truckPopupEta {
+  font-size: 0.68rem;
+  color: #059669;
+  font-weight: 800;
+}
+
+.truckPinIconBox {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid #f97316;
+  color: #f97316;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Destination User Pin */
+.mapDestMarkerWrap {
+  position: absolute;
+  top: 48%;
+  right: 18%;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  transform: translateY(-50%);
+  z-index: 10;
+}
+
+.destPopupCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.15);
+  border-radius: 8px;
+  padding: 0.45rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  white-space: nowrap;
+}
+
+.destPopupTitle {
+  font-size: 0.76rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.destPopupSub {
+  font-size: 0.66rem;
+  color: #64748b;
+}
+
+.destPinIcon {
+  color: #ef4444;
+  flex-shrink: 0;
+}
+
+/* Map UI Controls (+ / - and center) */
+.mapControlsWrap {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  z-index: 10;
+}
+
+.mapControlBtn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  font-weight: 800;
+  transition: all 0.15s ease;
+}
+
+.mapControlBtn:hover {
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+/* --------------------------------------------------------------------------
+   PENDING STATE (BEFORE CONFIRMATION): BROADCASTING & SINGLE UPLOAD BOX
+   -------------------------------------------------------------------------- */
+.broadcastingCard {
+  background: linear-gradient(135deg, #fffdf5 0%, #fffbeb 100%);
+  border: 1.5px solid #fde68a;
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.merchantCountBanner {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: #ffffff;
+  border: 1px solid #fef3c7;
+  padding: 0.85rem 1.15rem;
+  border-radius: 12px;
+}
+
+.countNumberLarge {
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: #b45309;
+}
+
+.countTextCol {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.countMainText {
+  font-size: 0.86rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.countSubText {
+  font-size: 0.74rem;
+  color: #64748b;
+}
+
+/* Single Box for Scrap Photos & Items Upload */
+.singleUploadBox {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.singleBoxHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.photoThumbGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+}
+
+.thumbCardSingle {
+  aspect-ratio: 4 / 3;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.18s ease;
+}
+
+.thumbCardSingle:hover {
+  transform: scale(1.03);
+  border-color: #fbc21a;
+}
+
+.thumbImgSingle {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* --------------------------------------------------------------------------
+   BOTTOM NOTICE BAR & NEED HELP BUTTON (MATCHING ATTACHED SCREENSHOT)
+   -------------------------------------------------------------------------- */
+.bottomNoticeBar {
+  background: #f0f7ff;
+  border: 1px solid #dbeafe;
+  border-radius: 12px;
+  padding: 0.85rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.noticeLeftText {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.84rem;
+  color: #1e40af;
+  font-weight: 600;
+}
+
+.needHelpBtn {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.45rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.needHelpBtn:hover {
+  background: #f8fafc;
+  color: #0f172a;
+  border-color: #94a3b8;
+}
+
+/* --------------------------------------------------------------------------
+   DETAIL VISION LIGHTBOX MODAL
+   -------------------------------------------------------------------------- */
+.lightboxOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  z-index: 10000;
+}
+
+.lightboxBox {
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 780px;
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  color: #ffffff;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+}
+
+.lightboxStage {
+  width: 100%;
+  max-height: 440px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #020617;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightboxImg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* --------------------------------------------------------------------------
+   MERCHANT ARRIVED & PICKUP OTP STYLES
+   -------------------------------------------------------------------------- */
+.arrivedAlertBanner {
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+  border: 1.5px solid #6ee7b7;
+  border-radius: 16px;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.arrivedLeftCol {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.arrivedTruckIcon {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background: #059669;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.otpDisplayBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #ffffff;
+  border: 2px dashed #059669;
+  border-radius: 12px;
+  padding: 0.6rem 1.25rem;
+  text-align: center;
+}
+
+.otpInstructionLabel {
+  font-size: 0.72rem;
+  color: #64748b;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.otpCodeLarge {
+  font-size: 1.65rem;
+  font-weight: 900;
+  letter-spacing: 0.25em;
+  color: #059669;
+  margin: 0.1rem 0;
+}
+
+/* --------------------------------------------------------------------------
+   BILLING SLIP / DIGITAL INVOICE REVIEW STYLES
+   -------------------------------------------------------------------------- */
+.billingPageContainer {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.billingSlipCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 4px 25px rgba(15, 23, 42, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  position: relative;
+}
+
+.billHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid #f1f5f9;
+  padding-bottom: 1.25rem;
+}
+
+.scaleVerifiedBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #ecfdf5;
+  color: #059669;
+  font-size: 0.76rem;
+  font-weight: 800;
+  padding: 0.25rem 0.65rem;
+  border-radius: 6px;
+  border: 1px solid #a7f3d0;
+}
+
+.billItemsTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.billItemsTable th {
+  text-align: left;
+  font-size: 0.74rem;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.billItemsTable td {
+  padding: 0.85rem 0;
+  font-size: 0.86rem;
+  color: #0f172a;
+  border-bottom: 1px solid #f8fafc;
+}
+
+.billTotalBox {
+  background: #0f172a;
+  color: #ffffff;
+  border-radius: 14px;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.billConfirmationCard {
+  background: #ffffff;
+  border: 1.5px solid #fbc21a;
+  border-radius: 20px;
+  padding: 1.75rem;
+  box-shadow: 0 4px 20px rgba(251, 194, 26, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.billingOtpHighlight {
+  background: #fffdf5;
+  border: 2px dashed #f59e0b;
+  border-radius: 14px;
+  padding: 1.25rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.confirmBillBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: #10b981;
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 900;
+  padding: 0.85rem 1.5rem;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+  transition: all 0.18s ease;
+}
+
+.confirmBillBtn:hover {
+  background: #059669;
+  transform: translateY(-1px);
+}
+
+/* --------------------------------------------------------------------------
+   ORDER COMPLETED & PAYMENT SUCCESS RECEIPT STYLES
+   -------------------------------------------------------------------------- */
+.completedSuccessCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 2.5rem 2rem;
+  box-shadow: 0 10px 35px rgba(15, 23, 42, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.5rem;
+  max-width: 680px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.successCelebrationCircle {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: #ecfdf5;
+  color: #10b981;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #a7f3d0;
+  box-shadow: 0 0 0 8px rgba(16, 185, 129, 0.1);
+}
+
+.completedPayoutAmount {
+  font-size: 2.25rem;
+  font-weight: 900;
+  color: #059669;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.receiptDetailsBox {
+  width: 100%;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  text-align: left;
+}
+
+.receiptRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.85rem;
+}
+
+/* Star Rating in Completed Card */
+.completedRatingSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.65rem;
+  width: 100%;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 1.25rem;
+}
+
+.starRatingWrap {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.starBtn {
+  background: none;
+  border: none;
+  color: #cbd5e1;
+  cursor: pointer;
+  padding: 0.2rem;
+  transition: transform 0.15s ease;
+}
+
+.starBtn:hover,
+.starActive {
+  color: #f59e0b;
+  transform: scale(1.2);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .orderContentGrid,
+  .billingPageContainer {
+    grid-template-columns: 1fr;
+  }
+
+  .photoThumbGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .pageContainer {
+    padding: 1rem 1rem 3rem 1rem;
+  }
+
+  .mapViewportFrame {
+    height: 320px;
+  }
+
+  .photoThumbGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

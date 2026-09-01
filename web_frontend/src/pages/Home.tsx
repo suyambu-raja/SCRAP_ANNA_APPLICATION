@@ -273,28 +273,6 @@ export default function Home() {
                 </div>
               </div>
             </div>
-
-            {/* Aggregator */}
-            <div className={styles.roleBox}>
-              <div className={styles.roleHeader}>
-                <div className={styles.roleIconWrap}>
-                  <Recycle size={20} />
-                </div>
-                <span className={styles.rolePill}>Aggregator</span>
-              </div>
-              <h3 className={styles.roleHeading}>Recycling Aggregators</h3>
-              <div className={styles.roleDetailGroup}>
-                <div className={styles.roleDetailItem}>
-                  <strong>WHO:</strong> Large-scale processing hubs & mill suppliers.
-                </div>
-                <div className={styles.roleDetailItem}>
-                  <strong>WHAT:</strong> Network volume tracking, logistics routing, bulk contracts.
-                </div>
-                <div className={styles.roleDetailItem}>
-                  <strong>WHY:</strong> Continuous, predictable supply chain operations.
-                </div>
-              </div>
-            </div>
           </div>
         </section>
 
@@ -643,7 +621,6 @@ export default function Home() {
             <a href="#who-we-serve" className={styles.footerNavLink}>For Households</a>
             <a href="#who-we-serve" className={styles.footerNavLink}>For Merchants</a>
             <a href="#who-we-serve" className={styles.footerNavLink}>For Industries</a>
-            <a href="#who-we-serve" className={styles.footerNavLink}>For Aggregators</a>
             <a href="#market-prices" className={styles.footerNavLink}>Market Reference Rates</a>
           </div>
 

@@ -4,7 +4,6 @@ import {
   Home as HomeIcon,
   Store,
   Factory,
-  Network,
   ArrowRight,
   ArrowLeft,
   Check,
@@ -44,12 +43,6 @@ const ROLE_OPTIONS: RoleOption[] = [
     title: 'Industry',
     description: 'Post scrap requirements and find suitable merchants.',
     icon: <Factory size={24} />,
-  },
-  {
-    id: 'aggregator',
-    title: 'Aggregator',
-    description: 'Collect, manage and trade scrap across your service area.',
-    icon: <Network size={24} />,
   },
 ];
 
@@ -210,15 +203,6 @@ export default function RegisterRole() {
         setError('Please enter shop / business name.');
         return;
       }
-    } else if (selectedRole === 'aggregator') {
-      if (!companyName.trim()) {
-        setError('Please enter aggregator organization name.');
-        return;
-      }
-      if (!contactPerson.trim()) {
-        setError('Please enter authorized representative name.');
-        return;
-      }
     }
 
     setLoading(true);
@@ -227,12 +211,7 @@ export default function RegisterRole() {
       const res = await registerRoleUser({
         phone,
         role: selectedRole,
-        name:
-          selectedRole === 'industry'
-            ? contactPerson
-            : selectedRole === 'aggregator'
-            ? contactPerson
-            : name,
+        name: selectedRole === 'industry' ? contactPerson : name,
         email: email.trim(),
         address: address.trim(),
         area: cityArea.trim() || 'Guindy',
@@ -1272,113 +1251,6 @@ export default function RegisterRole() {
                     </div>
                   </form>
                 )}
-              </div>
-            )}
-
-            {/* --------------------------------------------------------------------- */}
-            {/* D. AGGREGATOR REGISTRATION */}
-            {/* --------------------------------------------------------------------- */}
-            {selectedRole === 'aggregator' && (
-              <div>
-                <div className={styles.headerLeft}>
-                  <h1 className={styles.title}>Register as Scrap Aggregator</h1>
-                  <p className={styles.subtitle}>
-                    Collect, manage and trade bulk scrap across your operational hubs.
-                  </p>
-                </div>
-
-                <form onSubmit={handleFinalSubmit} className={styles.form}>
-                  <div className={styles.fieldGroup}>
-                    <label className={styles.fieldLabel}>Aggregator / Organization Name *</label>
-                    <input
-                      type="text"
-                      className={styles.textInput}
-                      placeholder="e.g. Greater Chennai Recycling Aggregators"
-                      value={companyName}
-                      onChange={(e) => setCompanyName(e.target.value)}
-                      required
-                      autoFocus
-                    />
-                  </div>
-
-                  <div className={styles.fieldGroup}>
-                    <label className={styles.fieldLabel}>Authorized Representative Name *</label>
-                    <input
-                      type="text"
-                      className={styles.textInput}
-                      placeholder="e.g. K. Murugesan"
-                      value={contactPerson}
-                      onChange={(e) => setContactPerson(e.target.value)}
-                      required
-                    />
-                  </div>
-
-                  <div className={styles.fieldGroup}>
-                    <label className={styles.fieldLabel}>Mobile Number</label>
-                    <div className={styles.readOnlyInput}>
-                      <span>{formattedPhone}</span>
-                      <span className={styles.verifiedPill}>
-                        <Check size={12} strokeWidth={3} /> Verified
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className={styles.fieldGroup}>
-                    <label className={styles.fieldLabel}>Official Email Address (Optional)</label>
-                    <input
-                      type="email"
-                      className={styles.textInput}
-                      placeholder="e.g. operations@chennairecycle.in"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                    />
-                  </div>
-
-                  <div className={styles.fieldGroup}>
-                    <label className={styles.fieldLabel}>
-                      Primary Processing Facility / Hubs in Chennai *
-                    </label>
-                    <input
-                      type="text"
-                      className={styles.textInput}
-                      placeholder="e.g. Manali Recycling Yard / Madhavaram Logistics Hub"
-                      value={address}
-                      onChange={(e) => setAddress(e.target.value)}
-                      required
-                    />
-                  </div>
-
-                  <div className={styles.fieldGroup}>
-                    <label className={styles.fieldLabel}>Estimated Daily Processing Capacity</label>
-                    <div className={styles.pillsWrap}>
-                      {['1–3 Tons', '5–10 Tons', '15–30 Tons', '50+ Tons / Day'].map((cap) => (
-                        <button
-                          key={cap}
-                          type="button"
-                          className={[
-                            styles.selectPill,
-                            dailyCapacity === cap ? styles.selectPillActive : '',
-                          ].join(' ')}
-                          onClick={() => setDailyCapacity(cap)}
-                        >
-                          {cap}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {error && <div className={styles.errorBanner}>{error}</div>}
-
-                  <Button
-                    type="submit"
-                    fullWidth
-                    size="lg"
-                    loading={loading}
-                    icon={<ArrowRight size={18} />}
-                  >
-                    {loading ? 'Setting up Network...' : 'Complete Aggregator Registration'}
-                  </Button>
-                </form>
               </div>
             )}
           </div>

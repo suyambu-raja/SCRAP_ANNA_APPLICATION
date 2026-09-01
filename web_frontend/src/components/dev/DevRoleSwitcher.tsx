@@ -24,12 +24,10 @@ export function DevRoleSwitcher() {
       navigate('/industry/dashboard');
     } else if (user.role === 'merchant') {
       navigate('/dashboard/merchant');
-    } else if (user.role === 'aggregator') {
-      navigate('/dashboard/aggregator');
     } else if (user.role === 'household') {
-      navigate('/dashboard/household');
+      navigate('/household');
     } else {
-      navigate('/dashboard/' + user.role);
+      navigate('/household');
     }
     setIsOpen(false);
   };
