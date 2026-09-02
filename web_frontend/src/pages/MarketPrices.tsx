@@ -19,15 +19,15 @@ import type { MarketPrice, ScrapCategory } from '@/types';
 import styles from './MarketPrices.module.css';
 
 /**
- * Hook to smoothly auto-scroll category/sub-category tracks leftward.
- * Pauses for 10 seconds whenever the user clicks, swipes, or touches the row.
+ * Hook for seamless infinite circular carousel scrolling leftward.
+ * Duplicate sets of items seamlessly follow each other. When half the content has scrolled,
+ * the scroll offset is adjusted by half the scrollWidth imperceptibly (0 pause, 0 jump).
  */
 function useAutoScrollTrack(speedPxPerSec = 22, pauseDurationMs = 10000) {
   const trackRef = useRef<HTMLDivElement | null>(null);
   const isPausedRef = useRef(false);
   const pauseTimeoutRef = useRef<number | null>(null);
-  const isHoldingAtEndRef = useRef(false);
-  const scrollDirectionRef = useRef<'forward' | 'backward'>('forward');
+  const scrollPosRef = useRef<number>(0);
 
   const pauseForDuration = useCallback((duration = pauseDurationMs) => {
     isPausedRef.current = true;
@@ -47,6 +47,10 @@ function useAutoScrollTrack(speedPxPerSec = 22, pauseDurationMs = 10000) {
   }, []);
 
   const onUserInteractionEnd = useCallback(() => {
+    if (trackRef.current) {
+      const halfScroll = trackRef.current.scrollWidth / 2;
+      scrollPosRef.current = halfScroll > 0 ? trackRef.current.scrollLeft % halfScroll : trackRef.current.scrollLeft;
+    }
     pauseForDuration(pauseDurationMs);
   }, [pauseForDuration, pauseDurationMs]);
 
@@ -58,32 +62,18 @@ function useAutoScrollTrack(speedPxPerSec = 22, pauseDurationMs = 10000) {
       if (lastTime === null) {
         lastTime = time;
       }
-      const delta = Math.min((time - lastTime) / 1000, 0.1);
+      const delta = Math.min((time - lastTime) / 1000, 0.05);
       lastTime = time;
 
       const el = trackRef.current;
-      if (el && !isPausedRef.current && !isHoldingAtEndRef.current) {
-        const maxScroll = el.scrollWidth - el.clientWidth;
-        if (maxScroll > 10) {
-          if (scrollDirectionRef.current === 'forward') {
-            el.scrollLeft += speedPxPerSec * delta;
-            if (el.scrollLeft >= maxScroll - 2) {
-              isHoldingAtEndRef.current = true;
-              window.setTimeout(() => {
-                scrollDirectionRef.current = 'backward';
-                isHoldingAtEndRef.current = false;
-              }, 1200);
-            }
-          } else {
-            el.scrollLeft -= speedPxPerSec * 1.8 * delta;
-            if (el.scrollLeft <= 2) {
-              isHoldingAtEndRef.current = true;
-              window.setTimeout(() => {
-                scrollDirectionRef.current = 'forward';
-                isHoldingAtEndRef.current = false;
-              }, 1200);
-            }
+      if (el && !isPausedRef.current) {
+        const halfScroll = el.scrollWidth / 2;
+        if (halfScroll > 10) {
+          scrollPosRef.current += speedPxPerSec * delta;
+          if (scrollPosRef.current >= halfScroll) {
+            scrollPosRef.current -= halfScroll;
           }
+          el.scrollLeft = scrollPosRef.current;
         }
       }
 
@@ -106,8 +96,20 @@ function useAutoScrollTrack(speedPxPerSec = 22, pauseDurationMs = 10000) {
     onTouchCancel: onUserInteractionEnd,
     onMouseDown: onUserInteractionStart,
     onMouseUp: onUserInteractionEnd,
-    onWheel: () => pauseForDuration(pauseDurationMs),
-    onClick: () => pauseForDuration(pauseDurationMs),
+    onWheel: () => {
+      if (trackRef.current) {
+        const halfScroll = trackRef.current.scrollWidth / 2;
+        scrollPosRef.current = halfScroll > 0 ? trackRef.current.scrollLeft % halfScroll : trackRef.current.scrollLeft;
+      }
+      pauseForDuration(pauseDurationMs);
+    },
+    onClick: () => {
+      if (trackRef.current) {
+        const halfScroll = trackRef.current.scrollWidth / 2;
+        scrollPosRef.current = halfScroll > 0 ? trackRef.current.scrollLeft % halfScroll : trackRef.current.scrollLeft;
+      }
+      pauseForDuration(pauseDurationMs);
+    },
   };
 
   return { trackRef, pauseForDuration, interactionProps };
@@ -136,7 +138,7 @@ export default function MarketPrices() {
       setCategories(catData);
       if (priceData.length > 0) {
         const initialCat = categoryParam || priceData[0].categoryId;
-        const initialItem = itemParam || priceData.find(p => p.categoryId === initialCat)?.id || priceData[0].id;
+        const initialItem = itemParam || priceData.find((p) => p.categoryId === initialCat)?.id || priceData[0].id;
         setSelectedCatId(initialCat);
         setSelectedMaterialId(initialItem);
       }
@@ -152,9 +154,9 @@ export default function MarketPrices() {
       ? prices
       : prices.filter((p) => p.categoryId === selectedCatId);
 
-  // Active material being inspected
-  const activePrice: MarketPrice | undefined =
-    prices.find((p) => p.id === selectedMaterialId) ||
+  // Active selected price item (fallback to first material)
+  const activePrice =
+    categoryMaterials.find((p) => p.id === selectedMaterialId) ||
     categoryMaterials[0] ||
     prices[0];
 
@@ -185,73 +187,83 @@ export default function MarketPrices() {
             </Link>
           </div>
 
-          {/* Primary Categories Filter Pills (Auto-scrolling with 10s pause on interaction) */}
+          {/* Primary Categories Filter Pills (Seamless Infinite Carousel) */}
           <div
             ref={categoryScroll.trackRef}
             className={styles.categoryPillsTrack}
             {...categoryScroll.interactionProps}
           >
-            <button
-              type="button"
-              className={[
-                styles.materialPillBtn,
-                selectedCatId === 'all' ? styles.materialPillActive : '',
-              ].join(' ')}
-              onClick={() => {
-                categoryScroll.pauseForDuration(10000);
-                setSelectedCatId('all');
-                if (prices.length > 0) setSelectedMaterialId(prices[0].id);
-              }}
-            >
-              All
-            </button>
-            {categories.map((cat) => (
-              <button
-                key={cat.id}
-                type="button"
-                className={[
-                  styles.materialPillBtn,
-                  selectedCatId === cat.id ? styles.materialPillActive : '',
-                ].join(' ')}
-                onClick={() => {
-                  categoryScroll.pauseForDuration(10000);
-                  setSelectedCatId(cat.id);
-                  const firstInCat = prices.find((p) => p.categoryId === cat.id);
-                  if (firstInCat) setSelectedMaterialId(firstInCat.id);
-                }}
-              >
-                {isTamil ? cat.name_ta : cat.name}
-              </button>
+            {[0, 1].map((copyIndex) => (
+              <div key={copyIndex} className={styles.categoryPillsGroup}>
+                <button
+                  type="button"
+                  className={[
+                    styles.materialPillBtn,
+                    selectedCatId === 'all' ? styles.materialPillActive : '',
+                  ].join(' ')}
+                  onClick={() => {
+                    categoryScroll.pauseForDuration(10000);
+                    setSelectedCatId('all');
+                    if (prices.length > 0) setSelectedMaterialId(prices[0].id);
+                  }}
+                >
+                  All
+                </button>
+                {categories.map((cat) => (
+                  <button
+                    key={`${copyIndex}-${cat.id}`}
+                    type="button"
+                    className={[
+                      styles.materialPillBtn,
+                      selectedCatId === cat.id ? styles.materialPillActive : '',
+                    ].join(' ')}
+                    onClick={() => {
+                      categoryScroll.pauseForDuration(10000);
+                      setSelectedCatId(cat.id);
+                      const firstInCat = prices.find((p) => p.categoryId === cat.id);
+                      if (firstInCat) setSelectedMaterialId(firstInCat.id);
+                    }}
+                  >
+                    {isTamil ? cat.name_ta : cat.name}
+                  </button>
+                ))}
+              </div>
             ))}
           </div>
         </div>
 
-        {/* Sub-Material Selector Pills (Auto-scrolling with 10s pause on interaction) */}
+        {/* Sub-Material Selector Pills (Seamless Infinite Carousel) */}
         {categoryMaterials.length > 1 && (
           <div
             ref={subCategoryScroll.trackRef}
             className={styles.subMaterialTrack}
             {...subCategoryScroll.interactionProps}
           >
-            <span className={styles.subMaterialLabel}>
-              <Tag size={13} />
-              <span>Select Material:</span>
-            </span>
-            {categoryMaterials.map((mat) => (
-              <button
-                key={mat.id}
-                type="button"
-                className={[
-                  styles.subMaterialPill,
-                  activePrice?.id === mat.id ? styles.subMaterialPillActive : '',
-                ].join(' ')}
-                onClick={() => {
-                  subCategoryScroll.pauseForDuration(10000);
-                  setSelectedMaterialId(mat.id);
-                }}
-              >
-                {mat.name || mat.category}
-              </button>
+            {[0, 1].map((copyIndex) => (
+              <div key={copyIndex} className={styles.subMaterialGroup}>
+                {copyIndex === 0 && (
+                  <span className={styles.subMaterialLabel}>
+                    <Tag size={13} />
+                    <span>Select Material:</span>
+                  </span>
+                )}
+                {categoryMaterials.map((mat) => (
+                  <button
+                    key={`${copyIndex}-${mat.id}`}
+                    type="button"
+                    className={[
+                      styles.subMaterialPill,
+                      activePrice?.id === mat.id ? styles.subMaterialPillActive : '',
+                    ].join(' ')}
+                    onClick={() => {
+                      subCategoryScroll.pauseForDuration(10000);
+                      setSelectedMaterialId(mat.id);
+                    }}
+                  >
+                    {mat.name || mat.category}
+                  </button>
+                ))}
+              </div>
             ))}
           </div>
         )}

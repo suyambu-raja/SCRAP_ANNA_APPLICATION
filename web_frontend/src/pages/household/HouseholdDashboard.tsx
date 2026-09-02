@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   ShieldCheck,
@@ -241,6 +241,59 @@ const ACTIVE_PICKUPS: ActivePickup[] = [
   },
 ];
 
+interface PromoSlide {
+  id: string;
+  type: 'image' | 'gold-banner';
+  image?: string;
+  title?: string;
+  subtitle?: string;
+  link: string;
+  alt?: string;
+  bgColor?: string;
+}
+
+const PROMO_SLIDES: PromoSlide[] = [
+  {
+    id: 'ayudha-puja',
+    type: 'image',
+    image: '/promo-ayudha-puja.png',
+    link: '/household/post-scrap',
+    alt: 'Ayudha Puja Special - Clean your space. Sell your scrap.',
+    bgColor: '#FAF5E8',
+  },
+  {
+    id: 'nearby-collectors',
+    type: 'image',
+    image: '/promo-nearby-collectors.png',
+    link: '/household/post-scrap',
+    alt: 'Nearby scrap collectors ready to pickup - Fast Pickup, Fair Pricing, Digital Payment',
+    bgColor: '#111215',
+  },
+  {
+    id: 'market-rates',
+    type: 'image',
+    image: '/promo-market-rates.png',
+    link: '/household/rates',
+    alt: "Today's Market Rates - Stay updated, sell better - Aluminium, Copper, Iron",
+    bgColor: '#F4F5F6',
+  },
+  {
+    id: 'greener-tomorrow',
+    type: 'image',
+    image: '/promo-greener-tomorrow.png',
+    link: '/household/post-scrap',
+    alt: 'Building a cleaner, greener tomorrow - Trusted by Households & Businesses',
+    bgColor: '#12200A',
+  },
+  {
+    id: 'turn-scrap',
+    type: 'gold-banner',
+    title: 'Turn your scrap into value',
+    subtitle: 'Doorstep pickup • Accurate weighing\nBest prices • Instant payment',
+    link: '/household/post-scrap',
+  },
+];
+
 export function HouseholdDashboard() {
   const navigate = useNavigate();
   const user = useAuthStore((s) => s.user);
@@ -263,6 +316,126 @@ export function HouseholdDashboard() {
     if (hour < 17) return 'Good afternoon!';
     return 'Good evening!';
   };
+
+  // ---------------------------------------------------------------------------
+  // Top Hero Carousel State (Seamless Infinite Loop with Touch & Drag Support)
+  // ---------------------------------------------------------------------------
+  const carouselSlides = [
+    PROMO_SLIDES[PROMO_SLIDES.length - 1],
+    ...PROMO_SLIDES,
+    PROMO_SLIDES[0],
+  ];
+
+  const [sliderIndex, setSliderIndex] = useState(1);
+  const [isSliderTransitioning, setIsSliderTransitioning] = useState(true);
+  const [sliderDragOffset, setSliderDragOffset] = useState(0);
+  const [isSliderDragging, setIsSliderDragging] = useState(false);
+
+  const sliderStartXRef = useRef(0);
+  const sliderCurrentXRef = useRef(0);
+  const sliderDragDistanceRef = useRef(0);
+  const autoSlideTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const resumeTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const sliderContainerRef = useRef<HTMLDivElement | null>(null);
+  const isInteractingRef = useRef(false);
+
+  const startAutoSlide = useCallback(() => {
+    if (autoSlideTimerRef.current) clearInterval(autoSlideTimerRef.current);
+    autoSlideTimerRef.current = setInterval(() => {
+      if (!isInteractingRef.current) {
+        setIsSliderTransitioning(true);
+        setSliderIndex((prev) => prev + 1);
+      }
+    }, 4500);
+  }, []);
+
+  const stopAutoSlide = useCallback(() => {
+    if (autoSlideTimerRef.current) {
+      clearInterval(autoSlideTimerRef.current);
+      autoSlideTimerRef.current = null;
+    }
+  }, []);
+
+  const resetResumeTimer = useCallback(() => {
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+    resumeTimerRef.current = setTimeout(() => {
+      isInteractingRef.current = false;
+      startAutoSlide();
+    }, 4000);
+  }, [startAutoSlide]);
+
+  useEffect(() => {
+    startAutoSlide();
+    return () => {
+      stopAutoSlide();
+      if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+    };
+  }, [startAutoSlide, stopAutoSlide]);
+
+  const handleSlideTransitionEnd = () => {
+    if (sliderIndex === carouselSlides.length - 1) {
+      setIsSliderTransitioning(false);
+      setSliderIndex(1);
+    } else if (sliderIndex === 0) {
+      setIsSliderTransitioning(false);
+      setSliderIndex(PROMO_SLIDES.length);
+    }
+  };
+
+  const handleDragStart = (clientX: number) => {
+    isInteractingRef.current = true;
+    stopAutoSlide();
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+
+    sliderStartXRef.current = clientX;
+    sliderCurrentXRef.current = clientX;
+    sliderDragDistanceRef.current = 0;
+    setIsSliderDragging(true);
+    setIsSliderTransitioning(false);
+  };
+
+  const handleDragMove = (clientX: number) => {
+    if (!isSliderDragging) return;
+    sliderCurrentXRef.current = clientX;
+    const delta = clientX - sliderStartXRef.current;
+    sliderDragDistanceRef.current = Math.abs(delta);
+    setSliderDragOffset(delta);
+  };
+
+  const handleDragEnd = () => {
+    if (!isSliderDragging) return;
+    setIsSliderDragging(false);
+    setIsSliderTransitioning(true);
+
+    const delta = sliderCurrentXRef.current - sliderStartXRef.current;
+    const containerWidth = sliderContainerRef.current?.offsetWidth || 400;
+    const threshold = Math.min(60, containerWidth * 0.15);
+
+    if (delta < -threshold) {
+      setSliderIndex((prev) => prev + 1);
+    } else if (delta > threshold) {
+      setSliderIndex((prev) => prev - 1);
+    }
+    setSliderDragOffset(0);
+    resetResumeTimer();
+  };
+
+  const handleLinkClickCapture = (e: React.MouseEvent) => {
+    if (sliderDragDistanceRef.current > 8) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  };
+
+  const goToSlide = (dotIndex: number) => {
+    isInteractingRef.current = true;
+    stopAutoSlide();
+    setIsSliderTransitioning(true);
+    setSliderIndex(dotIndex + 1);
+    resetResumeTimer();
+  };
+
+  const activeDotIndex = (sliderIndex - 1 + PROMO_SLIDES.length) % PROMO_SLIDES.length;
 
   // Address State & Bottom Sheet State
   const [savedAddresses, setSavedAddresses] = useState<DeliveryAddress[]>(INITIAL_DELIVERY_ADDRESSES);
@@ -423,28 +596,105 @@ export function HouseholdDashboard() {
       </div>
 
       {/* =========================================================================
-          2. GOLD VALUE BANNER (TURN YOUR SCRAP INTO VALUE - MATCHING REFERENCE UI)
+          2. TOP PROMOTIONAL HERO / IMAGE SLIDER (POLISHED PRODUCTION MOBILE CAROUSEL)
           ========================================================================= */}
-      <section className={styles.goldValueBanner}>
-        <div className={styles.goldBannerLeft}>
-          <h1 className={styles.goldBannerTitle}>Turn your scrap into value</h1>
+      <section
+        ref={sliderContainerRef}
+        className={styles.heroSliderWrapper}
+        onMouseEnter={() => {
+          isInteractingRef.current = true;
+          stopAutoSlide();
+        }}
+        onMouseLeave={() => {
+          if (!isSliderDragging) {
+            resetResumeTimer();
+          }
+        }}
+        onTouchStart={(e) => handleDragStart(e.touches[0].clientX)}
+        onTouchMove={(e) => handleDragMove(e.touches[0].clientX)}
+        onTouchEnd={handleDragEnd}
+        onMouseDown={(e) => {
+          if (e.button === 0) {
+            handleDragStart(e.clientX);
+          }
+        }}
+        onMouseMove={(e) => handleDragMove(e.clientX)}
+        onMouseUp={handleDragEnd}
+      >
+        <div
+          className={styles.sliderTrack}
+          onTransitionEnd={handleSlideTransitionEnd}
+          style={{
+            transform: isSliderDragging
+              ? `translateX(calc(-${sliderIndex * 100}% + ${sliderDragOffset}px))`
+              : `translateX(-${sliderIndex * 100}%)`,
+            transition: isSliderTransitioning
+              ? 'transform 600ms cubic-bezier(0.25, 1, 0.5, 1)'
+              : 'none',
+          }}
+        >
+          {carouselSlides.map((slide, idx) => (
+            <div
+              key={`${slide.id}-${idx}`}
+              className={styles.slideItem}
+              onClickCapture={handleLinkClickCapture}
+            >
+              {slide.type === 'image' ? (
+                <div
+                  className={styles.imagePromoSlide}
+                  style={slide.bgColor ? { backgroundColor: slide.bgColor } : undefined}
+                >
+                  <img
+                    src={slide.image}
+                    alt={slide.alt || 'Promotional Banner'}
+                    className={styles.promoImageFull}
+                    draggable={false}
+                  />
+                  <Link
+                    to={slide.link}
+                    className={styles.imageSlideClickOverlay}
+                    aria-label={slide.alt}
+                  />
+                </div>
+              ) : (
+                <div className={styles.goldValueBannerSlide}>
+                  <div className={styles.goldBannerLeft}>
+                    <h1 className={styles.goldBannerTitle}>{slide.title}</h1>
+                    <p className={styles.goldBannerSubtitle}>
+                      {slide.subtitle?.split('\n').map((line, lIdx) => (
+                        <span key={lIdx} style={{ display: 'block' }}>
+                          {line}
+                        </span>
+                      ))}
+                    </p>
+                    <div className={styles.goldBannerBtnRow}>
+                      <Link to="/household/post-scrap" className={styles.goldPostBtn}>
+                        <Plus size={16} color="#fbc21a" />
+                        <span>Post Scrap</span>
+                      </Link>
+                      <Link to="/household/rates" className={styles.goldRatesBtn}>
+                        <TrendingUp size={16} color="#15171B" />
+                        <span>Rates</span>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
 
-          <p className={styles.goldBannerSubtitle}>
-            Doorstep pickup • Accurate weighing<br />
-            Best prices • Instant payment
-          </p>
-
-          <div className={styles.goldBannerBtnRow}>
-            <Link to="/household/post-scrap" className={styles.goldPostBtn}>
-              <Plus size={16} color="#fbc21a" />
-              <span>Post Scrap</span>
-            </Link>
-
-            <Link to="/household/rates" className={styles.goldRatesBtn}>
-              <TrendingUp size={16} color="#0f172a" />
-              <span>Rates</span>
-            </Link>
-          </div>
+        {/* Pagination Dots (Bottom Center of Slider) */}
+        <div className={styles.sliderDotsContainer}>
+          {PROMO_SLIDES.map((_, dotIdx) => (
+            <button
+              key={dotIdx}
+              type="button"
+              className={`${styles.sliderDot} ${activeDotIndex === dotIdx ? styles.sliderDotActive : ''}`}
+              onClick={() => goToSlide(dotIdx)}
+              aria-label={`Go to slide ${dotIdx + 1}`}
+            />
+          ))}
         </div>
       </section>
 
@@ -469,9 +719,9 @@ export function HouseholdDashboard() {
           <div className={styles.statLeft}>
             <span className={styles.statNumber}>118.6 kg</span>
             <span className={styles.statLabel}>Total Recycled</span>
-            <span className={styles.statCaptionGreen}>12 Pickups</span>
+            <span className={styles.statCaptionGold}>12 Pickups</span>
           </div>
-          <div className={`${styles.statIconCircle} ${styles.iconCircleGreen}`}>
+          <div className={`${styles.statIconCircle} ${styles.iconCircleGold}`}>
             <CheckCircle2 size={22} />
           </div>
         </div>
@@ -481,9 +731,9 @@ export function HouseholdDashboard() {
           <div className={styles.statLeft}>
             <span className={styles.statNumber}>₹ 2,845</span>
             <span className={styles.statLabel}>Total Earned</span>
-            <span className={styles.statCaptionBlue}>This Month</span>
+            <span className={styles.statCaptionGold}>This Month</span>
           </div>
-          <div className={`${styles.statIconCircle} ${styles.iconCircleBlue}`}>
+          <div className={`${styles.statIconCircle} ${styles.iconCircleGold}`}>
             <IndianRupee size={22} />
           </div>
         </div>
@@ -737,6 +987,9 @@ export function HouseholdDashboard() {
       {/* =========================================================================
           5. ADDRESS SELECTOR BOTTOM SHEET MODAL (MATCHING REFERENCE DESIGN)
           ========================================================================= */}
+      {/* =========================================================================
+          ADDRESS SELECTOR BOTTOM SHEET (MATCHING REFERENCE UI)
+          ========================================================================= */}
       {isAddressSheetOpen && (
         <div
           className={styles.bottomSheetBackdrop}
@@ -753,7 +1006,7 @@ export function HouseholdDashboard() {
 
             {/* Header: Title + Close Icon */}
             <div className={styles.sheetHeader}>
-              <h3 className={styles.sheetTitle}>Select delivery address</h3>
+              <h3 className={styles.sheetTitle}>Select pickup address</h3>
               <button
                 type="button"
                 className={styles.sheetCloseBtn}
@@ -794,12 +1047,10 @@ export function HouseholdDashboard() {
                 role="button"
                 tabIndex={0}
               >
-                <div className={styles.actionIconCircleBlue}>
-                  <MapPin size={18} color="#2563eb" />
-                </div>
+                <MapPin size={22} color="#F8BF1D" className={styles.actionDirectIcon} />
                 <div className={styles.actionTextCol}>
-                  <span className={styles.actionTitleBlue}>Use my current location</span>
-                  <span className={styles.actionSubtext}>Allow access to location</span>
+                  <span className={styles.actionTitleGold}>Use my current location</span>
+                  <span className={styles.actionSubtext}>Allow access to location for faster pickups</span>
                 </div>
                 <ChevronRight size={18} className={styles.actionChevron} />
               </div>
@@ -807,14 +1058,13 @@ export function HouseholdDashboard() {
               {/* Action 2: Add New Address */}
               <Link
                 to="/household/post-scrap"
-                className={styles.sheetActionItem}
+                className={`${styles.sheetActionItem} ${styles.sheetActionDashed}`}
                 onClick={() => setIsAddressSheetOpen(false)}
               >
-                <div className={styles.actionIconCircleBlue}>
-                  <Plus size={18} color="#2563eb" />
-                </div>
+                <Plus size={22} color="#F8BF1D" className={styles.actionDirectIcon} />
                 <div className={styles.actionTextCol}>
-                  <span className={styles.actionTitleBlue}>Add New Address</span>
+                  <span className={styles.actionTitleGold}>Add New Address</span>
+                  <span className={styles.actionSubtext}>Add a new pickup address</span>
                 </div>
                 <ChevronRight size={18} className={styles.actionChevron} />
               </Link>
@@ -836,9 +1086,9 @@ export function HouseholdDashboard() {
                     >
                       <div className={styles.savedAddressIconBox}>
                         {addr.type === 'home' ? (
-                          <HomeIcon size={20} color="#0f172a" />
+                          <HomeIcon size={24} color="#F8BF1D" />
                         ) : (
-                          <Briefcase size={20} color="#0f172a" />
+                          <Briefcase size={24} color="#F8BF1D" />
                         )}
                       </div>
 
@@ -852,7 +1102,7 @@ export function HouseholdDashboard() {
 
                         <p className={styles.savedAddressFullText}>{addr.fullAddress}</p>
                         <div className={styles.savedAddressPhoneRow}>
-                          <Phone size={13} color="#fbc21a" />
+                          <Phone size={13} color="#F8BF1D" />
                           <span className={styles.savedAddressPhone}>{addr.phone}</span>
                         </div>
                       </div>
@@ -876,7 +1126,7 @@ export function HouseholdDashboard() {
               <div className={styles.locationAccessCard}>
                 <div className={styles.locAccessLeft}>
                   <div className={styles.locAccessIconWrap}>
-                    <Radio size={20} color="#fbc21a" />
+                    <Navigation size={20} color="#F8BF1D" />
                   </div>
                   <div className={styles.locAccessTextCol}>
                     <strong className={styles.locAccessTitle}>Location access</strong>
@@ -897,7 +1147,7 @@ export function HouseholdDashboard() {
 
               {/* Security Footer Banner */}
               <div className={styles.addressSecurityBanner}>
-                <ShieldCheck size={18} color="#fbc21a" className={styles.securityShieldIcon} />
+                <ShieldCheck size={20} color="#F8BF1D" className={styles.securityShieldIcon} />
                 <div className={styles.securityTextCol}>
                   <strong className={styles.securityTitle}>Your address is safe with us</strong>
                   <span className={styles.securitySubtitle}>We don't share your location with third parties.</span>
