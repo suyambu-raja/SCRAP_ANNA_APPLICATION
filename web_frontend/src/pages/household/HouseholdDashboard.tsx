@@ -13,12 +13,53 @@ import {
   Clock,
   ChevronRight,
   ChevronLeft,
+  ChevronDown,
   X,
   Eye,
   Maximize2,
+  MapPin,
+  Search,
+  Navigation,
+  Home as HomeIcon,
+  Briefcase,
+  MoreVertical,
+  Bell,
+  Radio,
+  Phone,
 } from 'lucide-react';
 import { useAuthStore } from '@/store/useAuthStore';
 import styles from './HouseholdDashboard.module.css';
+
+interface DeliveryAddress {
+  id: string;
+  tag: string;
+  area: string;
+  fullAddress: string;
+  phone: string;
+  isDefault: boolean;
+  type: 'home' | 'office' | 'other';
+}
+
+const INITIAL_DELIVERY_ADDRESSES: DeliveryAddress[] = [
+  {
+    id: 'addr-1',
+    tag: 'Home',
+    area: 'Anna Nagar, Chennai',
+    fullAddress: 'A-8, 4th Cross Street, Anna Nagar West, Chennai - 600040',
+    phone: '93607 66001',
+    isDefault: true,
+    type: 'home',
+  },
+  {
+    id: 'addr-2',
+    tag: 'Office',
+    area: 'Aminjikarai, Chennai',
+    fullAddress: '2nd Floor, No.12, Nelson Manickam Road, Aminjikarai, Chennai - 600029',
+    phone: '93607 66001',
+    isDefault: false,
+    type: 'office',
+  },
+];
 
 interface LiveScrapRateItem {
   id: string;
@@ -203,7 +244,32 @@ const ACTIVE_PICKUPS: ActivePickup[] = [
 export function HouseholdDashboard() {
   const navigate = useNavigate();
   const user = useAuthStore((s) => s.user);
-  const displayName = user?.name || 'Ramesh Kumar';
+  const displayName = user?.name || 'Arun Kumar';
+
+  // Dynamic Initials (e.g. "Arun Kumar" -> "AK")
+  const getInitials = (name: string) => {
+    const parts = name.trim().split(' ');
+    if (parts.length >= 2) {
+      return (parts[0][0] + parts[1][0]).toUpperCase();
+    }
+    return name.slice(0, 2).toUpperCase() || 'AK';
+  };
+  const userInitials = getInitials(displayName);
+
+  // Dynamic Greeting based on time of day
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Good morning!';
+    if (hour < 17) return 'Good afternoon!';
+    return 'Good evening!';
+  };
+
+  // Address State & Bottom Sheet State
+  const [savedAddresses, setSavedAddresses] = useState<DeliveryAddress[]>(INITIAL_DELIVERY_ADDRESSES);
+  const [selectedAddress, setSelectedAddress] = useState<DeliveryAddress>(INITIAL_DELIVERY_ADDRESSES[0]);
+  const [isAddressSheetOpen, setIsAddressSheetOpen] = useState(false);
+  const [addressSearchQuery, setAddressSearchQuery] = useState('');
+  const [locationEnabled, setLocationEnabled] = useState(false);
 
   // Detail Vision Lightbox Gallery State
   const [selectedGalleryPickup, setSelectedGalleryPickup] = useState<ActivePickup | null>(null);
@@ -221,7 +287,6 @@ export function HouseholdDashboard() {
   const [approxWeight, setApproxWeight] = useState('15');
   const [pickupDate, setPickupDate] = useState('2025-05-15');
   const [pickupSlot, setPickupSlot] = useState('Morning (09:00 AM - 12:00 PM)');
-  const [bookingSuccess, setBookingSuccess] = useState(false);
 
   // Lightbox Keyboard Navigation
   useEffect(() => {
@@ -279,194 +344,268 @@ export function HouseholdDashboard() {
     navigate('/household/post-scrap');
   };
 
+  // Filter saved addresses by search
+  const filteredAddresses = savedAddresses.filter(
+    (addr) =>
+      addr.tag.toLowerCase().includes(addressSearchQuery.toLowerCase()) ||
+      addr.area.toLowerCase().includes(addressSearchQuery.toLowerCase()) ||
+      addr.fullAddress.toLowerCase().includes(addressSearchQuery.toLowerCase())
+  );
+
+  const handleSelectAddress = (addr: DeliveryAddress) => {
+    setSelectedAddress(addr);
+    setIsAddressSheetOpen(false);
+  };
+
+  const handleUseCurrentLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        () => {
+          setLocationEnabled(true);
+          setSelectedAddress({
+            id: 'current-loc',
+            tag: 'Current Location',
+            area: 'Anna Nagar, Chennai',
+            fullAddress: 'Current GPS Location • Anna Nagar, Chennai',
+            phone: '93607 66001',
+            isDefault: false,
+            type: 'other',
+          });
+          setIsAddressSheetOpen(false);
+        },
+        () => {
+          setLocationEnabled(true);
+          setSelectedAddress({
+            id: 'current-loc',
+            tag: 'Current Location',
+            area: 'Anna Nagar, Chennai',
+            fullAddress: 'Current GPS Location • Anna Nagar, Chennai',
+            phone: '93607 66001',
+            isDefault: false,
+            type: 'other',
+          });
+          setIsAddressSheetOpen(false);
+        }
+      );
+    } else {
+      setIsAddressSheetOpen(false);
+    }
+  };
+
   return (
     <div className={styles.pageContainer}>
-      {/* 1. HERO WELCOME SECTION (DARK GRAPHITE THEME) */}
-      <section className={styles.heroSection}>
-        <div className={styles.heroLeftContent}>
-          <div className={styles.enterpriseBadgeRow}>
-            <span className={styles.enterpriseBadge}>
-              <ShieldCheck size={14} className={styles.shieldIcon} />
-              <span>VERIFIED HOUSEHOLD ACCOUNT</span>
-            </span>
-            <span className={styles.gstinTag}>PIN: 600040 • ANNA NAGAR, CHENNAI</span>
+      {/* =========================================================================
+          1. GREETING & ADDRESS SELECTOR (STANDALONE SINGLE ROW, NO CONTAINER BOX)
+          ========================================================================= */}
+      <div className={styles.greetingAddressRow}>
+        <div className={styles.greetingCol}>
+          <h2 className={styles.greetingName}>
+            Hi, {displayName}
+          </h2>
+          <span className={styles.greetingSubtext}>{getGreeting()}</span>
+        </div>
+
+        {/* Address Selector Pill */}
+        <button
+          type="button"
+          className={styles.addressPillBtn}
+          onClick={() => setIsAddressSheetOpen(true)}
+        >
+          <div className={styles.addressPillLeft}>
+            <MapPin size={16} className={styles.addressPillIcon} />
+            <div className={styles.addressPillTextGroup}>
+              <span className={styles.addressPillArea}>{selectedAddress.area}</span>
+              <span className={styles.addressPillChangeText}>Change Address</span>
+            </div>
           </div>
+          <ChevronDown size={14} className={styles.addressPillChevron} />
+        </button>
+      </div>
 
-          <h1 className={styles.welcomeTitle}>Welcome back, {displayName}!</h1>
+      {/* =========================================================================
+          2. GOLD VALUE BANNER (TURN YOUR SCRAP INTO VALUE - MATCHING REFERENCE UI)
+          ========================================================================= */}
+      <section className={styles.goldValueBanner}>
+        <div className={styles.goldBannerLeft}>
+          <h1 className={styles.goldBannerTitle}>Turn your scrap into value</h1>
 
-          <p className={styles.heroDescription}>
-            Get verified doorstep scrap pickup, digital weigh-scale accuracy, and instant spot UPI/Cash payment right from your doorstep.
+          <p className={styles.goldBannerSubtitle}>
+            Doorstep pickup • Accurate weighing<br />
+            Best prices • Instant payment
           </p>
 
-          <div className={styles.heroActionRow}>
-            <Link to="/household/post-scrap" className={styles.primaryPostBtn}>
-              <Plus size={16} />
+          <div className={styles.goldBannerBtnRow}>
+            <Link to="/household/post-scrap" className={styles.goldPostBtn}>
+              <Plus size={16} color="#fbc21a" />
               <span>Post Scrap</span>
             </Link>
 
-            <Link to="/household/rates" className={styles.secondaryRatesBtn}>
-              <TrendingUp size={16} />
-              <span>Check Market Rates</span>
+            <Link to="/household/rates" className={styles.goldRatesBtn}>
+              <TrendingUp size={16} color="#0f172a" />
+              <span>Rates</span>
             </Link>
-          </div>
-        </div>
-
-        {/* Right Metric Highlights Box */}
-        <div className={styles.heroMetricsCard}>
-          <div className={styles.metricItem}>
-            <span className={styles.metricLabel}>SCHEDULED PICKUPS</span>
-            <span className={styles.metricValueGold}>1 Pickup</span>
-            <span className={styles.metricSubtext}>Executive arriving today at 04:15 PM</span>
-          </div>
-
-          <div className={styles.metricDivider} />
-
-          <div className={styles.metricItem}>
-            <span className={styles.metricLabel}>TOTAL SCRAP RECYCLED</span>
-            <span className={styles.metricValueWhite}>118.6 KG</span>
-            <span className={styles.metricSubtext}>Across 12 completed pickups</span>
           </div>
         </div>
       </section>
 
-      {/* 2. 4 KPI STATS CARDS ROW */}
+      {/* =========================================================================
+          3. 3 KPI STATS CARDS ROW (MATCHING REFERENCE UI)
+          ========================================================================= */}
       <section className={styles.statsGrid}>
-        {/* Card 1 */}
+        {/* Card 1: Upcoming Pickup */}
         <div className={styles.statCard}>
           <div className={styles.statLeft}>
-            <span className={styles.statLabel}>Active Pickups</span>
             <span className={styles.statNumber}>1</span>
-            <span className={styles.statCaption}>Scheduled for Today</span>
+            <span className={styles.statLabel}>Upcoming Pickup</span>
+            <span className={styles.statCaptionGold}>Today, 04:15 PM</span>
           </div>
           <div className={`${styles.statIconCircle} ${styles.iconCircleGold}`}>
             <Calendar size={22} />
           </div>
         </div>
 
-        {/* Card 2 */}
+        {/* Card 2: Total Recycled */}
         <div className={styles.statCard}>
           <div className={styles.statLeft}>
-            <span className={styles.statLabel}>Completed Pickups</span>
-            <span className={styles.statNumber}>10</span>
-            <span className={styles.statCaption}>Successfully recycled</span>
+            <span className={styles.statNumber}>118.6 kg</span>
+            <span className={styles.statLabel}>Total Recycled</span>
+            <span className={styles.statCaptionGreen}>12 Pickups</span>
           </div>
           <div className={`${styles.statIconCircle} ${styles.iconCircleGreen}`}>
             <CheckCircle2 size={22} />
           </div>
         </div>
 
-        {/* Card 3 */}
+        {/* Card 3: Total Earned */}
         <div className={styles.statCard}>
           <div className={styles.statLeft}>
+            <span className={styles.statNumber}>₹ 2,845</span>
             <span className={styles.statLabel}>Total Earned</span>
-            <span className={styles.statNumber}>₹3,450</span>
-            <span className={styles.statCaption}>Instant spot payments</span>
-          </div>
-          <div className={`${styles.statIconCircle} ${styles.iconCirclePurple}`}>
-            <IndianRupee size={22} />
-          </div>
-        </div>
-
-        {/* Card 4 */}
-        <div className={styles.statCard}>
-          <div className={styles.statLeft}>
-            <span className={styles.statLabel}>Total Weight</span>
-            <span className={styles.statNumber}>118.6 KG</span>
-            <span className={styles.statCaption}>Diverted from landfills</span>
+            <span className={styles.statCaptionBlue}>This Month</span>
           </div>
           <div className={`${styles.statIconCircle} ${styles.iconCircleBlue}`}>
-            <Truck size={22} />
+            <IndianRupee size={22} />
           </div>
         </div>
       </section>
 
-      {/* 3. TWO-COLUMN MAIN CONTENT SECTION */}
+      {/* =========================================================================
+          4. TWO-COLUMN MAIN CONTENT SECTION
+          ========================================================================= */}
       <section className={styles.mainContentGrid}>
         {/* Left Column: Active Pickups */}
         <div className={styles.leftSectionCol}>
-          {/* Active Scrap Pickups Card */}
-          <div className={styles.sectionCard}>
-            <div className={styles.sectionHeaderRow}>
-              <div className={styles.sectionTitleGroup}>
-                <h3 className={styles.sectionTitle}>Active Scrap Pickups</h3>
-              </div>
-
-              <Link to="/household/orders" className={styles.viewAllLink}>
-                <span>View All (2)</span>
-                <ChevronRight size={15} />
-              </Link>
+          {/* Next Pickup Card (Single Unified Container matching reference image) */}
+          <div className={styles.nextPickupUnifiedCard}>
+            {/* Top Row: Title + Scheduled Badge */}
+            <div className={styles.pickupUnifiedHeader}>
+              <h3 className={styles.pickupUnifiedTitle}>Next Pickup</h3>
+              <span className={styles.scheduledPillBadge}>Scheduled</span>
             </div>
 
-            <div className={styles.pickupCardsList}>
-              {ACTIVE_PICKUPS.map((pickup) => (
-                <div key={pickup.id} className={styles.pickupItemCard}>
-                  <div className={styles.pickupCardTop}>
-                    {/* Interactive Photorealistic Thumbnail with Lightbox trigger */}
-                    <div
-                      className={styles.pickupThumbFrame}
-                      onClick={() => openPhotoGallery(pickup)}
-                      title="Click to open Detail Vision of all scrap photos"
-                      role="button"
-                      tabIndex={0}
-                    >
-                      <img
-                        src={pickup.coverImage}
-                        alt={pickup.title}
-                        className={styles.pickupThumbImg}
-                      />
-                      <div className={styles.thumbOverlayIcon}>
-                        <Maximize2 size={16} />
-                      </div>
-                      <span className={styles.thumbCountBadge}>+{pickup.materialsCount}</span>
-                    </div>
+            {/* Middle Content Row: Partner info on Left, ETA & Track button on Right */}
+            <div className={styles.pickupUnifiedBody}>
+              <div className={styles.pickupPartnerLeftCol}>
+                <div className={styles.partnerAvatarCircle}>
+                  <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" className={styles.partnerAvatarSvg}>
+                    <circle cx="22" cy="22" r="22" fill="#dbeafe" />
+                    {/* Hair */}
+                    <path d="M14 14C14 9.58 17.58 6 22 6C26.42 6 30 9.58 30 14C30 15 29.2 16.5 29.2 16.5C29.2 16.5 27.5 13.5 22 13.5C16.5 13.5 14.8 16.5 14.8 16.5C14.8 16.5 14 15 14 14Z" fill="#1e293b" />
+                    {/* Face */}
+                    <circle cx="22" cy="15.5" r="6" fill="#fcd34d" />
+                    {/* Beard */}
+                    <path d="M17.5 16.5C17.5 19 19.5 21 22 21C24.5 21 26.5 19 26.5 16.5C26.5 17.5 25.5 20 22 20C18.5 20 17.5 17.5 17.5 16.5Z" fill="#1e293b" />
+                    {/* Eyes */}
+                    <circle cx="19.5" cy="14.5" r="0.75" fill="#1e293b" />
+                    <circle cx="24.5" cy="14.5" r="0.75" fill="#1e293b" />
+                    {/* Smile */}
+                    <path d="M20.5 17.2C21 17.8 23 17.8 23.5 17.2" stroke="#1e293b" strokeWidth="0.75" strokeLinecap="round" />
+                    {/* Body / Shirt */}
+                    <path d="M10 35C10 28.37 15.37 23 22 23C28.63 23 34 28.37 34 35V44H10V35Z" fill="#2563eb" />
+                    {/* Collar */}
+                    <path d="M19 23L22 27L25 23" stroke="#ffffff" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </div>
 
-                    <div className={styles.pickupCardInfo}>
-                      <h4 className={styles.pickupTitle}>{pickup.title}</h4>
+                <div className={styles.pickupCardInfo}>
+                  <span className={styles.execArrivingLabel}>Executive arriving</span>
+                  <h4 className={styles.pickupTitle}>Arun Metal Traders</h4>
 
-                      <div className={styles.statusPillRow}>
-                        {pickup.status === 'dispatched' ? (
-                          <span className={styles.statusBadgeGreen}>
-                            <Truck size={13} />
-                            <span>Vehicle Dispatched</span>
-                          </span>
-                        ) : (
-                          <span className={styles.statusBadgeBlue}>
-                            <Clock size={13} />
-                            <span>Scheduled</span>
-                          </span>
-                        )}
-                        <span style={{ fontSize: '0.72rem', color: '#94a3b8', fontWeight: 700 }}>
-                          {pickup.orderNumber}
-                        </span>
-                      </div>
+                  <p className={styles.pickupScheduleText}>
+                    <Clock size={13} color="#94a3b8" />
+                    <span>Today, 04:15 PM</span>
+                  </p>
+                </div>
+              </div>
 
-                      <p className={styles.pickupScheduleText}>
-                        <Clock size={13} color="#f59e0b" />
-                        <span>{pickup.scheduledTime} • {pickup.executiveInfo}</span>
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className={styles.pickupCardBottom}>
-                    <div className={styles.cardActionBtns} style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', gap: '0.65rem' }}>
-                      <button
-                        type="button"
-                        onClick={() => openPhotoGallery(pickup)}
-                        className={styles.detailsOutlineBtn}
-                        style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}
-                      >
-                        <Eye size={14} color="#f59e0b" />
-                        <span>View Photos ({pickup.photos.length})</span>
-                      </button>
-
-                      <Link to="/household/orders" className={styles.trackGoldBtn}>
-                        <Truck size={14} />
-                        <span>Track Executive</span>
-                      </Link>
-                    </div>
+              {/* Vertical Divider / Right Column with ETA and Track Pickup */}
+              <div className={styles.pickupEtaRightCol}>
+                <div className={styles.etaTextGroup}>
+                  <span className={styles.etaLabel}>ETA</span>
+                  <div className={styles.etaValueRow}>
+                    <span className={styles.etaNumber}>20</span>
+                    <span className={styles.etaMinsText}>mins</span>
                   </div>
                 </div>
-              ))}
+
+                <Link to="/household/orders" className={styles.trackPickupMiniBtn}>
+                  Track Pickup
+                </Link>
+              </div>
+            </div>
+
+            {/* Bottom: 3-Step Process Chain Tracker */}
+            <div className={styles.miniStageTracker}>
+              <div className={`${styles.miniStep} ${styles.miniStepDone}`}>
+                <div className={styles.miniCircle}>✓</div>
+                <span>Confirmed</span>
+              </div>
+              <div className={`${styles.miniLine} ${styles.miniLineActive}`} />
+              <div className={`${styles.miniStep} ${styles.miniStepActive}`}>
+                <div className={styles.miniCircle}><Truck size={13} /></div>
+                <span>On the way</span>
+              </div>
+              <div className={styles.miniLine} />
+              <div className={styles.miniStep}>
+                <div className={styles.miniCircle}>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+                </div>
+                <span>Arrived</span>
+              </div>
+            </div>
+          </div>
+
+          {/* How It Works Card */}
+          <div className={styles.howItWorksCard}>
+            <h3 className={styles.howItWorksTitle}>How it works</h3>
+            <div className={styles.howItWorksStepsRow}>
+              <div className={styles.howStep}>
+                <div className={styles.howNumCircle}>1</div>
+                <div className={styles.howTextCol}>
+                  <strong>Post Scrap</strong>
+                  <span>Tell us what you have</span>
+                </div>
+              </div>
+
+              <span className={styles.howArrow}>→</span>
+
+              <div className={styles.howStep}>
+                <div className={styles.howNumCircle}>2</div>
+                <div className={styles.howTextCol}>
+                  <strong>We Pickup</strong>
+                  <span>Executive picks it up</span>
+                </div>
+              </div>
+
+              <span className={styles.howArrow}>→</span>
+
+              <div className={styles.howStep}>
+                <div className={styles.howNumCircle}>3</div>
+                <div className={styles.howTextCol}>
+                  <strong>Get Paid</strong>
+                  <span>Instant payment</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -595,6 +734,180 @@ export function HouseholdDashboard() {
         </div>
       </section>
 
+      {/* =========================================================================
+          5. ADDRESS SELECTOR BOTTOM SHEET MODAL (MATCHING REFERENCE DESIGN)
+          ========================================================================= */}
+      {isAddressSheetOpen && (
+        <div
+          className={styles.bottomSheetBackdrop}
+          onClick={() => setIsAddressSheetOpen(false)}
+        >
+          <div
+            className={styles.bottomSheetContainer}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Top Gray Drag Handle */}
+            <div className={styles.sheetDragHandleWrap}>
+              <div className={styles.sheetDragPill} />
+            </div>
+
+            {/* Header: Title + Close Icon */}
+            <div className={styles.sheetHeader}>
+              <h3 className={styles.sheetTitle}>Select delivery address</h3>
+              <button
+                type="button"
+                className={styles.sheetCloseBtn}
+                onClick={() => setIsAddressSheetOpen(false)}
+                aria-label="Close address sheet"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* Scrollable Sheet Body */}
+            <div className={styles.sheetBody}>
+              {/* Search Bar */}
+              <div className={styles.sheetSearchWrap}>
+                <Search size={18} className={styles.sheetSearchIcon} />
+                <input
+                  type="text"
+                  className={styles.sheetSearchInput}
+                  placeholder="Search area, street, pincode"
+                  value={addressSearchQuery}
+                  onChange={(e) => setAddressSearchQuery(e.target.value)}
+                />
+                {addressSearchQuery && (
+                  <button
+                    type="button"
+                    className={styles.sheetSearchClearBtn}
+                    onClick={() => setAddressSearchQuery('')}
+                  >
+                    <X size={15} />
+                  </button>
+                )}
+              </div>
+
+              {/* Action 1: Use my current location */}
+              <div
+                className={styles.sheetActionItem}
+                onClick={handleUseCurrentLocation}
+                role="button"
+                tabIndex={0}
+              >
+                <div className={styles.actionIconCircleBlue}>
+                  <MapPin size={18} color="#2563eb" />
+                </div>
+                <div className={styles.actionTextCol}>
+                  <span className={styles.actionTitleBlue}>Use my current location</span>
+                  <span className={styles.actionSubtext}>Allow access to location</span>
+                </div>
+                <ChevronRight size={18} className={styles.actionChevron} />
+              </div>
+
+              {/* Action 2: Add New Address */}
+              <Link
+                to="/household/post-scrap"
+                className={styles.sheetActionItem}
+                onClick={() => setIsAddressSheetOpen(false)}
+              >
+                <div className={styles.actionIconCircleBlue}>
+                  <Plus size={18} color="#2563eb" />
+                </div>
+                <div className={styles.actionTextCol}>
+                  <span className={styles.actionTitleBlue}>Add New Address</span>
+                </div>
+                <ChevronRight size={18} className={styles.actionChevron} />
+              </Link>
+
+              {/* Saved Addresses Section */}
+              <div className={styles.savedAddressesSection}>
+                <span className={styles.savedSectionLabel}>Saved addresses</span>
+
+                <div className={styles.savedAddressesList}>
+                  {filteredAddresses.map((addr) => (
+                    <div
+                      key={addr.id}
+                      className={`${styles.savedAddressCard} ${
+                        selectedAddress.id === addr.id ? styles.savedAddressActive : ''
+                      }`}
+                      onClick={() => handleSelectAddress(addr)}
+                      role="button"
+                      tabIndex={0}
+                    >
+                      <div className={styles.savedAddressIconBox}>
+                        {addr.type === 'home' ? (
+                          <HomeIcon size={20} color="#0f172a" />
+                        ) : (
+                          <Briefcase size={20} color="#0f172a" />
+                        )}
+                      </div>
+
+                      <div className={styles.savedAddressContent}>
+                        <div className={styles.savedAddressTitleRow}>
+                          <span className={styles.savedAddressTag}>{addr.tag}</span>
+                          {addr.isDefault && (
+                            <span className={styles.defaultBadgePill}>Default</span>
+                          )}
+                        </div>
+
+                        <p className={styles.savedAddressFullText}>{addr.fullAddress}</p>
+                        <div className={styles.savedAddressPhoneRow}>
+                          <Phone size={13} color="#fbc21a" />
+                          <span className={styles.savedAddressPhone}>{addr.phone}</span>
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        className={styles.savedAddressMenuBtn}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                        }}
+                        title="Address Options"
+                      >
+                        <MoreVertical size={18} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Location Access Banner Card */}
+              <div className={styles.locationAccessCard}>
+                <div className={styles.locAccessLeft}>
+                  <div className={styles.locAccessIconWrap}>
+                    <Radio size={20} color="#fbc21a" />
+                  </div>
+                  <div className={styles.locAccessTextCol}>
+                    <strong className={styles.locAccessTitle}>Location access</strong>
+                    <p className={styles.locAccessDesc}>
+                      Enable location to show nearby merchants and faster pickups.
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  className={styles.enableLocationBtn}
+                  onClick={handleUseCurrentLocation}
+                >
+                  {locationEnabled ? 'Location Enabled' : 'Enable Location'}
+                </button>
+              </div>
+
+              {/* Security Footer Banner */}
+              <div className={styles.addressSecurityBanner}>
+                <ShieldCheck size={18} color="#fbc21a" className={styles.securityShieldIcon} />
+                <div className={styles.securityTextCol}>
+                  <strong className={styles.securityTitle}>Your address is safe with us</strong>
+                  <span className={styles.securitySubtitle}>We don't share your location with third parties.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* DETAIL VISION IMAGE GALLERY / LIGHTBOX MODAL */}
       {selectedGalleryPickup && (
         <div className={styles.lightboxOverlay} onClick={() => setSelectedGalleryPickup(null)}>
@@ -720,86 +1033,76 @@ export function HouseholdDashboard() {
               </button>
             </div>
 
-            {bookingSuccess ? (
-              <div className={styles.bookingSuccessState}>
-                <CheckCircle2 size={44} color="#10b981" />
-                <h4 className={styles.successTitle}>Scrap Posted Successfully!</h4>
-                <p className={styles.successDesc}>
-                  Nearby verified scrap executives have been notified. You can track this in Orders.
-                </p>
+            <form onSubmit={handleBookOrder} className={styles.modalForm}>
+              <div className={styles.formGroup}>
+                <label className={styles.formLabel}>Selected Scrap Material</label>
+                <input
+                  type="text"
+                  className={styles.formInput}
+                  value={selectedMaterial}
+                  onChange={(e) => setSelectedMaterial(e.target.value)}
+                  required
+                />
               </div>
-            ) : (
-              <form onSubmit={handleBookOrder} className={styles.modalForm}>
+
+              <div className={styles.formRow}>
                 <div className={styles.formGroup}>
-                  <label className={styles.formLabel}>Selected Scrap Material</label>
+                  <label className={styles.formLabel}>Approx Weight (KG)</label>
                   <input
-                    type="text"
+                    type="number"
                     className={styles.formInput}
-                    value={selectedMaterial}
-                    onChange={(e) => setSelectedMaterial(e.target.value)}
+                    value={approxWeight}
+                    onChange={(e) => setApproxWeight(e.target.value)}
+                    placeholder="e.g. 15"
+                    min="1"
                     required
                   />
                 </div>
 
-                <div className={styles.formRow}>
-                  <div className={styles.formGroup}>
-                    <label className={styles.formLabel}>Approx Weight (KG)</label>
-                    <input
-                      type="number"
-                      className={styles.formInput}
-                      value={approxWeight}
-                      onChange={(e) => setApproxWeight(e.target.value)}
-                      placeholder="e.g. 15"
-                      min="1"
-                      required
-                    />
-                  </div>
-
-                  <div className={styles.formGroup}>
-                    <label className={styles.formLabel}>Preferred Date</label>
-                    <input
-                      type="date"
-                      className={styles.formInput}
-                      value={pickupDate}
-                      onChange={(e) => setPickupDate(e.target.value)}
-                      required
-                    />
-                  </div>
-                </div>
-
                 <div className={styles.formGroup}>
-                  <label className={styles.formLabel}>Time Slot</label>
-                  <select
-                    className={styles.formSelect}
-                    value={pickupSlot}
-                    onChange={(e) => setPickupSlot(e.target.value)}
-                  >
-                    <option value="Morning (09:00 AM - 12:00 PM)">
-                      Morning (09:00 AM - 12:00 PM)
-                    </option>
-                    <option value="Afternoon (12:00 PM - 04:00 PM)">
-                      Afternoon (12:00 PM - 04:00 PM)
-                    </option>
-                    <option value="Evening (04:00 PM - 07:00 PM)">
-                      Evening (04:00 PM - 07:00 PM)
-                    </option>
-                  </select>
+                  <label className={styles.formLabel}>Preferred Date</label>
+                  <input
+                    type="date"
+                    className={styles.formInput}
+                    value={pickupDate}
+                    onChange={(e) => setPickupDate(e.target.value)}
+                    required
+                  />
                 </div>
+              </div>
 
-                <div className={styles.modalFooter}>
-                  <button
-                    type="button"
-                    className={styles.modalCancelBtn}
-                    onClick={() => setIsBookModalOpen(false)}
-                  >
-                    Cancel
-                  </button>
-                  <button type="submit" className={styles.modalSubmitBtn}>
-                    <span>Schedule Pickup</span>
-                  </button>
-                </div>
-              </form>
-            )}
+              <div className={styles.formGroup}>
+                <label className={styles.formLabel}>Time Slot</label>
+                <select
+                  className={styles.formSelect}
+                  value={pickupSlot}
+                  onChange={(e) => setPickupSlot(e.target.value)}
+                >
+                  <option value="Morning (09:00 AM - 12:00 PM)">
+                    Morning (09:00 AM - 12:00 PM)
+                  </option>
+                  <option value="Afternoon (12:00 PM - 04:00 PM)">
+                    Afternoon (12:00 PM - 04:00 PM)
+                  </option>
+                  <option value="Evening (04:00 PM - 07:00 PM)">
+                    Evening (04:00 PM - 07:00 PM)
+                  </option>
+                </select>
+              </div>
+
+              <div className={styles.modalFooter}>
+                <button
+                  type="button"
+                  className={styles.modalCancelBtn}
+                  onClick={() => setIsBookModalOpen(false)}
+                >
+                  Cancel
+                </button>
+                <button type="submit" className={styles.modalSubmitBtn}>
+                  <span>Schedule Pickup</span>
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
