@@ -7,7 +7,7 @@ logger = logging.getLogger(__name__)
 NOTIFICATION_TYPE = "REGISTRATION_REJECTED"
 LANGUAGE = "EN"
 
-# The corrected text — includes {rejection_reason} and adds the 3-attempt limit
+# The corrected text - includes {rejection_reason} and adds the 3-attempt limit
 # clarification that gives users genuinely useful context upfront.
 UPDATED_TEMPLATE_TEXT = (
     "Your registration was not approved. Reason: {rejection_reason}. "
@@ -15,7 +15,7 @@ UPDATED_TEMPLATE_TEXT = (
     "will be permanently rejected."
 )
 
-# The reverse target — keeps the {rejection_reason} placeholder (fixing the original
+# The reverse target - keeps the {rejection_reason} placeholder (fixing the original
 # seed bug is intentional), but removes the 3-attempt clarifying sentence.
 PREVIOUS_TEMPLATE_TEXT = (
     "Your registration was not approved. Reason: {rejection_reason}. "
