@@ -16,6 +16,8 @@
   z-index: 10000;
   padding: 1.5rem;
   animation: fadeIn 0.2s ease;
+  overscroll-behavior: contain;
+  touch-action: none;
 }
 
 @keyframes fadeIn {
@@ -39,6 +41,8 @@
   overflow: hidden;
   border: 1px solid #e2e8f0;
   animation: modalPop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  overscroll-behavior: contain;
+  touch-action: pan-y;
 }
 
 @keyframes modalPop {
@@ -125,6 +129,8 @@
 .formContent {
   padding: 1.4rem 1.65rem;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;

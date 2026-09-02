@@ -648,7 +648,7 @@ export default function IndustryQuotesReceived() {
 
                     {/* Audio Frequency Waveform Bars */}
                     <div className={styles.waveformContainer}>
-                      {Array.from({ length: 28 }).map((_, i) => (
+                      {Array.from({ length: 20 }).map((_, i) => (
                         <div
                           key={i}
                           className={`${styles.waveformBar} ${
@@ -664,13 +664,6 @@ export default function IndustryQuotesReceived() {
 
                     <span className={styles.voiceTimestamp}>
                       {playingVoiceId === quote.id ? '0:12' : '0:00'} / {quote.voiceNoteDuration}
-                    </span>
-                  </div>
-
-                  <div className={styles.transcriptBox}>
-                    <span className={styles.transcriptLabel}>Transcript:</span>
-                    <span className={styles.transcriptSnippet}>
-                      &ldquo;{quote.voiceNoteTranscript}&rdquo;
                     </span>
                   </div>
                 </div>

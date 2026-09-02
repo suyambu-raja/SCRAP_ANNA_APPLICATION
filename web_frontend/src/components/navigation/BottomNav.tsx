@@ -33,13 +33,6 @@ const navConfig: Record<UserRole, NavItem[]> = {
     { path: '/notifications', labelKey: 'nav.notifications', icon: <Bell size={20} /> },
     { path: '/profile', labelKey: 'nav.profile', icon: <User size={20} /> },
   ],
-  aggregator: [
-    { path: '/dashboard/aggregator', labelKey: 'nav.home', icon: <Home size={20} /> },
-    { path: '/opportunities', labelKey: 'nav.opportunities', icon: <Briefcase size={20} /> },
-    { path: '/orders', labelKey: 'nav.orders', icon: <ShoppingCart size={20} /> },
-    { path: '/notifications', labelKey: 'nav.notifications', icon: <Bell size={20} /> },
-    { path: '/profile', labelKey: 'nav.profile', icon: <User size={20} /> },
-  ],
 };
 
 export function BottomNav() {

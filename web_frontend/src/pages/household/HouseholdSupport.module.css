@@ -1,0 +1,291 @@
+/* ==========================================================================
+   HOUSEHOLD SUPPORT & HELPLINE STYLING
+   ========================================================================== */
+
+.pageContainer {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.5rem 1.75rem 4rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  box-sizing: border-box;
+  font-family: inherit;
+  color: #0f172a;
+}
+
+/* --------------------------------------------------------------------------
+   HERO SUPPORT BANNER
+   -------------------------------------------------------------------------- */
+.heroBanner {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  border: 1px solid #334155;
+  border-radius: 20px;
+  padding: 2.25rem;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.15);
+}
+
+.heroBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  font-size: 0.74rem;
+  font-weight: 800;
+  padding: 0.25rem 0.65rem;
+  border-radius: 6px;
+  width: fit-content;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.heroTitle {
+  font-size: 1.85rem;
+  font-weight: 900;
+  margin: 0;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+}
+
+.heroSubtitle {
+  font-size: 0.88rem;
+  color: #cbd5e1;
+  margin: 0;
+  line-height: 1.5;
+  max-width: 600px;
+}
+
+/* --------------------------------------------------------------------------
+   CONTACT CHANNELS 3-COLUMN GRID
+   -------------------------------------------------------------------------- */
+.channelsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+
+.channelCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: all 0.15s ease;
+}
+
+.channelCard:hover {
+  transform: translateY(-2px);
+  border-color: #cbd5e1;
+}
+
+.channelIconBox {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.channelTitle {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+.channelSub {
+  font-size: 0.78rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.channelActionBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  background: #0f172a;
+  color: #fbc21a;
+  font-size: 0.82rem;
+  font-weight: 800;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  margin-top: auto;
+  transition: all 0.15s ease;
+}
+
+.channelActionBtn:hover {
+  background: #1e293b;
+}
+
+/* --------------------------------------------------------------------------
+   2-COLUMN SUPPORT GRID: TICKET FORM & FAQ
+   -------------------------------------------------------------------------- */
+.supportTwoColGrid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 1.5rem;
+}
+
+.sectionCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 1.75rem 2rem;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.cardTitle {
+  font-size: 1.2rem;
+  font-weight: 900;
+  color: #0f172a;
+  margin: 0;
+}
+
+/* Ticket Form */
+.ticketForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.fieldLabel {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #334155;
+  margin: 0;
+}
+
+.inputField,
+.selectField,
+.textareaField {
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  background: #f8fafc;
+  font-family: inherit;
+  font-size: 0.85rem;
+  color: #0f172a;
+  box-sizing: border-box;
+  outline: none;
+  transition: all 0.15s ease;
+}
+
+.inputField:focus,
+.selectField:focus,
+.textareaField:focus {
+  background: #ffffff;
+  border-color: #f59e0b;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+}
+
+.submitTicketBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  background: #fbc21a;
+  color: #0f172a;
+  font-size: 0.85rem;
+  font-weight: 900;
+  padding: 0.7rem 1.5rem;
+  border-radius: 8px;
+  border: 1.5px solid #e5aa00;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  width: fit-content;
+}
+
+.submitTicketBtn:hover {
+  background: #f59e0b;
+}
+
+/* FAQ Accordion */
+.faqList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.faqItem {
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #f8fafc;
+}
+
+.faqHeader {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: left;
+  font-weight: 800;
+  font-size: 0.86rem;
+  color: #0f172a;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.faqBody {
+  padding: 0.85rem 1rem;
+  background: #ffffff;
+  border-top: 1px solid #f1f5f9;
+  font-size: 0.82rem;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+/* --------------------------------------------------------------------------
+   RESPONSIVE
+   -------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .channelsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .supportTwoColGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .pageContainer {
+    padding: 1rem 0.85rem 6rem 0.85rem;
+  }
+
+  .sectionCard {
+    padding: 1.25rem 1rem;
+  }
+
+  .submitTicketBtn {
+    width: 100%;
+  }
+}

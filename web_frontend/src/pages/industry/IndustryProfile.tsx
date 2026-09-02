@@ -20,11 +20,17 @@ import {
   Scale,
   Receipt,
   ArrowRight,
+  Plus,
+  LogOut,
 } from 'lucide-react';
+import { useAuthStore } from '@/store/useAuthStore';
+import { RequestAdditionalRoleModal } from '@/components/common';
 import styles from './IndustryProfile.module.css';
 
 export default function IndustryProfile() {
   const [activeTab, setActiveTab] = useState<'overview' | 'business' | 'logistics' | 'preferences'>('overview');
+  const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
+  const logout = useAuthStore((s) => s.logout);
   const [isEditing, setIsEditing] = useState(false);
   const [saveSuccessToast, setSaveSuccessToast] = useState(false);
 
@@ -146,13 +152,6 @@ export default function IndustryProfile() {
           <Settings size={15} />
           <span>Account Preferences</span>
         </button>
-
-        {/* Transactions & Invoices Link (Inside Profile) */}
-        <Link to="/industry/transactions" className={styles.tabTransactionsLink}>
-          <Receipt size={15} />
-          <span>Transactions &amp; Invoices</span>
-          <ArrowRight size={13} />
-        </Link>
       </div>
 
       {/* 3. Tab Content Area */}
@@ -227,6 +226,63 @@ export default function IndustryProfile() {
                     <strong>Loading Assistance</strong>
                     <span>Overhead EOT Crane &amp; Forklift Available</span>
                   </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Account Role & Multi-Profile Card */}
+            <div className={styles.infraOverviewCard} style={{ marginTop: '1.25rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  <Building2 size={24} color="#0F172A" />
+                  <div>
+                    <strong style={{ fontSize: '0.95rem', color: '#0F172A', display: 'block' }}>Current Role: Industry Account</strong>
+                    <span style={{ fontSize: '0.76rem', color: '#15803D', fontWeight: 700 }}>✓ Verified Corporate Facility (GSTIN &amp; Gate Pass Certified)</span>
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                  <button
+                    type="button"
+                    onClick={() => setIsRoleModalOpen(true)}
+                    style={{
+                      background: '#0F172A',
+                      color: '#FBC21A',
+                      border: 'none',
+                      padding: '0.55rem 1rem',
+                      borderRadius: '8px',
+                      fontSize: '0.8rem',
+                      fontWeight: 800,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.4rem',
+                    }}
+                  >
+                    <span>Request Additional Role</span>
+                    <Plus size={14} />
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={logout}
+                    style={{
+                      background: '#FEE2E2',
+                      border: '1px solid #FECACA',
+                      color: '#DC2626',
+                      padding: '0.55rem 0.9rem',
+                      borderRadius: '8px',
+                      fontSize: '0.8rem',
+                      fontWeight: 800,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.35rem',
+                    }}
+                  >
+                    <LogOut size={14} />
+                    <span>Logout</span>
+                  </button>
                 </div>
               </div>
             </div>
@@ -450,6 +506,12 @@ export default function IndustryProfile() {
           </div>
         )}
       </div>
+
+      {/* Request Additional Role Modal */}
+      <RequestAdditionalRoleModal
+        isOpen={isRoleModalOpen}
+        onClose={() => setIsRoleModalOpen(false)}
+      />
     </div>
   );
 }

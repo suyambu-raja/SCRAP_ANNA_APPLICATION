@@ -1,15 +1,25 @@
-import { useState, type FormEvent } from 'react';
+import { useState, useEffect, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/common';
 import { sendMobileOTP } from '@/services';
+import { useAuthStore } from '@/store/useAuthStore';
 import styles from './Auth.module.css';
 
 export default function Login() {
   const navigate = useNavigate();
+  const user = useAuthStore((s) => s.user);
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+
   const [phone, setPhone] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (isAuthenticated && user?.role) {
+      navigate(`/dashboard/${user.role}`, { replace: true });
+    }
+  }, [isAuthenticated, user, navigate]);
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // Only accept numeric input up to 10 digits
@@ -128,14 +138,6 @@ export default function Login() {
               >
                 <strong>Industry</strong>
                 <span>98765 43212</span>
-              </button>
-              <button
-                type="button"
-                className={styles.demoBtn}
-                onClick={() => setDemoNumber('9876543213')}
-              >
-                <strong>Aggregator</strong>
-                <span>98765 43213</span>
               </button>
             </div>
             <p className={styles.demoHint}>

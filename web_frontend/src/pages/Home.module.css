@@ -6,6 +6,8 @@
   background: var(--color-white);
   color: var(--color-text-primary);
   width: 100%;
+  padding-top: 74px; /* Clearance for fixed top navbar */
+  box-sizing: border-box;
 }
 
 /* 2. Hero Section — Exact Replica of Scrap Anna Company Site */
@@ -40,16 +42,40 @@
 .badgeYellow {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.4rem;
   font-size: 0.75rem;
-  font-weight: 700;
-  background-color: var(--color-primary-light);
-  color: var(--color-graphite-dark);
-  border: 1px solid var(--color-primary-border);
-  padding: 0.3rem 0.75rem;
+  font-weight: 750;
+  background-color: #FFFDF5;
+  color: #111827;
+  border: 1.5px solid #FBC21A;
+  padding: 0.35rem 0.85rem;
   border-radius: var(--radius-pill);
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  box-shadow: 0 2px 8px rgba(251, 194, 26, 0.18);
+  transition: all 0.2s ease;
+}
+
+.locationPinAnim {
+  color: #D97706;
+  display: inline-block;
+  animation: pinBounce 1.8s cubic-bezier(0.28, 0.84, 0.42, 1) infinite;
+  transform-origin: bottom center;
+}
+
+@keyframes pinBounce {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  25% {
+    transform: translateY(-4px) scale(1.12);
+  }
+  50% {
+    transform: translateY(0) scale(0.96);
+  }
+  75% {
+    transform: translateY(-1.5px) scale(1.04);
+  }
 }
 
 .heroHeadlineExact {
@@ -322,7 +348,15 @@
   line-height: 1.5;
 }
 
-/* Four-Column Desktop Grid (Who We Serve & Trust) */
+/* Grids (3-Column & 4-Column) */
+.threeColumnGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.75rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
 .fourColumnGrid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -332,7 +366,7 @@
 
 .roleBox {
   background: var(--color-white);
-  border: 1px solid var(--color-border);
+  border: 1.5px solid var(--color-border);
   border-radius: var(--radius-xl);
   padding: 1.75rem 1.35rem;
   display: flex;
@@ -340,11 +374,65 @@
   gap: 1rem;
   transition: all var(--transition-normal);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+  cursor: pointer;
+  user-select: none;
 }
 .roleBox:hover {
   border-color: var(--color-primary);
   transform: translateY(-3px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+.roleBoxActive {
+  border: 2.5px solid #FBC21A !important;
+  box-shadow: 0 8px 24px rgba(251, 194, 26, 0.22) !important;
+  transform: translateY(-2px);
+}
+
+/* Trust Assurance Cards (Why Choose Scrap Anna?) */
+.trustAssuranceCard {
+  background: var(--color-white);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: 1.75rem 1.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  cursor: pointer;
+  user-select: none;
+}
+
+.trustAssuranceCard:hover {
+  transform: translateY(-3px);
+  border-color: var(--color-primary);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.trustAssuranceCardActive {
+  border: 2.5px solid #FBC21A !important;
+  box-shadow: 0 8px 24px rgba(251, 194, 26, 0.22) !important;
+  transform: translateY(-2px);
+}
+
+.trustFeatureIcon {
+  color: #D97706;
+  flex-shrink: 0;
+}
+
+.trustFeatureTitle {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--color-text-primary);
+  margin: 0;
+  line-height: 1.25;
+}
+
+.trustFeatureText {
+  font-size: var(--text-body);
+  color: var(--color-text-muted);
+  line-height: 1.5;
+  margin: 0;
 }
 
 .roleHeader {
@@ -383,62 +471,125 @@
   line-height: 1.2;
 }
 
-.roleDetailGroup {
+.roleDescText {
+  font-size: 0.93rem;
+  color: var(--color-text-muted);
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* How It Works 3-Step Process (Upload -> Merchant Pickup -> Instant Payment) */
+.howItWorksGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.75rem;
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.howItWorksCard {
+  background: var(--color-white);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: 2rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+}
+
+.howItWorksCard:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-primary);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.howItWorksCardActive {
+  border: 2.5px solid #FBC21A !important;
+  box-shadow: 0 8px 24px rgba(251, 194, 26, 0.22) !important;
+  transform: translateY(-2px);
+}
+
+.stepTopRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.stepIconWrap {
+  width: 52px;
+  height: 52px;
+  background: #0F172A;
+  color: #FBC21A;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12);
+  transition: all 0.2s ease;
+}
+
+.howItWorksCard:hover .stepIconWrap,
+.howItWorksCardActive .stepIconWrap {
+  background: #FBC21A;
+  color: #0F172A;
+}
+
+.stepBadgePill {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #D97706;
+  background: #FFFBEB;
+  border: 1px solid #FDE68A;
+  padding: 0.3rem 0.75rem;
+  border-radius: 9999px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.stepCardTitle {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--color-text-primary);
+  margin: 0;
+  line-height: 1.25;
+}
+
+.stepCardDesc {
+  font-size: 0.93rem;
+  color: var(--color-text-muted);
+  line-height: 1.55;
+  margin: 0;
+}
+
+.stepFeatureList {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  padding-top: 0.5rem;
+  padding-top: 0.75rem;
   border-top: 1px solid var(--color-border);
+  margin-top: auto;
 }
 
-.roleDetailItem {
-  font-size: var(--text-xs);
-  color: var(--color-text-muted);
-  line-height: 1.4;
-}
-.roleDetailItem strong {
-  color: var(--color-text-primary);
-  margin-right: 0.2rem;
-}
-
-/* Platform Statistics Impact Bar */
-.impactStatsBar {
-  background: var(--color-graphite);
-  color: var(--color-white);
-  border-radius: var(--radius-xl);
-  padding: 2.75rem 3rem;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.statsGridDesktop {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 2rem;
-  text-align: center;
-}
-
-.statCell {
+.stepFeatureItem {
   display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.83rem;
+  font-weight: 600;
+  color: #334155;
 }
 
-.statFigure {
-  font-size: 2.5rem;
-  font-weight: 800;
-  color: var(--color-primary);
-  letter-spacing: -0.03em;
-  line-height: 1.1;
+.stepCheckIcon {
+  color: #16A34A;
+  flex-shrink: 0;
 }
-
-.statDescription {
-  font-size: var(--text-small);
-  color: #CBD5E1;
-  font-weight: 500;
-}
-
-/* Scrap Market Snapshot — Premium White Marketplace Section */
 .marketSnapshotSection {
   background: #FFFFFF;
   border: 1px solid #E5E7EB;
@@ -501,65 +652,32 @@
   gap: 0.45rem;
   padding: 0.55rem 1.1rem;
   background: #FFFFFF;
-  border: 1px solid #E5E7EB;
+  border: 1.5px solid #FBC21A;
   border-radius: 9999px;
   font-size: 0.88rem;
   font-weight: 700;
   color: #111827;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 2px 8px rgba(251, 194, 26, 0.18);
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .locationSelectorBtn:hover {
-  border-color: #D1D5DB;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+  border-color: #F59E0B;
+  box-shadow: 0 4px 12px rgba(251, 194, 26, 0.25);
+  transform: translateY(-1px);
 }
 
 .locPinIcon {
-  color: #F59E0B;
+  color: #D97706;
+  display: inline-block;
+  animation: pinBounce 1.8s cubic-bezier(0.28, 0.84, 0.42, 1) infinite;
+  transform-origin: bottom center;
 }
 
 .locChevronIcon {
   color: #9CA3AF;
   margin-left: 0.2rem;
-}
-
-/* Category Filter Pills */
-.marketPillsRow {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 2rem;
-  flex-wrap: wrap;
-}
-
-.compactPill {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.45rem 1.1rem;
-  font-size: 0.84rem;
-  font-weight: 600;
-  border-radius: 9999px;
-  border: 1px solid #E5E7EB;
-  background: #F9FAFB;
-  color: #4B5563;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: all 0.18s ease;
-}
-
-.compactPill:hover {
-  border-color: #D1D5DB;
-  background: #F3F4F6;
-  color: #111827;
-}
-
-.compactPillActive {
-  background: #111827 !important;
-  border-color: #111827 !important;
-  color: #FBC21A !important;
-  font-weight: 700 !important;
 }
 
 /* 3-Column Desktop Grid */
@@ -638,6 +756,86 @@
 .viewAllBottomBtn:hover {
   color: #D97706;
   transform: translateX(3px);
+}
+
+/* 7. Tamil & English Accessibility Banner (Graphite Dark Card) */
+.bilingualAccessibilityBanner {
+  background: #0F172A;
+  color: #FFFFFF;
+  border: 2px solid #FBC21A;
+  border-radius: var(--radius-xl);
+  padding: 1.35rem 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1.35rem;
+  box-shadow: 0 8px 30px rgba(15, 23, 42, 0.16);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  user-select: none;
+  animation: borderBlinkYellow 1.8s ease-in-out infinite;
+}
+
+.bilingualAccessibilityBanner:hover,
+.bilingualAccessibilityBannerActive {
+  animation: none !important;
+  border: 2.5px solid #FBC21A !important;
+  box-shadow: 0 0 0 2px rgba(251, 194, 26, 0.45), 0 12px 36px rgba(251, 194, 26, 0.28) !important;
+  transform: translateY(-2px);
+}
+
+@keyframes borderBlinkYellow {
+  0%, 100% {
+    border-color: #FBC21A;
+    box-shadow: 0 0 0 2px rgba(251, 194, 26, 0.5), 0 8px 30px rgba(251, 194, 26, 0.28);
+  }
+  50% {
+    border-color: rgba(251, 194, 26, 0.25);
+    box-shadow: 0 0 0 0px rgba(251, 194, 26, 0), 0 4px 16px rgba(0, 0, 0, 0.12);
+  }
+}
+
+.accessIconContainer {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(251, 194, 26, 0.15);
+  color: #FBC21A;
+  border: 1.5px solid rgba(251, 194, 26, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.accessTextContainer {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.accessTitle {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin: 0;
+  line-height: 1.45;
+}
+
+.voiceBadgePill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.08);
+  color: #FBC21A;
+  border: 1.5px solid rgba(251, 194, 26, 0.35);
+  padding: 0.55rem 1.1rem;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 @media (max-width: 1024px) {
@@ -1102,34 +1300,195 @@
 }
 
 @media (max-width: 768px) {
-  .heroHeadlineExact {
-    font-size: 2.1rem;
+  .desktopPlatform {
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+    padding-top: 64px;
   }
+
+  .heroSectionExact {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .heroGridExact {
+    grid-template-columns: 1fr;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .heroLeftExact {
+    padding: 1.75rem 1.25rem 1rem 1.25rem;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .heroHeadlineExact {
+    font-size: 1.85rem;
+    line-height: 1.18;
+    word-break: break-word;
+    margin-bottom: 0.85rem;
+  }
+
+  .heroLastLine {
+    white-space: normal !important;
+    display: inline;
+  }
+
+  .heroYellowSpan {
+    white-space: normal !important;
+    display: inline;
+  }
+
+  .heroDescExact {
+    font-size: 0.875rem;
+    line-height: 1.5;
+    margin-bottom: 1.25rem;
+    max-width: 100%;
+  }
+
   .heroTrustGrid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 0.85rem;
+    gap: 0.75rem 0.5rem;
+    max-width: 100%;
+    margin-bottom: 1.5rem;
   }
+
+  .heroTrustItem {
+    padding: 0.25rem;
+  }
+
+  .heroTrustLabel {
+    font-size: 0.7rem;
+    line-height: 1.25;
+  }
+
+  .heroCtaGroup {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 0.65rem;
+  }
+
+  .heroPrimaryBtn {
+    width: 100% !important;
+    justify-content: center !important;
+    text-align: center !important;
+    padding: 0.8rem 1.25rem !important;
+    font-size: 0.925rem !important;
+  }
+
+  .heroWatchBtn {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+    padding: 0.75rem 1.25rem;
+    font-size: 0.9rem;
+    box-sizing: border-box;
+  }
+
+  .heroImageWrapperExact {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .heroTruckImgExact {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .heroFloatChip1,
+  .heroFloatChip2 {
+    display: none !important;
+  }
+
   .marketSnapshotHeader {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.75rem;
   }
+
   .marketSnapshotGrid {
     grid-template-columns: 1fr;
   }
+
   .fourColumnGrid {
     grid-template-columns: 1fr;
   }
-  .statsGridDesktop {
+
+  .threeColumnGrid {
     grid-template-columns: 1fr;
+    gap: 1.25rem;
   }
+
+  .howItWorksGrid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
   .bilingualAccessibilityBanner {
     flex-direction: column;
     align-items: flex-start;
+    padding: 1.75rem 1.35rem;
+    gap: 1.25rem;
   }
+
+  .finalCallToActionBanner {
+    padding: 2.25rem 1.25rem;
+    margin: 1.5rem 1rem;
+    border-radius: 18px;
+    box-sizing: border-box;
+    width: auto;
+    max-width: 100%;
+  }
+
+  .ctaContentWrapper {
+    width: 100%;
+    max-width: 100%;
+    gap: 0.85rem;
+  }
+
+  .ctaBannerHeading {
+    font-size: 1.65rem;
+    line-height: 1.2;
+    text-align: center;
+  }
+
+  .ctaBannerSubtext {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    text-align: center;
+  }
+
+  .ctaBtnWrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 0.35rem;
+  }
+
+  .ctaDarkBtn {
+    width: 100% !important;
+    max-width: 100% !important;
+    font-size: 0.875rem !important;
+    padding: 0.8rem 1rem !important;
+    justify-content: center !important;
+    text-align: center !important;
+    white-space: normal !important;
+    border-radius: 12px !important;
+    box-sizing: border-box !important;
+  }
+
   .footerInnerContainer {
     grid-template-columns: 1fr;
   }
+
   .footerBottomInner {
     flex-direction: column;
     align-items: flex-start;

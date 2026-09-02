@@ -25,7 +25,7 @@ export function MerchantBottomNav() {
     },
     {
       id: 'market-prices',
-      label: 'Market Prices',
+      label: 'Rates',
       to: '/merchant/market-prices',
       icon: <TrendingUp size={20} />,
       isActive: location.pathname.includes('/market-prices'),

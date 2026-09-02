@@ -37,12 +37,6 @@ const sidebarConfig: Record<UserRole, SidebarItem[]> = {
     { path: '/orders', labelKey: 'nav.orders', icon: <ShoppingCart size={18} /> },
     { path: '/notifications', labelKey: 'nav.notifications', icon: <Bell size={18} /> },
   ],
-  aggregator: [
-    { path: '/dashboard/aggregator', labelKey: 'nav.home', icon: <Home size={18} /> },
-    { path: '/opportunities', labelKey: 'dashboard.aggregator.opportunities', icon: <Briefcase size={18} /> },
-    { path: '/orders', labelKey: 'nav.orders', icon: <ShoppingCart size={18} /> },
-    { path: '/notifications', labelKey: 'nav.notifications', icon: <Bell size={18} /> },
-  ],
 };
 
 export function Sidebar() {

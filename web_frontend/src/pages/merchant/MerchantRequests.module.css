@@ -1198,26 +1198,183 @@
   border-radius: 4px;
 }
 
+.quoteProductsSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.sectionHeaderBetween {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.toggleCatalogBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #f8fafc;
+  border: 1.5px solid #cbd5e1;
+  color: #0f172a;
+  font-size: 0.775rem;
+  font-weight: 800;
+  padding: 0.35rem 0.75rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.toggleCatalogBtn:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+}
+
+.quoteProductsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.quoteProductCard {
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  transition: border-color 0.15s ease;
+}
+
+.quoteProductCard:focus-within {
+  border-color: #fbc21a;
+  background: #ffffff;
+}
+
+.quoteProductTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.productTitleGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.productCatIcon {
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+.productNameText {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.productMetaTags {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 2px;
+}
+
+.reqQtyPill {
+  font-size: 0.685rem;
+  font-weight: 800;
+  color: #b45309;
+  background: #fef3c7;
+  border: 1px solid #fde68a;
+  padding: 0.1rem 0.45rem;
+  border-radius: 4px;
+}
+
+.catNamePill {
+  font-size: 0.685rem;
+  font-weight: 600;
+  color: #64748b;
+  background: #e2e8f0;
+  padding: 0.1rem 0.45rem;
+  border-radius: 4px;
+}
+
+.removeProdBtn {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.removeProdBtn:hover {
+  background: #fee2e2;
+  transform: scale(1.05);
+}
+
+.quoteRateInputRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.85rem;
+  align-items: center;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.65rem 0.85rem;
+}
+
+.rateInputCol {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.rateSubLabel {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #475569;
+}
+
 .priceInputWrapper {
   display: flex;
   align-items: center;
   background: #ffffff;
-  border: 2px solid #cbd5e1;
-  border-radius: 10px;
-  padding: 0.45rem 0.95rem;
-  gap: 0.5rem;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 0.35rem 0.65rem;
+  gap: 0.35rem;
   transition: all 0.15s ease;
 }
 
 .priceInputWrapper:focus-within {
   border-color: #fbc21a;
-  box-shadow: 0 0 0 3px rgba(251, 194, 26, 0.25);
+  box-shadow: 0 0 0 3px rgba(251, 194, 26, 0.2);
 }
 
 .currencyPrefix {
-  font-size: 1.25rem;
+  font-size: 1.05rem;
   font-weight: 900;
   color: #0f172a;
+}
+
+.unitSuffix {
+  font-size: 0.775rem;
+  font-weight: 800;
+  color: #64748b;
+  white-space: nowrap;
 }
 
 .formInputPrice {
@@ -1225,9 +1382,354 @@
   outline: none;
   background: transparent;
   width: 100%;
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   font-weight: 900;
   color: #0f172a;
+  min-width: 0;
+}
+
+.rateSubtotalCol {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+  gap: 2px;
+}
+
+.rateSubtotalLabel {
+  font-size: 0.685rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.rateSubtotalVal {
+  font-size: 1.05rem;
+  font-weight: 900;
+  color: #16a34a;
+}
+
+.marketBenchmarkTag {
+  font-size: 0.685rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+/* Category Explorer & Universal Search (Billing style) */
+.quoteCategoryExplorerWrapper {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.scrapSearchInputWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #f8fafc;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 0.45rem 0.75rem;
+  transition: all 0.15s ease;
+}
+
+.scrapSearchInputWrapper:focus-within {
+  border-color: #fbc21a;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(251, 194, 26, 0.15);
+}
+
+.scrapSearchIcon {
+  color: #64748b;
+  flex-shrink: 0;
+}
+
+.scrapSearchInput {
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 100%;
+  font-size: 0.825rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.clearSearchQueryBtn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.searchResultsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 0.65rem;
+  max-height: 220px;
+  overflow-y: auto;
+  padding-right: 2px;
+}
+
+.categoryExplorerInner {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.billingCategoryTabsTrack {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.billingCategoryTabsTrack::-webkit-scrollbar {
+  height: 4px;
+}
+
+.billingCategoryTabsTrack::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.billingCategoryTabBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.35rem 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #334155;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.billingCategoryTabBtn:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.billingCategoryTabActive {
+  background: #fffdf5 !important;
+  border-color: #fbc21a !important;
+  color: #b45309 !important;
+  box-shadow: 0 1px 4px rgba(251, 194, 26, 0.2);
+}
+
+.billingCategoryTabIcon {
+  font-size: 0.95rem;
+}
+
+.billingCategoryTabLabel {
+  font-size: 0.75rem;
+}
+
+.subCategoryCardsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 0.55rem;
+  max-height: 200px;
+  overflow-y: auto;
+  padding-right: 2px;
+}
+
+.subCategoryCard {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.55rem 0.7rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.subCategoryCard:hover {
+  background: #ffffff;
+  border-color: #fbc21a;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transform: translateY(-1px);
+}
+
+.subCategoryCardTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.35rem;
+}
+
+.subCategoryCategoryTag {
+  font-size: 0.65rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.subCategoryPriceBadge {
+  font-size: 0.725rem;
+  font-weight: 900;
+  color: #16a34a;
+  background: #f0fdf4;
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  border: 1px solid #bbf7d0;
+}
+
+.subCategoryName {
+  font-size: 0.785rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.2;
+}
+
+.subCategoryQuality {
+  font-size: 0.65rem;
+  color: #64748b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.subCategoryCardBottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 2px;
+}
+
+.marketStandardTag {
+  font-size: 0.625rem;
+  color: #94a3b8;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.addSubItemBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  background: #fbc21a;
+  border: none;
+  border-radius: 4px;
+  padding: 0.2rem 0.45rem;
+  font-size: 0.685rem;
+  font-weight: 800;
+  color: #0f172a;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.addSubItemBtn:hover {
+  background: #f59e0b;
+}
+
+.customAddSubCard {
+  background: #fffdf7;
+  border: 1.5px dashed #fde68a;
+  border-radius: 8px;
+  padding: 0.55rem 0.7rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  cursor: pointer;
+}
+
+.customAddTag {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: #b45309;
+  text-transform: uppercase;
+}
+
+.customAddTitle {
+  font-size: 0.785rem;
+  font-weight: 800;
+  color: #78350f;
+}
+
+/* Total Summary Strip */
+.quoteTotalSummaryStrip {
+  background: #0f172a;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  color: #ffffff;
+}
+
+.quoteTotalRatesPreview {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.totalSummaryLabel {
+  font-size: 0.65rem;
+  font-weight: 900;
+  color: #fbc21a;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.ratesPillsRow {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.rateSummaryPill {
+  font-size: 0.725rem;
+  color: #e2e8f0;
+  background: #1e293b;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.rateSummaryPill strong {
+  color: #4ade80;
+}
+
+.quoteTotalAmountBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.totalAmountSubLabel {
+  font-size: 0.65rem;
+  color: #94a3b8;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.totalAmountBig {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: #fbc21a;
+  line-height: 1.1;
 }
 
 .formHelperText {
@@ -1268,24 +1770,31 @@
 
 .voicePromptRow {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 0.85rem;
+  justify-content: center;
+  text-align: center;
+  gap: 0.55rem;
+  width: 100%;
+  padding: 0.25rem 0;
 }
 
 .recordAudioBtn {
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
+  justify-content: center;
+  gap: 0.5rem;
   background-color: #ffffff;
   border: 1.5px solid #fde68a;
   color: #b45309;
-  font-size: 0.825rem;
+  font-size: 0.85rem;
   font-weight: 800;
-  padding: 0.5rem 0.95rem;
-  border-radius: 8px;
+  padding: 0.6rem 1.35rem;
+  border-radius: 10px;
   cursor: pointer;
   transition: all 0.15s ease;
   white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(180, 83, 9, 0.08);
 }
 
 .recordAudioBtn:hover {
@@ -1294,9 +1803,10 @@
 }
 
 .voicePromptSub {
-  font-size: 0.75rem;
+  font-size: 0.775rem;
   color: #92400e;
-  line-height: 1.35;
+  line-height: 1.4;
+  max-width: 340px;
 }
 
 .recordingActiveRow {
@@ -1304,12 +1814,15 @@
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
 .recordingIndicatorGroup {
   display: flex;
   align-items: center;
   gap: 0.55rem;
+  min-width: 0;
+  flex-wrap: wrap;
 }
 
 .recordingPulseDot {
@@ -1319,6 +1832,7 @@
   background-color: #dc2626;
   box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.25);
   animation: pulseRed 1.2s infinite;
+  flex-shrink: 0;
 }
 
 @keyframes pulseRed {
@@ -1331,12 +1845,16 @@
   font-size: 0.9rem;
   font-weight: 800;
   color: #dc2626;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
 }
 
 .recordingStatusLabel {
   font-size: 0.785rem;
   color: #78350f;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .stopRecordBtn {
@@ -1817,29 +2335,90 @@
 }
 
 /* Responsive */
-@media (max-width: 1100px) {
+@media (max-width: 1200px) {
   .requestsLayoutGrid {
     grid-template-columns: 1fr;
+  }
+  .highlightsGrid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 768px) {
   .mainContainer {
-    padding: 0.75rem 0.75rem 2rem 0.75rem;
+    padding: 0.85rem 1rem 2.5rem 1rem;
+    gap: 1rem;
   }
 
   .pageHeaderRow {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.5rem;
+    gap: 0.35rem;
+  }
+
+  .pageTitle {
+    font-size: 1.5rem;
+    line-height: 1.15;
+  }
+
+  .pageSubtitle {
+    font-size: 0.825rem;
+    line-height: 1.4;
+  }
+
+  .autoRefreshTag {
+    align-self: flex-start;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.75rem;
   }
 
   .highlightsGrid {
-    display: none; /* Streamline on mobile for maximum vertical space */
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.55rem;
+    width: 100%;
   }
 
+  .highlightCard {
+    padding: 0.6rem 0.65rem;
+    gap: 0.5rem;
+    min-width: 0;
+    border-radius: 10px;
+  }
+
+  .highlightIconCircle {
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+  }
+
+  .highlightTitle {
+    font-size: 0.75rem;
+    line-height: 1.15;
+  }
+
+  .highlightSub {
+    font-size: 0.635rem;
+    line-height: 1.15;
+  }
+
+  .requestsLayoutGrid {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 100%;
+    gap: 1rem;
+  }
+
+  .mainCol {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .sidebarCol,
   .rightSidebarCol {
-    display: none; /* Hide heavy sidebar filters on mobile, keep clean feed */
+    display: none !important; /* Hide heavy desktop sidebar on mobile */
   }
 
   .mobileTopTabTrack {
@@ -1848,7 +2427,7 @@
     background: #0f172a;
     padding: 4px;
     border-radius: 12px;
-    margin-bottom: 0.85rem;
+    margin-bottom: 0.5rem;
     width: 100%;
   }
 
@@ -1897,6 +2476,99 @@
     border-radius: 9999px;
   }
 
+  .tabContainer {
+    width: 100%;
+    margin-top: 0;
+    padding-bottom: 0;
+  }
+
+  .tabTrack {
+    width: 100%;
+    gap: 0.25rem;
+  }
+
+  .tabButton {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    font-size: 0.8rem;
+    padding: 0.6rem 0.25rem;
+    white-space: nowrap;
+  }
+
+  .tabCountBadge,
+  .tabCountBadgeActive {
+    font-size: 0.65rem;
+    padding: 0.1rem 0.4rem;
+  }
+
+  .requestsBar {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.15rem 0;
+  }
+
+  .countHeading {
+    font-size: 0.95rem;
+    line-height: 1.2;
+  }
+
+  .liveBadge {
+    font-size: 0.65rem;
+    padding: 1px 5px;
+  }
+
+  .sortSelector {
+    font-size: 0.75rem;
+    padding: 0.35rem 0.65rem;
+    border-radius: 8px;
+    white-space: nowrap;
+  }
+
+  .requestCard {
+    padding: 1rem;
+    border-radius: 16px;
+    gap: 0.85rem;
+  }
+
+  .cardHeaderRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+    padding-bottom: 0.55rem;
+  }
+
+  .cardHeaderLeft {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+
+  .posterGroup {
+    display: flex;
+    align-items: baseline;
+    gap: 0.3rem;
+    flex-wrap: wrap;
+  }
+
+  .posterName {
+    font-size: 0.95rem;
+    line-height: 1.25;
+  }
+
+  .requestIdMuted {
+    font-size: 0.72rem;
+    color: #94a3b8;
+  }
+
   .tabContainerMobileHidden,
   .requestsBarMobileHidden,
   .requestsListMobileHidden {
@@ -1904,19 +2576,40 @@
   }
 
   .cardBodyGrid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    width: 100%;
+  }
+
+  .imageShowcaseCol {
+    width: 100%;
   }
 
   .largeImgFrame {
-    height: 220px !important;
-    min-height: 220px !important;
+    height: 200px !important;
+    min-height: 200px !important;
     width: 100% !important;
-    border-radius: 14px !important;
+    border-radius: 12px !important;
+  }
+
+  .specsAndMetaCol {
+    width: 100%;
   }
 
   .actionsCol {
+    width: 100%;
     align-items: stretch;
+    margin-top: 0.25rem;
+  }
+
+  .acceptQuoteBtn {
+    width: 100%;
+    justify-content: center;
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 0.875rem;
   }
 
   .formGridTwo {
@@ -2202,7 +2895,45 @@
     color: #94a3b8;
   }
 
-  .mobileOfferStatusSub {
-    font-weight: 600;
+  .extensionStrip {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.85rem;
+    padding: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .extensionLeft {
+    width: 100%;
+  }
+
+  .extensionRight {
+    width: 100%;
+    align-items: stretch;
+  }
+
+  .extensionControls {
+    width: 100%;
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .extensionSelect {
+    flex: 1;
+  }
+
+  .extensionBtn {
+    flex: 1;
+    white-space: nowrap;
+  }
+
+  .bottomBanner {
+    padding: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
   }
 }

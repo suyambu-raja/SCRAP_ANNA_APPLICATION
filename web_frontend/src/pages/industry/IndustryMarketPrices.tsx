@@ -268,7 +268,7 @@ export default function IndustryMarketPrices() {
         )}
 
         {/* 3. Browse More Items in this Category */}
-        {categoryMaterials.length > 1 && (
+        {categoryMaterials.length > 0 && (
           <section className={styles.relatedMaterialsSection}>
             <div className={styles.relatedSectionHeader}>
               <h3 className={styles.relatedSectionTitle}>
@@ -289,7 +289,7 @@ export default function IndustryMarketPrices() {
                     activePrice?.id === mat.id ? styles.relatedCardActive : '',
                   ].join(' ')}
                 >
-                  <PriceCard price={mat} />
+                  <PriceCard price={mat} isActive={activePrice?.id === mat.id} />
                 </div>
               ))}
             </div>

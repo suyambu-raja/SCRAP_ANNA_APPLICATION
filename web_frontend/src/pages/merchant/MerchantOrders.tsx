@@ -174,6 +174,8 @@ export interface OrderWorkflow {
   deductions: number;
   billingOtpInput: string;
   billNumber: string;
+  agreedRate?: number | string;
+  actualWeight?: number | string;
 }
 
 interface OrderItem {

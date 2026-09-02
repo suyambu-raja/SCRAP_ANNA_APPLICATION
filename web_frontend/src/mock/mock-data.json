@@ -68,23 +68,6 @@
       "avatar": null,
       "verified": true,
       "status": "active"
-    },
-    {
-      "id": "USR004",
-      "role": "aggregator",
-      "name": "Tamil Nadu Recycling Network",
-      "email": "aggregator@example.com",
-      "phone": "+919876543213",
-      "language": "ta",
-      "location": {
-        "area": "Perungudi",
-        "city": "Chennai",
-        "state": "Tamil Nadu",
-        "pincode": "600096"
-      },
-      "avatar": null,
-      "verified": true,
-      "status": "active"
     }
   ],
   "demo_accounts": {
@@ -103,11 +86,6 @@
       {
         "userId": "USR003",
         "login": "industry@example.com",
-        "password": "demo123"
-      },
-      {
-        "userId": "USR004",
-        "login": "aggregator@example.com",
         "password": "demo123"
       }
     ]
@@ -131,11 +109,11 @@
     },
     {
       "id": "CAT_MATERIAL",
-      "name": "Material",
-      "name_ta": "பொருட்கள்",
+      "name": "Metals",
+      "name_ta": "உலோகங்கள்",
       "unit": "kg",
       "icon": "copper",
-      "description": "Copper, Aluminium, Brass, E-Waste and special recyclable metals"
+      "description": "Copper, Aluminium, Brass, SS and non-ferrous recyclable metals"
     },
     {
       "id": "CAT_PAPER_CARDBOARD",
@@ -382,7 +360,7 @@
     {
       "id": "COP_001",
       "name": "Copper Scrap",
-      "category": "Material",
+      "category": "Metals",
       "categoryId": "CAT_MATERIAL",
       "subcategory": "Copper",
       "price": 720,
@@ -402,7 +380,7 @@
     {
       "id": "COP_002",
       "name": "Burned copper",
-      "category": "Material",
+      "category": "Metals",
       "categoryId": "CAT_MATERIAL",
       "subcategory": "Burned copper",
       "price": 640,
@@ -422,7 +400,7 @@
     {
       "id": "ALU_001",
       "name": "household aluminium",
-      "category": "Material",
+      "category": "Metals",
       "categoryId": "CAT_MATERIAL",
       "subcategory": "household aluminium",
       "price": 135,
@@ -442,7 +420,7 @@
     {
       "id": "ALU_002",
       "name": "MA - solid alloy",
-      "category": "Material",
+      "category": "Metals",
       "categoryId": "CAT_MATERIAL",
       "subcategory": "MA - solid alloy",
       "price": 185,
@@ -462,7 +440,7 @@
     {
       "id": "ALU_003",
       "name": "commercial aluminium",
-      "category": "Material",
+      "category": "Metals",
       "categoryId": "CAT_MATERIAL",
       "subcategory": "commercial aluminium",
       "price": 165,
@@ -482,7 +460,7 @@
     {
       "id": "ALU_004",
       "name": "bus body",
-      "category": "Material",
+      "category": "Metals",
       "categoryId": "CAT_MATERIAL",
       "subcategory": "bus body",
       "price": 150,
@@ -502,7 +480,7 @@
     {
       "id": "BRS_001",
       "name": "Brass Scrap",
-      "category": "Material",
+      "category": "Metals",
       "categoryId": "CAT_MATERIAL",
       "subcategory": "Brass",
       "price": 490,
@@ -522,7 +500,7 @@
     {
       "id": "STL_001",
       "name": "Low quality steel",
-      "category": "Material",
+      "category": "Metals",
       "categoryId": "CAT_MATERIAL",
       "subcategory": "Low quality steel",
       "price": 36,
@@ -542,7 +520,7 @@
     {
       "id": "STL_002",
       "name": "quality steel",
-      "category": "Material",
+      "category": "Metals",
       "categoryId": "CAT_MATERIAL",
       "subcategory": "quality steel",
       "price": 78,

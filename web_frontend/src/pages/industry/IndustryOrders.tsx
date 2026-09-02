@@ -689,30 +689,32 @@ export default function IndustryOrders() {
                         </span>
                       </div>
 
-                      <table className={styles.agreedTable}>
-                        <thead>
-                          <tr>
-                            <th>Scrap Material</th>
-                            <th>Listed Quantity</th>
-                            <th className={styles.thAlignRight}>Committed Unit Rate</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {order.items.map((item, idx) => (
-                            <tr key={idx}>
-                              <td>
-                                <strong className={styles.agreedItemTitle}>{item.name}</strong>
-                              </td>
-                              <td>{item.estimatedQty}</td>
-                              <td className={styles.tdAlignRight}>
-                                <strong className={styles.rateHighlight}>
-                                  ₹{item.ratePerUnit} / {item.unit}
-                                </strong>
-                              </td>
+                      <div className={styles.agreedTableWrapper}>
+                        <table className={styles.agreedTable}>
+                          <thead>
+                            <tr>
+                              <th>Scrap Material</th>
+                              <th>Listed Quantity</th>
+                              <th className={styles.thAlignRight}>Committed Unit Rate</th>
                             </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                          </thead>
+                          <tbody>
+                            {order.items.map((item, idx) => (
+                              <tr key={idx}>
+                                <td>
+                                  <strong className={styles.agreedItemTitle}>{item.name}</strong>
+                                </td>
+                                <td>{item.estimatedQty}</td>
+                                <td className={styles.tdAlignRight}>
+                                  <strong className={styles.rateHighlight}>
+                                    ₹{item.ratePerUnit} / {item.unit}
+                                  </strong>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
 
                       <div className={styles.agreedRatesFooterNote}>
                         <Info size={13} className={styles.infoIconGrey} />
@@ -897,7 +899,7 @@ export default function IndustryOrders() {
                           <span className={styles.partyTypeHeader}>COLLECTED BY (CERTIFIED BUYER)</span>
                           <strong className={styles.partyName}>{order.merchantName}</strong>
                           <p className={styles.partyAddress}>
-                            {order.merchantShop || 'SIDCO Industrial Scrap Yard #12, Guindy'}<br />
+                            {order.shopName || 'SIDCO Industrial Scrap Yard #12, Guindy'}<br />
                             Chennai, Tamil Nadu – 600032
                           </p>
                           <span className={styles.partyGst}>GSTIN: 33XYZAB9876C1Z2</span>

@@ -1,20 +1,86 @@
-import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   Bell,
   Building2,
-  CheckCircle2,
   ChevronDown,
   Phone,
   Plus,
   ShieldCheck,
   Sparkles,
+  User,
+  CreditCard,
+  Settings,
+  HelpCircle,
+  Gift,
+  LogOut,
 } from 'lucide-react';
+import { useAuthStore } from '@/store/useAuthStore';
 import styles from './IndustryTopHeader.module.css';
 
 export function IndustryTopHeader() {
   const location = useLocation();
+  const navigate = useNavigate();
+  const logout = useAuthStore((s) => s.logout);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  const profileDropdownRef = useRef<HTMLDivElement>(null);
+
+  const [isVisible, setIsVisible] = useState(true);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (profileDropdownRef.current && !profileDropdownRef.current.contains(event.target as Node)) {
+        setProfileDropdownOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Smart Hide on Scroll Down, Immediate Reveal on Scroll Up (Backward)
+  useEffect(() => {
+    let lastScrollY = window.scrollY || document.documentElement.scrollTop;
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY || document.documentElement.scrollTop;
+      const delta = currentScrollY - lastScrollY;
+
+      // Always visible when near the top
+      if (currentScrollY <= 30) {
+        setIsVisible(true);
+        setIsScrolled(false);
+      } else {
+        setIsScrolled(true);
+        // Scrolling UP (Backward) -> Immediately show
+        if (delta < -1) {
+          setIsVisible(true);
+        }
+        // Scrolling DOWN -> Slide navbar up out of view
+        else if (delta > 4 && currentScrollY > 50) {
+          setIsVisible(false);
+        }
+      }
+
+      lastScrollY = currentScrollY;
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    document.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      document.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  const handleLogout = () => {
+    setProfileDropdownOpen(false);
+    logout();
+    navigate('/login');
+  };
 
   // Dynamic Page Title mapping
   const getPageMeta = () => {
@@ -46,7 +112,11 @@ export function IndustryTopHeader() {
   const pageMeta = getPageMeta();
 
   return (
-    <header className={styles.topHeader}>
+    <header
+      className={`${styles.topHeader} ${!isVisible ? styles.topHeaderHidden : ''} ${
+        isScrolled ? styles.topHeaderScrolled : ''
+      }`}
+    >
       {/* 1. Left: Mobile Brand Logo & Name / Desktop Page Meta */}
       <div className={styles.titleCol}>
         <Link to="/industry/dashboard" className={styles.mobileBrandLink}>
@@ -57,9 +127,8 @@ export function IndustryTopHeader() {
                 <span className={styles.brandTitleScrap}>Scrap </span>
                 <span className={styles.brandTitleAnna}>Anna</span>
               </span>
-              <span className={styles.mobileRoleBadge}>INDUSTRY</span>
             </div>
-            <span className={styles.mobileBrandTagline}>Enterprise Scrap Portal</span>
+            <span className={styles.mobileShopName}>CONNECT • COLLECT • RECYCLE</span>
           </div>
         </Link>
 
@@ -125,19 +194,95 @@ export function IndustryTopHeader() {
           )}
         </div>
 
-        {/* Industry Profile Block */}
-        <Link to="/industry/profile" className={styles.profileBlock}>
-          <div className={styles.avatarCircle}>
-            <Building2 size={18} />
-          </div>
-          <div className={styles.profileText}>
-            <div className={styles.profileNameRow}>
-              <span className={styles.companyName}>Sri Venkatesh Industries</span>
-              <CheckCircle2 size={13} fill="#16a34a" color="#ffffff" />
+        {/* Industry Profile Dropdown Card */}
+        <div className={styles.profileDropdownWrap} ref={profileDropdownRef}>
+          <button
+            type="button"
+            className={styles.profileBlockBtn}
+            onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+            aria-expanded={profileDropdownOpen}
+            aria-label="Toggle profile menu"
+          >
+            <div className={styles.avatarCircle}>
+              <Building2 size={18} />
             </div>
-            <span className={styles.companyLocation}>SIDCO Guindy, Chennai</span>
-          </div>
-        </Link>
+            <div className={styles.profileText}>
+              <div className={styles.profileNameRow}>
+                <span className={styles.companyName}>Sri Venkatesh Industries</span>
+              </div>
+              <span className={styles.companyLocation}>SIDCO Guindy, Chennai</span>
+            </div>
+            <ChevronDown
+              size={14}
+              className={profileDropdownOpen ? `${styles.chevron} ${styles.chevronOpen}` : styles.chevron}
+            />
+          </button>
+
+          {profileDropdownOpen && (
+            <div className={styles.dropdownMenu}>
+              <div className={styles.dropdownHeader}>
+                <div className={styles.dropdownHeaderTitle}>Sri Venkatesh Industries</div>
+                <div className={styles.dropdownHeaderSub}>GSTIN: 33AAAAA0000A1Z5 • Chennai</div>
+              </div>
+
+              <Link
+                to="/industry/profile"
+                className={styles.dropdownItem}
+                onClick={() => setProfileDropdownOpen(false)}
+              >
+                <User size={15} />
+                <span>Profile</span>
+              </Link>
+
+              <Link
+                to="/industry/transactions"
+                className={styles.dropdownItem}
+                onClick={() => setProfileDropdownOpen(false)}
+              >
+                <CreditCard size={15} />
+                <span>Transactions &amp; Ledger</span>
+              </Link>
+
+              <Link
+                to="/industry/profile#support"
+                className={styles.dropdownItem}
+                onClick={() => setProfileDropdownOpen(false)}
+              >
+                <HelpCircle size={15} />
+                <span>Support</span>
+              </Link>
+
+              <Link
+                to="/industry/profile#refer"
+                className={styles.dropdownItem}
+                onClick={() => setProfileDropdownOpen(false)}
+              >
+                <Gift size={15} />
+                <span>Refer &amp; Earn</span>
+              </Link>
+
+              <Link
+                to="/industry/profile"
+                className={styles.dropdownItem}
+                onClick={() => setProfileDropdownOpen(false)}
+              >
+                <Settings size={15} />
+                <span>Settings</span>
+              </Link>
+
+              <div style={{ height: 1, backgroundColor: '#f1f5f9', margin: '4px 0' }} />
+
+              <button
+                type="button"
+                className={`${styles.dropdownItem} ${styles.dropdownItemDanger}`}
+                onClick={handleLogout}
+              >
+                <LogOut size={15} />
+                <span>Sign Out</span>
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </header>
   );

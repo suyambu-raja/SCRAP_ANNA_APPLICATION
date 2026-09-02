@@ -24,7 +24,7 @@ export function IndustryBottomNav() {
     },
     {
       id: 'market-prices',
-      label: 'Market Prices',
+      label: 'Rates',
       to: '/industry/market-prices',
       icon: <TrendingUp size={20} />,
       isActive: location.pathname.includes('/industry/market-prices'),

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
@@ -18,6 +18,101 @@ import { getMarketPrices, getScrapCategories } from '@/services';
 import type { MarketPrice, ScrapCategory } from '@/types';
 import styles from './MarketPrices.module.css';
 
+/**
+ * Hook to smoothly auto-scroll category/sub-category tracks leftward.
+ * Pauses for 10 seconds whenever the user clicks, swipes, or touches the row.
+ */
+function useAutoScrollTrack(speedPxPerSec = 22, pauseDurationMs = 10000) {
+  const trackRef = useRef<HTMLDivElement | null>(null);
+  const isPausedRef = useRef(false);
+  const pauseTimeoutRef = useRef<number | null>(null);
+  const isHoldingAtEndRef = useRef(false);
+  const scrollDirectionRef = useRef<'forward' | 'backward'>('forward');
+
+  const pauseForDuration = useCallback((duration = pauseDurationMs) => {
+    isPausedRef.current = true;
+    if (pauseTimeoutRef.current) {
+      window.clearTimeout(pauseTimeoutRef.current);
+    }
+    pauseTimeoutRef.current = window.setTimeout(() => {
+      isPausedRef.current = false;
+    }, duration);
+  }, [pauseDurationMs]);
+
+  const onUserInteractionStart = useCallback(() => {
+    isPausedRef.current = true;
+    if (pauseTimeoutRef.current) {
+      window.clearTimeout(pauseTimeoutRef.current);
+    }
+  }, []);
+
+  const onUserInteractionEnd = useCallback(() => {
+    pauseForDuration(pauseDurationMs);
+  }, [pauseForDuration, pauseDurationMs]);
+
+  useEffect(() => {
+    let animId: number;
+    let lastTime: number | null = null;
+
+    const animate = (time: number) => {
+      if (lastTime === null) {
+        lastTime = time;
+      }
+      const delta = Math.min((time - lastTime) / 1000, 0.1);
+      lastTime = time;
+
+      const el = trackRef.current;
+      if (el && !isPausedRef.current && !isHoldingAtEndRef.current) {
+        const maxScroll = el.scrollWidth - el.clientWidth;
+        if (maxScroll > 10) {
+          if (scrollDirectionRef.current === 'forward') {
+            el.scrollLeft += speedPxPerSec * delta;
+            if (el.scrollLeft >= maxScroll - 2) {
+              isHoldingAtEndRef.current = true;
+              window.setTimeout(() => {
+                scrollDirectionRef.current = 'backward';
+                isHoldingAtEndRef.current = false;
+              }, 1200);
+            }
+          } else {
+            el.scrollLeft -= speedPxPerSec * 1.8 * delta;
+            if (el.scrollLeft <= 2) {
+              isHoldingAtEndRef.current = true;
+              window.setTimeout(() => {
+                scrollDirectionRef.current = 'forward';
+                isHoldingAtEndRef.current = false;
+              }, 1200);
+            }
+          }
+        }
+      }
+
+      animId = requestAnimationFrame(animate);
+    };
+
+    animId = requestAnimationFrame(animate);
+
+    return () => {
+      cancelAnimationFrame(animId);
+      if (pauseTimeoutRef.current) {
+        window.clearTimeout(pauseTimeoutRef.current);
+      }
+    };
+  }, [speedPxPerSec]);
+
+  const interactionProps = {
+    onTouchStart: onUserInteractionStart,
+    onTouchEnd: onUserInteractionEnd,
+    onTouchCancel: onUserInteractionEnd,
+    onMouseDown: onUserInteractionStart,
+    onMouseUp: onUserInteractionEnd,
+    onWheel: () => pauseForDuration(pauseDurationMs),
+    onClick: () => pauseForDuration(pauseDurationMs),
+  };
+
+  return { trackRef, pauseForDuration, interactionProps };
+}
+
 export default function MarketPrices() {
   const { i18n } = useTranslation();
   const navigate = useNavigate();
@@ -30,6 +125,10 @@ export default function MarketPrices() {
   const [loading, setLoading] = useState(true);
   const [selectedCatId, setSelectedCatId] = useState<string>('CAT_IRON');
   const [selectedMaterialId, setSelectedMaterialId] = useState<string>('IRON_001');
+
+  // Auto-scroll hooks with 10s pause on user touch/click/swipe
+  const categoryScroll = useAutoScrollTrack(24, 10000);
+  const subCategoryScroll = useAutoScrollTrack(20, 10000);
 
   useEffect(() => {
     Promise.all([getMarketPrices(), getScrapCategories()]).then(([priceData, catData]) => {
@@ -79,13 +178,19 @@ export default function MarketPrices() {
       <main className={styles.detailMainContainer}>
         {/* Top Navigation Row: Back Link + Category Switcher */}
         <div className={styles.topNavRow}>
-          <Link to="/home" className={styles.backLink}>
-            <ArrowLeft size={16} />
-            <span>← Back to All Categories</span>
-          </Link>
+          <div className={styles.backLinkRow}>
+            <Link to="/home" className={styles.backLink}>
+              <ArrowLeft size={16} />
+              <span>Back to Home</span>
+            </Link>
+          </div>
 
-          {/* Primary Categories Filter Pills */}
-          <div className={styles.categoryPillsTrack}>
+          {/* Primary Categories Filter Pills (Auto-scrolling with 10s pause on interaction) */}
+          <div
+            ref={categoryScroll.trackRef}
+            className={styles.categoryPillsTrack}
+            {...categoryScroll.interactionProps}
+          >
             <button
               type="button"
               className={[
@@ -93,6 +198,7 @@ export default function MarketPrices() {
                 selectedCatId === 'all' ? styles.materialPillActive : '',
               ].join(' ')}
               onClick={() => {
+                categoryScroll.pauseForDuration(10000);
                 setSelectedCatId('all');
                 if (prices.length > 0) setSelectedMaterialId(prices[0].id);
               }}
@@ -108,6 +214,7 @@ export default function MarketPrices() {
                   selectedCatId === cat.id ? styles.materialPillActive : '',
                 ].join(' ')}
                 onClick={() => {
+                  categoryScroll.pauseForDuration(10000);
                   setSelectedCatId(cat.id);
                   const firstInCat = prices.find((p) => p.categoryId === cat.id);
                   if (firstInCat) setSelectedMaterialId(firstInCat.id);
@@ -119,9 +226,13 @@ export default function MarketPrices() {
           </div>
         </div>
 
-        {/* Sub-Material Selector Pills (Within Selected Category) */}
+        {/* Sub-Material Selector Pills (Auto-scrolling with 10s pause on interaction) */}
         {categoryMaterials.length > 1 && (
-          <div className={styles.subMaterialTrack}>
+          <div
+            ref={subCategoryScroll.trackRef}
+            className={styles.subMaterialTrack}
+            {...subCategoryScroll.interactionProps}
+          >
             <span className={styles.subMaterialLabel}>
               <Tag size={13} />
               <span>Select Material:</span>
@@ -134,7 +245,10 @@ export default function MarketPrices() {
                   styles.subMaterialPill,
                   activePrice?.id === mat.id ? styles.subMaterialPillActive : '',
                 ].join(' ')}
-                onClick={() => setSelectedMaterialId(mat.id)}
+                onClick={() => {
+                  subCategoryScroll.pauseForDuration(10000);
+                  setSelectedMaterialId(mat.id);
+                }}
               >
                 {mat.name || mat.category}
               </button>
@@ -262,7 +376,7 @@ export default function MarketPrices() {
         )}
 
         {/* 3. Browse More Items in this Category */}
-        {categoryMaterials.length > 1 && (
+        {categoryMaterials.length > 0 && (
           <section className={styles.relatedMaterialsSection}>
             <div className={styles.relatedSectionHeader}>
               <h3 className={styles.relatedSectionTitle}>
@@ -283,7 +397,7 @@ export default function MarketPrices() {
                     activePrice?.id === mat.id ? styles.relatedCardActive : '',
                   ].join(' ')}
                 >
-                  <PriceCard price={mat} />
+                  <PriceCard price={mat} isActive={activePrice?.id === mat.id} />
                 </div>
               ))}
             </div>

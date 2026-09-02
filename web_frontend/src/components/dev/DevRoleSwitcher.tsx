@@ -6,9 +6,6 @@ import { UserCheck, ChevronUp, ChevronDown, RotateCcw } from 'lucide-react';
 import styles from './DevRoleSwitcher.module.css';
 
 export function DevRoleSwitcher() {
-  // Only render in development mode
-  if (!import.meta.env.DEV) return null;
-
   const [isOpen, setIsOpen] = useState(false);
   const currentUser = useAuthStore((s) => s.user);
   const login = useAuthStore((s) => s.login);
@@ -27,12 +24,10 @@ export function DevRoleSwitcher() {
       navigate('/industry/dashboard');
     } else if (user.role === 'merchant') {
       navigate('/dashboard/merchant');
-    } else if (user.role === 'aggregator') {
-      navigate('/dashboard/aggregator');
     } else if (user.role === 'household') {
-      navigate('/dashboard/household');
+      navigate('/household');
     } else {
-      navigate('/dashboard/' + user.role);
+      navigate('/household');
     }
     setIsOpen(false);
   };

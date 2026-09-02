@@ -19,6 +19,7 @@
   box-sizing: border-box;
   overflow-x: hidden;
   width: 100%;
+  padding-top: 64px; /* Clearance for separated fixed top header */
 }
 
 .mainWrapperExpanded {
@@ -46,6 +47,7 @@
   .mainWrapper {
     margin-left: 0 !important;
     width: 100% !important;
-    padding-bottom: 64px; /* Clearance for fixed mobile bottom navigation */
+    padding-top: 60px !important; /* Clearance for separated mobile fixed top header */
+    padding-bottom: calc(78px + env(safe-area-inset-bottom, 0px)) !important; /* Clearance for fixed mobile bottom navigation */
   }
 }

@@ -1,0 +1,1856 @@
+/* ==========================================================================
+   HOUSEHOLD DASHBOARD STYLING (MATCHING REFERENCE UI & THEME)
+   ========================================================================== */
+
+.pageContainer {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1rem 1.25rem 4rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  font-family: inherit;
+  color: #0f172a;
+}
+
+/* --------------------------------------------------------------------------
+   1. GREETING & ADDRESS SELECTOR (STANDALONE SINGLE ROW, NO CONTAINER BOX)
+   -------------------------------------------------------------------------- */
+.greetingAddressRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.25rem 0.15rem;
+  box-sizing: border-box;
+}
+
+.greetingCol {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.greetingName {
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: #0f172a;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.greetingSubtext {
+  font-size: 0.85rem;
+  color: #64748b;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.addressPillBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  background: #141c28;
+  color: #ffffff;
+  padding: 0.4rem 0.65rem;
+  border-radius: 10px;
+  border: 1px solid #233044;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+  flex-shrink: 0;
+  max-width: 175px;
+  margin-left: auto;
+}
+
+.addressPillBtn:hover {
+  background: #1e293b;
+  border-color: #fbc21a;
+  transform: translateY(-1px);
+}
+
+.addressPillLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-width: 0;
+  overflow: hidden;
+  flex: 1;
+}
+
+.addressPillIcon {
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.addressPillTextGroup {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  gap: 1px;
+  min-width: 0;
+  overflow: hidden;
+  flex: 1;
+}
+
+.addressPillArea {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 105px;
+}
+
+.addressPillChangeText {
+  font-size: 0.62rem;
+  font-weight: 800;
+  color: #fbc21a;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.addressPillChevron {
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+
+/* --------------------------------------------------------------------------
+   2. GOLD VALUE BANNER (TURN YOUR SCRAP INTO VALUE - MATCHING REFERENCE UI)
+   -------------------------------------------------------------------------- */
+.goldValueBanner {
+  background: #fbc21a url('/turn-scrap-banner-bg.png') no-repeat right center / cover;
+  border-radius: 20px;
+  padding: 1.75rem 2.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  box-shadow: 0 10px 30px rgba(245, 158, 11, 0.2);
+  position: relative;
+  overflow: hidden;
+  min-height: 180px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.goldBannerLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  z-index: 2;
+  max-width: 60%;
+}
+
+.goldBannerTitle {
+  font-size: 1.85rem;
+  font-weight: 900;
+  color: #0f172a;
+  margin: 0;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.goldBannerSubtitle {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0;
+  line-height: 1.45;
+}
+
+.goldBannerBtnRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.65rem;
+  flex-wrap: nowrap;
+}
+
+.goldPostBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: #0f172a;
+  color: #ffffff;
+  font-size: 0.825rem;
+  font-weight: 800;
+  padding: 0.6rem 1.15rem;
+  border-radius: 10px;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.goldPostBtn:hover {
+  background: #1e293b;
+  transform: translateY(-1px);
+}
+
+.goldRatesBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: #ffffff;
+  color: #0f172a;
+  font-size: 0.825rem;
+  font-weight: 800;
+  padding: 0.6rem 1.15rem;
+  border-radius: 10px;
+  text-decoration: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.goldRatesBtn:hover {
+  background: #f8fafc;
+  transform: translateY(-1px);
+}
+
+.goldBannerRightGraphic {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  max-width: 220px;
+  max-height: 200px;
+}
+
+.scrapBinImg {
+  width: 100%;
+  max-width: 200px;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 12px 20px rgba(0, 0, 0, 0.15));
+}
+
+/* --------------------------------------------------------------------------
+   3. 3 KPI STATS CARDS ROW (MATCHING REFERENCE UI)
+   -------------------------------------------------------------------------- */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.statCard {
+  background: #141c28;
+  border: 1px solid #233044;
+  border-radius: 16px;
+  padding: 1.25rem 1.35rem;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.statCard:hover {
+  transform: translateY(-2px);
+  border-color: #3b4d66;
+}
+
+.statLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.statNumber {
+  font-size: 1.75rem;
+  font-weight: 900;
+  color: #ffffff;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.statLabel {
+  font-size: 0.825rem;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.statCaptionGold {
+  font-size: 0.75rem;
+  color: #fbc21a;
+  font-weight: 700;
+}
+
+.statCaptionGreen {
+  font-size: 0.75rem;
+  color: #4ade80;
+  font-weight: 700;
+}
+
+.statCaptionBlue {
+  font-size: 0.75rem;
+  color: #38bdf8;
+  font-weight: 700;
+}
+
+.statIconCircle {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.iconCircleGold {
+  background: rgba(251, 194, 26, 0.12);
+  color: #fbc21a;
+}
+
+.iconCircleGreen {
+  background: rgba(34, 197, 94, 0.12);
+  color: #22c55e;
+}
+
+.iconCircleBlue {
+  background: rgba(56, 189, 248, 0.12);
+  color: #38bdf8;
+}
+
+/* --------------------------------------------------------------------------
+   4. TWO-COLUMN MAIN CONTENT SECTION
+   -------------------------------------------------------------------------- */
+.mainContentGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  gap: 1.25rem;
+  align-items: start;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.leftSectionCol {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.rightSectionCol {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Next Pickup Single Unified Card (Matching Reference UI) */
+.nextPickupUnifiedCard {
+  background: #141c28;
+  border: 1px solid #233044;
+  border-radius: 18px;
+  padding: 1.15rem 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.pickupUnifiedHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.pickupUnifiedTitle {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+}
+
+.scheduledPillBadge {
+  background: #064e3b;
+  color: #4ade80;
+  border: 1px solid #059669;
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 0.15rem 0.6rem;
+  border-radius: 9999px;
+}
+
+.pickupUnifiedBody {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.pickupPartnerLeftCol {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.partnerAvatarCircle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid #334155;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.partnerAvatarSvg {
+  width: 100%;
+  height: 100%;
+}
+
+.pickupCardInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+  flex: 1 1 auto;
+  overflow: hidden;
+}
+
+.execArrivingLabel {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.pickupTitle {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pickupScheduleText {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.75rem;
+  color: #cbd5e1;
+  font-weight: 600;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.pickupEtaRightCol {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.3rem;
+  border-left: 1px solid #1e293b;
+  padding-left: 0.65rem;
+  flex-shrink: 0;
+}
+
+.etaTextGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0;
+}
+
+.etaLabel {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #94a3b8;
+  letter-spacing: 0.05em;
+}
+
+.etaValueRow {
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+}
+
+.etaNumber {
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.etaMinsText {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.trackPickupMiniBtn {
+  background: transparent;
+  color: #fbc21a;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.3rem 0.75rem;
+  border-radius: 6px;
+  text-decoration: none;
+  border: 1.5px solid #fbc21a;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.trackPickupMiniBtn:hover {
+  background: rgba(251, 194, 26, 0.15);
+}
+
+/* 3-Step Process Chain Tracker */
+.miniStageTracker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
+  padding-top: 0.85rem;
+  border-top: 1px solid #1e293b;
+  position: relative;
+}
+
+.miniStep {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #64748b;
+  position: relative;
+  z-index: 2;
+  flex-shrink: 0;
+  text-align: center;
+}
+
+.miniStep span {
+  white-space: nowrap;
+  text-align: center;
+}
+
+.miniStepDone .miniCircle {
+  background: #22c55e;
+  color: #ffffff;
+  border-color: #22c55e;
+}
+.miniStepDone span {
+  color: #ffffff;
+  font-weight: 800;
+}
+
+.miniStepActive .miniCircle {
+  background: #22c55e;
+  color: #ffffff;
+  border-color: #22c55e;
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.25);
+}
+.miniStepActive span {
+  color: #22c55e;
+  font-weight: 800;
+}
+
+.miniCircle {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #141c28;
+  color: #94a3b8;
+  font-size: 0.72rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid #334155;
+  box-shadow: 0 0 0 3px #141c28;
+  transition: all 0.2s ease;
+}
+
+.miniLine {
+  flex: 1;
+  height: 2.5px;
+  background: #233044;
+  margin: 0;
+  margin-bottom: 1.15rem;
+  min-width: 15px;
+  z-index: 1;
+}
+
+.miniLineActive {
+  background: #22c55e !important;
+}
+
+/* How It Works Card */
+.howItWorksCard {
+  background: #141c28;
+  border: 1px solid #233044;
+  border-radius: 18px;
+  padding: 1.25rem 1.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.howItWorksTitle {
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: #ffffff;
+  margin: 0;
+}
+
+.howItWorksStepsRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.howStep {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex: 1;
+}
+
+.howNumCircle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1.5px solid #fbc21a;
+  color: #fbc21a;
+  font-weight: 900;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.howTextCol {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.howTextCol strong {
+  font-size: 0.825rem;
+  color: #ffffff;
+}
+
+.howTextCol span {
+  font-size: 0.725rem;
+  color: #94a3b8;
+}
+
+.howArrow {
+  font-size: 1.2rem;
+  color: #64748b;
+  font-weight: 700;
+}
+
+/* Market Prices Widget */
+.ratesSectionCard {
+  background: #141c28;
+  border: 1px solid #233044;
+  border-radius: 18px;
+  padding: 1.35rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.ratesHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ratesTitleGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ratesMainTitle {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #ffffff;
+  margin: 0;
+}
+
+.ratesSubtitle {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.exploreAllLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #fbc21a;
+  text-decoration: none;
+}
+
+.exploreAllLink:hover {
+  color: #f59e0b;
+}
+
+.rateRowsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.rateRowCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.65rem 0.85rem;
+  background: #101722;
+  border: 1px solid #1e293b;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.rateRowCard:hover {
+  border-color: #fbc21a;
+  background: #182333;
+  transform: translateX(2px);
+}
+
+.rateRowLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.rateRowThumb {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #334155;
+  flex-shrink: 0;
+}
+
+.rateRowMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.rateRowName {
+  font-size: 0.825rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+}
+
+.rateRowPrice {
+  font-size: 0.85rem;
+  font-weight: 900;
+  color: #22c55e;
+  margin: 0;
+}
+
+.rateTrendBadge {
+  font-size: 0.725rem;
+  font-weight: 800;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+}
+
+.trendGreen {
+  background: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+}
+
+.trendRed {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+}
+
+.trendNeutral {
+  background: #1e293b;
+  color: #94a3b8;
+}
+
+/* Review Card */
+.reviewCard {
+  background: #141c28;
+  border: 1px solid #233044;
+  border-radius: 18px;
+  padding: 1.35rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.reviewHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.reviewTitle {
+  font-size: 1.05rem;
+  font-weight: 900;
+  color: #ffffff;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.reviewSubtitle {
+  font-size: 0.775rem;
+  color: #94a3b8;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.starRatingRow {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.starBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.2rem;
+  color: #4b5563;
+  transition: all 0.15s ease;
+}
+
+.starActive {
+  color: #f59e0b !important;
+}
+
+.reviewTextarea {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 0.825rem;
+  border: 1.5px solid #283548;
+  border-radius: 10px;
+  background: #101722;
+  color: #ffffff;
+  outline: none;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+.reviewTextarea:focus {
+  border-color: #fbc21a;
+}
+
+.reviewActionRow {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.5rem;
+}
+
+.submitReviewBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #fbc21a;
+  color: #0f172a;
+  font-size: 0.8rem;
+  font-weight: 900;
+  padding: 0.55rem 1.15rem;
+  border-radius: 8px;
+  border: 1.5px solid #e5aa00;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.submitReviewBtn:hover {
+  background: #f59e0b;
+}
+
+/* --------------------------------------------------------------------------
+   5. ADDRESS SELECTOR BOTTOM SHEET MODAL (MATCHING REFERENCE UI)
+   -------------------------------------------------------------------------- */
+.bottomSheetBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  z-index: 99999;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.bottomSheetContainer {
+  background: #111827;
+  width: 100%;
+  max-width: 480px;
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.6);
+  animation: slideUpSheet 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  overflow: hidden;
+  border: 1px solid #1f2937;
+  border-bottom: none;
+}
+
+@keyframes slideUpSheet {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.sheetDragHandleWrap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 0.65rem 0 0.25rem 0;
+}
+
+.sheetDragPill {
+  width: 44px;
+  height: 4px;
+  border-radius: 9999px;
+  background: #4b5563;
+}
+
+.sheetHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1.5rem 0.85rem;
+  border-bottom: 1px solid #1f2937;
+}
+
+.sheetTitle {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #ffffff;
+  margin: 0;
+}
+
+.sheetCloseBtn {
+  background: #1f2937;
+  border: none;
+  color: #9ca3af;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.sheetCloseBtn:hover {
+  background: #374151;
+  color: #ffffff;
+}
+
+.sheetBody {
+  padding: 1.25rem 1.5rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+  box-sizing: border-box;
+}
+
+.sheetSearchWrap {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  background: #1f2937;
+  border: 1.5px solid #374151;
+  border-radius: 12px;
+  padding: 0.7rem 1rem;
+}
+
+.sheetSearchIcon {
+  color: #9ca3af;
+  flex-shrink: 0;
+}
+
+.sheetSearchInput {
+  width: 100%;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+.sheetSearchInput::placeholder {
+  color: #6b7280;
+}
+
+.sheetSearchClearBtn {
+  background: none;
+  border: none;
+  color: #9ca3af;
+  cursor: pointer;
+}
+
+.sheetActionItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.85rem;
+  background: #1f2937;
+  border: 1px solid #374151;
+  border-radius: 14px;
+  padding: 0.95rem 1.15rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.sheetActionItem:hover {
+  border-color: #fbc21a;
+  background: #283548;
+}
+
+.actionIconCircleBlue {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: #111827;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid #374151;
+}
+
+.actionTextCol {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.actionTitleBlue {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #fbc21a;
+}
+
+.actionSubtext {
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+.actionChevron {
+  color: #9ca3af;
+}
+
+/* Saved Addresses Section */
+.savedAddressesSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.savedSectionLabel {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.savedAddressesList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.savedAddressCard {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  background: #1a2232;
+  border: 1.5px solid #283548;
+  border-radius: 16px;
+  padding: 1rem 1.15rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.savedAddressCard:hover {
+  border-color: #fbc21a;
+  background: #1e293b;
+}
+
+.savedAddressActive {
+  border-color: #fbc21a !important;
+  background: #1e293b !important;
+}
+
+.savedAddressIconBox {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: #111827;
+  border: 1px solid #374151;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.savedAddressContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  flex: 1;
+}
+
+.savedAddressTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.savedAddressTag {
+  font-size: 0.95rem;
+  font-weight: 900;
+  color: #ffffff;
+}
+
+.defaultBadgePill {
+  background: rgba(251, 194, 26, 0.15);
+  color: #fbc21a;
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 0.15rem 0.55rem;
+  border-radius: 6px;
+  border: 1px solid rgba(251, 194, 26, 0.3);
+}
+
+.savedAddressFullText {
+  font-size: 0.78rem;
+  color: #9ca3af;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.savedAddressPhoneRow {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.savedAddressPhone {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #cbd5e1;
+}
+
+.savedAddressMenuBtn {
+  background: none;
+  border: none;
+  color: #9ca3af;
+  cursor: pointer;
+  padding: 0.25rem;
+}
+
+/* Location Access Card */
+.locationAccessCard {
+  background: #161f2d;
+  border: 1px solid #232f42;
+  border-radius: 16px;
+  padding: 1.15rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.locAccessLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.locAccessIconWrap {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #111827;
+  border: 1px solid #374151;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.locAccessTextCol {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.locAccessTitle {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.locAccessDesc {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin: 0;
+  line-height: 1.35;
+}
+
+.enableLocationBtn {
+  background: #fbc21a;
+  color: #0f172a;
+  font-size: 0.8rem;
+  font-weight: 900;
+  padding: 0.55rem 1.15rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.enableLocationBtn:hover {
+  background: #f59e0b;
+}
+
+.addressSecurityBanner {
+  background: #111827;
+  border: 1px solid #1f2937;
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.securityShieldIcon {
+  flex-shrink: 0;
+}
+
+.securityTextCol {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.securityTitle {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.securitySubtitle {
+  font-size: 0.72rem;
+  color: #9ca3af;
+}
+
+/* --------------------------------------------------------------------------
+   LIGHTBOX / DETAIL VISION & MODALS
+   -------------------------------------------------------------------------- */
+.lightboxOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(8px);
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.lightboxBox {
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 20px;
+  max-width: 900px;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+}
+
+.lightboxHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.75rem;
+  border-bottom: 1px solid #1e293b;
+}
+
+.lightboxTitle {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #ffffff;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.orderPillBadge {
+  background: rgba(251, 194, 26, 0.2);
+  color: #fbc21a;
+  font-size: 0.725rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  border: 1px solid rgba(251, 194, 26, 0.4);
+}
+
+.lightboxSubtitle {
+  font-size: 0.775rem;
+  color: #94a3b8;
+  margin: 0.2rem 0 0 0;
+}
+
+.lightboxCloseBtn {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: #ffffff;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.lightboxViewer {
+  display: flex;
+  flex-direction: column;
+  background: #020617;
+}
+
+.lightboxImageStage {
+  width: 100%;
+  height: 420px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.lightboxMainImg {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.lightboxNavArrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid #334155;
+  color: #ffffff;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.lightboxNavPrev {
+  left: 1.5rem;
+}
+
+.lightboxNavNext {
+  right: 1.5rem;
+}
+
+.photoCaptionBox {
+  background: #0f172a;
+  padding: 1.15rem 1.75rem;
+  border-top: 1px solid #1e293b;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.captionTopRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.photoIndexTag {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #94a3b8;
+  letter-spacing: 0.05em;
+}
+
+.photoWeightBadge {
+  background: #10b981;
+  color: #ffffff;
+  font-size: 0.725rem;
+  font-weight: 800;
+  padding: 0.15rem 0.55rem;
+  border-radius: 4px;
+}
+
+.photoCaptionTitle {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+}
+
+.photoRateInfo {
+  font-size: 0.8rem;
+  color: #cbd5e1;
+  margin: 0;
+}
+
+.lightboxThumbStrip {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.75rem;
+  background: #020617;
+  overflow-x: auto;
+}
+
+.stripThumbCard {
+  width: 80px;
+  height: 60px;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid transparent;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.stripThumbActive {
+  border-color: #fbc21a;
+}
+
+.stripThumbImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.stripThumbLabel {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(15, 23, 42, 0.8);
+  color: #ffffff;
+  font-size: 0.6rem;
+  text-align: center;
+  padding: 1px;
+}
+
+/* Post Scrap Modal */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(4px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.modalContent {
+  background: #ffffff;
+  width: 100%;
+  max-width: 480px;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.15rem 1.5rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.modalTitle {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #0f172a;
+  margin: 0;
+}
+
+.modalSubtitle {
+  font-size: 0.775rem;
+  color: #64748b;
+  margin: 0.15rem 0 0 0;
+}
+
+.modalCloseBtn {
+  background: #f1f5f9;
+  border: none;
+  color: #64748b;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.modalForm {
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.formLabel {
+  font-size: 0.775rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.formInput,
+.formSelect {
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #0f172a;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.formInput:focus,
+.formSelect:focus {
+  border-color: #f59e0b;
+}
+
+.modalFooter {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.65rem;
+  padding-top: 0.5rem;
+}
+
+.modalCancelBtn {
+  padding: 0.55rem 1rem;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #475569;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.modalSubmitBtn {
+  padding: 0.55rem 1.25rem;
+  background: #fbc21a;
+  color: #0f172a;
+  font-size: 0.8rem;
+  font-weight: 900;
+  border-radius: 8px;
+  border: 1.5px solid #e5aa00;
+  cursor: pointer;
+}
+
+/* --------------------------------------------------------------------------
+   RESPONSIVENESS (MOBILE PERFECT)
+   -------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  .goldValueBanner {
+    padding: 1.5rem;
+    gap: 1.25rem;
+    background-size: cover;
+    background-position: right center;
+  }
+
+  .goldBannerLeft {
+    max-width: 62%;
+  }
+
+  .statsGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+  }
+
+  .mainContentGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .pageContainer {
+    padding: 0.75rem 0.85rem 5rem 0.85rem;
+    gap: 1rem;
+    background: #ffffff;
+  }
+
+  .topAppHeaderSection {
+    padding: 0.85rem 1rem;
+    border-radius: 16px;
+  }
+
+  .greetingName {
+    font-size: 1.15rem;
+  }
+
+  .greetingSubtext {
+    font-size: 0.75rem;
+  }
+
+  .greetingAddressRow {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .addressPillBtn {
+    min-width: unset;
+    max-width: 160px;
+    padding: 0.35rem 0.6rem;
+    margin-left: auto;
+  }
+
+  .addressPillArea {
+    font-size: 0.72rem;
+    max-width: 95px;
+  }
+
+  .addressPillChangeText {
+    font-size: 0.6rem;
+  }
+
+  .goldValueBanner {
+    padding: 1.25rem 1.15rem;
+    border-radius: 18px;
+    background: #fbc21a url('/turn-scrap-banner-bg.png') no-repeat right -15px center;
+    background-size: auto 100%;
+    min-height: 155px;
+  }
+
+  .goldBannerLeft {
+    max-width: 62%;
+    gap: 0.35rem;
+  }
+
+  .goldBannerTitle {
+    font-size: 1.35rem;
+    font-weight: 900;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+
+  .goldBannerSubtitle {
+    font-size: 0.75rem;
+    line-height: 1.35;
+    font-weight: 600;
+  }
+
+  .goldBannerBtnRow {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.45rem;
+    flex-wrap: nowrap;
+  }
+
+  .goldPostBtn,
+  .goldRatesBtn {
+    padding: 0.45rem 0.85rem;
+    font-size: 0.75rem;
+    font-weight: 800;
+    border-radius: 8px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .statsGrid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 0.5rem;
+  }
+
+  .statCard {
+    padding: 0.75rem 0.55rem;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    min-height: 90px;
+    gap: 0.35rem;
+  }
+
+  .statNumber {
+    font-size: 1.15rem;
+  }
+
+  .statLabel {
+    font-size: 0.68rem;
+  }
+
+  .statCaptionGold,
+  .statCaptionGreen,
+  .statCaptionBlue {
+    font-size: 0.65rem;
+  }
+
+  .statIconCircle {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    align-self: flex-end;
+  }
+
+  .pickupCardTop {
+    gap: 0.65rem;
+  }
+
+  .partnerAvatarCircle {
+    width: 42px;
+    height: 42px;
+  }
+
+  .pickupTitle {
+    font-size: 0.95rem;
+  }
+
+  .etaNumber {
+    font-size: 1.2rem;
+  }
+
+  .howItWorksCard {
+    padding: 0.95rem 1rem;
+  }
+
+  .howItWorksStepsRow {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.35rem;
+    width: 100%;
+  }
+
+  .howStep {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    flex: 1;
+  }
+
+  .howNumCircle {
+    width: 24px;
+    height: 24px;
+    font-size: 0.72rem;
+    border-width: 1px;
+  }
+
+  .howTextCol strong {
+    font-size: 0.72rem;
+    white-space: nowrap;
+  }
+
+  .howTextCol span {
+    font-size: 0.6rem;
+    line-height: 1.15;
+  }
+
+  .nextPickupUnifiedCard,
+  .howItWorksCard,
+  .ratesSectionCard {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+}

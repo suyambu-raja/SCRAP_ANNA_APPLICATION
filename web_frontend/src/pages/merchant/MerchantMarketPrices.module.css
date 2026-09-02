@@ -638,7 +638,10 @@
 .relatedCardWrapper {
   cursor: pointer;
   transition: transform 0.2s ease;
-  border-radius: 14px;
+  border-radius: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
 }
 
 .relatedCardWrapper:hover {
@@ -646,12 +649,7 @@
 }
 
 .relatedCardActive {
-  border-radius: 14px;
-}
-
-.relatedCardActive > div {
-  border-color: #fbc21a !important;
-  box-shadow: 0 0 0 2px #fbc21a, 0 8px 20px rgba(251, 194, 26, 0.25) !important;
+  /* Active styling handled by PriceCard marketCardActive */
 }
 
 /* Responsive */
@@ -670,9 +668,78 @@
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
+  .detailPageWrapper {
+    padding: 1rem 0.85rem 5rem;
+    gap: 1.15rem;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
+  }
+
+  .topNavRow {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .categoryPillsTrack {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding-bottom: 0.25rem;
+  }
+
+  .detailGridDesktop,
+  .subMaterialTrack {
+    display: none !important;
+  }
+
+  .relatedMaterialsSection {
+    margin-top: 0.5rem;
+    padding-top: 0;
+    border-top: none;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
+  }
+
+  .relatedSectionHeader {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .relatedSectionTitle {
+    font-size: 1.25rem;
+    word-break: break-word;
+  }
+
+  .relatedSectionSub {
+    font-size: 0.82rem;
+  }
+
   .relatedGrid {
     grid-template-columns: 1fr;
+    gap: 1.25rem;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .relatedCardWrapper {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .stepperControlRow {

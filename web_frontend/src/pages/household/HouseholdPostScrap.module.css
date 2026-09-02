@@ -1,0 +1,861 @@
+/* ==========================================================================
+   HOUSEHOLD POST SCRAP PAGE STYLING (MATCHING THEME)
+   ========================================================================== */
+
+.pageContainer {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.75rem 2rem 4rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  box-sizing: border-box;
+  font-family: inherit;
+  color: #0f172a;
+}
+
+/* Header Section */
+.headerBlock {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  padding: 0.5rem 0;
+}
+
+.headerIconCircle {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: #fffbeb;
+  color: #d97706;
+  border: 1px solid #fef3c7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.headerTitles {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.mainTitle {
+  font-size: 1.55rem;
+  font-weight: 900;
+  color: #0f172a;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.mainSubtitle {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin: 0;
+}
+
+/* Form Container Card */
+.formCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 2rem 2.25rem;
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.sectionHeadingGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 0.85rem;
+}
+
+.sectionHeading {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+.sectionSubheading {
+  font-size: 0.82rem;
+  color: #64748b;
+  margin: 0;
+}
+
+/* --------------------------------------------------------------------------
+   1. ADDRESS SECTION & SAVED ADDRESS CARDS
+   -------------------------------------------------------------------------- */
+.addressSectionBox {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.addressSectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.fieldLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.825rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.editAddressBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  color: #0f172a;
+  font-size: 0.775rem;
+  font-weight: 800;
+  padding: 0.35rem 0.75rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.editAddressBtn:hover {
+  background: #f1f5f9;
+  border-color: #0f172a;
+}
+
+.savedAddressesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.savedAddressCard {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 1rem 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.savedAddressCard:hover {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+}
+
+.savedAddressActive {
+  border-color: #f59e0b !important;
+  background: #fffdf5 !important;
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.12);
+}
+
+.addressCardTop {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.addressRadioCircle {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.savedAddressActive .addressRadioCircle {
+  border-color: #f59e0b;
+}
+
+.radioDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #f59e0b;
+}
+
+.addressTagBadge {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.defaultTagBadge {
+  background: #ecfdf5;
+  color: #059669;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 0.1rem 0.45rem;
+  border-radius: 4px;
+  border: 1px solid #a7f3d0;
+}
+
+.addressFullText {
+  font-size: 0.82rem;
+  color: #334155;
+  line-height: 1.4;
+  margin: 0;
+  font-weight: 600;
+}
+
+.addressMetaText {
+  font-size: 0.72rem;
+  color: #64748b;
+}
+
+/* Edit Address Inline Form */
+.editAddressFormWrap {
+  background: #f8fafc;
+  border: 1.5px dashed #cbd5e1;
+  border-radius: 14px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.subFieldLabel {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #475569;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.editAddressActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.65rem;
+}
+
+.cancelEditBtn {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #475569;
+  font-size: 0.775rem;
+  font-weight: 700;
+  padding: 0.45rem 0.9rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.saveEditBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #0f172a;
+  color: #fbc21a;
+  font-size: 0.775rem;
+  font-weight: 800;
+  padding: 0.45rem 1rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+/* --------------------------------------------------------------------------
+   2. PREFERRED DATE & TIME GRID
+   -------------------------------------------------------------------------- */
+.dateTimeGrid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.datePillsRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.datePillBtn {
+  flex: 1;
+  padding: 0.6rem 0.85rem;
+  font-size: 0.825rem;
+  font-weight: 700;
+  border-radius: 10px;
+  border: 1.5px solid #e2e8f0;
+  background: #ffffff;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: center;
+}
+
+.datePillBtn:hover {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+}
+
+.datePillActive {
+  background: #0f172a !important;
+  border-color: #0f172a !important;
+  color: #fbc21a !important;
+  font-weight: 800 !important;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.15);
+}
+
+.inputField,
+.selectField,
+.textareaField {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #0f172a;
+  outline: none;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.inputField:focus,
+.selectField:focus,
+.textareaField:focus {
+  border-color: #f59e0b;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.12);
+}
+
+.fieldGroupFull {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+/* --------------------------------------------------------------------------
+   3. UPLOAD TOOLBAR & WORKING BUTTONS (OLDER FORMAT)
+   -------------------------------------------------------------------------- */
+.uploadActionToolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.uploadButtonPhoto,
+.uploadButtonVideo,
+.uploadButtonCamera {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.15rem;
+  border-radius: 10px;
+  font-size: 0.825rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: 1.5px solid #e2e8f0;
+  background: #f8fafc;
+  color: #334155;
+}
+
+.uploadButtonPhoto:hover,
+.uploadButtonVideo:hover,
+.uploadButtonCamera:hover {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  transform: translateY(-1px);
+}
+
+.uploadButtonCamera {
+  background: #0f172a;
+  color: #fbc21a;
+  border-color: #0f172a;
+}
+
+.uploadButtonCamera:hover {
+  background: #1e293b;
+  border-color: #1e293b;
+}
+
+/* --------------------------------------------------------------------------
+   UPLOADED MEDIA GRID & DETAIL VISION CARDS (OLDER FORMAT)
+   -------------------------------------------------------------------------- */
+.uploadedMediaGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 1.15rem;
+  width: 100%;
+}
+
+.mediaCard {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+.mediaCard:hover {
+  border-color: #f59e0b;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
+}
+
+.mediaThumbContainer {
+  width: 100%;
+  height: 125px;
+  background: #f1f5f9;
+  position: relative;
+  overflow: hidden;
+}
+
+.mediaThumbnail {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.mediaTypeBadge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(4px);
+  color: #ffffff;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  letter-spacing: 0.04em;
+}
+
+.detailVisionHint {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: rgba(15, 23, 42, 0.75);
+  color: #ffffff;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.mediaCard:hover .detailVisionHint {
+  opacity: 1;
+}
+
+.removeMediaBtn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(239, 68, 68, 0.9);
+  color: #ffffff;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+  z-index: 2;
+}
+
+.removeMediaBtn:hover {
+  transform: scale(1.15);
+  background: #dc2626;
+}
+
+.mediaMeta {
+  padding: 0.65rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.mediaTitle {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mediaSubtext {
+  font-size: 0.68rem;
+  color: #64748b;
+}
+
+/* Cooldown Alert */
+.cooldownAlertBox {
+  background: #fffbeb;
+  border: 1.5px solid #fde68a;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  color: #b45309;
+}
+
+.cooldownTextWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  font-size: 0.84rem;
+}
+
+/* Submit Action Bar */
+.formFooterActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-top: 0.5rem;
+}
+
+.submitPostBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  background: #fbc21a;
+  color: #0f172a;
+  font-size: 0.92rem;
+  font-weight: 900;
+  padding: 0.85rem 2rem;
+  border-radius: 12px;
+  border: 1.5px solid #e5aa00;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 4px 14px rgba(251, 194, 26, 0.35);
+}
+
+.submitPostBtn:hover:not(:disabled) {
+  background: #f59e0b;
+  transform: translateY(-1px);
+}
+
+.submitPostBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* --------------------------------------------------------------------------
+   DETAIL VISION LIGHTBOX MODAL
+   -------------------------------------------------------------------------- */
+.lightboxOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(6px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.lightboxBox {
+  background: #ffffff;
+  width: 100%;
+  max-width: 720px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+}
+
+.lightboxHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.lightboxTitle {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #0f172a;
+  margin: 0;
+}
+
+.lightboxSubtitle {
+  font-size: 0.78rem;
+  color: #64748b;
+}
+
+.lightboxCloseBtn {
+  background: #f1f5f9;
+  border: none;
+  color: #64748b;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.lightboxCloseBtn:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.lightboxImageStage {
+  width: 100%;
+  height: 420px;
+  background: #0f172a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightboxMainImg {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* --------------------------------------------------------------------------
+   LIVE CAMERA MODAL STYLING
+   -------------------------------------------------------------------------- */
+.cameraModalContent {
+  background: #ffffff;
+  width: 100%;
+  max-width: 580px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+}
+
+.cameraHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.cameraViewport {
+  width: 100%;
+  height: 360px;
+  background: #0f172a;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cameraVideo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cameraControls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  background: #f8fafc;
+  border-top: 1px solid #f1f5f9;
+}
+
+.switchCamBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1rem;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #334155;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.captureSnapBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.5rem;
+  border-radius: 12px;
+  background: #fbc21a;
+  color: #0f172a;
+  font-size: 0.86rem;
+  font-weight: 900;
+  border: 1.5px solid #e5aa00;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(251, 194, 26, 0.3);
+}
+
+.captureSnapBtn:hover {
+  background: #f59e0b;
+}
+
+/* --------------------------------------------------------------------------
+   SUBMIT SUCCESS MODAL
+   -------------------------------------------------------------------------- */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(4px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.successModalContent {
+  background: #ffffff;
+  width: 100%;
+  max-width: 480px;
+  border-radius: 20px;
+  padding: 2.25rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  gap: 1rem;
+}
+
+.successIconBox {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: #ecfdf5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.successModalTitle {
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: #0f172a;
+  margin: 0;
+}
+
+.successModalText {
+  font-size: 0.86rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.45;
+}
+
+.successDetailsBox {
+  width: 100%;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  text-align: left;
+  font-size: 0.825rem;
+}
+
+.successDetailRow {
+  display: flex;
+  justify-content: space-between;
+  color: #64748b;
+}
+
+.successDetailRow strong {
+  color: #0f172a;
+}
+
+.successModalActions {
+  display: flex;
+  gap: 0.75rem;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.trackOrdersBtn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  background: #fbc21a;
+  color: #0f172a;
+  font-size: 0.85rem;
+  font-weight: 900;
+  padding: 0.75rem;
+  border-radius: 10px;
+  text-decoration: none;
+  border: 1px solid #e5aa00;
+}
+
+.closeSuccessBtn {
+  flex: 1;
+  padding: 0.75rem;
+  border-radius: 10px;
+  border: 1.5px solid #cbd5e1;
+  background: #ffffff;
+  color: #334155;
+  font-size: 0.85rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+@media (max-width: 860px) {
+  .pageContainer {
+    padding: 1.25rem 1rem 5rem 1rem;
+  }
+
+  .dateTimeGrid {
+    grid-template-columns: 1fr;
+  }
+}

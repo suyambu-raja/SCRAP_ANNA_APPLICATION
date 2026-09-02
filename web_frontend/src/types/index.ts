@@ -1,4 +1,4 @@
-export type UserRole = 'household' | 'merchant' | 'industry' | 'aggregator';
+export type UserRole = 'household' | 'merchant' | 'industry';
 export type UserStatus = 'active' | 'inactive' | 'suspended';
 
 export interface UserLocation {

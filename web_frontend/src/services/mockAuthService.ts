@@ -126,8 +126,6 @@ export async function registerRoleUser(data: RoleRegistrationData): Promise<{ us
         ? data.businessName
         : data.role === 'industry' && data.companyName
         ? data.companyName
-        : data.role === 'aggregator' && data.organizationName
-        ? data.organizationName
         : data.name;
 
     const newUser: User = {
