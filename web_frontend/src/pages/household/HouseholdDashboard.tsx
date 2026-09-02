@@ -391,8 +391,8 @@ export function HouseholdDashboard() {
   const sliderStartXRef = useRef(0);
   const sliderCurrentXRef = useRef(0);
   const sliderDragDistanceRef = useRef(0);
-  const autoSlideTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const resumeTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const autoSlideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const resumeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const sliderContainerRef = useRef<HTMLDivElement | null>(null);
   const isInteractingRef = useRef(false);
 
