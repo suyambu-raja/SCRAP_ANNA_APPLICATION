@@ -26,6 +26,8 @@ import {
   Bell,
   Radio,
   Phone,
+  Recycle,
+  User as UserIcon,
 } from 'lucide-react';
 import { useAuthStore } from '@/store/useAuthStore';
 import styles from './HouseholdDashboard.module.css';
@@ -294,10 +296,65 @@ const PROMO_SLIDES: PromoSlide[] = [
   },
 ];
 
+function useCountUp(target: number, duration: number = 1000, decimals: number = 0) {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    let startTimestamp: number | null = null;
+    let frameId: number;
+
+    const step = (timestamp: number) => {
+      if (!startTimestamp) startTimestamp = timestamp;
+      const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+      const easeOut = 1 - Math.pow(1 - progress, 3);
+      setCount(easeOut * target);
+
+      if (progress < 1) {
+        frameId = requestAnimationFrame(step);
+      }
+    };
+
+    frameId = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(frameId);
+  }, [target, duration]);
+
+  return count.toFixed(decimals);
+}
+
 export function HouseholdDashboard() {
   const navigate = useNavigate();
   const user = useAuthStore((s) => s.user);
   const displayName = user?.name || 'Arun Kumar';
+
+  // Animated KPI Stats Numbers (Count up smoothly on load)
+  const countUpcoming = useCountUp(1, 800, 0);
+  const countRecycled = useCountUp(118.6, 1200, 1);
+  const countEarned = useCountUp(2845, 1200, 0);
+
+  // Stats Carousel Active Dot State for Mobile Scroll
+  const [activeStatDot, setActiveStatDot] = useState(0);
+  const statsTrackRef = useRef<HTMLDivElement>(null);
+
+  const handleStatsScroll = useCallback(() => {
+    if (!statsTrackRef.current) return;
+    const { scrollLeft, clientWidth } = statsTrackRef.current;
+    if (clientWidth > 0) {
+      const cardWidth = clientWidth * 0.8;
+      const index = Math.round(scrollLeft / cardWidth);
+      setActiveStatDot(Math.min(Math.max(index, 0), 2));
+    }
+  }, []);
+
+  const scrollToStatCard = (index: number) => {
+    if (!statsTrackRef.current) return;
+    const clientWidth = statsTrackRef.current.clientWidth;
+    const cardWidth = clientWidth * 0.8;
+    statsTrackRef.current.scrollTo({
+      left: index * cardWidth,
+      behavior: 'smooth',
+    });
+    setActiveStatDot(index);
+  };
 
   // Dynamic Initials (e.g. "Arun Kumar" -> "AK")
   const getInitials = (name: string) => {
@@ -699,43 +756,105 @@ export function HouseholdDashboard() {
       </section>
 
       {/* =========================================================================
-          3. 3 KPI STATS CARDS ROW (MATCHING REFERENCE UI)
+          3. 3 KPI STATS CARDS CAROUSEL (SWIPEABLE MOBILE-FIRST INTERACTIVE CAROUSEL)
           ========================================================================= */}
-      <section className={styles.statsGrid}>
-        {/* Card 1: Upcoming Pickup */}
-        <div className={styles.statCard}>
-          <div className={styles.statLeft}>
-            <span className={styles.statNumber}>1</span>
-            <span className={styles.statLabel}>Upcoming Pickup</span>
-            <span className={styles.statCaptionGold}>Today, 04:15 PM</span>
+      <section className={styles.statsSectionWrapper}>
+        <div
+          className={styles.statsCarouselTrack}
+          ref={statsTrackRef}
+          onScroll={handleStatsScroll}
+        >
+          {/* Card 1: Upcoming Pickup */}
+          <div
+            className={`${styles.statInteractiveCard} ${styles.statCard1}`}
+            onClick={() => navigate('/household/orders')}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => e.key === 'Enter' && navigate('/household/orders')}
+            aria-label="Upcoming Pickup: 1, Today 04:15 PM"
+          >
+            <div className={styles.statCardTopRow}>
+              <div className={styles.statSquircleIcon}>
+                <Calendar size={22} strokeWidth={2.4} />
+              </div>
+              <div className={styles.statTopRightBadge}>
+                <Clock size={13} color="#8A6B14" strokeWidth={2.4} />
+                <span>Today, 04:15 PM</span>
+              </div>
+            </div>
+
+            <div className={styles.statCardValueGroup}>
+              <span className={styles.statBigValue}>{countUpcoming}</span>
+              <h3 className={styles.statCardTitle}>Upcoming Pickup</h3>
+            </div>
           </div>
-          <div className={`${styles.statIconCircle} ${styles.iconCircleGold}`}>
-            <Calendar size={22} />
+
+          {/* Card 2: Total Recycled */}
+          <div
+            className={`${styles.statInteractiveCard} ${styles.statCard2}`}
+            onClick={() => navigate('/household/history')}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => e.key === 'Enter' && navigate('/household/history')}
+            aria-label="Total Recycled: 118.6 kg, 12 Pickups"
+          >
+            <div className={styles.statCardTopRow}>
+              <div className={styles.statSquircleIcon}>
+                <Recycle size={22} strokeWidth={2.4} />
+              </div>
+              <div className={styles.statTopRightBadge}>
+                <UserIcon size={13} color="#8A6B14" strokeWidth={2.4} />
+                <span>12 Pickups</span>
+              </div>
+            </div>
+
+            <div className={styles.statCardValueGroup}>
+              <span className={styles.statBigValue}>
+                {countRecycled} <span className={styles.statUnitText}>kg</span>
+              </span>
+              <h3 className={styles.statCardTitle}>Total Recycled</h3>
+            </div>
+          </div>
+
+          {/* Card 3: Total Earned */}
+          <div
+            className={`${styles.statInteractiveCard} ${styles.statCard3}`}
+            onClick={() => navigate('/household/history')}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => e.key === 'Enter' && navigate('/household/history')}
+            aria-label="Total Earned: ₹2,845, This Month"
+          >
+            <div className={styles.statCardTopRow}>
+              <div className={styles.statSquircleIcon}>
+                <IndianRupee size={22} strokeWidth={2.6} />
+              </div>
+              <div className={styles.statTopRightBadge}>
+                <Calendar size={13} color="#8A6B14" strokeWidth={2.4} />
+                <span>This Month</span>
+              </div>
+            </div>
+
+            <div className={styles.statCardValueGroup}>
+              <span className={styles.statBigValue}>
+                ₹{Number(countEarned).toLocaleString('en-IN')}
+              </span>
+              <h3 className={styles.statCardTitle}>Total Earned</h3>
+            </div>
           </div>
         </div>
 
-        {/* Card 2: Total Recycled */}
-        <div className={styles.statCard}>
-          <div className={styles.statLeft}>
-            <span className={styles.statNumber}>118.6 kg</span>
-            <span className={styles.statLabel}>Total Recycled</span>
-            <span className={styles.statCaptionGold}>12 Pickups</span>
-          </div>
-          <div className={`${styles.statIconCircle} ${styles.iconCircleGold}`}>
-            <CheckCircle2 size={22} />
-          </div>
-        </div>
-
-        {/* Card 3: Total Earned */}
-        <div className={styles.statCard}>
-          <div className={styles.statLeft}>
-            <span className={styles.statNumber}>₹ 2,845</span>
-            <span className={styles.statLabel}>Total Earned</span>
-            <span className={styles.statCaptionGold}>This Month</span>
-          </div>
-          <div className={`${styles.statIconCircle} ${styles.iconCircleGold}`}>
-            <IndianRupee size={22} />
-          </div>
+        {/* Carousel Indicator Dots for Mobile */}
+        <div className={styles.statsIndicatorDotsRow}>
+          {[0, 1, 2].map((idx) => (
+            <button
+              key={idx}
+              type="button"
+              className={`${styles.statIndicatorDot} ${activeStatDot === idx ? styles.statIndicatorDotActive : ''}`}
+              onClick={() => scrollToStatCard(idx)}
+              aria-label={`Go to statistic ${idx + 1}`}
+            />
+          ))}
         </div>
       </section>
 

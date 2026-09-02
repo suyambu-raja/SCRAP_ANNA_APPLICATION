@@ -850,12 +850,1145 @@
   cursor: pointer;
 }
 
-@media (max-width: 860px) {
+/* ==========================================================================
+   RESPONSIVE SWITCHER: DESKTOP VS MOBILE
+   Desktop (min-width: 769px): Keeps the exact original desktop layout intact.
+   Mobile (max-width: 768px): Activates the clean step-based mobile flow.
+   ========================================================================== */
+
+.desktopPostScrapContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.mobilePostScrapContainer {
+  display: none;
+}
+
+@media (min-width: 769px) {
+  .desktopPostScrapContainer {
+    display: flex !important;
+  }
+  .mobilePostScrapContainer {
+    display: none !important;
+  }
+}
+
+@media (max-width: 768px) {
   .pageContainer {
-    padding: 1.25rem 1rem 5rem 1rem;
+    padding: 0.75rem 0.85rem 5rem 0.85rem;
+    gap: 1rem;
+    max-width: 100vw;
+    box-sizing: border-box;
   }
 
-  .dateTimeGrid {
-    grid-template-columns: 1fr;
+  .desktopPostScrapContainer {
+    display: none !important;
+  }
+
+  .mobilePostScrapContainer {
+    display: flex !important;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Mobile Top Header */
+  .mobilePostHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.25rem 0;
+    width: 100%;
+  }
+
+  .mobileBackBtn,
+  .mobileSupportBtn {
+    background: #ffffff;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #0f172a;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    transition: all 0.15s ease;
+  }
+
+  .mobileBackBtn:active,
+  .mobileSupportBtn:active {
+    transform: scale(0.95);
+    background: #f1f5f9;
+  }
+
+  .mobileHeaderTitle {
+    font-size: 1.2rem;
+    font-weight: 900;
+    color: #0f172a;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+
+  /* 3-Step Horizontal Progress Tracker */
+  .mobileStepIndicator {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.25rem 0.25rem 0.85rem 0.25rem;
+    position: relative;
+    box-sizing: border-box;
+  }
+
+  .stepNode {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+    z-index: 2;
+    cursor: pointer;
+    flex: 0 0 auto;
+  }
+
+  .stepCircle {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 800;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    box-sizing: border-box;
+  }
+
+  .stepLabel {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #94a3b8;
+    white-space: nowrap;
+    text-align: center;
+  }
+
+  /* Active Node */
+  .stepNodeActive .stepCircle {
+    background: #fbc21a;
+    color: #0f172a;
+    box-shadow: 0 0 0 4px rgba(251, 194, 26, 0.25);
+    border: 1px solid #e5aa00;
+  }
+
+  .stepNodeActive .stepLabel {
+    color: #0f172a;
+    font-weight: 800;
+  }
+
+  /* Completed Node */
+  .stepNodeDone .stepCircle {
+    background: #22c55e;
+    color: #ffffff;
+    border: 1px solid #16a34a;
+  }
+
+  .stepNodeDone .stepLabel {
+    color: #16a34a;
+    font-weight: 800;
+  }
+
+  /* Pending Node */
+  .stepNodePending .stepCircle {
+    background: #f8fafc;
+    color: #94a3b8;
+    border: 1.5px solid #e2e8f0;
+  }
+
+  .stepNodePending .stepLabel {
+    color: #94a3b8;
+  }
+
+  .stepConnectorLine {
+    flex: 1;
+    height: 2px;
+    background: #e2e8f0;
+    margin: 0 0.4rem;
+    margin-bottom: 1.15rem;
+    z-index: 1;
+    transition: background 0.25s ease;
+  }
+
+  .stepConnectorDone {
+    background: #22c55e !important;
+  }
+
+  /* Content Wrapper */
+  .mobileStepContent {
+    display: flex;
+    flex-direction: column;
+    gap: 1.15rem;
+    width: 100%;
+    padding-bottom: 90px;
+    box-sizing: border-box;
+    animation: fadeInStep 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes fadeInStep {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .mobileSectionHeader {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .mobileStepTitle {
+    font-size: 1.25rem;
+    font-weight: 900;
+    color: #0f172a;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+
+  .mobileStepSubtitle {
+    font-size: 0.8rem;
+    color: #64748b;
+    margin: 0;
+  }
+
+  /* Selected Address Card */
+  .mobileSelectedAddressCard {
+    background: #ffffff;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 1.15rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+  }
+
+  .selectedAddressLabel {
+    font-size: 0.775rem;
+    font-weight: 800;
+    color: #16a34a;
+    letter-spacing: 0.01em;
+  }
+
+  .selectedAddressMainRow {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+
+  .addressHomeIconSquircle {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: #fff8dc;
+    border: 1.5px solid #ffde7a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .addressMainDetails {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .addressTagRow {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .addressTagName {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #0f172a;
+  }
+
+  .addressDefaultBadge {
+    font-size: 0.65rem;
+    font-weight: 800;
+    background: #dcfce7;
+    color: #15803d;
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+    border: 1px solid #bbf7d0;
+  }
+
+  .addressFullString {
+    font-size: 0.775rem;
+    color: #475569;
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  .addressDistanceText {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #64748b;
+  }
+
+  .changeAddressActionBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    background: #f8fafc;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 10px;
+    padding: 0.65rem;
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: #0f172a;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .changeAddressActionBtn:hover {
+    background: #f1f5f9;
+  }
+
+  /* Date & Slot Groups */
+  .mobileBlockGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .mobileBlockTitle {
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0;
+  }
+
+  .pickupDateCardsRow {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.65rem;
+  }
+
+  .pickupDateCard {
+    background: #ffffff;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 0.75rem 0.4rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .dateCardTag {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #64748b;
+  }
+
+  .dateCardValue {
+    font-size: 0.825rem;
+    font-weight: 900;
+    color: #0f172a;
+    white-space: nowrap;
+  }
+
+  .pickupDateCardActive {
+    background: #fffdf5;
+    border-color: #f59e0b;
+    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.2);
+  }
+
+  .pickupDateCardActive .dateCardTag {
+    color: #d97706;
+  }
+
+  .pickupDateCardActive .dateCardValue {
+    color: #0f172a;
+  }
+
+  .chooseDateWrap {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .mobileCustomDatePickerInput {
+    margin-top: 0.35rem;
+    width: 100%;
+    padding: 0.65rem;
+    border: 1.5px solid #f59e0b;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    box-sizing: border-box;
+  }
+
+  /* Time Slot Cards */
+  .timeSlotCardsColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .timeSlotCard {
+    background: #ffffff;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 0.85rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-align: left;
+  }
+
+  .timeSlotIconWrap {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: #f8fafc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .timeSlotDetails {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .timeSlotTitle {
+    font-size: 0.875rem;
+    font-weight: 800;
+    color: #0f172a;
+  }
+
+  .timeSlotRange {
+    font-size: 0.75rem;
+    color: #64748b;
+    font-weight: 600;
+  }
+
+  .timeSlotCardActive {
+    background: #fffdf5;
+    border-color: #f59e0b;
+    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.2);
+  }
+
+  .timeSlotCardActive .timeSlotIconWrap {
+    background: #fef3c7;
+  }
+
+  .timeSlotCardActive .timeSlotTitle {
+    color: #b45309;
+  }
+
+  /* Info Banner */
+  .mobileInfoBanner {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .greenCheckCircle {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #22c55e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .infoBannerTextWrap {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+
+  .infoBannerTitle {
+    font-size: 0.78rem;
+    font-weight: 800;
+    color: #166534;
+  }
+
+  .infoBannerSubtitle {
+    font-size: 0.68rem;
+    color: #15803d;
+  }
+
+  /* Photo Upload Box (Step 2) */
+  .mobilePhotoUploadBox {
+    background: #fafaf9;
+    border: 1.5px dashed #cbd5e1;
+    border-radius: 16px;
+    padding: 1.75rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 0.35rem;
+  }
+
+  .cameraGreenCircle {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #ecfdf5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.25rem;
+    border: 1px solid #a7f3d0;
+  }
+
+  .uploadBoxHeading {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0;
+  }
+
+  .uploadBoxSubheading {
+    font-size: 0.775rem;
+    color: #64748b;
+    margin: 0;
+  }
+
+  .openCameraYellowBtn {
+    margin-top: 0.6rem;
+    width: 100%;
+    max-width: 220px;
+    padding: 0.75rem;
+    background: #fbc21a;
+    color: #0f172a;
+    font-size: 0.85rem;
+    font-weight: 900;
+    border-radius: 10px;
+    border: 1px solid #e5aa00;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(251, 194, 26, 0.3);
+  }
+
+  .uploadGalleryLinkBtn {
+    background: none;
+    border: none;
+    font-size: 0.775rem;
+    font-weight: 800;
+    color: #d97706;
+    text-decoration: underline;
+    cursor: pointer;
+    margin-top: 0.25rem;
+  }
+
+  .supportedFormatsText {
+    font-size: 0.68rem;
+    color: #94a3b8;
+    margin-top: 0.4rem;
+  }
+
+  /* Uploaded Media 2-Column Grid */
+  .mobileUploadedSection {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .uploadedSectionHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .uploadedCountTitle {
+    font-size: 0.875rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0;
+  }
+
+  .viewAllLinkBtn {
+    background: none;
+    border: none;
+    font-size: 0.775rem;
+    font-weight: 800;
+    color: #16a34a;
+    cursor: pointer;
+  }
+
+  .mobilePhotoGrid2Col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.65rem;
+  }
+
+  .mobilePhotoGridItem {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    aspect-ratio: 1;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    cursor: pointer;
+  }
+
+  .mobilePhotoGridImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .mobilePhotoRemoveBtn {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    z-index: 3;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: rgba(15, 23, 42, 0.75);
+    color: #ffffff;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  .morePhotosOverlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.65);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+    font-weight: 900;
+    z-index: 2;
+  }
+
+  .mobileSuccessBanner {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.25rem;
+  }
+
+  .successBannerTextWrap {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+
+  .successBannerTitle {
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: #166534;
+  }
+
+  .successBannerSubtitle {
+    font-size: 0.7rem;
+    color: #15803d;
+  }
+
+  /* Step 3: Details & Pickup Summary */
+  .mobileCategoryLabelRow {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .mobileFieldLabel {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #0f172a;
+  }
+
+  .optionalTagText {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #94a3b8;
+  }
+
+  .mobileCategorySelect {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    background: #ffffff;
+    color: #0f172a;
+    outline: none;
+    box-sizing: border-box;
+  }
+
+  .mobileCategorySelect:focus {
+    border-color: #f59e0b;
+  }
+
+  .mobileTextareaWrapper {
+    position: relative;
+    width: 100%;
+  }
+
+  .mobileTextareaField {
+    width: 100%;
+    padding: 0.8rem 1rem 1.6rem 1rem;
+    font-size: 0.85rem;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    background: #ffffff;
+    color: #0f172a;
+    outline: none;
+    resize: vertical;
+    box-sizing: border-box;
+  }
+
+  .mobileTextareaField:focus {
+    border-color: #f59e0b;
+  }
+
+  .charCountText {
+    position: absolute;
+    bottom: 8px;
+    right: 12px;
+    font-size: 0.68rem;
+    color: #94a3b8;
+    font-weight: 600;
+  }
+
+  .mobilePartnerCallout {
+    background: #fffbeb;
+    border: 1px solid #fef3c7;
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+  }
+
+  .lightbulbCircle {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #fde68a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .partnerCalloutText {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #92400e;
+  }
+
+  /* Pickup Summary Card */
+  .mobilePickupSummaryCard {
+    background: #ffffff;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 1.15rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+  }
+
+  .pickupSummaryTitle {
+    font-size: 0.95rem;
+    font-weight: 900;
+    color: #0f172a;
+    margin: 0;
+  }
+
+  .summaryList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .summaryRowItem {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .summaryItemLeft {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .summaryRowIcon {
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .summaryItemTexts {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 0;
+  }
+
+  .summaryItemTitle {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #0f172a;
+  }
+
+  .summaryItemSubtext {
+    font-size: 0.75rem;
+    color: #64748b;
+    font-weight: 600;
+    margin: 0;
+    line-height: 1.35;
+  }
+
+  .summaryChangeLink {
+    background: none;
+    border: none;
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #16a34a;
+    cursor: pointer;
+    text-decoration: underline;
+    flex-shrink: 0;
+  }
+
+  .summaryGuaranteeBanner {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 8px;
+    padding: 0.55rem 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.725rem;
+    font-weight: 800;
+    color: #166534;
+    margin-top: 0.25rem;
+  }
+
+  /* Why Post Scrap on Scrap Anna Section */
+  .mobileWhyPostSection {
+    background: #fffdf5;
+    border: 1.5px solid #fef08a;
+    border-radius: 16px;
+    padding: 1.15rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    margin-top: 0.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .whyPostTitle {
+    font-size: 0.925rem;
+    font-weight: 900;
+    color: #0f172a;
+    margin: 0;
+    text-align: center;
+  }
+
+  .whyPostPillsGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  .whyPostPill {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .whyPostIconSquircle {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .whyPostTexts {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    min-width: 0;
+  }
+
+  .whyPostTexts strong {
+    font-size: 0.775rem;
+    font-weight: 800;
+    color: #0f172a;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .whyPostTexts span {
+    font-size: 0.68rem;
+    color: #64748b;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Sticky Bottom Action Bar */
+  .mobileStickyActionBar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: #ffffff;
+    border-top: 1px solid #e2e8f0;
+    padding: 0.75rem 1rem max(0.75rem, env(safe-area-inset-bottom, 0px)) 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.08);
+    box-sizing: border-box;
+  }
+
+  .mobileSecondaryBtn {
+    flex: 1;
+    padding: 0.85rem;
+    border-radius: 12px;
+    border: 1.5px solid #cbd5e1;
+    background: #ffffff;
+    color: #334155;
+    font-size: 0.85rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    cursor: pointer;
+  }
+
+  .mobilePrimaryBtn {
+    flex: 2;
+    padding: 0.85rem;
+    border-radius: 12px;
+    border: 1.5px solid #e5aa00;
+    background: #fbc21a;
+    color: #0f172a;
+    font-size: 0.875rem;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(251, 194, 26, 0.3);
+  }
+
+  .mobilePrimaryBtn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  /* Bottom Sheet Modals */
+  .bottomSheetOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 9999;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  .bottomSheetModal,
+  .allPhotosModal {
+    background: #ffffff;
+    width: 100%;
+    max-width: 500px;
+    border-radius: 20px 20px 0 0;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-sizing: border-box;
+    animation: slideUpSheet 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes slideUpSheet {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  .bottomSheetHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 0.75rem;
+  }
+
+  .bottomSheetTitle {
+    font-size: 1.05rem;
+    font-weight: 900;
+    color: #0f172a;
+    margin: 0;
+  }
+
+  .bottomSheetCloseBtn {
+    background: #f1f5f9;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #64748b;
+  }
+
+  .bottomSheetAddressList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .sheetAddressCard {
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 0.85rem;
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .sheetAddressActive {
+    border-color: #f59e0b;
+    background: #fffdf5;
+  }
+
+  .sheetAddressRadio {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1.5px solid #cbd5e1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+
+  .sheetRadioDot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #f59e0b;
+  }
+
+  .sheetAddressMeta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    flex: 1;
+  }
+
+  .sheetTagRow {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.85rem;
+    color: #0f172a;
+  }
+
+  .sheetAddressFull {
+    font-size: 0.75rem;
+    color: #475569;
+    margin: 0;
+    line-height: 1.35;
+  }
+
+  .sheetAddressPin {
+    font-size: 0.7rem;
+    color: #94a3b8;
+    font-weight: 600;
+  }
+
+  .allPhotosGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.65rem;
+  }
+
+  .allPhotosCard {
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    aspect-ratio: 1;
+    border: 1px solid #e2e8f0;
+    cursor: pointer;
+  }
+
+  .allPhotosImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 }

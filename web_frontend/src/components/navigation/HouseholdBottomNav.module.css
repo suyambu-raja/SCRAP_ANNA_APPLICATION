@@ -15,9 +15,9 @@
     left: 0;
     right: 0;
     height: 64px;
-    background: #0f172a; /* Dark Graphite */
-    border-top: 1px solid #1e293b;
-    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.25);
+    background: #2B2F38; /* Exact Graphite #2B2F38 */
+    border-top: 1px solid #3B404D;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
     z-index: 999;
     padding-bottom: env(safe-area-inset-bottom, 0);
   }
@@ -82,7 +82,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1.5px solid #0f172a;
+    border: 1.5px solid #2B2F38;
     line-height: 1;
   }
 

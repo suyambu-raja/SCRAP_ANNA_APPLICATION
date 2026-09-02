@@ -12,10 +12,21 @@ import {
   CheckCircle2,
   Package,
   ArrowRight,
+  ArrowLeft,
   Maximize2,
   RefreshCw,
   Edit2,
   Check,
+  Headphones,
+  Sun,
+  Moon,
+  Tag,
+  ChevronDown,
+  ShieldCheck,
+  Scale,
+  Lightbulb,
+  Home as HomeIcon,
+  Briefcase,
 } from 'lucide-react';
 import styles from './HouseholdPostScrap.module.css';
 
@@ -167,6 +178,21 @@ export function HouseholdPostScrap() {
   const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
   const [facingMode, setFacingMode] = useState<'user' | 'environment'>('environment');
   const [cameraError, setCameraError] = useState<string | null>(null);
+
+  // --------------------------------------------------------------------------
+  // 4. MOBILE MULTI-STEP FLOW STATE (MATCHING PRODUCTION SPEC)
+  // --------------------------------------------------------------------------
+  const [mobileStep, setMobileStep] = useState<1 | 2 | 3>(1);
+  const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const [isAddressSheetOpen, setIsAddressSheetOpen] = useState<boolean>(false);
+  const [isViewAllPhotosOpen, setIsViewAllPhotosOpen] = useState<boolean>(false);
+  const mobileCustomDateInputRef = useRef<HTMLInputElement>(null);
+
+  const getFormattedDate = (daysFromNow: number) => {
+    const d = new Date();
+    d.setDate(d.getDate() + daysFromNow);
+    return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
+  };
 
   // Address Save Handlers
   const handleStartEditAddress = () => {
@@ -350,380 +376,1067 @@ export function HouseholdPostScrap() {
 
   return (
     <div className={styles.pageContainer}>
-      {/* 1. Header Section */}
-      <div className={styles.headerBlock}>
-        <div className={styles.headerIconCircle}>
-          <Package size={26} />
-        </div>
-        <div className={styles.headerTitles}>
-          <h1 className={styles.mainTitle}>Post Scrap For Doorstep Pickup</h1>
-          <p className={styles.mainSubtitle}>
-            Schedule doorstep pickup with verified digital weighing. Upload photos/videos so nearby scrap executives can verify and dispatch vehicles.
-          </p>
-        </div>
-      </div>
-
-      {/* Hidden File Inputs for Working File/Video/Camera Selectors */}
-      <input
-        type="file"
-        ref={photoInputRef}
-        onChange={handlePhotoFilesSelected}
-        multiple
-        accept="image/*"
-        style={{ display: 'none' }}
-      />
-      <input
-        type="file"
-        ref={videoInputRef}
-        onChange={handleVideoFilesSelected}
-        multiple
-        accept="video/*"
-        style={{ display: 'none' }}
-      />
-      <input
-        type="file"
-        ref={cameraFallbackInputRef}
-        onChange={handlePhotoFilesSelected}
-        accept="image/*"
-        capture="environment"
-        style={{ display: 'none' }}
-      />
-
-      {/* 2. Main Form Card */}
-      <form onSubmit={handleSubmit} className={styles.formCard}>
-        {/* Section 1: Pickup Location & Slot */}
-        <div className={styles.sectionHeadingGroup}>
-          <h2 className={styles.sectionHeading}>1. Doorstep Pickup Details</h2>
-          <p className={styles.sectionSubheading}>
-            Select your saved doorstep address in Chennai, preferred pickup date, and convenient time slot.
-          </p>
+      {/* =========================================================================
+          DESKTOP POST SCRAP CONTAINER (100% PRESERVED & UNCHANGED)
+          ========================================================================= */}
+      <div className={styles.desktopPostScrapContainer}>
+        {/* 1. Header Section */}
+        <div className={styles.headerBlock}>
+          <div className={styles.headerIconCircle}>
+            <Package size={26} />
+          </div>
+          <div className={styles.headerTitles}>
+            <h1 className={styles.mainTitle}>Post Scrap For Doorstep Pickup</h1>
+            <p className={styles.mainSubtitle}>
+              Schedule doorstep pickup with verified digital weighing. Upload photos/videos so nearby scrap executives can verify and dispatch vehicles.
+            </p>
+          </div>
         </div>
 
-        {/* 1A. Saved Address Selection with Edit Option */}
-        <div className={styles.addressSectionBox}>
-          <div className={styles.addressSectionHeader}>
-            <label className={styles.fieldLabel}>
-              <MapPin size={16} color="#d97706" />
-              <span>Doorstep Pickup Address</span>
-            </label>
+        {/* 2. Main Form Card */}
+        <form onSubmit={handleSubmit} className={styles.formCard}>
+          {/* Section 1: Pickup Location & Slot */}
+          <div className={styles.sectionHeadingGroup}>
+            <h2 className={styles.sectionHeading}>1. Doorstep Pickup Details</h2>
+            <p className={styles.sectionSubheading}>
+              Select your saved doorstep address in Chennai, preferred pickup date, and convenient time slot.
+            </p>
+          </div>
 
-            {!isEditingAddress && (
-              <button
-                type="button"
-                className={styles.editAddressBtn}
-                onClick={handleStartEditAddress}
-              >
-                <Edit2 size={13} />
-                <span>Edit / Change Address</span>
-              </button>
+          {/* 1A. Saved Address Selection with Edit Option */}
+          <div className={styles.addressSectionBox}>
+            <div className={styles.addressSectionHeader}>
+              <label className={styles.fieldLabel}>
+                <MapPin size={16} color="#d97706" />
+                <span>Doorstep Pickup Address</span>
+              </label>
+
+              {!isEditingAddress && (
+                <button
+                  type="button"
+                  className={styles.editAddressBtn}
+                  onClick={handleStartEditAddress}
+                >
+                  <Edit2 size={13} />
+                  <span>Edit / Change Address</span>
+                </button>
+              )}
+            </div>
+
+            {!isEditingAddress ? (
+              /* Saved Address Cards */
+              <div className={styles.savedAddressesGrid}>
+                {savedAddresses.map((addr) => (
+                  <div
+                    key={addr.id}
+                    className={`${styles.savedAddressCard} ${
+                      selectedAddressId === addr.id ? styles.savedAddressActive : ''
+                    }`}
+                    onClick={() => setSelectedAddressId(addr.id)}
+                    role="button"
+                    tabIndex={0}
+                  >
+                    <div className={styles.addressCardTop}>
+                      <div className={styles.addressRadioCircle}>
+                        {selectedAddressId === addr.id && <div className={styles.radioDot} />}
+                      </div>
+                      <span className={styles.addressTagBadge}>{addr.tag}</span>
+                      {addr.isDefault && (
+                        <span className={styles.defaultTagBadge}>Default</span>
+                      )}
+                    </div>
+
+                    <p className={styles.addressFullText}>{addr.fullAddress}</p>
+                    <span className={styles.addressMetaText}>
+                      Landmark: {addr.landmark} • PIN: {addr.pincode}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              /* Edit Address Form */
+              <div className={styles.editAddressFormWrap}>
+                <div className={styles.formGroup}>
+                  <label className={styles.subFieldLabel}>Full Address / Street / Door No.</label>
+                  <input
+                    type="text"
+                    className={styles.inputField}
+                    value={customFullAddress}
+                    onChange={(e) => setCustomFullAddress(e.target.value)}
+                    placeholder="Enter house no, street name, area..."
+                    required
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label className={styles.subFieldLabel}>Landmark</label>
+                  <input
+                    type="text"
+                    className={styles.inputField}
+                    value={customLandmark}
+                    onChange={(e) => setCustomLandmark(e.target.value)}
+                    placeholder="Nearby metro, temple, school..."
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label className={styles.subFieldLabel}>PIN Code</label>
+                  <input
+                    type="text"
+                    className={styles.inputField}
+                    value={customPincode}
+                    onChange={(e) => setCustomPincode(e.target.value)}
+                    placeholder="e.g. 600040"
+                    required
+                  />
+                </div>
+
+                <div className={styles.editAddressActions}>
+                  <button
+                    type="button"
+                    className={styles.cancelEditBtn}
+                    onClick={() => setIsEditingAddress(false)}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    className={styles.saveEditBtn}
+                    onClick={handleSaveEditedAddress}
+                  >
+                    <Check size={14} />
+                    <span>Update Address</span>
+                  </button>
+                </div>
+              </div>
             )}
           </div>
 
-          {!isEditingAddress ? (
-            /* Saved Address Cards */
-            <div className={styles.savedAddressesGrid}>
-              {savedAddresses.map((addr) => (
-                <div
-                  key={addr.id}
-                  className={`${styles.savedAddressCard} ${
-                    selectedAddressId === addr.id ? styles.savedAddressActive : ''
+          {/* 1B. Preferred Date (Today, Tomorrow, Custom Date) & Time Slot */}
+          <div className={styles.dateTimeGrid}>
+            {/* Preferred Date Pill Selector */}
+            <div className={styles.fieldGroup}>
+              <label className={styles.fieldLabel}>
+                <Calendar size={15} color="#d97706" />
+                <span>Preferred Pickup Date</span>
+              </label>
+
+              <div className={styles.datePillsRow}>
+                <button
+                  type="button"
+                  className={`${styles.datePillBtn} ${
+                    dateOption === 'today' ? styles.datePillActive : ''
                   }`}
-                  onClick={() => setSelectedAddressId(addr.id)}
-                  role="button"
-                  tabIndex={0}
+                  onClick={() => setDateOption('today')}
                 >
-                  <div className={styles.addressCardTop}>
-                    <div className={styles.addressRadioCircle}>
-                      {selectedAddressId === addr.id && <div className={styles.radioDot} />}
-                    </div>
-                    <span className={styles.addressTagBadge}>{addr.tag}</span>
-                    {addr.isDefault && (
-                      <span className={styles.defaultTagBadge}>Default</span>
-                    )}
+                  Today
+                </button>
+
+                <button
+                  type="button"
+                  className={`${styles.datePillBtn} ${
+                    dateOption === 'tomorrow' ? styles.datePillActive : ''
+                  }`}
+                  onClick={() => setDateOption('tomorrow')}
+                >
+                  Tomorrow
+                </button>
+
+                <button
+                  type="button"
+                  className={`${styles.datePillBtn} ${
+                    dateOption === 'custom' ? styles.datePillActive : ''
+                  }`}
+                  onClick={() => setDateOption('custom')}
+                >
+                  Custom Date
+                </button>
+              </div>
+
+              {/* If Custom Date is selected, show date picker */}
+              {dateOption === 'custom' && (
+                <div style={{ marginTop: '0.45rem' }}>
+                  <input
+                    type="date"
+                    className={styles.inputField}
+                    value={customDateValue}
+                    onChange={(e) => setCustomDateValue(e.target.value)}
+                    min={new Date().toISOString().split('T')[0]}
+                    required
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Preferred Time Slot */}
+            <div className={styles.fieldGroup}>
+              <label className={styles.fieldLabel}>
+                <Clock size={15} color="#d97706" />
+                <span>Preferred Time Slot</span>
+              </label>
+              <select
+                className={styles.selectField}
+                value={preferredSlot}
+                onChange={(e) => setPreferredSlot(e.target.value)}
+              >
+                <option value="Morning (09:00 AM - 12:00 PM)">
+                  Morning (09:00 AM - 12:00 PM)
+                </option>
+                <option value="Afternoon (12:00 PM - 04:00 PM)">
+                  Afternoon (12:00 PM - 04:00 PM)
+                </option>
+                <option value="Evening (04:00 PM - 07:00 PM)">
+                  Evening (04:00 PM - 07:00 PM)
+                </option>
+              </select>
+            </div>
+          </div>
+
+          {/* Section 2: Upload Scrap Photos & Videos */}
+          <div className={styles.sectionHeadingGroup} style={{ marginTop: '0.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }}>
+              <h2 className={styles.sectionHeading}>2. Scrap Photos &amp; Videos</h2>
+              <span style={{ fontSize: '0.8rem', color: '#059669', fontWeight: 800 }}>
+                ✓ {uploadedList.length} Media Uploaded
+              </span>
+            </div>
+            <p className={styles.sectionSubheading}>
+              Upload scrap images, record videos, or capture live photos with your camera. Click any thumbnail for high resolution Detail Vision.
+            </p>
+          </div>
+
+          {/* Action Upload Buttons Toolbar */}
+          <div className={styles.uploadActionToolbar}>
+            <button
+              type="button"
+              className={styles.uploadButtonPhoto}
+              onClick={handlePhotoUploadClick}
+            >
+              <ImageIcon size={17} />
+              <span>Upload Photos</span>
+            </button>
+
+            <button
+              type="button"
+              className={styles.uploadButtonVideo}
+              onClick={handleVideoUploadClick}
+            >
+              <VideoIcon size={17} />
+              <span>Upload Videos</span>
+            </button>
+
+            <button
+              type="button"
+              className={styles.uploadButtonCamera}
+              onClick={handleOpenCameraModal}
+            >
+              <Camera size={17} />
+              <span>Open Camera</span>
+            </button>
+          </div>
+
+          {/* Media Grid / Detail Vision Gallery */}
+          <div className={styles.uploadedMediaGrid}>
+            {uploadedList.map((item) => (
+              <div
+                key={item.id}
+                className={styles.mediaCard}
+                onClick={() => setSelectedPhoto(item)}
+                role="button"
+                tabIndex={0}
+                title="Click to open Detail Vision"
+              >
+                <div className={styles.mediaThumbContainer}>
+                  <img
+                    src={item.imageUrl}
+                    alt={item.title}
+                    className={styles.mediaThumbnail}
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = '/household-scrap-bundle.jpg';
+                    }}
+                  />
+
+                  <div className={styles.mediaTypeBadge}>
+                    {item.type === 'video' ? <VideoIcon size={13} /> : <ImageIcon size={13} />}
+                    <span>{item.type === 'video' ? 'VIDEO' : 'PHOTO'}</span>
                   </div>
 
-                  <p className={styles.addressFullText}>{addr.fullAddress}</p>
-                  <span className={styles.addressMetaText}>
-                    Landmark: {addr.landmark} • PIN: {addr.pincode}
-                  </span>
+                  <div className={styles.detailVisionHint}>
+                    <Maximize2 size={15} />
+                  </div>
+
+                  <button
+                    type="button"
+                    className={styles.removeMediaBtn}
+                    onClick={(e) => handleRemoveMedia(item.id, e)}
+                    title="Remove media"
+                  >
+                    <X size={14} />
+                  </button>
                 </div>
-              ))}
-            </div>
-          ) : (
-            /* Edit Address Form */
-            <div className={styles.editAddressFormWrap}>
-              <div className={styles.formGroup}>
-                <label className={styles.subFieldLabel}>Full Address / Street / Door No.</label>
-                <input
-                  type="text"
-                  className={styles.inputField}
-                  value={customFullAddress}
-                  onChange={(e) => setCustomFullAddress(e.target.value)}
-                  placeholder="Enter house no, street name, area..."
-                  required
-                />
-              </div>
 
-              <div className={styles.formGroup}>
-                <label className={styles.subFieldLabel}>Landmark</label>
-                <input
-                  type="text"
-                  className={styles.inputField}
-                  value={customLandmark}
-                  onChange={(e) => setCustomLandmark(e.target.value)}
-                  placeholder="Nearby metro, temple, school..."
-                />
+                <div className={styles.mediaMeta}>
+                  <span className={styles.mediaTitle}>{item.title}</span>
+                  <span className={styles.mediaSubtext}>Click to view high-res photo</span>
+                </div>
               </div>
+            ))}
+          </div>
 
-              <div className={styles.formGroup}>
-                <label className={styles.subFieldLabel}>PIN Code</label>
-                <input
-                  type="text"
-                  className={styles.inputField}
-                  value={customPincode}
-                  onChange={(e) => setCustomPincode(e.target.value)}
-                  placeholder="e.g. 600040"
-                  required
-                />
-              </div>
+          {/* Section 3: Additional Notes */}
+          <div className={styles.fieldGroupFull}>
+            <label className={styles.fieldLabel}>
+              <span>Additional Scrap Description (Optional)</span>
+            </label>
+            <textarea
+              className={styles.textareaField}
+              rows={3}
+              placeholder="e.g. 2 bundles of copper wire, old aluminium vessels, newspapers in tied stacks, AC compressor in backyard..."
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+            />
+          </div>
 
-              <div className={styles.editAddressActions}>
-                <button
-                  type="button"
-                  className={styles.cancelEditBtn}
-                  onClick={() => setIsEditingAddress(false)}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  className={styles.saveEditBtn}
-                  onClick={handleSaveEditedAddress}
-                >
-                  <Check size={14} />
-                  <span>Update Address</span>
-                </button>
+          {/* Cooldown Warning Notice */}
+          {cooldownSeconds > 0 && (
+            <div className={styles.cooldownAlertBox}>
+              <Clock size={18} />
+              <div className={styles.cooldownTextWrap}>
+                <strong>Request Cooldown Active ({formatCooldownTime(cooldownSeconds)} remaining)</strong>
+                <span>
+                  To ensure quality pickup scheduling, please wait before submitting another doorstep request.
+                </span>
               </div>
             </div>
           )}
+
+          {/* Submit Action Bar */}
+          <div className={styles.formFooterActions}>
+            <button
+              type="submit"
+              className={styles.submitPostBtn}
+              disabled={cooldownSeconds > 0 || uploadedList.length === 0}
+            >
+              {cooldownSeconds > 0 ? (
+                <span>Cooldown Active ({formatCooldownTime(cooldownSeconds)})</span>
+              ) : (
+                <>
+                  <span>Post Scrap for Pickup</span>
+                  <ArrowRight size={17} />
+                </>
+              )}
+            </button>
+          </div>
+        </form>
+      </div>
+
+      {/* =========================================================================
+          MOBILE POST SCRAP FLOW (MODERN STEP-BASED APP UX)
+          Visible only on Mobile (<= 768px). Desktop is 100% untouched.
+          ========================================================================= */}
+      <div className={styles.mobilePostScrapContainer}>
+        {/* Top Header Bar */}
+        <div className={styles.mobilePostHeader}>
+          <button
+            type="button"
+            className={styles.mobileBackBtn}
+            onClick={() => {
+              if (mobileStep > 1) {
+                setMobileStep((s) => (s - 1) as 1 | 2 | 3);
+              } else {
+                navigate('/household/home');
+              }
+            }}
+            aria-label="Back"
+          >
+            <ArrowLeft size={20} />
+          </button>
+          <h1 className={styles.mobileHeaderTitle}>Post Scrap</h1>
+          <button
+            type="button"
+            className={styles.mobileSupportBtn}
+            onClick={() => navigate('/household/support')}
+            aria-label="Support"
+            title="Customer Support"
+          >
+            <Headphones size={20} />
+          </button>
         </div>
 
-        {/* 1B. Preferred Date (Today, Tomorrow, Custom Date) & Time Slot */}
-        <div className={styles.dateTimeGrid}>
-          {/* Preferred Date Pill Selector */}
-          <div className={styles.fieldGroup}>
-            <label className={styles.fieldLabel}>
-              <Calendar size={15} color="#d97706" />
-              <span>Preferred Pickup Date</span>
-            </label>
+        {/* 3-Step Horizontal Progress Tracker */}
+        <div className={styles.mobileStepIndicator}>
+          {/* Step 1 */}
+          <div
+            className={`${styles.stepNode} ${
+              mobileStep === 1
+                ? styles.stepNodeActive
+                : mobileStep > 1
+                ? styles.stepNodeDone
+                : styles.stepNodePending
+            }`}
+            onClick={() => mobileStep > 1 && setMobileStep(1)}
+          >
+            <div className={styles.stepCircle}>
+              {mobileStep > 1 ? <Check size={14} strokeWidth={3} /> : '1'}
+            </div>
+            <span className={styles.stepLabel}>Pickup Location</span>
+          </div>
 
-            <div className={styles.datePillsRow}>
+          <div
+            className={`${styles.stepConnectorLine} ${
+              mobileStep >= 2 ? styles.stepConnectorDone : ''
+            }`}
+          />
+
+          {/* Step 2 */}
+          <div
+            className={`${styles.stepNode} ${
+              mobileStep === 2
+                ? styles.stepNodeActive
+                : mobileStep > 2
+                ? styles.stepNodeDone
+                : styles.stepNodePending
+            }`}
+            onClick={() => mobileStep > 2 && setMobileStep(2)}
+          >
+            <div className={styles.stepCircle}>
+              {mobileStep > 2 ? <Check size={14} strokeWidth={3} /> : '2'}
+            </div>
+            <span className={styles.stepLabel}>Photos</span>
+          </div>
+
+          <div
+            className={`${styles.stepConnectorLine} ${
+              mobileStep >= 3 ? styles.stepConnectorDone : ''
+            }`}
+          />
+
+          {/* Step 3 */}
+          <div
+            className={`${styles.stepNode} ${
+              mobileStep === 3 ? styles.stepNodeActive : styles.stepNodePending
+            }`}
+          >
+            <div className={styles.stepCircle}>3</div>
+            <span className={styles.stepLabel}>Details</span>
+          </div>
+        </div>
+
+        {/* =========================================================================
+            SCREEN 1: PICKUP LOCATION & SLOTS
+            ========================================================================= */}
+        {mobileStep === 1 && (
+          <div className={styles.mobileStepContent}>
+            <div className={styles.mobileSectionHeader}>
+              <h2 className={styles.mobileStepTitle}>1. Pickup Location</h2>
+              <p className={styles.mobileStepSubtitle}>Where should we pick up your scrap?</p>
+            </div>
+
+            {/* Selected Address Card */}
+            <div className={styles.mobileSelectedAddressCard}>
+              <div className={styles.selectedAddressLabel}>Selected Address</div>
+
+              <div className={styles.selectedAddressMainRow}>
+                <div className={styles.addressHomeIconSquircle}>
+                  <HomeIcon size={20} color="#8A6B14" />
+                </div>
+
+                <div className={styles.addressMainDetails}>
+                  <div className={styles.addressTagRow}>
+                    <span className={styles.addressTagName}>{activeSavedAddress.tag.split(' ')[0]}</span>
+                    {activeSavedAddress.isDefault && (
+                      <span className={styles.addressDefaultBadge}>Default</span>
+                    )}
+                  </div>
+                  <p className={styles.addressFullString}>{activeSavedAddress.fullAddress}</p>
+                  <span className={styles.addressDistanceText}>📍 12.5 km away</span>
+                </div>
+              </div>
+
               <button
                 type="button"
-                className={`${styles.datePillBtn} ${
-                  dateOption === 'today' ? styles.datePillActive : ''
-                }`}
-                onClick={() => setDateOption('today')}
+                className={styles.changeAddressActionBtn}
+                onClick={() => setIsAddressSheetOpen(true)}
               >
-                Today
-              </button>
-
-              <button
-                type="button"
-                className={`${styles.datePillBtn} ${
-                  dateOption === 'tomorrow' ? styles.datePillActive : ''
-                }`}
-                onClick={() => setDateOption('tomorrow')}
-              >
-                Tomorrow
-              </button>
-
-              <button
-                type="button"
-                className={`${styles.datePillBtn} ${
-                  dateOption === 'custom' ? styles.datePillActive : ''
-                }`}
-                onClick={() => setDateOption('custom')}
-              >
-                Custom Date
+                <Edit2 size={14} />
+                <span>Change Address</span>
               </button>
             </div>
 
-            {/* If Custom Date is selected, show date picker */}
-            {dateOption === 'custom' && (
-              <div style={{ marginTop: '0.45rem' }}>
-                <input
-                  type="date"
-                  className={styles.inputField}
-                  value={customDateValue}
-                  onChange={(e) => setCustomDateValue(e.target.value)}
-                  min={new Date().toISOString().split('T')[0]}
-                  required
-                />
-              </div>
-            )}
-          </div>
-
-          {/* Preferred Time Slot */}
-          <div className={styles.fieldGroup}>
-            <label className={styles.fieldLabel}>
-              <Clock size={15} color="#d97706" />
-              <span>Preferred Time Slot</span>
-            </label>
-            <select
-              className={styles.selectField}
-              value={preferredSlot}
-              onChange={(e) => setPreferredSlot(e.target.value)}
-            >
-              <option value="Morning (09:00 AM - 12:00 PM)">
-                Morning (09:00 AM - 12:00 PM)
-              </option>
-              <option value="Afternoon (12:00 PM - 04:00 PM)">
-                Afternoon (12:00 PM - 04:00 PM)
-              </option>
-              <option value="Evening (04:00 PM - 07:00 PM)">
-                Evening (04:00 PM - 07:00 PM)
-              </option>
-            </select>
-          </div>
-        </div>
-
-        {/* Section 2: Upload Scrap Photos & Videos (Older Format) */}
-        <div className={styles.sectionHeadingGroup} style={{ marginTop: '0.5rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }}>
-            <h2 className={styles.sectionHeading}>2. Scrap Photos &amp; Videos</h2>
-            <span style={{ fontSize: '0.8rem', color: '#059669', fontWeight: 800 }}>
-              ✓ {uploadedList.length} Media Uploaded
-            </span>
-          </div>
-          <p className={styles.sectionSubheading}>
-            Upload scrap images, record videos, or capture live photos with your camera. Click any thumbnail for high resolution Detail Vision.
-          </p>
-        </div>
-
-        {/* Action Upload Buttons Toolbar (Older Format) */}
-        <div className={styles.uploadActionToolbar}>
-          <button
-            type="button"
-            className={styles.uploadButtonPhoto}
-            onClick={handlePhotoUploadClick}
-          >
-            <ImageIcon size={17} />
-            <span>Upload Photos</span>
-          </button>
-
-          <button
-            type="button"
-            className={styles.uploadButtonVideo}
-            onClick={handleVideoUploadClick}
-          >
-            <VideoIcon size={17} />
-            <span>Upload Videos</span>
-          </button>
-
-          <button
-            type="button"
-            className={styles.uploadButtonCamera}
-            onClick={handleOpenCameraModal}
-          >
-            <Camera size={17} />
-            <span>Open Camera</span>
-          </button>
-        </div>
-
-        {/* Media Grid / Detail Vision Gallery (Older Format) */}
-        <div className={styles.uploadedMediaGrid}>
-          {uploadedList.map((item) => (
-            <div
-              key={item.id}
-              className={styles.mediaCard}
-              onClick={() => setSelectedPhoto(item)}
-              role="button"
-              tabIndex={0}
-              title="Click to open Detail Vision"
-            >
-              <div className={styles.mediaThumbContainer}>
-                <img
-                  src={item.imageUrl}
-                  alt={item.title}
-                  className={styles.mediaThumbnail}
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src = '/household-scrap-bundle.jpg';
-                  }}
-                />
-
-                <div className={styles.mediaTypeBadge}>
-                  {item.type === 'video' ? <VideoIcon size={13} /> : <ImageIcon size={13} />}
-                  <span>{item.type === 'video' ? 'VIDEO' : 'PHOTO'}</span>
-                </div>
-
-                <div className={styles.detailVisionHint}>
-                  <Maximize2 size={15} />
-                </div>
+            {/* Preferred Pickup Date */}
+            <div className={styles.mobileBlockGroup}>
+              <h3 className={styles.mobileBlockTitle}>Preferred Pickup Date</h3>
+              <div className={styles.pickupDateCardsRow}>
+                <button
+                  type="button"
+                  className={`${styles.pickupDateCard} ${
+                    dateOption === 'today' ? styles.pickupDateCardActive : ''
+                  }`}
+                  onClick={() => setDateOption('today')}
+                >
+                  <span className={styles.dateCardTag}>Today</span>
+                  <strong className={styles.dateCardValue}>{getFormattedDate(0)}</strong>
+                </button>
 
                 <button
                   type="button"
-                  className={styles.removeMediaBtn}
-                  onClick={(e) => handleRemoveMedia(item.id, e)}
-                  title="Remove media"
+                  className={`${styles.pickupDateCard} ${
+                    dateOption === 'tomorrow' ? styles.pickupDateCardActive : ''
+                  }`}
+                  onClick={() => setDateOption('tomorrow')}
                 >
-                  <X size={14} />
+                  <span className={styles.dateCardTag}>Tomorrow</span>
+                  <strong className={styles.dateCardValue}>{getFormattedDate(1)}</strong>
+                </button>
+
+                <button
+                  type="button"
+                  className={`${styles.pickupDateCard} ${
+                    dateOption === 'custom' ? styles.pickupDateCardActive : ''
+                  }`}
+                  onClick={() => {
+                    setDateOption('custom');
+                    mobileCustomDateInputRef.current?.showPicker?.();
+                  }}
+                >
+                  <span className={styles.dateCardTag}>Choose</span>
+                  <div className={styles.chooseDateWrap}>
+                    <Calendar size={14} color="#d97706" />
+                    <strong className={styles.dateCardValue}>
+                      {dateOption === 'custom' && customDateValue
+                        ? new Date(customDateValue).toLocaleDateString('en-IN', {
+                            day: 'numeric',
+                            month: 'short',
+                          })
+                        : 'Date'}
+                    </strong>
+                  </div>
                 </button>
               </div>
 
-              <div className={styles.mediaMeta}>
-                <span className={styles.mediaTitle}>{item.title}</span>
-                <span className={styles.mediaSubtext}>Click to view high-res photo</span>
+              {dateOption === 'custom' && (
+                <input
+                  type="date"
+                  ref={mobileCustomDateInputRef}
+                  className={styles.mobileCustomDatePickerInput}
+                  value={customDateValue}
+                  onChange={(e) => setCustomDateValue(e.target.value)}
+                  min={new Date().toISOString().split('T')[0]}
+                />
+              )}
+            </div>
+
+            {/* Preferred Time Slot */}
+            <div className={styles.mobileBlockGroup}>
+              <h3 className={styles.mobileBlockTitle}>Preferred Time Slot</h3>
+              <div className={styles.timeSlotCardsColumn}>
+                {[
+                  {
+                    id: 'Morning (09:00 AM - 12:00 PM)',
+                    title: 'Morning',
+                    time: '09:00 AM - 12:00 PM',
+                    icon: Sun,
+                  },
+                  {
+                    id: 'Afternoon (12:00 PM - 04:00 PM)',
+                    title: 'Afternoon',
+                    time: '12:00 PM - 04:00 PM',
+                    icon: Sun,
+                  },
+                  {
+                    id: 'Evening (04:00 PM - 07:00 PM)',
+                    title: 'Evening',
+                    time: '04:00 PM - 08:00 PM',
+                    icon: Moon,
+                  },
+                ].map((slot) => {
+                  const IconComponent = slot.icon;
+                  const isSelected = preferredSlot === slot.id;
+                  return (
+                    <button
+                      key={slot.id}
+                      type="button"
+                      className={`${styles.timeSlotCard} ${
+                        isSelected ? styles.timeSlotCardActive : ''
+                      }`}
+                      onClick={() => setPreferredSlot(slot.id)}
+                    >
+                      <div className={styles.timeSlotIconWrap}>
+                        <IconComponent
+                          size={20}
+                          color={isSelected ? '#d97706' : '#94a3b8'}
+                        />
+                      </div>
+                      <div className={styles.timeSlotDetails}>
+                        <strong className={styles.timeSlotTitle}>{slot.title}</strong>
+                        <span className={styles.timeSlotRange}>{slot.time}</span>
+                      </div>
+                    </button>
+                  );
+                })}
               </div>
             </div>
-          ))}
-        </div>
 
-        {/* Section 3: Additional Notes */}
-        <div className={styles.fieldGroupFull}>
-          <label className={styles.fieldLabel}>
-            <span>Additional Scrap Description (Optional)</span>
-          </label>
-          <textarea
-            className={styles.textareaField}
-            rows={3}
-            placeholder="e.g. 2 bundles of copper wire, old aluminium vessels, newspapers in tied stacks, AC compressor in backyard..."
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-          />
-        </div>
+            {/* Information Banner */}
+            <div className={styles.mobileInfoBanner}>
+              <div className={styles.greenCheckCircle}>
+                <Check size={14} color="#ffffff" strokeWidth={3} />
+              </div>
+              <div className={styles.infoBannerTextWrap}>
+                <strong className={styles.infoBannerTitle}>
+                  We will confirm your pickup shortly
+                </strong>
+                <span className={styles.infoBannerSubtitle}>via call or SMS</span>
+              </div>
+            </div>
 
-        {/* Cooldown Warning Notice */}
-        {cooldownSeconds > 0 && (
-          <div className={styles.cooldownAlertBox}>
-            <Clock size={18} />
-            <div className={styles.cooldownTextWrap}>
-              <strong>Request Cooldown Active ({formatCooldownTime(cooldownSeconds)} remaining)</strong>
-              <span>
-                To ensure quality pickup scheduling, please wait before submitting another doorstep request.
-              </span>
+            {/* Bottom Sticky Action Bar */}
+            <div className={styles.mobileStickyActionBar}>
+              <button
+                type="button"
+                className={styles.mobileSecondaryBtn}
+                onClick={() => navigate('/household/home')}
+              >
+                Save &amp; Exit
+              </button>
+              <button
+                type="button"
+                className={styles.mobilePrimaryBtn}
+                onClick={() => setMobileStep(2)}
+              >
+                <span>Continue to Photos</span>
+                <ArrowRight size={17} />
+              </button>
             </div>
           </div>
         )}
 
-        {/* Submit Action Bar */}
-        <div className={styles.formFooterActions}>
-          <button
-            type="submit"
-            className={styles.submitPostBtn}
-            disabled={cooldownSeconds > 0 || uploadedList.length === 0}
-          >
-            {cooldownSeconds > 0 ? (
-              <span>Cooldown Active ({formatCooldownTime(cooldownSeconds)})</span>
-            ) : (
-              <>
-                <span>Post Scrap for Pickup</span>
-                <ArrowRight size={17} />
-              </>
+        {/* =========================================================================
+            SCREEN 2: ADD SCRAP PHOTOS
+            ========================================================================= */}
+        {mobileStep === 2 && (
+          <div className={styles.mobileStepContent}>
+            <div className={styles.mobileSectionHeader}>
+              <h2 className={styles.mobileStepTitle}>2. Add Scrap Photos</h2>
+              <p className={styles.mobileStepSubtitle}>
+                Add clear photos or videos of your scrap for better estimation.
+              </p>
+            </div>
+
+            {/* Photo Upload Area */}
+            <div className={styles.mobilePhotoUploadBox}>
+              <div className={styles.cameraGreenCircle}>
+                <Camera size={26} color="#16a34a" />
+              </div>
+
+              <h3 className={styles.uploadBoxHeading}>Take a Photo</h3>
+              <p className={styles.uploadBoxSubheading}>or upload from gallery</p>
+
+              <button
+                type="button"
+                className={styles.openCameraYellowBtn}
+                onClick={handleOpenCameraModal}
+              >
+                <span>Open Camera</span>
+              </button>
+
+              <button
+                type="button"
+                className={styles.uploadGalleryLinkBtn}
+                onClick={handlePhotoUploadClick}
+              >
+                Upload from Gallery
+              </button>
+
+              <span className={styles.supportedFormatsText}>
+                Supported: JPG, PNG, MP4 (Max 50MB)
+              </span>
+            </div>
+
+            {/* Uploaded Photos Section */}
+            {uploadedList.length > 0 && (
+              <div className={styles.mobileUploadedSection}>
+                <div className={styles.uploadedSectionHeader}>
+                  <h3 className={styles.uploadedCountTitle}>Uploaded ({uploadedList.length})</h3>
+                  <button
+                    type="button"
+                    className={styles.viewAllLinkBtn}
+                    onClick={() => setIsViewAllPhotosOpen(true)}
+                  >
+                    View All
+                  </button>
+                </div>
+
+                {/* 2-Column Preview Grid (Shows first 4) */}
+                <div className={styles.mobilePhotoGrid2Col}>
+                  {uploadedList.slice(0, 4).map((item, idx) => (
+                    <div
+                      key={item.id}
+                      className={styles.mobilePhotoGridItem}
+                      onClick={() => setSelectedPhoto(item)}
+                    >
+                      <img
+                        src={item.imageUrl}
+                        alt={item.title}
+                        className={styles.mobilePhotoGridImg}
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = '/household-scrap-bundle.jpg';
+                        }}
+                      />
+
+                      <button
+                        type="button"
+                        className={styles.mobilePhotoRemoveBtn}
+                        onClick={(e) => handleRemoveMedia(item.id, e)}
+                        aria-label="Remove photo"
+                      >
+                        <X size={13} />
+                      </button>
+
+                      {idx === 3 && uploadedList.length > 4 && (
+                        <div
+                          className={styles.morePhotosOverlay}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setIsViewAllPhotosOpen(true);
+                          }}
+                        >
+                          <span>+{uploadedList.length - 3}</span>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Success Banner */}
+                <div className={styles.mobileSuccessBanner}>
+                  <div className={styles.greenCheckCircle}>
+                    <Check size={14} color="#ffffff" strokeWidth={3} />
+                  </div>
+                  <div className={styles.successBannerTextWrap}>
+                    <strong className={styles.successBannerTitle}>
+                      {uploadedList.length} Photos added
+                    </strong>
+                    <span className={styles.successBannerSubtitle}>
+                      Great! This helps us estimate better.
+                    </span>
+                  </div>
+                </div>
+              </div>
             )}
-          </button>
-        </div>
-      </form>
+
+            {/* Bottom Sticky Action Bar */}
+            <div className={styles.mobileStickyActionBar}>
+              <button
+                type="button"
+                className={styles.mobileSecondaryBtn}
+                onClick={() => setMobileStep(1)}
+              >
+                <ArrowLeft size={16} />
+                <span>Back</span>
+              </button>
+              <button
+                type="button"
+                className={styles.mobilePrimaryBtn}
+                onClick={() => setMobileStep(3)}
+                disabled={uploadedList.length === 0}
+              >
+                <span>Continue to Details</span>
+                <ArrowRight size={17} />
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* =========================================================================
+            SCREEN 3: ADDITIONAL DETAILS & PICKUP SUMMARY
+            ========================================================================= */}
+        {mobileStep === 3 && (
+          <div className={styles.mobileStepContent}>
+            <div className={styles.mobileSectionHeader}>
+              <h2 className={styles.mobileStepTitle}>3. Additional Details</h2>
+              <p className={styles.mobileStepSubtitle}>
+                Any extra information about your scrap?
+              </p>
+            </div>
+
+            {/* Scrap Category (Optional) */}
+            <div className={styles.mobileBlockGroup}>
+              <div className={styles.mobileCategoryLabelRow}>
+                <Tag size={16} color="#d97706" />
+                <label className={styles.mobileFieldLabel}>
+                  <span>Scrap Category</span> <span className={styles.optionalTagText}>(Optional)</span>
+                </label>
+              </div>
+              <select
+                className={styles.mobileCategorySelect}
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+              >
+                <option value="">Select category</option>
+                <option value="Metal Scrap">Metal Scrap (Iron, Copper, Brass, Aluminium)</option>
+                <option value="Paper & Books">Paper &amp; Cardboard</option>
+                <option value="Plastic Items">Plastic &amp; Bottles</option>
+                <option value="Electronics & Appliances">Electronics &amp; Appliances</option>
+                <option value="Mixed Household Scrap">Mixed Household Scrap</option>
+                <option value="Other">Other Scrap Materials</option>
+              </select>
+            </div>
+
+            {/* Additional Description (Optional) */}
+            <div className={styles.mobileBlockGroup}>
+              <div className={styles.mobileCategoryLabelRow}>
+                <Edit2 size={15} color="#d97706" />
+                <label className={styles.mobileFieldLabel}>
+                  <span>Additional Description</span>{' '}
+                  <span className={styles.optionalTagText}>(Optional)</span>
+                </label>
+              </div>
+              <div className={styles.mobileTextareaWrapper}>
+                <textarea
+                  className={styles.mobileTextareaField}
+                  rows={3}
+                  maxLength={200}
+                  placeholder="E.g. Old aluminium windows, mixed metal items, copper wire, etc."
+                  value={notes}
+                  onChange={(e) => setNotes(e.target.value)}
+                />
+                <span className={styles.charCountText}>{notes.length}/200</span>
+              </div>
+            </div>
+
+            {/* Partner Callout Info */}
+            <div className={styles.mobilePartnerCallout}>
+              <div className={styles.lightbulbCircle}>
+                <Lightbulb size={16} color="#8a6b14" />
+              </div>
+              <span className={styles.partnerCalloutText}>
+                Our partner may call you if more details are needed.
+              </span>
+            </div>
+
+            {/* Pickup Summary Card */}
+            <div className={styles.mobilePickupSummaryCard}>
+              <h3 className={styles.pickupSummaryTitle}>Pickup Summary</h3>
+
+              <div className={styles.summaryList}>
+                {/* Address Row */}
+                <div className={styles.summaryRowItem}>
+                  <div className={styles.summaryItemLeft}>
+                    <HomeIcon size={18} color="#d97706" className={styles.summaryRowIcon} />
+                    <div className={styles.summaryItemTexts}>
+                      <strong className={styles.summaryItemTitle}>Home</strong>
+                      <p className={styles.summaryItemSubtext}>
+                        {activeSavedAddress.fullAddress}
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    className={styles.summaryChangeLink}
+                    onClick={() => setMobileStep(1)}
+                  >
+                    Change
+                  </button>
+                </div>
+
+                {/* Date & Time Row */}
+                <div className={styles.summaryRowItem}>
+                  <div className={styles.summaryItemLeft}>
+                    <Calendar size={18} color="#d97706" className={styles.summaryRowIcon} />
+                    <div className={styles.summaryItemTexts}>
+                      <strong className={styles.summaryItemTitle}>
+                        {getResolvedDateText()},{' '}
+                        {getFormattedDate(dateOption === 'tomorrow' ? 1 : 0)}
+                      </strong>
+                      <span className={styles.summaryItemSubtext}>{preferredSlot}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Photos Row */}
+                <div className={styles.summaryRowItem}>
+                  <div className={styles.summaryItemLeft}>
+                    <ImageIcon size={18} color="#d97706" className={styles.summaryRowIcon} />
+                    <div className={styles.summaryItemTexts}>
+                      <strong className={styles.summaryItemTitle}>
+                        {uploadedList.length} Photos
+                      </strong>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    className={styles.summaryChangeLink}
+                    onClick={() => setIsViewAllPhotosOpen(true)}
+                  >
+                    View
+                  </button>
+                </div>
+
+                {/* Estimation Row */}
+                <div className={styles.summaryRowItem}>
+                  <div className={styles.summaryItemLeft}>
+                    <Scale size={18} color="#d97706" className={styles.summaryRowIcon} />
+                    <div className={styles.summaryItemTexts}>
+                      <span className={styles.summaryItemSubtext}>
+                        Estimated after pickup &amp; weighing
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Guarantee Green Banner */}
+                <div className={styles.summaryGuaranteeBanner}>
+                  <ShieldCheck size={16} color="#16a34a" />
+                  <span>Safe, hassle-free &amp; secure pickup</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Cooldown Warning Notice if Active */}
+            {cooldownSeconds > 0 && (
+              <div className={styles.cooldownAlertBox}>
+                <Clock size={18} />
+                <div className={styles.cooldownTextWrap}>
+                  <strong>Request Cooldown Active ({formatCooldownTime(cooldownSeconds)})</strong>
+                  <span>Please wait before submitting another request.</span>
+                </div>
+              </div>
+            )}
+
+            {/* Bottom Sticky Action Bar */}
+            <div className={styles.mobileStickyActionBar}>
+              <button
+                type="button"
+                className={styles.mobileSecondaryBtn}
+                onClick={() => setMobileStep(2)}
+              >
+                <ArrowLeft size={16} />
+                <span>Back</span>
+              </button>
+              <button
+                type="button"
+                className={styles.mobilePrimaryBtn}
+                onClick={handleSubmit}
+                disabled={cooldownSeconds > 0 || uploadedList.length === 0}
+              >
+                <span>
+                  {cooldownSeconds > 0
+                    ? `Cooldown (${formatCooldownTime(cooldownSeconds)})`
+                    : 'Post Scrap for Pickup'}
+                </span>
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Address Selection Bottom Sheet Modal (Mobile) */}
+        {isAddressSheetOpen && (
+          <div
+            className={styles.bottomSheetOverlay}
+            onClick={() => setIsAddressSheetOpen(false)}
+          >
+            <div className={styles.bottomSheetModal} onClick={(e) => e.stopPropagation()}>
+              <div className={styles.bottomSheetHeader}>
+                <h3 className={styles.bottomSheetTitle}>Select Pickup Address</h3>
+                <button
+                  type="button"
+                  className={styles.bottomSheetCloseBtn}
+                  onClick={() => setIsAddressSheetOpen(false)}
+                >
+                  <X size={18} />
+                </button>
+              </div>
+
+              <div className={styles.bottomSheetAddressList}>
+                {savedAddresses.map((addr) => (
+                  <div
+                    key={addr.id}
+                    className={`${styles.sheetAddressCard} ${
+                      selectedAddressId === addr.id ? styles.sheetAddressActive : ''
+                    }`}
+                    onClick={() => {
+                      setSelectedAddressId(addr.id);
+                      setIsAddressSheetOpen(false);
+                    }}
+                  >
+                    <div className={styles.sheetAddressRadio}>
+                      {selectedAddressId === addr.id && <div className={styles.sheetRadioDot} />}
+                    </div>
+                    <div className={styles.sheetAddressMeta}>
+                      <div className={styles.sheetTagRow}>
+                        <strong>{addr.tag}</strong>
+                        {addr.isDefault && (
+                          <span className={styles.addressDefaultBadge}>Default</span>
+                        )}
+                      </div>
+                      <p className={styles.sheetAddressFull}>{addr.fullAddress}</p>
+                      <span className={styles.sheetAddressPin}>
+                        PIN: {addr.pincode} • {addr.landmark}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* View All Uploaded Photos Modal (Mobile) */}
+        {isViewAllPhotosOpen && (
+          <div
+            className={styles.bottomSheetOverlay}
+            onClick={() => setIsViewAllPhotosOpen(false)}
+          >
+            <div className={styles.allPhotosModal} onClick={(e) => e.stopPropagation()}>
+              <div className={styles.bottomSheetHeader}>
+                <h3 className={styles.bottomSheetTitle}>
+                  Uploaded Photos ({uploadedList.length})
+                </h3>
+                <button
+                  type="button"
+                  className={styles.bottomSheetCloseBtn}
+                  onClick={() => setIsViewAllPhotosOpen(false)}
+                >
+                  <X size={18} />
+                </button>
+              </div>
+
+              <div className={styles.allPhotosGrid}>
+                {uploadedList.map((item) => (
+                  <div
+                    key={item.id}
+                    className={styles.allPhotosCard}
+                    onClick={() => {
+                      setSelectedPhoto(item);
+                      setIsViewAllPhotosOpen(false);
+                    }}
+                  >
+                    <img
+                      src={item.imageUrl}
+                      alt={item.title}
+                      className={styles.allPhotosImg}
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = '/household-scrap-bundle.jpg';
+                      }}
+                    />
+                    <button
+                      type="button"
+                      className={styles.mobilePhotoRemoveBtn}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleRemoveMedia(item.id, e);
+                      }}
+                    >
+                      <X size={13} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
 
       {/* DETAIL VISION LIGHTBOX MODAL */}
       {selectedPhoto && (
