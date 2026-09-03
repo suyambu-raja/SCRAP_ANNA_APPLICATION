@@ -11,16 +11,23 @@ import {
   LuSquare,
   LuTrash2,
   LuSend,
-  LuStar,
   LuPackage,
   LuTriangleAlert,
+  LuShoppingCart,
+  LuCircleCheck as LuCheckCircle,
+  LuCircleX as LuXCircle,
+  LuClock,
+  LuShieldAlert,
 } from 'react-icons/lu';
 import {
   getHouseholdProductById,
   getProductVoiceMessages,
   sendHouseholdVoiceMessage,
+  getReusableCart,
+  addToReusableCart,
   type HouseholdProductItem,
   type VoiceMessageItem,
+  type ReusableCartItem,
 } from '@/services/reusableProductService';
 import styles from './HouseholdProductDetail.module.css';
 
@@ -33,6 +40,13 @@ export function HouseholdProductDetail() {
   const [product, setProduct] = useState<HouseholdProductItem | null>(null);
   const [voiceMessages, setVoiceMessages] = useState<VoiceMessageItem[]>([]);
   const [activePlayingId, setActivePlayingId] = useState<string | null>(null);
+  const [cartItems, setCartItems] = useState<ReusableCartItem[]>(() => getReusableCart());
+
+  // Merchant product voice note state
+  const [isMerchantVoicePlaying, setIsMerchantVoicePlaying] = useState(false);
+  const [merchantVoiceSeconds, setMerchantVoiceSeconds] = useState(0);
+  const merchantVoiceIntervalRef = useRef<number | null>(null);
+  const synthUtteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
   // Voice recording states
   const [recorderState, setRecorderState] = useState<RecordingState>('idle');
@@ -58,10 +72,83 @@ export function HouseholdProductDetail() {
     }
   }, [id]);
 
+  const currentCartItem = product ? cartItems.find((i) => i.productId === product.id) : undefined;
+  const isInCart = Boolean(currentCartItem);
+
+  const handleAddToCart = () => {
+    if (!product) return;
+    addToReusableCart(product);
+    setCartItems(getReusableCart());
+  };
+
+  // Toggle merchant voice note playback (natural speech audio + animated waveform)
+  const toggleMerchantVoicePlay = () => {
+    if (isMerchantVoicePlaying) {
+      if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+      if (merchantVoiceIntervalRef.current) {
+        clearInterval(merchantVoiceIntervalRef.current);
+        merchantVoiceIntervalRef.current = null;
+      }
+      setIsMerchantVoicePlaying(false);
+    } else {
+      setIsMerchantVoicePlaying(true);
+      const totalSec = 18;
+
+      if (typeof window !== 'undefined' && 'speechSynthesis' in window && product?.description) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(
+          `Hello, this is ${product.merchant.name}. ${product.description}`
+        );
+        utterance.rate = 0.95;
+        utterance.pitch = 1.0;
+        utterance.onend = () => {
+          setIsMerchantVoicePlaying(false);
+          setMerchantVoiceSeconds(0);
+          if (merchantVoiceIntervalRef.current) {
+            clearInterval(merchantVoiceIntervalRef.current);
+            merchantVoiceIntervalRef.current = null;
+          }
+        };
+        utterance.onerror = () => {
+          setIsMerchantVoicePlaying(false);
+          if (merchantVoiceIntervalRef.current) {
+            clearInterval(merchantVoiceIntervalRef.current);
+            merchantVoiceIntervalRef.current = null;
+          }
+        };
+        synthUtteranceRef.current = utterance;
+        window.speechSynthesis.speak(utterance);
+      }
+
+      if (merchantVoiceIntervalRef.current) {
+        clearInterval(merchantVoiceIntervalRef.current);
+      }
+      merchantVoiceIntervalRef.current = window.setInterval(() => {
+        setMerchantVoiceSeconds((prev) => {
+          if (prev >= totalSec) {
+            if (merchantVoiceIntervalRef.current) {
+              clearInterval(merchantVoiceIntervalRef.current);
+              merchantVoiceIntervalRef.current = null;
+            }
+            setIsMerchantVoicePlaying(false);
+            return 0;
+          }
+          return prev + 1;
+        });
+      }, 1000);
+    }
+  };
+
   // Clean up timers & audios on unmount
   useEffect(() => {
     return () => {
       if (timerIntervalRef.current) clearInterval(timerIntervalRef.current);
+      if (merchantVoiceIntervalRef.current) clearInterval(merchantVoiceIntervalRef.current);
+      if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
       if (previewAudioElRef.current) previewAudioElRef.current.pause();
       if (activeAudioElRef.current) activeAudioElRef.current.pause();
     };
@@ -285,16 +372,17 @@ export function HouseholdProductDetail() {
           <div className={styles.unavailableTextGroup}>
             <h3 className={styles.unavailableTitle}>Product No Longer Available</h3>
             <p className={styles.unavailableDesc}>
-              This item has been removed or sold by the merchant. Inquiries and voice negotiations are currently disabled.
+              This item has been removed or sold by the merchant. Inquiries and voice messages are currently disabled.
             </p>
           </div>
         </div>
       )}
 
-      {/* 2. Main Two-Column Layout */}
+      {/* 2. Main Layout (Desktop 2-Col, Mobile Compact Stack) */}
       <div className={styles.detailGrid}>
-        {/* Left Column: Product Showcase & Specifications */}
+        {/* Left Column: Product Image & Unified Product Summary */}
         <div className={styles.productMainCol}>
+          {/* Product Image Container with badges */}
           <div className={styles.imageGalleryCard}>
             <div className={styles.mainImageWrap}>
               {product.image ? (
@@ -305,69 +393,109 @@ export function HouseholdProductDetail() {
                 />
               ) : (
                 <div className={styles.fallbackImagePlaceholder}>
-                  <LuPackage size={64} />
+                  <LuPackage size={56} />
                   <span>No image available</span>
                 </div>
               )}
 
               <span className={styles.imageConditionBadge}>{product.condition}</span>
-
-              {product.negotiable && (
-                <span className={styles.imageNegotiableBadge}>Price Negotiable</span>
-              )}
             </div>
           </div>
 
-          {/* Product Description & Information Card */}
-          <div className={styles.infoCard}>
-            <span className={styles.categoryTag}>{product.category}</span>
-            <h1 className={styles.productName}>{product.name}</h1>
+          {/* Unified Compact Product Summary & Description Card */}
+          <div className={styles.productSummaryCard}>
+            {/* Category */}
+            <span className={styles.categoryLabel}>{product.category}</span>
 
-            <div className={styles.priceBanner}>
-              <span className={styles.priceMain}>{product.priceFormatted}</span>
-              <span className={styles.priceLabel}>
-                {product.negotiable ? '(Merchant listed price, negotiable)' : '(Fixed price)'}
+            {/* Product Name */}
+            <h1 className={styles.productTitle}>{product.name}</h1>
+
+            {/* Listed Price & Status */}
+            <div className={styles.priceRow}>
+              <span className={styles.priceValue}>{product.priceFormatted}</span>
+              <span className={styles.priceStatus}>
+                {product.negotiable ? 'Merchant listed price' : 'Fixed price'}
               </span>
             </div>
 
-            <div className={styles.descriptionSection}>
-              <h3 className={styles.descHeading}>Product Description & Condition</h3>
-              <p className={styles.descText}>{product.description}</p>
+            {/* Compact Metadata Row (Condition · Location · Distance) */}
+            <div className={styles.compactMetaRow}>
+              <span className={styles.metaConditionPill}>{product.condition}</span>
+              <span className={styles.metaDot}>•</span>
+              <span className={styles.metaLocationText}>
+                <LuMapPin size={13} className={styles.metaPinIcon} />
+                <span>{product.area}</span>
+              </span>
+              <span className={styles.metaDot}>•</span>
+              <span className={styles.metaDistanceText}>{product.distanceText}</span>
             </div>
 
-            {/* Meta Specifications */}
-            <div className={styles.metaGrid}>
-              <div className={styles.metaItem}>
-                <span className={styles.metaItemLabel}>Condition Assessment</span>
-                <span className={styles.metaItemValue}>{product.condition}</span>
-              </div>
-              <div className={styles.metaItem}>
-                <span className={styles.metaItemLabel}>Location</span>
-                <span className={styles.metaItemValue}>
-                  <LuMapPin size={14} />
-                  {product.area}
+            <div className={styles.summaryDivider} />
+
+            {/* Merchant Voice Description (Replaces text description) */}
+            <div className={styles.merchantVoiceSection}>
+              <div className={styles.merchantVoiceHeader}>
+                <h2 className={styles.descTitle}>About This Product</h2>
+                <span className={styles.merchantVoiceBadge}>
+                  <LuMic size={12} className={styles.merchantMicBadgeIcon} />
+                  <span>Merchant Voice Note</span>
                 </span>
               </div>
-              <div className={styles.metaItem}>
-                <span className={styles.metaItemLabel}>Distance from your area</span>
-                <span className={styles.metaItemValue}>{product.distanceText}</span>
+
+              <div className={styles.merchantVoicePlayerCard}>
+                <button
+                  type="button"
+                  className={styles.merchantPlayBtn}
+                  onClick={toggleMerchantVoicePlay}
+                  aria-label={isMerchantVoicePlaying ? "Pause merchant's voice" : "Play merchant's voice"}
+                >
+                  {isMerchantVoicePlaying ? <LuPause size={16} /> : <LuPlay size={16} style={{ marginLeft: 2 }} />}
+                </button>
+
+                <div className={styles.merchantWaveformWrap} aria-hidden="true">
+                  {[30, 55, 40, 85, 70, 35, 95, 60, 80, 45, 90, 65, 40, 75, 50, 85, 60, 70].map((h, idx) => {
+                    const isBarPlayed = isMerchantVoicePlaying && (idx / 18) * 18 <= merchantVoiceSeconds;
+                    return (
+                      <span
+                        key={idx}
+                        className={`${styles.merchantWaveBar} ${isMerchantVoicePlaying ? styles.merchantWaveActive : ''} ${isBarPlayed ? styles.merchantWavePlayed : ''}`}
+                        style={{
+                          height: isMerchantVoicePlaying
+                            ? `${Math.max(6, (h * (idx % 2 ? 1 : 0.8)) / 4)}px`
+                            : `${Math.max(4, h / 7)}px`,
+                        }}
+                      />
+                    );
+                  })}
+                </div>
+
+                <span className={styles.merchantVoiceDuration}>
+                  {isMerchantVoicePlaying ? formatTimer(merchantVoiceSeconds) : '0:18'}
+                </span>
               </div>
-              <div className={styles.metaItem}>
-                <span className={styles.metaItemLabel}>Posted</span>
-                <span className={styles.metaItemValue}>{product.postedTime}</span>
+
+              <div className={styles.merchantVoiceMetaRow}>
+                <span className={styles.merchantVoiceAuthor}>
+                  Voice note recorded by <strong>{product.merchant.name}</strong>
+                </span>
+                {isMerchantVoicePlaying && (
+                  <span className={styles.audioPlayingBadge}>
+                    <span className={styles.greenAudioDot} /> Playing audio
+                  </span>
+                )}
               </div>
             </div>
           </div>
         </div>
 
-        {/* Right Column: Seller Profile & Pure Voice Communication */}
+        {/* Right Column: Seller Information & Voice Messages */}
         <div className={styles.interactionCol}>
-          {/* Seller Profile Card */}
+          {/* Compact Seller Information Card */}
           <div className={styles.sellerCard}>
             <div className={styles.sellerCardHeader}>
-              <span className={styles.sellerSectionTitle}>Seller Information</span>
+              <h2 className={styles.sellerSectionTitle}>Seller Information</h2>
               {product.merchant.verificationStatus === 'verified' && (
-                <span className={styles.verifiedPill}>
+                <span className={styles.verifiedBadge}>
                   <LuShieldCheck size={13} />
                   <span>Verified Merchant</span>
                 </span>
@@ -381,33 +509,92 @@ export function HouseholdProductDetail() {
               <div className={styles.sellerNames}>
                 <h3 className={styles.sellerName}>{product.merchant.name}</h3>
                 <p className={styles.sellerBusinessName}>{product.merchant.businessName}</p>
+                <div className={styles.sellerAreaRow}>
+                  <LuMapPin size={12} className={styles.sellerPinIcon} />
+                  <span>{product.merchant.area}, {product.merchant.city}</span>
+                </div>
               </div>
             </div>
 
-            <div className={styles.sellerMetricsRow}>
-              <div className={styles.metricItem}>
-                <LuStar size={14} className={styles.ratingStar} />
-                <span>{product.merchant.rating} / 5.0 Rating</span>
-              </div>
-              <div className={styles.metricItem}>
+            {/* Factual trust metric only - strictly NO ratings or reviews */}
+            {product.merchant.completedDeals > 0 && (
+              <div className={styles.sellerFactualMetric}>
+                <LuPackage size={13} className={styles.metricPackageIcon} />
                 <span>{product.merchant.completedDeals} Deals Completed</span>
               </div>
-            </div>
+            )}
 
-            <div className={styles.sellerContactBar}>
-              <a
-                href={`tel:${product.merchant.mobile}`}
-                className={styles.callSellerBtn}
-                title={`Call ${product.merchant.name}`}
-              >
-                <LuPhone size={15} />
-                <span>Call {product.merchant.mobile}</span>
-              </a>
+            <div className={styles.sellerActionsRow}>
+              <div className={styles.cartActionButtonsWrap}>
+                <a
+                  href={`tel:${product.merchant.mobile}`}
+                  className={styles.callSellerBtn}
+                  title={`Call ${product.merchant.name}`}
+                >
+                  <LuPhone size={14} />
+                  <span>Call Merchant</span>
+                </a>
+
+                {!isInCart && isAvailable && (
+                  <button
+                    type="button"
+                    className={styles.addToCartBtn}
+                    onClick={handleAddToCart}
+                  >
+                    <LuShoppingCart size={14} />
+                    <span>Select Product</span>
+                  </button>
+                )}
+              </div>
+
+              {/* In-cart status alerts & action buttons */}
+              {isInCart && currentCartItem && (
+                <>
+                  {currentCartItem.status === 'confirmed' && (
+                    <button
+                      type="button"
+                      className={styles.inCartConfirmedBtn}
+                      onClick={() => navigate('/household/products?openCart=true')}
+                    >
+                      <LuCheckCircle size={15} />
+                      <span>Confirmed by Merchant (Ready for Pickup)</span>
+                    </button>
+                  )}
+                  {currentCartItem.status === 'rejected' && (
+                    <button
+                      type="button"
+                      className={styles.inCartRejectedBtn}
+                      onClick={() => navigate('/household/products?openCart=true')}
+                    >
+                      <LuXCircle size={15} />
+                      <span>Rejected by Merchant (Do Not Visit Yard)</span>
+                    </button>
+                  )}
+                  {currentCartItem.status === 'pending' && (
+                    <button
+                      type="button"
+                      className={styles.inCartPendingBtn}
+                      onClick={() => navigate('/household/products?openCart=true')}
+                    >
+                      <LuClock size={15} />
+                      <span>In Cart · Awaiting Confirmation</span>
+                    </button>
+                  )}
+                </>
+              )}
+
+              {/* Crucial confirmation warning for household users */}
+              <p className={styles.yardVisitTip}>
+                <LuShieldAlert size={15} className={styles.yardTipIcon} />
+                <span>
+                  <strong>Check Merchant Status First:</strong> Merchants may sell items to walk-ins. Please confirm availability or wait for &quot;Confirmed&quot; status before visiting the yard in {product.area}.
+                </span>
+              </p>
             </div>
           </div>
 
           {/* Pure Voice Messages Section (Strictly No Text Chat) */}
-          <section className={styles.voiceSectionCard} aria-label="Voice Messages Negotiation">
+          <section className={styles.voiceSectionCard} aria-label="Voice Messages">
             <div className={styles.voiceHeader}>
               <div className={styles.voiceHeadingRow}>
                 <h2 className={styles.voiceTitle}>
@@ -419,7 +606,7 @@ export function HouseholdProductDetail() {
                 </span>
               </div>
               <p className={styles.voiceContextText}>
-                Want to know more or discuss the price? Send the merchant a voice message.
+                Want to know more or have questions? Send the merchant a voice message.
               </p>
             </div>
 
@@ -427,7 +614,7 @@ export function HouseholdProductDetail() {
             <div className={styles.conversationHistory} role="log" aria-live="polite">
               {voiceMessages.length === 0 ? (
                 <div style={{ textAlign: 'center', padding: '1rem', color: '#64748b', fontSize: '0.85rem' }}>
-                  No voice messages yet. Press the mic below to ask a question or negotiate.
+                  No voice messages yet. Tap the mic below to send a voice message.
                 </div>
               ) : (
                 voiceMessages.map((msg) => {
@@ -486,7 +673,7 @@ export function HouseholdProductDetail() {
                 {recorderState === 'idle' && (
                   <div className={styles.idleState}>
                     <span className={styles.recordPromptText}>
-                      Tap mic to record questions or negotiate price with merchant
+                      Tap mic to send a voice message to the merchant
                     </span>
                     <button
                       type="button"

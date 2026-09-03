@@ -6,7 +6,7 @@
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 1.5rem 2rem 4rem 2rem;
+  padding: 1.5rem 2rem 1.25rem 2rem;
   display: flex;
   flex-direction: column;
   gap: 1.75rem;
@@ -548,7 +548,7 @@
 
 @media (max-width: 768px) {
   .pageContainer {
-    padding: 1rem 1rem 3rem 1rem;
+    padding: 1rem 1rem 1rem 1rem;
   }
 
   .profileHeroCard {

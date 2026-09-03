@@ -1613,21 +1613,51 @@ export function HouseholdPostScrap() {
             </p>
 
             <div className={styles.successDetailsBox}>
-              <div className={styles.successDetailRow}>
-                <span>Pickup Address:</span>
-                <strong>{activeSavedAddress.fullAddress} ({activeSavedAddress.tag})</strong>
+              {/* Pickup Address */}
+              <div className={styles.successDetailItemStacked}>
+                <div className={styles.detailItemHeader}>
+                  <MapPin size={15} className={styles.detailIcon} />
+                  <span className={styles.detailLabel}>Pickup Address</span>
+                  <span className={styles.detailTagBadge}>{activeSavedAddress.tag}</span>
+                </div>
+                <div className={styles.detailAddressText}>
+                  {activeSavedAddress.fullAddress}
+                </div>
               </div>
-              <div className={styles.successDetailRow}>
-                <span>Scheduled Time:</span>
-                <strong>{getResolvedDateText()} • {preferredSlot}</strong>
+
+              <div className={styles.successDetailsDivider} />
+
+              {/* Scheduled Time */}
+              <div className={styles.successDetailItem}>
+                <div className={styles.detailItemLeft}>
+                  <Clock size={15} className={styles.detailIcon} />
+                  <span className={styles.detailLabel}>Scheduled Time</span>
+                </div>
+                <strong className={styles.detailValue}>
+                  {getResolvedDateText()} • {preferredSlot}
+                </strong>
               </div>
-              <div className={styles.successDetailRow}>
-                <span>Scrap Photos:</span>
-                <strong>{uploadedList.length} Items Attached</strong>
+
+              {/* Scrap Photos */}
+              <div className={styles.successDetailItem}>
+                <div className={styles.detailItemLeft}>
+                  <ImageIcon size={15} className={styles.detailIcon} />
+                  <span className={styles.detailLabel}>Scrap Photos</span>
+                </div>
+                <strong className={styles.detailValue}>
+                  {uploadedList.length} Items Attached
+                </strong>
               </div>
-              <div className={styles.successDetailRow}>
-                <span>Digital Weighing:</span>
-                <strong style={{ color: '#059669' }}>Guaranteed 100% Calibrated Scale</strong>
+
+              {/* Digital Weighing */}
+              <div className={styles.successDetailItem}>
+                <div className={styles.detailItemLeft}>
+                  <Scale size={15} className={styles.detailIcon} />
+                  <span className={styles.detailLabel}>Digital Weighing</span>
+                </div>
+                <strong className={styles.detailValueGreen}>
+                  Guaranteed 100% Calibrated Scale
+                </strong>
               </div>
             </div>
 

@@ -919,7 +919,7 @@ export function HouseholdOrders() {
                     <div className={styles.merchantNameCol}>
                       <h4 className={styles.merchantName}>{activeOrder.merchantName}</h4>
                       <span className={styles.ratingBadge}>
-                        <Star size={12} fill="#F59E0B" color="#F59E0B" aria-hidden="true" style={{ marginRight: 3, verticalAlign: -1 }} /> {activeOrder.merchantRating} • Verified Doorstep Partner
+                        Verified Doorstep Partner
                       </span>
                     </div>
                   </div>
@@ -1254,9 +1254,6 @@ export function HouseholdOrders() {
                         <span className={styles.merchantNameText}>
                           {currentMobileOrder.merchantName}
                         </span>
-                        <span className={styles.merchantRatingText}>
-                          <Star size={12} fill="#F59E0B" color="#F59E0B" aria-hidden="true" style={{ marginRight: 3, verticalAlign: -1 }} /> {currentMobileOrder.merchantRating || 4.8} (230+ pickups)
-                        </span>
                       </div>
                     </div>
                     <div className={styles.merchantVehicleRow}>
@@ -1268,7 +1265,7 @@ export function HouseholdOrders() {
                   </div>
 
                   <div className={styles.infoNotePill}>
-                    <Clock size={16} color="#16a34a" />
+                    <Clock size={16} />
                     <span>Merchant will reach your location within the selected time slot.</span>
                   </div>
 
@@ -1313,7 +1310,7 @@ export function HouseholdOrders() {
                   </button>
 
                   <div className={styles.infoNotePill}>
-                    <Info size={16} color="#d97706" />
+                    <Info size={16} />
                     <span>Please be available at your location.</span>
                   </div>
 
@@ -1419,7 +1416,7 @@ export function HouseholdOrders() {
                   </button>
 
                   <div className={styles.infoNotePill}>
-                    <Info size={16} color="#d97706" />
+                    <Info size={16} />
                     <span>You can review weight &amp; price before making the payment.</span>
                   </div>
                 </>
@@ -1518,9 +1515,7 @@ export function HouseholdOrders() {
                 </h4>
                 <div className={styles.supportingInfoRow}>
                   <User size={16} />
-                  <span>
-                    {currentMobileOrder.merchantName} (<Star size={11} fill="#F59E0B" color="#F59E0B" aria-hidden="true" style={{ verticalAlign: -1 }} /> {currentMobileOrder.merchantRating || 4.8})
-                  </span>
+                  <span>{currentMobileOrder.merchantName}</span>
                 </div>
                 <div className={styles.supportingInfoRow}>
                   <Truck size={16} />
@@ -1545,23 +1540,6 @@ export function HouseholdOrders() {
                   </div>
                 ))}
               </div>
-            </div>
-
-            {/* Stage Simulator Tester Bar */}
-            <div className={styles.stageSimulatorBar}>
-              <span style={{ fontWeight: 800, color: '#0f172a' }}>Stages:</span>
-              {STAGE_STEPS.map((step, idx) => (
-                <button
-                  key={step.id}
-                  type="button"
-                  className={`${styles.stageSimPill} ${
-                    currentMobileOrder.stage === step.id ? styles.stageSimPillActive : ''
-                  }`}
-                  onClick={() => setOrderStage(currentMobileOrder.id, step.id as OrderLifecycleStage)}
-                >
-                  {idx + 1}. {step.label.split(' ')[0]}
-                </button>
-              ))}
             </div>
           </div>
         )}

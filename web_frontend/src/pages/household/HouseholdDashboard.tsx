@@ -26,8 +26,10 @@ import {
   LuCheck,
   LuCircleCheck as LuCheckCircle,
   LuEllipsisVertical as MoreVertical,
+  LuMessageSquareQuote,
 } from 'react-icons/lu';
 import { useAuthStore } from '@/store/useAuthStore';
+import { submitPrivateFeedback } from '@/services/feedbackService';
 import styles from './HouseholdDashboard.module.css';
 
 interface DeliveryAddress {
@@ -64,6 +66,7 @@ const INITIAL_DELIVERY_ADDRESSES: DeliveryAddress[] = [
 interface LiveScrapRateItem {
   id: string;
   name: string;
+  categoryId?: string;
   price: string;
   unit: string;
   trend: string;
@@ -76,6 +79,7 @@ const LIVE_SCRAP_RATES: LiveScrapRateItem[] = [
   {
     id: 'COP_001',
     name: 'Copper Scrap',
+    categoryId: 'CAT_MATERIAL',
     price: '₹720.00',
     unit: '/ kg',
     trend: '+1.8%',
@@ -86,6 +90,7 @@ const LIVE_SCRAP_RATES: LiveScrapRateItem[] = [
   {
     id: 'BRS_001',
     name: 'Brass Scrap',
+    categoryId: 'CAT_MATERIAL',
     price: '₹490.00',
     unit: '/ kg',
     trend: '+1.5%',
@@ -96,6 +101,7 @@ const LIVE_SCRAP_RATES: LiveScrapRateItem[] = [
   {
     id: 'IRON_001',
     name: 'Scrap Iron',
+    categoryId: 'CAT_IRON',
     price: '₹42.00',
     unit: '/ kg',
     trend: '+2.5%',
@@ -106,6 +112,7 @@ const LIVE_SCRAP_RATES: LiveScrapRateItem[] = [
   {
     id: 'ALU_001',
     name: 'household aluminium',
+    categoryId: 'CAT_MATERIAL',
     price: '₹135.00',
     unit: '/ kg',
     trend: '+2.1%',
@@ -116,6 +123,7 @@ const LIVE_SCRAP_RATES: LiveScrapRateItem[] = [
   {
     id: 'PLS_007',
     name: 'Mixed plastic',
+    categoryId: 'CAT_PLASTIC',
     price: '₹18.00',
     unit: '/ kg',
     trend: '+0.5%',
@@ -126,6 +134,7 @@ const LIVE_SCRAP_RATES: LiveScrapRateItem[] = [
   {
     id: 'CRD_001',
     name: 'carboard',
+    categoryId: 'CAT_PAPER_CARDBOARD',
     price: '₹13.00',
     unit: '/ kg',
     trend: '+1.0%',
@@ -274,7 +283,7 @@ const PROMO_SLIDES: PromoSlide[] = [
     type: 'image',
     image: '/promo-reusable-products.png',
     link: '/household/products',
-    alt: 'Reusable Products - Good for you. Great for the planet. Voice chat to negotiate.',
+    alt: 'Reusable Products - Good for you. Great for the planet. Voice chat to connect.',
     bgColor: '#EBF1E8',
   },
   {
@@ -613,11 +622,21 @@ export function HouseholdDashboard() {
   const [selectedGalleryPickup, setSelectedGalleryPickup] = useState<ActivePickup | null>(null);
   const [activePhotoIndex, setActivePhotoIndex] = useState<number>(0);
 
-  // Review State
-  const [rating, setRating] = useState(5);
+  // Private BillScrap Application Feedback State (100% Private, Not Public Reviews)
+  const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
+  const [satisfactionRating, setSatisfactionRating] = useState(5);
   const [hoverRating, setHoverRating] = useState(0);
-  const [reviewText, setReviewText] = useState('');
-  const [submittedReview, setSubmittedReview] = useState(false);
+  const [feedbackCategory, setFeedbackCategory] = useState('App experience');
+  const [experienceRating, setExperienceRating] = useState('Helpful');
+  const [selectedUsageCategories, setSelectedUsageCategories] = useState<string[]>([
+    'Selling scrap',
+    'Checking scrap rates',
+  ]);
+  const [likedFeatures, setLikedFeatures] = useState('');
+  const [problemsFaced, setProblemsFaced] = useState('');
+  const [improvementSuggestions, setImprovementSuggestions] = useState('');
+  const [isSubmittingFeedback, setIsSubmittingFeedback] = useState(false);
+  const [feedbackSuccess, setFeedbackSuccess] = useState(false);
 
   // How it Works Single-Step Cross-Fade Loop
   const [howStepIndex, setHowStepIndex] = useState(0);
@@ -707,14 +726,50 @@ export function HouseholdDashboard() {
     );
   };
 
-  const handleSubmitReview = (e: React.FormEvent) => {
+  const handleSubmitFeedback = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!reviewText.trim()) return;
-    setSubmittedReview(true);
-    setTimeout(() => {
-      setSubmittedReview(false);
-      setReviewText('');
-    }, 3500);
+    if (isSubmittingFeedback) return;
+    setIsSubmittingFeedback(true);
+
+    try {
+      await submitPrivateFeedback({
+        userId: user?.id,
+        userName: displayName,
+        userPhone: user?.phone,
+        satisfactionRating,
+        feedbackCategory,
+        experienceRating,
+        primaryUses: selectedUsageCategories,
+        likedAspects: likedFeatures,
+        problemsFaced,
+        improvements: improvementSuggestions,
+        description: [likedFeatures, problemsFaced, improvementSuggestions].filter(Boolean).join('\n\n'),
+      });
+
+      setFeedbackSuccess(true);
+    } catch (err) {
+      console.error('Failed to submit feedback:', err);
+    } finally {
+      setIsSubmittingFeedback(false);
+    }
+  };
+
+  const handleCloseFeedbackModal = () => {
+    setIsFeedbackModalOpen(false);
+    if (feedbackSuccess) {
+      setTimeout(() => {
+        setFeedbackSuccess(false);
+        setLikedFeatures('');
+        setProblemsFaced('');
+        setImprovementSuggestions('');
+      }, 300);
+    }
+  };
+
+  const toggleUsageCategory = (item: string) => {
+    setSelectedUsageCategories((prev) =>
+      prev.includes(item) ? prev.filter((cat) => cat !== item) : [...prev, item]
+    );
   };
 
 
@@ -1159,6 +1214,16 @@ export function HouseholdDashboard() {
                 <div
                   key={item.id}
                   className={styles.rateRowCard}
+                  onClick={() => navigate(`/household/rates?item=${item.id}&category=${item.categoryId || ''}`)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      navigate(`/household/rates?item=${item.id}&category=${item.categoryId || ''}`);
+                    }
+                  }}
+                  title={`View live market rate for ${item.name}`}
+                  aria-label={`View live market rate for ${item.name}`}
                 >
                   <div className={styles.rateRowLeft}>
                     <div className={styles.rateRowThumb} style={{ background: item.iconBg }}>
@@ -1200,57 +1265,58 @@ export function HouseholdDashboard() {
             </div>
           </div>
 
-          {/* 2. Share Your Review Card */}
-          <div className={styles.reviewCard}>
-            <div className={styles.reviewHeader}>
-              <h3 className={styles.reviewTitle}>
-                <Star size={18} fill="#f59e0b" color="#f59e0b" />
-                <span>Share Your Review</span>
-              </h3>
-              <p className={styles.reviewSubtitle}>
-                We value your feedback! Let us know about your doorstep scrap selling experience.
+          {/* 2. Tell Us What You Think - Private Application Feedback Card */}
+          <div className={styles.feedbackCard}>
+            <div className={styles.feedbackHeader}>
+              <div className={styles.feedbackTitleRow}>
+                <LuMessageSquareQuote size={20} color="#F8BF1D" />
+                <h3 className={styles.feedbackTitle}>Tell Us What You Think</h3>
+              </div>
+              <p className={styles.feedbackSubtitle}>
+                Help us improve BillScrap with your feedback.
               </p>
             </div>
 
-            {/* 5-Star Rating Selector */}
-            <div className={styles.starRatingRow}>
-              {[1, 2, 3, 4, 5].map((star) => (
-                <button
-                  key={star}
-                  type="button"
-                  className={`${styles.starBtn} ${
-                    (hoverRating || rating) >= star ? styles.starActive : ''
-                  }`}
-                  onClick={() => setRating(star)}
-                  onMouseEnter={() => setHoverRating(star)}
-                  onMouseLeave={() => setHoverRating(0)}
-                  title={`${star} Star`}
-                >
-                  <Star
-                    size={22}
-                    fill={(hoverRating || rating) >= star ? '#f59e0b' : 'none'}
-                    stroke="currentColor"
-                  />
-                </button>
-              ))}
+            {/* Quick Satisfaction Rating */}
+            <div className={styles.feedbackRatingSection}>
+              <span className={styles.feedbackRatingLabel}>
+                How satisfied are you with BillScrap?
+              </span>
+              <div className={styles.starRatingRow}>
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <button
+                    key={star}
+                    type="button"
+                    className={`${styles.starBtn} ${
+                      (hoverRating || satisfactionRating) >= star ? styles.starActive : ''
+                    }`}
+                    onClick={() => {
+                      setSatisfactionRating(star);
+                      setIsFeedbackModalOpen(true);
+                    }}
+                    onMouseEnter={() => setHoverRating(star)}
+                    onMouseLeave={() => setHoverRating(0)}
+                    title={`Rate overall experience ${star} of 5 stars`}
+                    aria-label={`Rate overall experience ${star} of 5 stars`}
+                  >
+                    <Star
+                      size={24}
+                      fill={(hoverRating || satisfactionRating) >= star ? '#f59e0b' : 'none'}
+                      stroke="currentColor"
+                    />
+                  </button>
+                ))}
+              </div>
             </div>
 
-            <form onSubmit={handleSubmitReview}>
-              <textarea
-                className={styles.reviewTextarea}
-                placeholder="Write your review here..."
-                value={reviewText}
-                onChange={(e) => setReviewText(e.target.value)}
-                rows={3}
-              />
-
-              <div className={styles.reviewActionRow}>
-                <button type="submit" className={styles.submitReviewBtn}>
-                  {submittedReview ? <LuCheckCircle size={14} aria-hidden="true" /> : <Send size={14} aria-hidden="true" />}
-                  <span>{submittedReview ? 'Review Submitted!' : 'Submit Review'}</span>
-                </button>
-              </div>
-            </form>
+            <button
+              type="button"
+              className={styles.giveFeedbackBtn}
+              onClick={() => setIsFeedbackModalOpen(true)}
+            >
+              <LuMessageSquareQuote size={16} />
+              <span>Give Feedback</span>
+            </button>
           </div>
         </div>
       </section>
@@ -1530,6 +1596,253 @@ export function HouseholdDashboard() {
                 </div>
               ))}
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* PRIVATE BILLSCRAP APPLICATION FEEDBACK MODAL (100% CONFIDENTIAL PRODUCT FEEDBACK) */}
+      {isFeedbackModalOpen && (
+        <div
+          className={styles.feedbackModalOverlay}
+          onClick={handleCloseFeedbackModal}
+          role="dialog"
+          aria-modal="true"
+          aria-label="BillScrap Application Feedback"
+        >
+          <div
+            className={styles.feedbackModalContainer}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className={styles.feedbackModalHeader}>
+              <div className={styles.feedbackModalTitleGroup}>
+                <h3 className={styles.feedbackModalTitle}>
+                  <LuMessageSquareQuote size={20} color="#F8BF1D" />
+                  <span>Tell Us What You Think</span>
+                </h3>
+                <span className={styles.feedbackModalSubtitle}>
+                  Help us improve BillScrap with your private feedback
+                </span>
+              </div>
+              <button
+                type="button"
+                className={styles.feedbackModalCloseBtn}
+                onClick={handleCloseFeedbackModal}
+                aria-label="Close Feedback Modal"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            {feedbackSuccess ? (
+              <div className={styles.feedbackSuccessView}>
+                <div className={styles.successIconWrap}>
+                  <CheckCircle2 size={32} />
+                </div>
+                <h4 className={styles.successTitle}>Thanks for your feedback!</h4>
+                <p className={styles.successDesc}>
+                  Your feedback helps us make BillScrap better. Our product team reviews every submission privately.
+                </p>
+                <button
+                  type="button"
+                  className={styles.successDoneBtn}
+                  onClick={handleCloseFeedbackModal}
+                >
+                  Done
+                </button>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmitFeedback} style={{ display: 'contents' }}>
+                <div className={styles.feedbackModalBody}>
+                  {/* Confidentiality Privacy Banner */}
+                  <div className={styles.feedbackPrivateBanner}>
+                    <ShieldCheck size={18} style={{ flexShrink: 0, marginTop: '2px' }} />
+                    <span>
+                      <strong>100% Private Product Feedback.</strong> This is collected for internal product improvement only. It will never be shared publicly or with merchants.
+                    </span>
+                  </div>
+
+                  {/* Rating Input: How satisfied are you with BillScrap? */}
+                  <div className={styles.questionGroup}>
+                    <label className={styles.questionLabel}>
+                      Overall Satisfaction with BillScrap
+                    </label>
+                    <div className={styles.starRatingRow}>
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <button
+                          key={star}
+                          type="button"
+                          className={`${styles.starBtn} ${
+                            (hoverRating || satisfactionRating) >= star ? styles.starActive : ''
+                          }`}
+                          onClick={() => setSatisfactionRating(star)}
+                          onMouseEnter={() => setHoverRating(star)}
+                          onMouseLeave={() => setHoverRating(0)}
+                          title={`${star} of 5 stars`}
+                        >
+                          <Star
+                            size={26}
+                            fill={(hoverRating || satisfactionRating) >= star ? '#f59e0b' : 'none'}
+                            stroke="currentColor"
+                          />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Feedback Category */}
+                  <div className={styles.questionGroup}>
+                    <label className={styles.questionLabel}>
+                      Feedback Category
+                    </label>
+                    <div className={styles.optionsPillsWrap}>
+                      {[
+                        'App experience',
+                        'Scrap selling',
+                        'Pickup experience',
+                        'Scrap rates',
+                        'Reusable products',
+                        'Payments',
+                        'Other',
+                      ].map((cat) => (
+                        <button
+                          key={cat}
+                          type="button"
+                          className={`${styles.optionPillBtn} ${
+                            feedbackCategory === cat ? styles.optionPillBtnActive : ''
+                          }`}
+                          onClick={() => setFeedbackCategory(cat)}
+                        >
+                          {cat}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Question 1: How has BillScrap been for you? */}
+                  <div className={styles.questionGroup}>
+                    <label className={styles.questionLabel}>
+                      1. How has BillScrap been for you?
+                    </label>
+                    <div className={styles.optionsPillsWrap}>
+                      {['Very helpful', 'Helpful', 'Okay', 'Not very helpful', 'Not helpful'].map(
+                        (opt) => (
+                          <button
+                            key={opt}
+                            type="button"
+                            className={`${styles.optionPillBtn} ${
+                              experienceRating === opt ? styles.optionPillBtnActive : ''
+                            }`}
+                            onClick={() => setExperienceRating(opt)}
+                          >
+                            {opt}
+                          </button>
+                        )
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Question 2: What do you mainly use BillScrap for? */}
+                  <div className={styles.questionGroup}>
+                    <label className={styles.questionLabel}>
+                      2. What do you mainly use BillScrap for? <span style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 'normal' }}>(Select all that apply)</span>
+                    </label>
+                    <div className={styles.optionsPillsWrap}>
+                      {[
+                        'Selling scrap',
+                        'Checking scrap rates',
+                        'Booking pickups',
+                        'Finding reusable products',
+                        'Tracking orders',
+                        'Other',
+                      ].map((item) => {
+                        const isSelected = selectedUsageCategories.includes(item);
+                        return (
+                          <button
+                            key={item}
+                            type="button"
+                            className={`${styles.optionPillBtn} ${
+                              isSelected ? styles.optionPillBtnActive : ''
+                            }`}
+                            onClick={() => toggleUsageCategory(item)}
+                          >
+                            {isSelected ? '✓ ' : ''}{item}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Question 3: What do you like about BillScrap? */}
+                  <div className={styles.questionGroup}>
+                    <label className={styles.questionLabel}>
+                      3. What do you like about BillScrap?
+                    </label>
+                    <textarea
+                      className={styles.questionTextarea}
+                      rows={3}
+                      placeholder="Tell us what works well for you..."
+                      value={likedFeatures}
+                      onChange={(e) => setLikedFeatures(e.target.value)}
+                    />
+                  </div>
+
+                  {/* Question 4: Are you facing any problems? */}
+                  <div className={styles.questionGroup}>
+                    <label className={styles.questionLabel}>
+                      4. Are you facing any problems?
+                    </label>
+                    <textarea
+                      className={styles.questionTextarea}
+                      rows={3}
+                      placeholder="Tell us about any issue or difficulty you faced..."
+                      value={problemsFaced}
+                      onChange={(e) => setProblemsFaced(e.target.value)}
+                    />
+                  </div>
+
+                  {/* Question 5: What should we improve? */}
+                  <div className={styles.questionGroup}>
+                    <label className={styles.questionLabel}>
+                      5. What should we improve?
+                    </label>
+                    <textarea
+                      className={styles.questionTextarea}
+                      rows={3}
+                      placeholder="Tell us what would make BillScrap better..."
+                      value={improvementSuggestions}
+                      onChange={(e) => setImprovementSuggestions(e.target.value)}
+                    />
+                  </div>
+                </div>
+
+                {/* Modal Footer Actions */}
+                <div className={styles.feedbackModalFooter}>
+                  <button
+                    type="button"
+                    className={styles.feedbackCancelBtn}
+                    onClick={handleCloseFeedbackModal}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className={styles.feedbackSubmitBtn}
+                    disabled={isSubmittingFeedback}
+                  >
+                    {isSubmittingFeedback ? (
+                      <span>Submitting...</span>
+                    ) : (
+                      <>
+                        <Send size={15} />
+                        <span>Submit Feedback</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              </form>
+            )}
           </div>
         </div>
       )}

@@ -6,7 +6,7 @@
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 1.5rem 1.5rem 4rem 1.5rem;
+  padding: 1.5rem 1.5rem 1rem 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -642,7 +642,7 @@
   }
 
   .pageContainer {
-    padding: 1rem 1rem 5.5rem 1rem !important;
+    padding: 1rem 1rem 1rem 1rem !important;
     gap: 1rem !important;
     max-width: 100vw !important;
     overflow-x: hidden !important;

@@ -7,7 +7,7 @@
   width: 100%;
   max-width: 720px;
   margin: 0 auto;
-  padding: 1.25rem 1rem 6.5rem 1rem;
+  padding: 1.25rem 1rem 1rem 1rem;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -329,7 +329,7 @@
    ========================================================================== */
 @media (max-width: 768px) {
   .pageContainer {
-    padding: 1rem 0.85rem 6.5rem 0.85rem;
+    padding: 1rem 0.85rem 1rem 0.85rem;
     gap: 1.25rem;
   }
 

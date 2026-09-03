@@ -17,7 +17,7 @@
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 1rem 1.25rem 4rem 1.25rem;
+  padding: 1rem 1.25rem 1.25rem 1.25rem;
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
@@ -559,18 +559,29 @@
   box-sizing: border-box;
 }
 
-/* Next Pickup Single Unified Card (Matching Reference UI) */
+/* Next Pickup Single Unified Card (with Light Blinking Yellow Border) */
+@keyframes yellowBorderPulse {
+  0%, 100% {
+    border-color: rgba(248, 191, 29, 0.4);
+    box-shadow: 0 0 0 1px rgba(248, 191, 29, 0.15), 0 10px 30px -4px rgba(0, 0, 0, 0.08), 0 4px 12px -2px rgba(0, 0, 0, 0.04);
+  }
+  50% {
+    border-color: #F8BF1D;
+    box-shadow: 0 0 14px 2px rgba(248, 191, 29, 0.45), 0 10px 30px -4px rgba(0, 0, 0, 0.1), 0 4px 12px -2px rgba(0, 0, 0, 0.06);
+  }
+}
+
 .nextPickupUnifiedCard {
   background: #ffffff;
-  border: 1px solid #e2e8f0;
+  border: 1.5px solid #F8BF1D;
   border-radius: 18px;
   padding: 1.15rem 1.15rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  box-shadow: 0 10px 30px -4px rgba(0, 0, 0, 0.12), 0 4px 12px -2px rgba(0, 0, 0, 0.08);
   width: 100%;
   box-sizing: border-box;
+  animation: yellowBorderPulse 2s ease-in-out infinite;
 }
 
 .pickupUnifiedHeader {
@@ -1007,13 +1018,20 @@
   background: #f8fafc;
   border: 1px solid #e2e8f0;
   border-radius: 12px;
-  cursor: default;
-  transition: all 0.15s ease;
+  cursor: pointer;
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
 }
 
 .rateRowCard:hover {
-  border-color: #cbd5e1;
-  background: #f1f5f9;
+  border-color: #F8BF1D;
+  background: #fffdf5;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(248, 191, 29, 0.12);
+}
+
+.rateRowCard:active {
+  transform: translateY(0);
 }
 
 .rateRowLeft {
@@ -1077,38 +1095,60 @@
 }
 
 /* Review Card */
-.reviewCard {
+/* --------------------------------------------------------------------------
+   2. BILLSCRAP APPLICATION FEEDBACK (PRIVATE PRODUCT FEEDBACK)
+   -------------------------------------------------------------------------- */
+.feedbackCard {
   background: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 18px;
-  padding: 1.35rem 1.5rem;
+  padding: 1.25rem 1.35rem;
   display: flex;
   flex-direction: column;
   gap: 0.85rem;
-  box-shadow: 0 10px 30px -4px rgba(0, 0, 0, 0.12), 0 4px 12px -2px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 18px -2px rgba(15, 23, 42, 0.06);
 }
 
-.reviewHeader {
+.feedbackHeader {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
 }
 
-.reviewTitle {
-  font-size: 1.05rem;
-  font-weight: 900;
-  color: #0f172a;
-  margin: 0;
+.feedbackTitleRow {
   display: flex;
   align-items: center;
   gap: 0.45rem;
 }
 
-.reviewSubtitle {
-  font-size: 0.775rem;
+.feedbackTitle {
+  font-size: 1.05rem;
+  font-weight: 900;
+  color: #0f172a;
+  margin: 0;
+}
+
+.feedbackSubtitle {
+  font-size: 0.78rem;
   color: #64748b;
   margin: 0;
   line-height: 1.4;
+}
+
+.feedbackRatingSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  background: #f8fafc;
+  border: 1px solid #edf2f7;
+  border-radius: 12px;
+  padding: 0.65rem 0.85rem;
+}
+
+.feedbackRatingLabel {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #334155;
 }
 
 .starRatingRow {
@@ -1124,57 +1164,344 @@
   padding: 0.2rem;
   color: #cbd5e1;
   transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.starBtn:hover {
+  transform: scale(1.1);
 }
 
 .starActive {
   color: #f59e0b !important;
 }
 
-.reviewTextarea {
-  width: 100%;
-  padding: 0.75rem;
-  font-size: 0.825rem;
-  border: 1.5px solid #e2e8f0;
-  border-radius: 10px;
-  background: #f8fafc;
+.giveFeedbackBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  background: var(--scrap-yellow);
   color: #0f172a;
-  outline: none;
-  resize: vertical;
+  font-size: 0.85rem;
+  font-weight: 900;
+  padding: 0.65rem 1.25rem;
+  border-radius: 10px;
+  border: 1.5px solid #e5ab0a;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  width: 100%;
+  box-shadow: 0 2px 8px rgba(248, 191, 29, 0.25);
+}
+
+.giveFeedbackBtn:hover {
+  background: #e5ab0a;
+  transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   FEEDBACK MODAL / BOTTOM SHEET (PRIVATE & CONFIDENTIAL)
+   ========================================================================== */
+.feedbackModalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
   box-sizing: border-box;
 }
 
-.reviewTextarea::placeholder {
-  color: #94a3b8;
+.feedbackModalContainer {
+  background: #ffffff;
+  width: 100%;
+  max-width: 560px;
+  border-radius: 20px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+  animation: modalPop 0.2s ease-out;
+  box-sizing: border-box;
 }
 
-.reviewTextarea:focus {
-  border-color: #f59e0b;
+@keyframes modalPop {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.feedbackModalHeader {
+  padding: 1.15rem 1.35rem;
+  border-bottom: 1px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   background: #ffffff;
 }
 
-.reviewActionRow {
+.feedbackModalTitleGroup {
   display: flex;
-  justify-content: flex-end;
-  margin-top: 0.5rem;
+  flex-direction: column;
+  gap: 2px;
 }
 
-.submitReviewBtn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  background: var(--scrap-yellow);
-  color: #0f172a;
-  font-size: 0.8rem;
+.feedbackModalTitle {
+  font-size: 1.15rem;
   font-weight: 900;
-  padding: 0.55rem 1.15rem;
+  color: #0f172a;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.feedbackModalSubtitle {
+  font-size: 0.775rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.feedbackModalCloseBtn {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
   border-radius: 8px;
-  border: 1.5px solid #e5ab0a;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
   cursor: pointer;
   transition: all 0.15s ease;
 }
 
-.submitReviewBtn:hover {
+.feedbackModalCloseBtn:hover {
+  background: #fee2e2;
+  border-color: #fca5a5;
+  color: #dc2626;
+}
+
+.feedbackModalBody {
+  padding: 1.25rem 1.35rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+  box-sizing: border-box;
+}
+
+.feedbackPrivateBanner {
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  border-radius: 10px;
+  padding: 0.65rem 0.85rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: #065f46;
+  line-height: 1.45;
+}
+
+.questionGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.questionLabel {
+  font-size: 0.825rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.optionsPillsWrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.optionPillBtn {
+  padding: 0.35rem 0.75rem;
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.optionPillBtn:hover {
+  border-color: #F8BF1D;
+  background: #fffdf7;
+  color: #0f172a;
+}
+
+.optionPillBtnActive {
+  background: #F8BF1D;
+  border-color: #F8BF1D;
+  color: #15171B;
+  font-weight: 800;
+  box-shadow: 0 2px 6px rgba(248, 191, 29, 0.25);
+}
+
+.questionTextarea {
+  width: 100%;
+  padding: 0.65rem 0.8rem;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 0.825rem;
+  color: #0f172a;
+  outline: none;
+  resize: vertical;
+  box-sizing: border-box;
+  background: #ffffff;
+  font-family: inherit;
+  transition: border-color 0.15s ease;
+}
+
+.questionTextarea::placeholder {
+  color: #94a3b8;
+}
+
+.questionTextarea:focus {
+  border-color: #F8BF1D;
+  box-shadow: 0 0 0 3px rgba(248, 191, 29, 0.18);
+}
+
+.feedbackModalFooter {
+  padding: 0.85rem 1.35rem;
+  border-top: 1px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  background: #fafafa;
+}
+
+.feedbackCancelBtn {
+  padding: 0.6rem 1.15rem;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 0.825rem;
+  font-weight: 700;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.feedbackCancelBtn:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.feedbackSubmitBtn {
+  padding: 0.6rem 1.35rem;
+  background: var(--scrap-yellow);
+  border: 1.5px solid #e5ab0a;
+  border-radius: 8px;
+  font-size: 0.825rem;
+  font-weight: 900;
+  color: #0f172a;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.15s ease;
+  box-shadow: 0 2px 6px rgba(248, 191, 29, 0.25);
+}
+
+.feedbackSubmitBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.feedbackSubmitBtn:not(:disabled):hover {
   background: #e5ab0a;
+  transform: translateY(-1px);
+}
+
+/* Success View */
+.feedbackSuccessView {
+  padding: 3rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0.85rem;
+}
+
+.successIconWrap {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #059669;
+}
+
+.successTitle {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: #0f172a;
+  margin: 0;
+}
+
+.successDesc {
+  font-size: 0.85rem;
+  color: #64748b;
+  max-width: 360px;
+  margin: 0;
+  line-height: 1.45;
+}
+
+.successDoneBtn {
+  margin-top: 0.5rem;
+  padding: 0.6rem 1.5rem;
+  background: #0f172a;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.successDoneBtn:hover {
+  background: #1e293b;
+}
+
+@media (max-width: 640px) {
+  .feedbackModalOverlay {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .feedbackModalContainer {
+    max-height: 88vh;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
 }
 
 /* --------------------------------------------------------------------------
@@ -1929,7 +2256,7 @@
 
 @media (max-width: 768px) {
   .pageContainer {
-    padding: 0.75rem 0.85rem 5rem 0.85rem;
+    padding: 0.75rem 0.85rem 1rem 0.85rem;
     gap: 1rem;
     width: 100% !important;
     max-width: 100vw !important;

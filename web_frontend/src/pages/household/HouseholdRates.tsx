@@ -137,14 +137,49 @@ export function HouseholdRates() {
       setPrices(priceData);
       setCategories(catData);
       if (priceData.length > 0) {
-        const initialCat = categoryParam || priceData[0].categoryId;
-        const initialItem = itemParam || priceData.find((p) => p.categoryId === initialCat)?.id || priceData[0].id;
+        const foundItem = itemParam
+          ? priceData.find(
+              (p) =>
+                p.id.toLowerCase() === itemParam.toLowerCase() ||
+                p.name.toLowerCase() === itemParam.toLowerCase() ||
+                p.subcategory?.toLowerCase() === itemParam.toLowerCase()
+            )
+          : undefined;
+
+        const initialCat = categoryParam || foundItem?.categoryId || priceData[0].categoryId;
+        const initialItem = foundItem
+          ? foundItem.id
+          : itemParam || priceData.find((p) => p.categoryId === initialCat)?.id || priceData[0].id;
+
         setSelectedCatId(initialCat);
         setSelectedMaterialId(initialItem);
       }
       setLoading(false);
     });
   }, [categoryParam, itemParam]);
+
+  // Reactive sync if URL query parameters change while on the rates page
+  useEffect(() => {
+    if (prices.length === 0) return;
+    if (itemParam) {
+      const foundItem = prices.find(
+        (p) =>
+          p.id.toLowerCase() === itemParam.toLowerCase() ||
+          p.name.toLowerCase() === itemParam.toLowerCase() ||
+          p.subcategory?.toLowerCase() === itemParam.toLowerCase()
+      );
+      if (foundItem) {
+        setSelectedCatId(categoryParam || foundItem.categoryId);
+        setSelectedMaterialId(foundItem.id);
+        return;
+      }
+    }
+    if (categoryParam) {
+      setSelectedCatId(categoryParam);
+      const firstInCat = prices.find((p) => p.categoryId === categoryParam);
+      if (firstInCat) setSelectedMaterialId(firstInCat.id);
+    }
+  }, [categoryParam, itemParam, prices]);
 
   const isTamil = i18n.language === 'ta';
 

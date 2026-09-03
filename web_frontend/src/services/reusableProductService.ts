@@ -363,3 +363,167 @@ export function markProductUnavailable(productId: string): void {
     prod.status = 'removed';
   }
 }
+
+/* ==========================================================================
+   REUSABLE CART & MERCHANT CONFIRMATION / REJECTION TRACKING
+   ========================================================================== */
+
+export type MerchantConfirmationStatus = 'confirmed' | 'rejected' | 'pending';
+
+export interface ReusableCartItem {
+  id: string;
+  productId: string;
+  productName: string;
+  category: string;
+  priceFormatted: string;
+  image: string;
+  merchantName: string;
+  merchantBusinessName: string;
+  merchantArea: string;
+  merchantMobile: string;
+  requestedAt: string;
+  status: MerchantConfirmationStatus;
+  statusReason: string;
+}
+
+const CART_STORAGE_KEY = 'billscrap_reusable_cart_v1';
+
+const INITIAL_CART_ITEMS: ReusableCartItem[] = [
+  {
+    id: 'cart-1',
+    productId: 'prod-1',
+    productName: 'Hero Sprint Cycle',
+    category: 'Cycles',
+    priceFormatted: '₹3,500',
+    image: '/scrap-battery.png',
+    merchantName: 'Ramesh Traders',
+    merchantBusinessName: 'Ramesh Scrap & Reusable Hub',
+    merchantArea: 'Guindy, Chennai',
+    merchantMobile: '+91 98765 43211',
+    requestedAt: 'Today, 10:30 AM',
+    status: 'confirmed',
+    statusReason: 'Merchant confirmed item is reserved and ready at the yard. You can visit Guindy to inspect and collect it.',
+  },
+  {
+    id: 'cart-2',
+    productId: 'prod-5',
+    productName: 'Voltas Split AC (1.5 Ton, 3 Star)',
+    category: 'Appliances',
+    priceFormatted: '₹15,000',
+    image: '/scrap-ac.png',
+    merchantName: 'Selvam Recyclers',
+    merchantBusinessName: 'Selvam Metal Yards',
+    merchantArea: 'Padi, Chennai',
+    merchantMobile: '+91 97910 88776',
+    requestedAt: 'Yesterday, 4:15 PM',
+    status: 'rejected',
+    statusReason: 'Item sold to a walk-in buyer at the yard. DO NOT visit Padi for this item.',
+  },
+  {
+    id: 'cart-3',
+    productId: 'prod-4',
+    productName: 'Industrial Heavy Duty Metal Rack',
+    category: 'Furniture',
+    priceFormatted: '₹6,500',
+    image: '/scrap-quality-steel.png',
+    merchantName: 'Ramesh Traders',
+    merchantBusinessName: 'Ramesh Scrap & Reusable Hub',
+    merchantArea: 'Guindy, Chennai',
+    merchantMobile: '+91 98765 43211',
+    requestedAt: 'Today, 1:45 PM',
+    status: 'pending',
+    statusReason: 'Waiting for Ramesh Traders to confirm stock availability. Please do not visit Guindy until confirmed.',
+  },
+];
+
+function loadCartFromStorage(): ReusableCartItem[] {
+  if (typeof window === 'undefined') return INITIAL_CART_ITEMS;
+  try {
+    const raw = localStorage.getItem(CART_STORAGE_KEY);
+    if (!raw) {
+      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(INITIAL_CART_ITEMS));
+      return INITIAL_CART_ITEMS;
+    }
+    return JSON.parse(raw);
+  } catch (e) {
+    console.error('Error loading reusable cart from storage:', e);
+    return INITIAL_CART_ITEMS;
+  }
+}
+
+function saveCartToStorage(items: ReusableCartItem[]) {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
+  } catch (e) {
+    console.error('Error saving reusable cart to storage:', e);
+  }
+}
+
+/**
+ * Get all reusable cart items
+ */
+export function getReusableCart(): ReusableCartItem[] {
+  return loadCartFromStorage();
+}
+
+/**
+ * Check if a product is in cart
+ */
+export function isProductInCart(productId: string): boolean {
+  const items = loadCartFromStorage();
+  return items.some((i) => i.productId === productId);
+}
+
+/**
+ * Get cart item for product ID
+ */
+export function getCartItemByProductId(productId: string): ReusableCartItem | undefined {
+  const items = loadCartFromStorage();
+  return items.find((i) => i.productId === productId);
+}
+
+/**
+ * Add a product to the cart (defaults to 'pending' confirmation)
+ */
+export function addToReusableCart(product: HouseholdProductItem): ReusableCartItem {
+  const items = loadCartFromStorage();
+  const existing = items.find((i) => i.productId === product.id);
+  if (existing) {
+    return existing;
+  }
+
+  const now = new Date();
+  const timeFormatted = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+  const newItem: ReusableCartItem = {
+    id: `cart-${Date.now()}`,
+    productId: product.id,
+    productName: product.name,
+    category: product.category,
+    priceFormatted: product.priceFormatted,
+    image: product.image,
+    merchantName: product.merchant.name,
+    merchantBusinessName: product.merchant.businessName,
+    merchantArea: product.area,
+    merchantMobile: product.merchant.mobile,
+    requestedAt: `Today, ${timeFormatted}`,
+    status: 'pending',
+    statusReason: `Awaiting ${product.merchant.name} confirmation. Please do not visit ${product.area} until confirmed.`,
+  };
+
+  const updated = [newItem, ...items];
+  saveCartToStorage(updated);
+  return newItem;
+}
+
+/**
+ * Remove an item from the cart
+ */
+export function removeFromReusableCart(cartItemId: string): ReusableCartItem[] {
+  const items = loadCartFromStorage();
+  const updated = items.filter((i) => i.id !== cartItemId);
+  saveCartToStorage(updated);
+  return updated;
+}
+
