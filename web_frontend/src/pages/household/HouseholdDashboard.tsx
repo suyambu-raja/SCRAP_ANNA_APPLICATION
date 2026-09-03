@@ -296,6 +296,30 @@ const PROMO_SLIDES: PromoSlide[] = [
   },
 ];
 
+interface HowItWorksStep {
+  step: number;
+  title: string;
+  desc: string;
+}
+
+const HOW_IT_WORKS_STEPS: HowItWorksStep[] = [
+  {
+    step: 1,
+    title: 'Post Scrap',
+    desc: 'Tell us what you have',
+  },
+  {
+    step: 2,
+    title: 'We Pickup',
+    desc: 'Executive picks it up',
+  },
+  {
+    step: 3,
+    title: 'Get Paid',
+    desc: 'Instant payment at your doorstep',
+  },
+];
+
 function useCountUp(target: number, duration: number = 1000, decimals: number = 0) {
   const [count, setCount] = useState(0);
 
@@ -337,23 +361,36 @@ export function HouseholdDashboard() {
 
   const handleStatsScroll = useCallback(() => {
     if (!statsTrackRef.current) return;
-    const { scrollLeft, clientWidth } = statsTrackRef.current;
-    if (clientWidth > 0) {
-      const cardWidth = clientWidth * 0.8;
-      const index = Math.round(scrollLeft / cardWidth);
-      setActiveStatDot(Math.min(Math.max(index, 0), 2));
+    const track = statsTrackRef.current;
+    const { scrollLeft } = track;
+    const cards = track.children;
+    if (cards.length > 0) {
+      let closestIdx = 0;
+      let minDiff = Infinity;
+      for (let i = 0; i < cards.length; i++) {
+        const card = cards[i] as HTMLElement;
+        const diff = Math.abs(card.offsetLeft - track.offsetLeft - scrollLeft);
+        if (diff < minDiff) {
+          minDiff = diff;
+          closestIdx = i;
+        }
+      }
+      setActiveStatDot(Math.min(Math.max(closestIdx, 0), cards.length - 1));
     }
   }, []);
 
   const scrollToStatCard = (index: number) => {
     if (!statsTrackRef.current) return;
-    const clientWidth = statsTrackRef.current.clientWidth;
-    const cardWidth = clientWidth * 0.8;
-    statsTrackRef.current.scrollTo({
-      left: index * cardWidth,
-      behavior: 'smooth',
-    });
-    setActiveStatDot(index);
+    const track = statsTrackRef.current;
+    const cards = track.children;
+    if (cards[index]) {
+      const targetCard = cards[index] as HTMLElement;
+      track.scrollTo({
+        left: targetCard.offsetLeft - track.offsetLeft,
+        behavior: 'smooth',
+      });
+      setActiveStatDot(index);
+    }
   };
 
   // Dynamic Initials (e.g. "Arun Kumar" -> "AK")
@@ -399,12 +436,17 @@ export function HouseholdDashboard() {
   const startAutoSlide = useCallback(() => {
     if (autoSlideTimerRef.current) clearInterval(autoSlideTimerRef.current);
     autoSlideTimerRef.current = setInterval(() => {
-      if (!isInteractingRef.current) {
-        setIsSliderTransitioning(true);
-        setSliderIndex((prev) => prev + 1);
+      if (!isInteractingRef.current && !document.hidden) {
+        setSliderIndex((prev) => {
+          if (prev >= carouselSlides.length - 1) {
+            return 1;
+          }
+          setIsSliderTransitioning(true);
+          return prev + 1;
+        });
       }
     }, 4500);
-  }, []);
+  }, [carouselSlides.length]);
 
   const stopAutoSlide = useCallback(() => {
     if (autoSlideTimerRef.current) {
@@ -429,11 +471,70 @@ export function HouseholdDashboard() {
     };
   }, [startAutoSlide, stopAutoSlide]);
 
+  // Handle visibility change (pause timer when app closed/minimized, safely reset when reopened)
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        stopAutoSlide();
+        if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+      } else {
+        // App reopened / focused: ensure sliderIndex is strictly inside bounds
+        setSliderIndex((prev) => {
+          if (prev >= carouselSlides.length - 1 || prev <= 0) {
+            setIsSliderTransitioning(false);
+            return 1;
+          }
+          return prev;
+        });
+        startAutoSlide();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('focus', handleVisibilityChange);
+    window.addEventListener('blur', handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('focus', handleVisibilityChange);
+      window.removeEventListener('blur', handleVisibilityChange);
+    };
+  }, [startAutoSlide, stopAutoSlide, carouselSlides.length]);
+
+  // Watchdog timer: If transitionend doesn't fire (e.g. background tab or quick unlock), safely wrap
+  useEffect(() => {
+    if (sliderIndex >= carouselSlides.length - 1) {
+      const timer = setTimeout(() => {
+        setIsSliderTransitioning(false);
+        setSliderIndex(1);
+      }, 650);
+      return () => clearTimeout(timer);
+    } else if (sliderIndex <= 0) {
+      const timer = setTimeout(() => {
+        setIsSliderTransitioning(false);
+        setSliderIndex(PROMO_SLIDES.length);
+      }, 650);
+      return () => clearTimeout(timer);
+    }
+  }, [sliderIndex, carouselSlides.length]);
+
+  // Re-enable smooth transition after an instant wrap
+  useEffect(() => {
+    if (!isSliderTransitioning) {
+      const raf = requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setIsSliderTransitioning(true);
+        });
+      });
+      return () => cancelAnimationFrame(raf);
+    }
+  }, [isSliderTransitioning]);
+
   const handleSlideTransitionEnd = () => {
-    if (sliderIndex === carouselSlides.length - 1) {
+    if (sliderIndex >= carouselSlides.length - 1) {
       setIsSliderTransitioning(false);
       setSliderIndex(1);
-    } else if (sliderIndex === 0) {
+    } else if (sliderIndex <= 0) {
       setIsSliderTransitioning(false);
       setSliderIndex(PROMO_SLIDES.length);
     }
@@ -492,7 +593,8 @@ export function HouseholdDashboard() {
     resetResumeTimer();
   };
 
-  const activeDotIndex = (sliderIndex - 1 + PROMO_SLIDES.length) % PROMO_SLIDES.length;
+  const safeSliderIndex = Math.min(Math.max(sliderIndex, 0), carouselSlides.length - 1);
+  const activeDotIndex = (safeSliderIndex - 1 + PROMO_SLIDES.length) % PROMO_SLIDES.length;
 
   // Address State & Bottom Sheet State
   const [savedAddresses, setSavedAddresses] = useState<DeliveryAddress[]>(INITIAL_DELIVERY_ADDRESSES);
@@ -510,6 +612,57 @@ export function HouseholdDashboard() {
   const [hoverRating, setHoverRating] = useState(0);
   const [reviewText, setReviewText] = useState('');
   const [submittedReview, setSubmittedReview] = useState(false);
+
+  // How it Works Single-Step Carousel Loop
+  const [howStepIndex, setHowStepIndex] = useState(0);
+  const [isHowTransitioning, setIsHowTransitioning] = useState(true);
+  const howStepTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const carouselSteps = [...HOW_IT_WORKS_STEPS, HOW_IT_WORKS_STEPS[0]];
+
+  const startHowStepTimer = useCallback(() => {
+    if (howStepTimerRef.current) clearInterval(howStepTimerRef.current);
+    howStepTimerRef.current = setInterval(() => {
+      if (!document.hidden) {
+        setIsHowTransitioning(true);
+        setHowStepIndex((prev) => {
+          if (prev >= carouselSteps.length - 1) return 1;
+          return prev + 1;
+        });
+      }
+    }, 3500);
+  }, [carouselSteps.length]);
+
+  useEffect(() => {
+    startHowStepTimer();
+    return () => {
+      if (howStepTimerRef.current) clearInterval(howStepTimerRef.current);
+    };
+  }, [startHowStepTimer]);
+
+  const handleHowTransitionEnd = () => {
+    if (howStepIndex >= carouselSteps.length - 1) {
+      setIsHowTransitioning(false);
+      setHowStepIndex(0);
+    }
+  };
+
+  useEffect(() => {
+    if (!isHowTransitioning) {
+      const raf = requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setIsHowTransitioning(true);
+        });
+      });
+      return () => cancelAnimationFrame(raf);
+    }
+  }, [isHowTransitioning]);
+
+  const handleHowDotClick = (dotIdx: number) => {
+    setIsHowTransitioning(true);
+    setHowStepIndex(dotIdx);
+    startHowStepTimer();
+  };
 
   // Post Scrap Modal State
   const [isBookModalOpen, setIsBookModalOpen] = useState(false);
@@ -683,8 +836,8 @@ export function HouseholdDashboard() {
           onTransitionEnd={handleSlideTransitionEnd}
           style={{
             transform: isSliderDragging
-              ? `translateX(calc(-${sliderIndex * 100}% + ${sliderDragOffset}px))`
-              : `translateX(-${sliderIndex * 100}%)`,
+              ? `translateX(calc(-${safeSliderIndex * 100}% + ${sliderDragOffset}px))`
+              : `translateX(-${safeSliderIndex * 100}%)`,
             transition: isSliderTransitioning
               ? 'transform 600ms cubic-bezier(0.25, 1, 0.5, 1)'
               : 'none',
@@ -706,6 +859,7 @@ export function HouseholdDashboard() {
                     alt={slide.alt || 'Promotional Banner'}
                     className={styles.promoImageFull}
                     draggable={false}
+                    loading="eager"
                   />
                   <Link
                     to={slide.link}
@@ -778,7 +932,7 @@ export function HouseholdDashboard() {
                 <Calendar size={22} strokeWidth={2.4} />
               </div>
               <div className={styles.statTopRightBadge}>
-                <Clock size={13} color="#8A6B14" strokeWidth={2.4} />
+                <Clock size={13} color="#1E3A20" strokeWidth={2.4} />
                 <span>Today, 04:15 PM</span>
               </div>
             </div>
@@ -803,7 +957,7 @@ export function HouseholdDashboard() {
                 <Recycle size={22} strokeWidth={2.4} />
               </div>
               <div className={styles.statTopRightBadge}>
-                <UserIcon size={13} color="#8A6B14" strokeWidth={2.4} />
+                <UserIcon size={13} color="#1E3A20" strokeWidth={2.4} />
                 <span>12 Pickups</span>
               </div>
             </div>
@@ -830,7 +984,7 @@ export function HouseholdDashboard() {
                 <IndianRupee size={22} strokeWidth={2.6} />
               </div>
               <div className={styles.statTopRightBadge}>
-                <Calendar size={13} color="#8A6B14" strokeWidth={2.4} />
+                <Calendar size={13} color="#1E3A20" strokeWidth={2.4} />
                 <span>This Month</span>
               </div>
             </div>
@@ -944,36 +1098,47 @@ export function HouseholdDashboard() {
             </div>
           </div>
 
-          {/* How It Works Card */}
+          {/* How It Works Card - Single Step Transition */}
           <div className={styles.howItWorksCard}>
-            <h3 className={styles.howItWorksTitle}>How it works</h3>
-            <div className={styles.howItWorksStepsRow}>
-              <div className={styles.howStep}>
-                <div className={styles.howNumCircle}>1</div>
-                <div className={styles.howTextCol}>
-                  <strong>Post Scrap</strong>
-                  <span>Tell us what you have</span>
-                </div>
+            <div className={styles.howItWorksHeader}>
+              <h3 className={styles.howItWorksTitle}>How it works</h3>
+              <div className={styles.howStepDots}>
+                {HOW_IT_WORKS_STEPS.map((_, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    className={`${styles.howDot} ${
+                      idx === (howStepIndex % HOW_IT_WORKS_STEPS.length)
+                        ? styles.howDotActive
+                        : ''
+                    }`}
+                    onClick={() => handleHowDotClick(idx)}
+                    aria-label={`Step ${idx + 1}`}
+                  />
+                ))}
               </div>
+            </div>
 
-              <span className={styles.howArrow}>→</span>
-
-              <div className={styles.howStep}>
-                <div className={styles.howNumCircle}>2</div>
-                <div className={styles.howTextCol}>
-                  <strong>We Pickup</strong>
-                  <span>Executive picks it up</span>
-                </div>
-              </div>
-
-              <span className={styles.howArrow}>→</span>
-
-              <div className={styles.howStep}>
-                <div className={styles.howNumCircle}>3</div>
-                <div className={styles.howTextCol}>
-                  <strong>Get Paid</strong>
-                  <span>Instant payment</span>
-                </div>
+            <div className={styles.howStepViewport}>
+              <div
+                className={styles.howStepTrack}
+                onTransitionEnd={handleHowTransitionEnd}
+                style={{
+                  transform: `translateX(-${howStepIndex * 100}%)`,
+                  transition: isHowTransitioning
+                    ? 'transform 450ms cubic-bezier(0.25, 1, 0.5, 1)'
+                    : 'none',
+                }}
+              >
+                {carouselSteps.map((item, idx) => (
+                  <div key={`${item.step}-${idx}`} className={styles.howSingleStepSlide}>
+                    <div className={styles.howNumCircle}>{item.step}</div>
+                    <div className={styles.howTextCol}>
+                      <strong>{item.title}</strong>
+                      <span>{item.desc}</span>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

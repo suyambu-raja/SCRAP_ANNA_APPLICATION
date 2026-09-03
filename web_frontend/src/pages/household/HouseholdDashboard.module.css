@@ -4,8 +4,8 @@
 
 :root {
   --scrap-yellow: #F8BF1D;
-  --scrap-graphite: #2B2F38;
-  --scrap-card-bg: #2B2F38;
+  --scrap-graphite: #20242D;
+  --scrap-card-bg: #20242D;
   --scrap-card-inner: #22262E;
   --scrap-border: #3A404C;
   --scrap-border-hover: #505869;
@@ -148,6 +148,7 @@
   user-select: none;
   cursor: grab;
   box-sizing: border-box;
+  background: #111215;
 }
 
 .heroSliderWrapper:active {
@@ -180,7 +181,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #FAF5E8;
+  background: #111215;
   border-radius: 20px;
   overflow: hidden;
 }
@@ -785,7 +786,7 @@
   box-shadow: 0 0 0 4px rgba(248, 191, 29, 0.25);
 }
 .miniStepActive span {
-  color: #b45309;
+  color: #1A381C;
   font-weight: 800;
 }
 
@@ -824,11 +825,20 @@
   background: var(--scrap-graphite);
   border: 1px solid var(--scrap-border);
   border-radius: 18px;
-  padding: 1.25rem 1.35rem;
+  padding: 1.15rem 1.35rem;
   display: flex;
   flex-direction: column;
   gap: 0.85rem;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+  position: relative;
+}
+
+.howItWorksHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
 }
 
 .howItWorksTitle {
@@ -836,58 +846,88 @@
   font-weight: 900;
   color: #ffffff;
   margin: 0;
+  letter-spacing: -0.01em;
 }
 
-.howItWorksStepsRow {
+.howStepDots {
   display: flex;
-  flex-direction: row;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
+  gap: 5px;
+}
+
+.howDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.25);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.howDotActive {
+  width: 18px;
+  background: var(--scrap-yellow);
+  box-shadow: 0 0 6px rgba(248, 191, 29, 0.5);
+}
+
+.howStepViewport {
   width: 100%;
+  overflow: hidden;
+  position: relative;
 }
 
-.howStep {
+.howStepTrack {
+  display: flex;
+  width: 100%;
+  will-change: transform;
+}
+
+.howSingleStepSlide {
+  min-width: 100%;
+  width: 100%;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
-  gap: 0.55rem;
-  flex: 1;
+  gap: 0.85rem;
+  box-sizing: border-box;
 }
 
 .howNumCircle {
-  width: 28px;
-  height: 28px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   border: 1.5px solid var(--scrap-yellow);
   color: var(--scrap-yellow);
   font-weight: 900;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  background: rgba(248, 191, 29, 0.1);
 }
 
 .howTextCol {
   display: flex;
   flex-direction: column;
-  gap: 1px;
+  gap: 2px;
+  min-width: 0;
 }
 
 .howTextCol strong {
-  font-size: 0.825rem;
+  font-size: 0.95rem;
   color: #ffffff;
+  font-weight: 800;
+  letter-spacing: -0.01em;
 }
 
 .howTextCol span {
-  font-size: 0.725rem;
+  font-size: 0.8rem;
   color: var(--scrap-text-muted);
-}
-
-.howArrow {
-  font-size: 1.2rem;
-  color: var(--scrap-text-dim);
-  font-weight: 700;
+  font-weight: 500;
+  line-height: 1.35;
 }
 
 /* Market Prices Widget */
@@ -938,7 +978,7 @@
 }
 
 .exploreAllLink:hover {
-  color: #b45309;
+  color: #1A381C;
 }
 
 .rateRowsList {
@@ -2015,10 +2055,11 @@
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    gap: 0;
-    padding: 0.25rem 0 0.5rem 0;
+    gap: 0.85rem;
+    padding: 0.25rem 0.15rem 0.5rem 0.15rem;
     width: 100%;
     box-sizing: border-box;
+    scroll-padding: 0.15rem;
   }
 
   .statsCarouselTrack::-webkit-scrollbar {
@@ -2084,50 +2125,32 @@
   }
 
   .howItWorksCard {
-    padding: 0.95rem 1rem;
+    padding: 0.95rem 1.15rem;
     width: 100%;
     box-sizing: border-box;
+    border-radius: 16px;
   }
 
-  .howItWorksStepsRow {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.25rem;
-    width: 100%;
-    box-sizing: border-box;
+  .howItWorksTitle {
+    font-size: 0.95rem;
   }
 
-  .howStep {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-    flex: 1;
-    min-width: 0;
+  .howSingleStepSlide {
+    gap: 0.75rem;
   }
 
   .howNumCircle {
-    width: 24px;
-    height: 24px;
-    font-size: 0.72rem;
-    border-width: 1px;
-    flex-shrink: 0;
-  }
-
-  .howTextCol {
-    min-width: 0;
+    width: 30px;
+    height: 30px;
+    font-size: 0.82rem;
   }
 
   .howTextCol strong {
-    font-size: 0.72rem;
-    white-space: normal;
-    word-break: break-word;
+    font-size: 0.88rem;
   }
 
   .howTextCol span {
-    font-size: 0.6rem;
-    line-height: 1.15;
+    font-size: 0.75rem;
   }
 
   .mainContentGrid,

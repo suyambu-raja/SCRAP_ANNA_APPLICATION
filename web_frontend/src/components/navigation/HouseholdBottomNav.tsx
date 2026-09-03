@@ -11,6 +11,12 @@ import styles from './HouseholdBottomNav.module.css';
 export function HouseholdBottomNav() {
   const location = useLocation();
 
+  // In the Post Scrap multi-step wizard, hide global bottom navigation
+  // so the dedicated step action bar sits cleanly docked without overlap
+  if (location.pathname.includes('/household/post-scrap')) {
+    return null;
+  }
+
   const navItems = [
     {
       id: 'dashboard',

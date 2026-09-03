@@ -320,14 +320,14 @@ export function HouseholdProfile() {
               </div>
 
               {/* Request Additional Role button */}
-              <div style={{ padding: '0.85rem', background: '#FFFDF5', borderRadius: '10px', border: '1.5px solid #FDE68A', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <div style={{ padding: '0.85rem', background: 'linear-gradient(180deg, #FFF8DC 0%, #FFEEBA 100%)', borderRadius: '12px', border: '1.5px solid #FFDE7A', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
-                  <Store size={16} color="#D97706" />
-                  <span style={{ fontSize: '0.84rem', fontWeight: 750, color: '#92400E' }}>
+                  <Store size={16} color="#1E3A20" />
+                  <span style={{ fontSize: '0.84rem', fontWeight: 800, color: '#1A381C' }}>
                     Need Merchant or Industry Profile?
                   </span>
                 </div>
-                <p style={{ fontSize: '0.75rem', color: '#78350F', margin: 0, lineHeight: 1.4 }}>
+                <p style={{ fontSize: '0.75rem', color: '#234A28', margin: 0, lineHeight: 1.4 }}>
                   Apply for a verified Merchant or Industry account under your mobile number.
                 </p>
                 <button

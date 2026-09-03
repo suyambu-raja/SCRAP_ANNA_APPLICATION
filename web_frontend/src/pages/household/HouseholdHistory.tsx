@@ -17,6 +17,7 @@ import {
   ChevronRight,
 } from 'lucide-react';
 import styles from './HouseholdHistory.module.css';
+import { useBodyScrollLock } from '../../hooks/useBodyScrollLock';
 
 interface OrderItemSummary {
   material: string;
@@ -149,6 +150,9 @@ export function HouseholdHistory() {
   const [statusFilter, setStatusFilter] = useState<'ALL' | 'COMPLETED' | 'CANCELLED'>('ALL');
   const [selectedOrder, setSelectedOrder] = useState<OrderHistoryRecord | null>(null);
 
+  // Prevent background scrolling when receipt modal is open
+  useBodyScrollLock(Boolean(selectedOrder));
+
   // Filter Data
   const filteredData = useMemo(() => {
     return HISTORY_DATA.filter((order) => {
@@ -251,7 +255,11 @@ export function HouseholdHistory() {
 
   return (
     <div className={styles.pageContainer}>
-      {/* 1. Header with Clock Icon */}
+      {/* ===================================================================
+         DESKTOP HISTORY VIEW (UNTOUCHED, PRESERVED 100%)
+         =================================================================== */}
+      <div className={styles.desktopHistoryView}>
+        {/* 1. Header with Clock Icon */}
       <div className={styles.headerBlock}>
         <div className={styles.headerIconCircle}>
           <Clock size={24} />
@@ -408,6 +416,174 @@ export function HouseholdHistory() {
           </button>
         </div>
       )}
+      </div> {/* /.desktopHistoryView */}
+
+      {/* ===================================================================
+         MOBILE HISTORY VIEW (MOBILE-ONLY REFINED UI)
+         =================================================================== */}
+      <div className={styles.mobileHistoryView}>
+        {/* 1. Compact Headline */}
+        <div className={styles.mobileHeaderBlock}>
+          <h1 className={styles.mobileMainTitle}>History</h1>
+          <p className={styles.mobileMainSubtitle}>View your past scrap pickups.</p>
+        </div>
+
+        {/* 2. Filter Row: All, Completed, Cancelled */}
+        <div className={styles.mobileFiltersRow}>
+          {[
+            { id: 'ALL', label: 'All' },
+            { id: 'COMPLETED', label: 'Completed' },
+            { id: 'CANCELLED', label: 'Cancelled' },
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              type="button"
+              className={`${styles.mobileFilterPillBtn} ${
+                statusFilter === tab.id ? styles.mobileFilterPillActive : ''
+              }`}
+              onClick={() => setStatusFilter(tab.id as any)}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
+        {/* 3. Full-width Search Bar */}
+        <div className={styles.mobileSearchBoxWrap}>
+          <Search size={16} className={styles.mobileSearchIcon} />
+          <input
+            type="text"
+            className={styles.mobileSearchInput}
+            placeholder="Search orders or scrap"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          {searchTerm && (
+            <button
+              type="button"
+              className={styles.mobileClearSearchBtn}
+              onClick={() => setSearchTerm('')}
+              aria-label="Clear search"
+            >
+              <X size={15} />
+            </button>
+          )}
+        </div>
+
+        {/* 4. History Cards List */}
+        <div className={styles.mobileHistoryCardsList}>
+          {filteredData.map((order) => (
+            <div
+              key={order.id}
+              className={styles.mobileHistoryCard}
+              onClick={() => setSelectedOrder(order)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => e.key === 'Enter' && setSelectedOrder(order)}
+            >
+              {/* Section 1: Top Row */}
+              <div className={styles.mobileCardTopRow}>
+                <div className={styles.mobileDateCol}>
+                  <Calendar size={13} className={styles.mobileDateIcon} />
+                  <span className={styles.mobileDateText}>{order.dateTime}</span>
+                </div>
+                <div className={styles.mobileTopRightBadges}>
+                  <span className={styles.mobileOrderIdBadge}>#{order.orderNumber}</span>
+                  {order.status === 'completed' ? (
+                    <span className={styles.mobileStatusBadgeGreen}>
+                      <CheckCircle2 size={11} />
+                      <span>Completed</span>
+                    </span>
+                  ) : (
+                    <span className={styles.mobileStatusBadgeRed}>
+                      <AlertCircle size={11} />
+                      <span>Cancelled</span>
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              {/* Section 2: Scrap Summary */}
+              <div className={styles.mobileScrapSummaryRow}>
+                <div className={styles.mobileThumbsGroup}>
+                  {order.items.slice(0, 3).map((item, idx) => (
+                    <img
+                      key={idx}
+                      src={item.imageUrl}
+                      alt={item.material}
+                      className={styles.mobileThumbImg}
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = '/household-scrap-bundle.jpg';
+                      }}
+                    />
+                  ))}
+                </div>
+
+                <div className={styles.mobileScrapTextCol}>
+                  <h3 className={styles.mobileScrapMaterialsTitle}>
+                    {order.items.map((i) => i.material).join(', ')}
+                  </h3>
+                  <div className={styles.mobileScrapMetricsRow}>
+                    <span className={styles.mobileWeightText}>
+                      Total: {order.totalWeightKg} kg
+                    </span>
+                    <span className={styles.mobileItemsCountText}>
+                      ({order.items.length} {order.items.length === 1 ? 'item' : 'items'})
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Section 3: Executive Area */}
+              <div className={styles.mobileExecutiveBox}>
+                <div className={styles.mobileExecutiveLeft}>
+                  <span className={styles.mobileExecutiveLabel}>EXECUTIVE</span>
+                  <span className={styles.mobileExecutiveName}>
+                    {order.executiveName || 'Assigned Driver'}
+                  </span>
+                </div>
+                <div className={styles.mobilePayoutRight}>
+                  <span className={styles.mobilePayoutLabel}>
+                    {order.status === 'completed' ? 'PAYOUT' : 'ESTIMATE'}
+                  </span>
+                  <span className={styles.mobilePayoutAmount}>
+                    ₹{order.amount.toFixed(2)}
+                  </span>
+                </div>
+              </div>
+
+              {/* Section 4: Action */}
+              <div className={styles.mobileCardActionRow}>
+                <span className={styles.mobileViewDetailsText}>View Details</span>
+                <ChevronRight size={15} className={styles.mobileChevronIcon} />
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Empty State */}
+        {filteredData.length === 0 && (
+          <div className={styles.mobileEmptyState}>
+            <Clock size={32} color="#94A3B8" />
+            <h4 className={styles.mobileEmptyTitle}>No past pickups found</h4>
+            <p className={styles.mobileEmptySubtitle}>
+              {searchTerm
+                ? `No pickups match "${searchTerm}".`
+                : 'No orders found in this category.'}
+            </p>
+            <button
+              type="button"
+              className={styles.mobileResetFilterBtn}
+              onClick={() => {
+                setStatusFilter('ALL');
+                setSearchTerm('');
+              }}
+            >
+              Show All
+            </button>
+          </div>
+        )}
+      </div>
 
       {/* 4. DETAIL RECEIPT MODAL */}
       {selectedOrder && (
@@ -467,10 +643,10 @@ export function HouseholdHistory() {
                 <table className={styles.receiptTable}>
                   <thead>
                     <tr>
-                      <th>Material</th>
-                      <th>Weighed Qty</th>
-                      <th>Rate</th>
-                      <th style={{ textAlign: 'right' }}>Amount</th>
+                      <th style={{ width: '42%' }}>Material</th>
+                      <th style={{ width: '20%' }}>Qty</th>
+                      <th style={{ width: '18%' }}>Rate</th>
+                      <th style={{ width: '20%', textAlign: 'right' }}>Amount</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -478,7 +654,7 @@ export function HouseholdHistory() {
                       <tr key={idx}>
                         <td style={{ fontWeight: 700 }}>{item.material}</td>
                         <td>{item.weightKg} KG</td>
-                        <td>₹{item.ratePerKg}/KG</td>
+                        <td>₹{item.ratePerKg}</td>
                         <td style={{ textAlign: 'right', fontWeight: 800, color: '#059669' }}>
                           ₹{(item.weightKg * item.ratePerKg).toFixed(2)}
                         </td>

@@ -29,6 +29,7 @@ import {
   Briefcase,
 } from 'lucide-react';
 import styles from './HouseholdPostScrap.module.css';
+import { useBodyScrollLock } from '../../hooks/useBodyScrollLock';
 
 interface SavedAddress {
   id: string;
@@ -56,6 +57,16 @@ const DEFAULT_SAVED_ADDRESSES: SavedAddress[] = [
     pincode: '600030',
     isDefault: false,
   },
+];
+
+const SCRAP_CATEGORIES = [
+  { value: '', label: 'Select category' },
+  { value: 'Metal Scrap', label: 'Metal Scrap (Iron, Copper, Brass, Aluminium)' },
+  { value: 'Paper & Books', label: 'Paper & Cardboard' },
+  { value: 'Plastic Items', label: 'Plastic & Bottles' },
+  { value: 'Electronics & Appliances', label: 'Electronics & Appliances' },
+  { value: 'Mixed Household Scrap', label: 'Mixed Household Scrap' },
+  { value: 'Other', label: 'Other Scrap Materials' },
 ];
 
 interface UploadedMediaItem {
@@ -184,9 +195,35 @@ export function HouseholdPostScrap() {
   // --------------------------------------------------------------------------
   const [mobileStep, setMobileStep] = useState<1 | 2 | 3>(1);
   const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState<boolean>(false);
+  const categoryDropdownRef = useRef<HTMLDivElement>(null);
   const [isAddressSheetOpen, setIsAddressSheetOpen] = useState<boolean>(false);
   const [isViewAllPhotosOpen, setIsViewAllPhotosOpen] = useState<boolean>(false);
   const mobileCustomDateInputRef = useRef<HTMLInputElement>(null);
+
+  // Prevent background scrolling when any modal, lightbox, camera or sheet is open
+  useBodyScrollLock(
+    Boolean(
+      selectedPhoto ||
+      showSuccessModal ||
+      isCameraModalOpen ||
+      isAddressSheetOpen ||
+      isViewAllPhotosOpen
+    )
+  );
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        categoryDropdownRef.current &&
+        !categoryDropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsCategoryDropdownOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const getFormattedDate = (daysFromNow: number) => {
     const d = new Date();
@@ -765,6 +802,16 @@ export function HouseholdPostScrap() {
 
         {/* 3-Step Horizontal Progress Tracker */}
         <div className={styles.mobileStepIndicator}>
+          {/* Continuous Connecting Line (Zero gap, links directly circle-to-circle) */}
+          <div className={styles.stepConnectingTrack}>
+            <div
+              className={styles.stepConnectingFill}
+              style={{
+                width: mobileStep === 1 ? '0%' : mobileStep === 2 ? '50%' : '100%',
+              }}
+            />
+          </div>
+
           {/* Step 1 */}
           <div
             className={`${styles.stepNode} ${
@@ -779,14 +826,8 @@ export function HouseholdPostScrap() {
             <div className={styles.stepCircle}>
               {mobileStep > 1 ? <Check size={14} strokeWidth={3} /> : '1'}
             </div>
-            <span className={styles.stepLabel}>Pickup Location</span>
+            <span className={styles.stepLabel}>Location</span>
           </div>
-
-          <div
-            className={`${styles.stepConnectorLine} ${
-              mobileStep >= 2 ? styles.stepConnectorDone : ''
-            }`}
-          />
 
           {/* Step 2 */}
           <div
@@ -804,12 +845,6 @@ export function HouseholdPostScrap() {
             </div>
             <span className={styles.stepLabel}>Photos</span>
           </div>
-
-          <div
-            className={`${styles.stepConnectorLine} ${
-              mobileStep >= 3 ? styles.stepConnectorDone : ''
-            }`}
-          />
 
           {/* Step 3 */}
           <div
@@ -838,7 +873,7 @@ export function HouseholdPostScrap() {
 
               <div className={styles.selectedAddressMainRow}>
                 <div className={styles.addressHomeIconSquircle}>
-                  <HomeIcon size={20} color="#8A6B14" />
+                  <HomeIcon size={20} color="#1E3A20" />
                 </div>
 
                 <div className={styles.addressMainDetails}>
@@ -1168,19 +1203,54 @@ export function HouseholdPostScrap() {
                   <span>Scrap Category</span> <span className={styles.optionalTagText}>(Optional)</span>
                 </label>
               </div>
-              <select
-                className={styles.mobileCategorySelect}
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-              >
-                <option value="">Select category</option>
-                <option value="Metal Scrap">Metal Scrap (Iron, Copper, Brass, Aluminium)</option>
-                <option value="Paper & Books">Paper &amp; Cardboard</option>
-                <option value="Plastic Items">Plastic &amp; Bottles</option>
-                <option value="Electronics & Appliances">Electronics &amp; Appliances</option>
-                <option value="Mixed Household Scrap">Mixed Household Scrap</option>
-                <option value="Other">Other Scrap Materials</option>
-              </select>
+              {/* Custom Aligned Dropdown */}
+              <div className={styles.customSelectWrapper} ref={categoryDropdownRef}>
+                <button
+                  type="button"
+                  className={`${styles.customSelectTrigger} ${
+                    isCategoryDropdownOpen ? styles.customSelectTriggerActive : ''
+                  }`}
+                  onClick={() => setIsCategoryDropdownOpen((prev) => !prev)}
+                >
+                  <span
+                    className={
+                      selectedCategory ? styles.selectedCategoryText : styles.placeholderCategoryText
+                    }
+                  >
+                    {SCRAP_CATEGORIES.find((c) => c.value === selectedCategory)?.label ||
+                      'Select category'}
+                  </span>
+                  <ChevronDown
+                    size={18}
+                    className={`${styles.selectChevron} ${
+                      isCategoryDropdownOpen ? styles.selectChevronOpen : ''
+                    }`}
+                  />
+                </button>
+
+                {isCategoryDropdownOpen && (
+                  <div className={styles.customSelectMenu}>
+                    {SCRAP_CATEGORIES.map((cat) => {
+                      const isSelected = selectedCategory === cat.value;
+                      return (
+                        <div
+                          key={cat.value}
+                          className={`${styles.customSelectOption} ${
+                            isSelected ? styles.customSelectOptionSelected : ''
+                          }`}
+                          onClick={() => {
+                            setSelectedCategory(cat.value);
+                            setIsCategoryDropdownOpen(false);
+                          }}
+                        >
+                          <span className={styles.optionLabelText}>{cat.label}</span>
+                          {isSelected && <Check size={16} color="#d97706" strokeWidth={2.5} />}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Additional Description (Optional) */}
@@ -1208,7 +1278,7 @@ export function HouseholdPostScrap() {
             {/* Partner Callout Info */}
             <div className={styles.mobilePartnerCallout}>
               <div className={styles.lightbulbCircle}>
-                <Lightbulb size={16} color="#8a6b14" />
+                <Lightbulb size={16} color="#1E3A20" />
               </div>
               <span className={styles.partnerCalloutText}>
                 Our partner may call you if more details are needed.

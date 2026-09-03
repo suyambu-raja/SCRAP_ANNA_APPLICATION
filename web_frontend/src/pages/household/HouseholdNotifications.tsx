@@ -1,112 +1,255 @@
-import { Bell, CheckCircle2, Clock, Truck, IndianRupee, ShieldCheck } from 'lucide-react';
-import styles from './HouseholdHistory.module.css';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import {
+  IndianRupee,
+  Truck,
+  TrendingUp,
+  CheckCircle2,
+  CheckCheck,
+  ChevronRight,
+  BellCheck,
+} from 'lucide-react';
+import styles from './HouseholdNotifications.module.css';
 
-const NOTIFICATIONS = [
+type NotificationGroup = 'TODAY' | 'YESTERDAY' | 'EARLIER';
+type NotificationType = 'payment' | 'pickup' | 'price_update' | 'general';
+
+interface NotificationItem {
+  id: string;
+  group: NotificationGroup;
+  type: NotificationType;
+  title: string;
+  desc: string;
+  time: string;
+  unread: boolean;
+  actionLabel?: string;
+  actionLink?: string;
+}
+
+const INITIAL_NOTIFICATIONS: NotificationItem[] = [
   {
     id: 'n-1',
-    title: 'Payment Credited: ₹1,850 for Order SA123456',
-    desc: 'UPI payment transferred directly to your bank account ending in 4421.',
-    time: 'Today, 10:45 AM',
+    group: 'TODAY',
+    type: 'payment',
+    title: 'Payment Credited',
+    desc: '₹1,850 credited for Order SA123456. UPI spot transfer received.',
+    time: '10:45 AM',
     unread: true,
-    icon: IndianRupee,
-    iconBg: '#ecfdf5',
-    iconColor: '#059669',
+    actionLabel: 'View Order',
+    actionLink: '/household/orders',
   },
   {
     id: 'n-2',
+    group: 'TODAY',
+    type: 'pickup',
     title: 'Pickup Executive Assigned',
-    desc: 'Driver Murugan (Tata 407 • TN 09 BX 4421) assigned for order SA123455.',
-    time: 'Today, 09:30 AM',
+    desc: 'Murugan (Tata 407 • TN 09 BX 4421) assigned to Order SA123455.',
+    time: '09:30 AM',
     unread: true,
-    icon: Truck,
-    iconBg: '#eff6ff',
-    iconColor: '#2563eb',
+    actionLabel: 'View Pickup',
+    actionLink: '/household/orders',
   },
   {
     id: 'n-3',
-    title: 'Copper Scrap Prices Rose by +₹12/kg',
-    desc: 'Current copper market rate is ₹720/kg. Book your pickup today to lock in rates!',
-    time: 'Yesterday, 04:00 PM',
+    group: 'YESTERDAY',
+    type: 'price_update',
+    title: 'Copper Price Increased',
+    desc: 'Copper is now ₹720/kg (+₹12/kg surge). Lock in today’s best rate.',
+    time: 'Yesterday',
     unread: true,
-    icon: Bell,
-    iconBg: '#fffbeb',
-    iconColor: '#f59e0b',
+    actionLabel: 'Check Rates',
+    actionLink: '/household/rates',
   },
   {
     id: 'n-4',
-    title: 'Order SA123453 Completed Successfully',
-    desc: 'Thank you for recycling 32.1 kg of scrap materials with Scrap Anna.',
-    time: '22 Apr 2025',
+    group: 'YESTERDAY',
+    type: 'pickup',
+    title: 'Doorstep Pickup Completed',
+    desc: 'Digital scale verified 32.1 kg collected for Order SA123453.',
+    time: 'Yesterday',
     unread: false,
-    icon: CheckCircle2,
-    iconBg: '#f1f5f9',
-    iconColor: '#475569',
+    actionLabel: 'View Receipt',
+    actionLink: '/household/history',
+  },
+  {
+    id: 'n-5',
+    group: 'EARLIER',
+    type: 'payment',
+    title: 'Payment Credited',
+    desc: '₹2,845 credited for Order SA123450 via UPI payment.',
+    time: '28 Apr',
+    unread: false,
+    actionLabel: 'View Order',
+    actionLink: '/household/history',
+  },
+  {
+    id: 'n-6',
+    group: 'EARLIER',
+    type: 'price_update',
+    title: 'Aluminium Rates Updated',
+    desc: 'Household aluminium wire rates updated to ₹135/kg in Chennai.',
+    time: '25 Apr',
+    unread: false,
+    actionLabel: 'Check Rates',
+    actionLink: '/household/rates',
   },
 ];
 
+const GROUPS: NotificationGroup[] = ['TODAY', 'YESTERDAY', 'EARLIER'];
+
 export function HouseholdNotifications() {
+  const navigate = useNavigate();
+  const [notifications, setNotifications] = useState<NotificationItem[]>(INITIAL_NOTIFICATIONS);
+
+  const unreadCount = notifications.filter((n) => n.unread).length;
+
+  const handleMarkAllRead = () => {
+    setNotifications((prev) => prev.map((item) => ({ ...item, unread: false })));
+  };
+
+  const handleNotificationClick = (item: NotificationItem) => {
+    // Mark clicked item as read
+    setNotifications((prev) =>
+      prev.map((n) => (n.id === item.id ? { ...n, unread: false } : n))
+    );
+
+    // Route to contextual action if provided
+    if (item.actionLink) {
+      navigate(item.actionLink);
+    }
+  };
+
+  const getSemanticIcon = (type: NotificationType) => {
+    switch (type) {
+      case 'payment':
+        return <IndianRupee size={18} strokeWidth={2.5} />;
+      case 'pickup':
+        return <Truck size={18} strokeWidth={2.2} />;
+      case 'price_update':
+        return <TrendingUp size={18} strokeWidth={2.2} />;
+      default:
+        return <CheckCircle2 size={18} strokeWidth={2.2} />;
+    }
+  };
+
+  const getIconClass = (type: NotificationType) => {
+    switch (type) {
+      case 'payment':
+        return styles.iconPayment;
+      case 'pickup':
+        return styles.iconPickup;
+      case 'price_update':
+        return styles.iconPrice;
+      default:
+        return styles.iconGeneral;
+    }
+  };
+
   return (
     <div className={styles.pageContainer}>
-      <div className={styles.headerBlock}>
-        <div className={styles.headerIconCircle} style={{ background: '#fffbeb', color: '#d97706' }}>
-          <Bell size={24} />
-        </div>
+      {/* 1. Header Section */}
+      <div className={styles.headerRow}>
         <div className={styles.headerTitles}>
-          <h2 className={styles.mainTitle}>Notifications & Alerts</h2>
-          <p className={styles.mainSubtitle}>Stay updated on your scrap pickup statuses, price surges, and payments.</p>
+          <h1 className={styles.pageTitle}>Notifications</h1>
+          <p className={styles.pageSubtitle}>
+            Stay updated on your pickups, payments &amp; rates.
+          </p>
         </div>
+
+        {unreadCount > 0 && (
+          <button
+            type="button"
+            className={styles.markAllReadBtn}
+            onClick={handleMarkAllRead}
+            aria-label="Mark all notifications as read"
+          >
+            <CheckCheck size={15} />
+            <span>Mark all read</span>
+          </button>
+        )}
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
-        {NOTIFICATIONS.map((item) => {
-          const Icon = item.icon;
+      {/* 2. Notification Groups or Empty State */}
+      {notifications.length === 0 ? (
+        <div className={styles.emptyStateContainer}>
+          <div className={styles.emptyStateIconCircle}>
+            <BellCheck size={26} />
+          </div>
+          <h2 className={styles.emptyStateTitle}>You're all caught up</h2>
+          <p className={styles.emptyStateDesc}>
+            New pickup, payment and rate updates will appear here.
+          </p>
+        </div>
+      ) : (
+        GROUPS.map((group) => {
+          const groupItems = notifications.filter((n) => n.group === group);
+          if (groupItems.length === 0) return null;
+
           return (
-            <div
-              key={item.id}
-              style={{
-                background: item.unread ? '#ffffff' : '#f8fafc',
-                border: item.unread ? '1px solid #fde68a' : '1px solid #e2e8f0',
-                borderRadius: '14px',
-                padding: '1.15rem 1.25rem',
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: '1rem',
-                boxShadow: item.unread ? '0 2px 8px rgba(245,158,11,0.08)' : 'none',
-              }}
-            >
-              <div
-                style={{
-                  width: '42px',
-                  height: '42px',
-                  borderRadius: '10px',
-                  background: item.iconBg,
-                  color: item.iconColor,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexShrink: 0,
-                }}
-              >
-                <Icon size={20} />
+            <section key={group} className={styles.notificationGroup} aria-label={group}>
+              <div className={styles.groupHeadingRow}>
+                <span className={styles.groupHeadingText}>{group}</span>
+                <span className={styles.groupCountBadge}>{groupItems.length}</span>
               </div>
 
-              <div style={{ flex: 1 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.2rem' }}>
-                  <h4 style={{ margin: 0, fontSize: '0.92rem', fontWeight: 800, color: '#0f172a' }}>
-                    {item.title}
-                  </h4>
-                  <span style={{ fontSize: '0.74rem', color: '#94a3b8' }}>{item.time}</span>
-                </div>
-                <p style={{ margin: 0, fontSize: '0.82rem', color: '#475569', lineHeight: 1.4 }}>
-                  {item.desc}
-                </p>
+              <div className={styles.notificationList}>
+                {groupItems.map((item) => (
+                  <div
+                    key={item.id}
+                    className={`${styles.notificationRow} ${
+                      item.unread ? styles.notificationRowUnread : styles.notificationRowRead
+                    }`}
+                    onClick={() => handleNotificationClick(item)}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        handleNotificationClick(item);
+                      }
+                    }}
+                  >
+                    {/* Left Rounded Semantic Icon Container */}
+                    <div
+                      className={`${styles.iconContainer} ${getIconClass(item.type)}`}
+                      aria-hidden="true"
+                    >
+                      {getSemanticIcon(item.type)}
+                    </div>
+
+                    {/* Content Column */}
+                    <div className={styles.contentCol}>
+                      <div className={styles.titleTimestampRow}>
+                        <h2 className={styles.notificationTitle}>{item.title}</h2>
+                        <span className={styles.timestampText}>{item.time}</span>
+                      </div>
+
+                      <p className={styles.notificationDesc}>{item.desc}</p>
+
+                      {item.actionLabel && (
+                        <div className={styles.actionRow}>
+                          <span className={styles.actionChip}>
+                            <span>{item.actionLabel}</span>
+                            <ChevronRight size={12} strokeWidth={2.5} />
+                          </span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Unread Accent Dot */}
+                    {item.unread && (
+                      <span
+                        className={styles.unreadDot}
+                        aria-label="Unread notification"
+                      />
+                    )}
+                  </div>
+                ))}
               </div>
-            </div>
+            </section>
           );
-        })}
-      </div>
+        })
+      )}
     </div>
   );
 }
-
-export default HouseholdNotifications;

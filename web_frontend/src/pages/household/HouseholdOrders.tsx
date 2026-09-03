@@ -22,8 +22,13 @@ import {
   AlertCircle,
   Eye,
   Maximize2,
+  ArrowLeft,
+  Headphones,
+  ChevronRight,
+  Check,
 } from 'lucide-react';
 import styles from './HouseholdOrders.module.css';
+import { useBodyScrollLock } from '../../hooks/useBodyScrollLock';
 
 interface OrderMediaItem {
   id: string;
@@ -72,15 +77,15 @@ interface HouseholdOrder {
 const SAMPLE_ORDERS: HouseholdOrder[] = [
   {
     id: 'ord-1',
-    orderNumber: 'SA12345678',
-    bookedDate: '01 May 2025, 10:30 AM',
+    orderNumber: 'SA12345',
+    bookedDate: '23 May 2024, 09:30 AM',
     pickupAddress: 'No. 42, 2nd Main Road, Anna Nagar, Chennai - 600040',
     preferredDate: 'Today',
     preferredSlot: '10:00 AM - 12:00 PM',
     stage: 'arriving',
     pickupOtp: '8492',
     billingOtp: '4190',
-    billSlipNumber: 'SLP-2025-05-SA12345678',
+    billSlipNumber: 'SLP-2024-05-SA12345',
     merchantName: 'Selvam Scrap Traders',
     merchantRating: 4.8,
     merchantPhone: '+91 98401 23456',
@@ -92,7 +97,7 @@ const SAMPLE_ORDERS: HouseholdOrder[] = [
       {
         id: 'it-1',
         title: 'Copper Wires & Windings',
-        weight: '2.5 KG',
+        weight: '2.8 KG',
         rate: '₹720 / KG',
         actualWeighedKg: 2.8,
         ratePerKg: 720,
@@ -102,7 +107,7 @@ const SAMPLE_ORDERS: HouseholdOrder[] = [
       {
         id: 'it-2',
         title: 'Scrap Iron Rods',
-        weight: '8.4 KG',
+        weight: '9.2 KG',
         rate: '₹38.50 / KG',
         actualWeighedKg: 9.2,
         ratePerKg: 38.5,
@@ -112,7 +117,7 @@ const SAMPLE_ORDERS: HouseholdOrder[] = [
       {
         id: 'it-3',
         title: 'Corrugated Cardboard',
-        weight: '12.0 KG',
+        weight: '14.5 KG',
         rate: '₹14.50 / KG',
         actualWeighedKg: 14.5,
         ratePerKg: 14.5,
@@ -157,6 +162,46 @@ const SAMPLE_ORDERS: HouseholdOrder[] = [
     ],
     finalSettledTotal: 859.6,
   },
+  {
+    id: 'ord-past',
+    orderNumber: 'SA12344',
+    bookedDate: '22 May 2024, 11:30 AM',
+    pickupAddress: 'No. 42, 2nd Main Road, Anna Nagar, Chennai - 600040',
+    preferredDate: '22 May 2024',
+    preferredSlot: '11:00 AM - 01:00 PM',
+    stage: 'completed',
+    pickupOtp: '5521',
+    billingOtp: '8910',
+    billSlipNumber: 'SLP-2024-05-SA12344',
+    merchantName: 'Selvam Scrap Traders',
+    merchantRating: 4.8,
+    merchantPhone: '+91 98401 23456',
+    vehicleType: 'Tata 407 Flatbed Truck',
+    vehicleRegNumber: 'TN 09 BX 4421',
+    items: [
+      {
+        id: 'it-p1',
+        title: 'Mixed Metal Scrap',
+        weight: '65.4 KG',
+        rate: '₹32 / KG',
+        actualWeighedKg: 65.4,
+        ratePerKg: 32,
+        subtotal: 2092.8,
+        imageUrl: '/scrap-iron.png',
+      },
+      {
+        id: 'it-p2',
+        title: 'Old Books & Newspapers',
+        weight: '53.2 KG',
+        rate: '₹14.15 / KG',
+        actualWeighedKg: 53.2,
+        ratePerKg: 14.15,
+        subtotal: 752.2,
+        imageUrl: '/scrap-cardboard.png',
+      },
+    ],
+    finalSettledTotal: 2845.0,
+  },
 ];
 
 const STAGE_STEPS = [
@@ -168,16 +213,164 @@ const STAGE_STEPS = [
   { id: 'completed', label: 'Completed' },
 ];
 
+/* 5-Stage Mobile Progress Tracker (Request Posted removed per user instruction) */
+const MOBILE_STAGE_STEPS = [
+  { id: 'confirmed', label: 'merchant confirmed' },
+  { id: 'arriving', label: 'arriving' },
+  { id: 'pickup', label: 'pickup' },
+  { id: 'bill_confirmation', label: 'bill' },
+  { id: 'completed', label: 'completed' },
+];
+
+/* Custom Vector Illustrations matching design mockup */
+function RequestPostedIllustration() {
+  return (
+    <svg width="68" height="68" viewBox="0 0 72 72" fill="none" aria-hidden="true">
+      <rect x="14" y="10" width="44" height="54" rx="8" fill="#F8FAFC" stroke="#CBD5E1" strokeWidth="2.5" />
+      <rect x="22" y="6" width="28" height="8" rx="4" fill="#0F172A" />
+      <line x1="22" y1="28" x2="50" y2="28" stroke="#E2E8F0" strokeWidth="3" strokeLinecap="round" />
+      <line x1="22" y1="36" x2="44" y2="36" stroke="#E2E8F0" strokeWidth="3" strokeLinecap="round" />
+      <circle cx="36" cy="48" r="12" fill="#DCFCE7" />
+      <path d="M30 48L34 52L42 44" stroke="#16A34A" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function MerchantConfirmedIllustration() {
+  return (
+    <svg width="68" height="68" viewBox="0 0 72 72" fill="none" aria-hidden="true">
+      <circle cx="36" cy="36" r="32" fill="#FEF9C3" />
+      <circle cx="36" cy="28" r="12" fill="#F59E0B" />
+      <path d="M22 28C22 20 28 16 36 16C44 16 50 20 50 28H22Z" fill="#15803D" />
+      <path d="M22 27H50C52 27 54 28 54 30H18C18 28 20 27 22 27Z" fill="#166534" />
+      <path d="M18 56C18 46 26 42 36 42C46 42 54 46 54 56" fill="#15803D" />
+      <circle cx="50" cy="48" r="10" fill="#16A34A" />
+      <path d="M46 48L49 51L55 45" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function MerchantArrivingIllustration() {
+  return (
+    <svg width="86" height="56" viewBox="0 0 90 60" fill="none" aria-hidden="true">
+      <rect width="90" height="60" rx="12" fill="#F1F5F9" />
+      <path d="M10 42Q35 20 55 35T80 24" stroke="#94A3B8" strokeWidth="4" strokeDasharray="4 4" />
+      <path d="M10 42Q35 20 50 34" stroke="#16A34A" strokeWidth="4" />
+      <circle cx="10" cy="42" r="5" fill="#16A34A" />
+      <g transform="translate(42, 16)">
+        <rect x="0" y="4" width="22" height="15" rx="2" fill="#FBC21A" />
+        <rect x="16" y="8" width="10" height="11" rx="2" fill="#F59E0B" />
+        <circle cx="6" cy="19" r="3.5" fill="#1E293B" />
+        <circle cx="20" cy="19" r="3.5" fill="#1E293B" />
+      </g>
+      <circle cx="80" cy="24" r="6" fill="#EF4444" />
+      <circle cx="80" cy="24" r="2.5" fill="#FFFFFF" />
+    </svg>
+  );
+}
+
+function DoorstepPickupIllustration() {
+  return (
+    <svg width="76" height="68" viewBox="0 0 80 68" fill="none" aria-hidden="true">
+      <circle cx="28" cy="22" r="10" fill="#FDE047" />
+      <path d="M16 22C16 15 21 11 28 11C35 11 40 15 40 22H16Z" fill="#15803D" />
+      <path d="M14 46C14 38 20 34 28 34C36 34 42 38 42 46" fill="#15803D" />
+      <circle cx="52" cy="24" r="9" fill="#FED7AA" />
+      <path d="M42 46C42 39 47 36 52 36C57 36 62 39 62 46" fill="#0284C7" />
+      <rect x="36" y="28" width="11" height="18" rx="2" fill="#0F172A" />
+      <rect x="38" y="30" width="7" height="12" rx="1" fill="#22C55E" />
+    </svg>
+  );
+}
+
+function BillReadyIllustration() {
+  return (
+    <svg width="72" height="68" viewBox="0 0 76 68" fill="none" aria-hidden="true">
+      <rect x="12" y="46" width="52" height="10" rx="3" fill="#334155" />
+      <rect x="22" y="48" width="18" height="6" rx="2" fill="#0F172A" />
+      <rect x="24" y="50" width="14" height="2" fill="#22C55E" />
+      <rect x="8" y="38" width="60" height="8" rx="2" fill="#94A3B8" />
+      <rect x="20" y="20" width="20" height="18" rx="2" fill="#D97706" />
+      <line x1="30" y1="20" x2="30" y2="38" stroke="#B45309" strokeWidth="2" />
+      <circle cx="54" cy="24" r="10" fill="#DCFCE7" stroke="#16A34A" strokeWidth="2" />
+      <path d="M49 24L52 27L58 21" stroke="#16A34A" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function PickupCompletedIllustration() {
+  return (
+    <svg width="72" height="72" viewBox="0 0 76 76" fill="none" aria-hidden="true">
+      <circle cx="38" cy="38" r="30" fill="#16A34A" />
+      <path d="M26 38L34 46L50 30" stroke="#FFFFFF" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx="16" cy="18" r="2.5" fill="#FBC21A" />
+      <circle cx="60" cy="20" r="3" fill="#FBC21A" />
+      <circle cx="58" cy="56" r="2" fill="#38BDF8" />
+      <circle cx="18" cy="54" r="2.5" fill="#F43F5E" />
+    </svg>
+  );
+}
+
+const getStatusTitle = (stage: OrderLifecycleStage) => {
+  switch (stage) {
+    case 'posted':
+      return 'Request Posted!';
+    case 'confirmed':
+      return 'Pickup Confirmed!';
+    case 'arriving':
+      return 'Merchant is Arriving';
+    case 'pickup':
+      return 'Merchant Reached';
+    case 'bill_confirmation':
+      return 'Bill Ready';
+    case 'completed':
+      return 'Pickup Completed!';
+    case 'cancelled':
+      return 'Order Cancelled';
+    default:
+      return 'Order Status';
+  }
+};
+
+const getStatusMessage = (order: HouseholdOrder) => {
+  switch (order.stage) {
+    case 'posted':
+      return 'We have received your request. We will notify you once a merchant confirms your pickup.';
+    case 'confirmed':
+      return `${order.merchantName || 'Selvam Scrap Traders'} has accepted your pickup request.`;
+    case 'arriving':
+      return 'Our partner is on the way to your location.';
+    case 'pickup':
+      return 'The merchant has reached your location. Share the OTP below to start weighing.';
+    case 'bill_confirmation':
+      return 'Please review the final weight and amount before confirming.';
+    case 'completed':
+      return 'Thank you for recycling with Scrap Anna.';
+    case 'cancelled':
+      return 'This doorstep pickup request has been cancelled.';
+    default:
+      return '';
+  }
+};
+
 export function HouseholdOrders() {
   const [ordersList, setOrdersList] = useState<HouseholdOrder[]>(SAMPLE_ORDERS);
   const [selectedOrderId, setSelectedOrderId] = useState<string>('ord-1');
+  const [selectedMobileOrderId, setSelectedMobileOrderId] = useState<string | null>(null);
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [cancelReason, setCancelReason] = useState('Merchant delayed');
   const [completedRating, setCompletedRating] = useState<number>(5);
   const [reviewSubmitted, setReviewSubmitted] = useState<boolean>(false);
+  const [mobileRating, setMobileRating] = useState<number>(5);
+  const [mobileRated, setMobileRated] = useState<boolean>(false);
   const [previewPhoto, setPreviewPhoto] = useState<string | null>(null);
 
+  // Lock background scrolling when modal or photo preview is open
+  useBodyScrollLock(Boolean(showCancelModal || previewPhoto));
+
   const activeOrder = ordersList.find((o) => o.id === selectedOrderId) || ordersList[0];
+  const currentMobileOrder =
+    ordersList.find((o) => o.id === (selectedMobileOrderId || selectedOrderId)) || activeOrder;
 
   const getStageIndex = (stage: OrderLifecycleStage) => {
     switch (stage) {
@@ -199,6 +392,28 @@ export function HouseholdOrders() {
   };
 
   const currentStageIdx = getStageIndex(activeOrder.stage);
+  const mobileStageIdx = getStageIndex(currentMobileOrder.stage);
+
+  const getMobileProgressIndex = (stage: OrderLifecycleStage) => {
+    switch (stage) {
+      case 'posted':
+        return -1;
+      case 'confirmed':
+        return 0;
+      case 'arriving':
+        return 1;
+      case 'pickup':
+        return 2;
+      case 'bill_confirmation':
+        return 3;
+      case 'completed':
+        return 4;
+      default:
+        return -1;
+    }
+  };
+
+  const mobileProgressIdx = getMobileProgressIndex(currentMobileOrder.stage);
 
   const setOrderStage = (orderId: string, newStage: OrderLifecycleStage) => {
     setOrdersList((prev) =>
@@ -242,7 +457,11 @@ export function HouseholdOrders() {
 
   return (
     <div className={styles.pageContainer}>
-      {/* 1. Header Banner */}
+      {/* ===================================================================
+         DESKTOP ORDERS VIEW (UNTOUCHED, PRESERVED 100%)
+         =================================================================== */}
+      <div className={styles.desktopOrdersView}>
+        {/* 1. Header Banner */}
       <div className={styles.headerBanner}>
         <div className={styles.headerTitleGroup}>
           <h1 className={styles.mainTitle}>Orders</h1>
@@ -711,6 +930,613 @@ export function HouseholdOrders() {
           </div>
         </div>
       )}
+      </div> {/* /.desktopOrdersView */}
+
+      {/* ===================================================================
+         MOBILE ORDERS VIEW (MOBILE-ONLY EXPERIENCE FOR <= 768px)
+         =================================================================== */}
+      <div className={styles.mobileOrdersView}>
+        {selectedMobileOrderId === null ? (
+          /* -----------------------------------------------------------------
+             SCREEN 1: MOBILE ORDERS LIST
+             ----------------------------------------------------------------- */
+          <div className={styles.mobileListContainer}>
+            {/* Header */}
+            <div className={styles.mobileHeaderRow}>
+              <div className={styles.mobileHeaderTitles}>
+                <h1 className={styles.mobileHeaderMainTitle}>Orders</h1>
+                <p className={styles.mobileHeaderSubtitle}>Track your doorstep scrap pickup</p>
+              </div>
+              <Link
+                to="/household/support"
+                className={styles.mobileSupportCircleBtn}
+                aria-label="Customer Support"
+              >
+                <Headphones size={20} />
+              </Link>
+            </div>
+
+            {/* Primary Action Button */}
+            <Link to="/household/post-scrap" className={styles.mobilePrimaryPostBtn}>
+              <Plus size={20} strokeWidth={2.6} />
+              <span>Post Scrap</span>
+            </Link>
+
+            {/* Active Pickup Card */}
+            {activeOrder && activeOrder.stage !== 'completed' && activeOrder.stage !== 'cancelled' && (
+              <div className={styles.mobileSectionBlock}>
+                <div className={styles.mobileSectionLabelRow}>
+                  <h2 className={styles.mobileSectionLabelTitle}>Active Pickup</h2>
+                  <span className={styles.mobileSectionOrderTag}>Order #{activeOrder.orderNumber}</span>
+                </div>
+
+                <div
+                  className={styles.mobileActiveOrderCard}
+                  onClick={() => setSelectedMobileOrderId(activeOrder.id)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => e.key === 'Enter' && setSelectedMobileOrderId(activeOrder.id)}
+                >
+                  <div className={styles.activeCardTopRow}>
+                    <div className={styles.activeCardMerchantGroup}>
+                      <div className={styles.activeCardMerchantIcon}>
+                        <User size={18} />
+                      </div>
+                      <div className={styles.activeCardMerchantDetails}>
+                        <span className={styles.activeCardMerchantName}>
+                          {activeOrder.merchantName || 'Scrap Anna Partner'}
+                        </span>
+                        <span
+                          className={
+                            activeOrder.stage === 'arriving' || activeOrder.stage === 'pickup'
+                              ? styles.activeCardStagePill
+                              : styles.activeCardStagePillYellow
+                          }
+                        >
+                          {MOBILE_STAGE_STEPS.find((s) => s.id === activeOrder.stage)?.label || 'merchant confirmed'}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className={styles.activeCardContentRow}>
+                    <div className={styles.activeCardMetricsLeft}>
+                      <span className={styles.activeCardEtaHighlight}>
+                        {activeOrder.stage === 'arriving'
+                          ? `ETA: ${activeOrder.etaMinutes || 12} mins`
+                          : activeOrder.stage === 'pickup'
+                          ? 'Driver at Doorstep'
+                          : 'Pickup Scheduled'}
+                      </span>
+                      <span className={styles.activeCardSlotText}>
+                        <Clock size={13} />
+                        <span>
+                          {activeOrder.preferredDate}, {activeOrder.preferredSlot}
+                        </span>
+                      </span>
+                    </div>
+
+                    <div className={styles.activeCardRightVisual}>
+                      <img
+                        src="/stat-van.png"
+                        alt="Scrap pickup truck"
+                        className={styles.activeCardVehicleImg}
+                      />
+                      <ChevronRight size={20} className={styles.activeCardChevron} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Past Orders Section */}
+            <div className={styles.mobileSectionBlock}>
+              <div className={styles.mobileSectionLabelRow}>
+                <h2 className={styles.mobileSectionLabelTitle}>Past Orders</h2>
+              </div>
+
+              <div className={styles.mobilePastOrdersList}>
+                {ordersList
+                  .filter((ord) => ord.stage === 'completed' || ord.stage === 'cancelled')
+                  .map((pastOrd) => {
+                    const totalWeighed = pastOrd.items.reduce(
+                      (sum, it) => sum + (it.actualWeighedKg || 0),
+                      0
+                    );
+                    return (
+                      <div
+                        key={pastOrd.id}
+                        className={styles.mobilePastOrderCard}
+                        onClick={() => setSelectedMobileOrderId(pastOrd.id)}
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={(e) => e.key === 'Enter' && setSelectedMobileOrderId(pastOrd.id)}
+                      >
+                        <div className={styles.pastOrderInfoLeft}>
+                          <div className={styles.pastOrderTopRow}>
+                            <span className={styles.pastOrderNumber}>Order #{pastOrd.orderNumber}</span>
+                            <span
+                              className={
+                                pastOrd.stage === 'completed'
+                                  ? styles.pastOrderCompletedPill
+                                  : styles.pastOrderCancelledPill
+                              }
+                            >
+                              {pastOrd.stage === 'completed' ? 'Completed' : 'Cancelled'}
+                            </span>
+                          </div>
+
+                          <div className={styles.pastOrderMerchantRow}>
+                            <User size={15} color="#64748b" />
+                            <span>{pastOrd.merchantName || 'Verified Merchant'}</span>
+                          </div>
+
+                          <span className={styles.pastOrderMetricsText}>
+                            {totalWeighed > 0 ? `${totalWeighed.toFixed(1)} kg` : '118.6 kg'} • ₹
+                            {(pastOrd.finalSettledTotal || 2845).toLocaleString('en-IN')}
+                          </span>
+
+                          <span className={styles.pastOrderDateText}>{pastOrd.bookedDate}</span>
+                        </div>
+
+                        <ChevronRight size={20} color="#94a3b8" />
+                      </div>
+                    );
+                  })}
+              </div>
+            </div>
+          </div>
+        ) : (
+          /* -----------------------------------------------------------------
+             SCREEN 2: MOBILE ORDER DETAILS
+             ----------------------------------------------------------------- */
+          <div className={styles.mobileDetailsContainer}>
+            {/* Top Navigation Bar */}
+            <div className={styles.mobileDetailsTopBar}>
+              <button
+                type="button"
+                className={styles.mobileBackCircleBtn}
+                onClick={() => setSelectedMobileOrderId(null)}
+                aria-label="Back to Orders list"
+              >
+                <ArrowLeft size={20} />
+              </button>
+              <h2 className={styles.mobileDetailsHeaderTitle}>Order Details</h2>
+              <Link
+                to="/household/support"
+                className={styles.mobileSupportCircleBtn}
+                aria-label="Customer Support"
+              >
+                <Headphones size={18} />
+              </Link>
+            </div>
+
+            {/* Order Meta Summary */}
+            <div className={styles.mobileOrderMetaSummary}>
+              <div className={styles.metaSummaryLeft}>
+                <strong className={styles.metaSummaryOrderNum}>
+                  Order #{currentMobileOrder.orderNumber}
+                </strong>
+                <span className={styles.metaSummaryDate}>
+                  Placed on {currentMobileOrder.bookedDate}
+                </span>
+              </div>
+              <span
+                className={
+                  currentMobileOrder.stage === 'completed'
+                    ? styles.pastOrderCompletedPill
+                    : currentMobileOrder.stage === 'cancelled'
+                    ? styles.pastOrderCancelledPill
+                    : styles.metaSummaryActiveBadge
+                }
+              >
+                {currentMobileOrder.stage === 'completed'
+                  ? 'Completed'
+                  : currentMobileOrder.stage === 'cancelled'
+                  ? 'Cancelled'
+                  : 'Active'}
+              </span>
+            </div>
+
+            {/* 5-Stage Progress Indicator (Request Posted removed per user instruction) */}
+            <div className={styles.mobileTrackerCard}>
+              <div className={styles.mobileTrackerTrack}>
+                <div className={styles.trackerConnectingLine}>
+                  <div
+                    className={styles.trackerConnectingFill}
+                    style={{
+                      width: `${Math.max(0, (mobileProgressIdx / 4)) * 100}%`,
+                    }}
+                  />
+                </div>
+
+                {MOBILE_STAGE_STEPS.map((step, idx) => {
+                  const isPassed = mobileProgressIdx > idx;
+                  const isCurrent = mobileProgressIdx === idx;
+                  return (
+                    <div
+                      key={step.id}
+                      className={styles.trackerStepNode}
+                      onClick={() => setOrderStage(currentMobileOrder.id, step.id as OrderLifecycleStage)}
+                    >
+                      <div
+                        className={`${styles.trackerNodeCircle} ${
+                          isPassed
+                            ? styles.trackerNodePassed
+                            : isCurrent
+                            ? styles.trackerNodeCurrent
+                            : styles.trackerNodeUpcoming
+                        }`}
+                      >
+                        {isPassed ? <Check size={14} strokeWidth={3} /> : idx + 1}
+                      </div>
+                      <span
+                        className={`${styles.trackerNodeLabel} ${
+                          isCurrent || isPassed ? styles.trackerNodeLabelActive : ''
+                        }`}
+                      >
+                        {step.label}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Dynamic Current Status Card */}
+            <div className={styles.dynamicStatusCard}>
+              <div className={styles.statusCardHeader}>
+                <span className={styles.statusCardCurrentLabel}>Current Status</span>
+                <h3 className={styles.statusCardMainTitle}>{getStatusTitle(currentMobileOrder.stage)}</h3>
+                <p className={styles.statusCardMessage}>{getStatusMessage(currentMobileOrder)}</p>
+              </div>
+
+              {/* Stage Specific Content */}
+              {currentMobileOrder.stage === 'posted' && (
+                <>
+                  <div className={styles.statusIllustrationBox}>
+                    <RequestPostedIllustration />
+                  </div>
+                  <div className={styles.infoNotePill}>
+                    <Info size={16} color="#d97706" />
+                    <span>You can track your order status in real-time here.</span>
+                  </div>
+                  <button
+                    type="button"
+                    className={styles.cancelOrderLinkBtn}
+                    onClick={() => setShowCancelModal(true)}
+                  >
+                    Cancel Pickup
+                  </button>
+                </>
+              )}
+
+              {currentMobileOrder.stage === 'confirmed' && (
+                <>
+                  <div className={styles.statusIllustrationBox}>
+                    <MerchantConfirmedIllustration />
+                  </div>
+                  <div className={styles.merchantConfirmedCard}>
+                    <div className={styles.merchantDetailsRow}>
+                      <div className={styles.merchantAvatarSquircle}>
+                        <User size={22} />
+                      </div>
+                      <div className={styles.merchantMetaCol}>
+                        <span className={styles.merchantNameText}>
+                          {currentMobileOrder.merchantName}
+                        </span>
+                        <span className={styles.merchantRatingText}>
+                          ★ {currentMobileOrder.merchantRating || 4.8} (230+ pickups)
+                        </span>
+                      </div>
+                    </div>
+                    <div className={styles.merchantVehicleRow}>
+                      <Truck size={15} />
+                      <span>
+                        {currentMobileOrder.vehicleType} ({currentMobileOrder.vehicleRegNumber})
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className={styles.infoNotePill}>
+                    <Clock size={16} color="#16a34a" />
+                    <span>Merchant will reach your location within the selected time slot.</span>
+                  </div>
+
+                  <a
+                    href={`tel:${currentMobileOrder.merchantPhone || '+919840123456'}`}
+                    className={styles.merchantCallActionBtn}
+                  >
+                    <Phone size={16} />
+                    <span>Call Merchant</span>
+                  </a>
+                </>
+              )}
+
+              {currentMobileOrder.stage === 'arriving' && (
+                <>
+                  <div className={styles.mapRouteBox}>
+                    <MerchantArrivingIllustration />
+                  </div>
+
+                  <div className={styles.arrivingMetricsRow}>
+                    <div className={styles.metricTile}>
+                      <span className={styles.metricTileLabel}>ETA</span>
+                      <span className={styles.metricTileVal}>
+                        {currentMobileOrder.etaMinutes || 12} mins
+                      </span>
+                    </div>
+                    <div className={styles.metricTile}>
+                      <span className={styles.metricTileLabel}>Distance</span>
+                      <span className={styles.metricTileVal}>
+                        {currentMobileOrder.distanceKm || 2.4} km
+                      </span>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    className={styles.trackLiveBtn}
+                    onClick={() => setOrderStage(currentMobileOrder.id, 'pickup')}
+                  >
+                    <Navigation size={18} />
+                    <span>Track Live Location</span>
+                  </button>
+
+                  <div className={styles.infoNotePill}>
+                    <Info size={16} color="#d97706" />
+                    <span>Please be available at your location.</span>
+                  </div>
+
+                  <a
+                    href={`tel:${currentMobileOrder.merchantPhone || '+919840123456'}`}
+                    className={styles.merchantCallActionBtn}
+                  >
+                    <Phone size={16} />
+                    <span>Call Merchant</span>
+                  </a>
+                </>
+              )}
+
+              {currentMobileOrder.stage === 'pickup' && (
+                <>
+                  <div className={styles.statusIllustrationBox}>
+                    <DoorstepPickupIllustration />
+                  </div>
+
+                  {/* Doorstep OTP Highlight Box */}
+                  <div className={styles.doorstepOtpBox}>
+                    <span className={styles.doorstepOtpLabel}>DOORSTEP PICKUP OTP</span>
+                    <span className={styles.doorstepOtpDigits}>{currentMobileOrder.pickupOtp}</span>
+                    <span className={styles.doorstepOtpSubtext}>
+                      Share with merchant ONLY when they arrive at your doorstep.
+                    </span>
+                  </div>
+
+                  <div className={styles.doorstepSecurityWarning}>
+                    <ShieldCheck size={16} />
+                    <span>Do not share OTP over call or message.</span>
+                  </div>
+
+                  <button
+                    type="button"
+                    className={styles.mobilePrimaryPostBtn}
+                    onClick={() => setOrderStage(currentMobileOrder.id, 'bill_confirmation')}
+                  >
+                    <Scale size={18} />
+                    <span>Start Weighing</span>
+                  </button>
+                </>
+              )}
+
+              {currentMobileOrder.stage === 'bill_confirmation' && (
+                <>
+                  <div className={styles.statusIllustrationBox}>
+                    <BillReadyIllustration />
+                  </div>
+
+                  <div className={styles.mobileBillSection}>
+                    <div className={styles.billCardTopHeader}>
+                      <div className={styles.scaleCertifiedPill}>
+                        <Scale size={13} />
+                        <span>Digital Scale Certified</span>
+                      </div>
+                      <span className={styles.billCardOrderTag}>#{currentMobileOrder.orderNumber}</span>
+                    </div>
+
+                    <table className={styles.billTableMobile}>
+                      <thead>
+                        <tr>
+                          <th style={{ width: '36%', textAlign: 'left' }}>Material</th>
+                          <th style={{ width: '18%', textAlign: 'center' }}>Weight</th>
+                          <th style={{ width: '22%', textAlign: 'right' }}>Price</th>
+                          <th style={{ width: '24%', textAlign: 'right' }}>Amount</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {currentMobileOrder.items.map((it) => (
+                          <tr key={it.id}>
+                            <td className={styles.billItemTitleCell}>{it.title}</td>
+                            <td className={styles.billItemWeightCell}>{it.actualWeighedKg} kg</td>
+                            <td className={styles.billItemPriceCell}>
+                              ₹{it.ratePerKg || (it.rate ? it.rate.replace(/[^0-9.]/g, '') : '')}
+                            </td>
+                            <td className={styles.billItemAmountCell}>
+                              ₹{it.subtotal?.toFixed(2)}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+
+                    <div className={styles.billTotalSummaryRow}>
+                      <div className={styles.billTotalLeftCol}>
+                        <span className={styles.billTotalLabel}>Total Amount</span>
+                        <span className={styles.billTotalSubLabel}>Spot payout via UPI / Cash</span>
+                      </div>
+                      <span className={styles.billTotalValue}>
+                        ₹{currentMobileOrder.finalSettledTotal?.toFixed(2) || '2,580.45'}
+                      </span>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    className={styles.confirmPayBtn}
+                    onClick={() => setOrderStage(currentMobileOrder.id, 'completed')}
+                  >
+                    <CheckCircle2 size={18} />
+                    <span>Confirm &amp; Pay</span>
+                  </button>
+
+                  <div className={styles.infoNotePill}>
+                    <Info size={16} color="#d97706" />
+                    <span>You can review weight &amp; price before making the payment.</span>
+                  </div>
+                </>
+              )}
+
+              {currentMobileOrder.stage === 'completed' && (
+                <>
+                  <div className={styles.statusIllustrationBox}>
+                    <PickupCompletedIllustration />
+                  </div>
+
+                  <div className={styles.completedMetricsCard}>
+                    <div className={styles.completedMetricItem}>
+                      <span className={styles.completedMetricLabel}>Total Weight</span>
+                      <span className={styles.completedMetricValue}>118.6 kg</span>
+                    </div>
+                    <div className={styles.completedMetricItem}>
+                      <span className={styles.completedMetricLabel}>Amount Paid</span>
+                      <span className={styles.completedMetricValue}>
+                        ₹{currentMobileOrder.finalSettledTotal?.toFixed(2) || '2,845'}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* 5-Star Private Rating Section */}
+                  <div className={styles.mobileRatingBox}>
+                    <span className={styles.ratingTitlePrompt}>Rate your experience</span>
+                    <div className={styles.starRatingRow}>
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <button
+                          key={star}
+                          type="button"
+                          className={`${styles.mobileStarBtn} ${
+                            mobileRating >= star ? styles.mobileStarActive : ''
+                          }`}
+                          onClick={() => {
+                            setMobileRating(star);
+                            setMobileRated(true);
+                          }}
+                        >
+                          <Star
+                            size={26}
+                            fill={mobileRating >= star ? '#f59e0b' : 'none'}
+                            stroke="currentColor"
+                          />
+                        </button>
+                      ))}
+                    </div>
+                    {mobileRated && (
+                      <span style={{ fontSize: '0.72rem', color: '#16a34a', fontWeight: 700 }}>
+                        Thank you! Reviews remain private for quality management.
+                      </span>
+                    )}
+                  </div>
+
+                  <div className={styles.mobileCompletedActionRow}>
+                    <button
+                      type="button"
+                      className={styles.viewSummaryBtn}
+                      onClick={() => setSelectedMobileOrderId(null)}
+                    >
+                      <FileText size={16} />
+                      <span>Order Summary</span>
+                    </button>
+                    <Link to="/household" className={styles.goHomeBtn}>
+                      <span>Go Home</span>
+                    </Link>
+                  </div>
+                </>
+              )}
+            </div>
+
+            {/* Supporting Section 1: Pickup Details */}
+            <div className={styles.supportingCard}>
+              <h4 className={styles.supportingCardTitle}>Pickup Details</h4>
+              <div className={styles.supportingInfoRow}>
+                <Calendar size={16} />
+                <span>
+                  {currentMobileOrder.preferredDate}, {currentMobileOrder.preferredSlot}
+                </span>
+              </div>
+              <div className={styles.supportingInfoRow}>
+                <MapPin size={16} />
+                <span>{currentMobileOrder.pickupAddress}</span>
+              </div>
+            </div>
+
+            {/* Supporting Section 2: Merchant Details (when assigned) */}
+            {currentMobileOrder.merchantName && currentMobileOrder.stage !== 'posted' && (
+              <div className={styles.supportingCard}>
+                <h4 className={styles.supportingCardTitle}>
+                  <span>Merchant Partner</span>
+                  <span style={{ fontSize: '0.72rem', color: '#16a34a', fontWeight: 700 }}>
+                    ✓ Verified
+                  </span>
+                </h4>
+                <div className={styles.supportingInfoRow}>
+                  <User size={16} />
+                  <span>
+                    {currentMobileOrder.merchantName} (★ {currentMobileOrder.merchantRating || 4.8})
+                  </span>
+                </div>
+                <div className={styles.supportingInfoRow}>
+                  <Truck size={16} />
+                  <span>
+                    {currentMobileOrder.vehicleType} • {currentMobileOrder.vehicleRegNumber}
+                  </span>
+                </div>
+              </div>
+            )}
+
+            {/* Supporting Section 3: Scrap Details & Photos */}
+            <div className={styles.supportingCard}>
+              <h4 className={styles.supportingCardTitle}>Scrap Photos &amp; Items</h4>
+              <div className={styles.scrapThumbnailStrip}>
+                {currentMobileOrder.items.map((it) => (
+                  <div
+                    key={it.id}
+                    className={styles.scrapThumbItem}
+                    onClick={() => setPreviewPhoto(it.imageUrl)}
+                  >
+                    <img src={it.imageUrl} alt={it.title} className={styles.scrapThumbImg} />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Stage Simulator Tester Bar */}
+            <div className={styles.stageSimulatorBar}>
+              <span style={{ fontWeight: 800, color: '#0f172a' }}>Stages:</span>
+              {STAGE_STEPS.map((step, idx) => (
+                <button
+                  key={step.id}
+                  type="button"
+                  className={`${styles.stageSimPill} ${
+                    currentMobileOrder.stage === step.id ? styles.stageSimPillActive : ''
+                  }`}
+                  onClick={() => setOrderStage(currentMobileOrder.id, step.id as OrderLifecycleStage)}
+                >
+                  {idx + 1}. {step.label.split(' ')[0]}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
 
       {/* CANCEL ORDER MODAL */}
       {showCancelModal && (

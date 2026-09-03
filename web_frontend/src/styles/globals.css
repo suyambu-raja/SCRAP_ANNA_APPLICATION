@@ -132,3 +132,30 @@ h4 { font-size: var(--text-h4); font-weight: 600; line-height: 1.35; }
     padding-bottom: var(--safe-area-bottom);
   }
 }
+
+/* ===== Background Scroll Lock & Isolation for Modals & Position-Based Overlays ===== */
+body.modal-open {
+  overflow: hidden !important;
+  overscroll-behavior: none !important;
+  touch-action: none !important;
+}
+
+/* Prevent scroll chaining/bleed from modal dialogs to background */
+[class*="modalOverlay"],
+[class*="modal_overlay"],
+[class*="confirmModalOverlay"],
+[class*="workflowModalOverlay"],
+[class*="videoModalOverlay"] {
+  overscroll-behavior: contain !important;
+  touch-action: none;
+}
+
+[class*="modalContent"],
+[class*="modal_content"],
+[class*="modalBody"],
+[class*="modal_body"] {
+  overscroll-behavior: contain !important;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+}
+

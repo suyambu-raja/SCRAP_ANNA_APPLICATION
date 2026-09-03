@@ -97,8 +97,8 @@ export function HouseholdTopHeader() {
     }
     if (path.includes('/household/notifications')) {
       return {
-        title: 'Notifications & Alerts',
-        subtitle: 'Stay updated on pickup statuses, rate surges, and payments',
+        title: 'Notifications',
+        subtitle: 'Stay updated on your pickups, payments & rates',
       };
     }
     if (path.includes('/household/post-scrap')) {
