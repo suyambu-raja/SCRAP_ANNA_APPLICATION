@@ -464,16 +464,11 @@ export function HouseholdOrders() {
         {/* 1. Header Banner */}
       <div className={styles.headerBanner}>
         <div className={styles.headerTitleGroup}>
-          <h1 className={styles.mainTitle}>Orders</h1>
+          <h1 className={styles.mainTitle}>My Order</h1>
           <p className={styles.mainSubtitle}>
             Track your doorstep scrap pickup and verify digital scale weighing.
           </p>
         </div>
-
-        <Link to="/household/post-scrap" className={styles.postScrapBtn}>
-          <Plus size={16} />
-          <span>Post Scrap</span>
-        </Link>
       </div>
 
       {/* 2. Order Selector Tabs Track */}
@@ -973,7 +968,7 @@ export function HouseholdOrders() {
             {/* Header */}
             <div className={styles.mobileHeaderRow}>
               <div className={styles.mobileHeaderTitles}>
-                <h1 className={styles.mobileHeaderMainTitle}>Orders</h1>
+                <h1 className={styles.mobileHeaderMainTitle}>My Order</h1>
                 <p className={styles.mobileHeaderSubtitle}>Track your doorstep scrap pickup</p>
               </div>
               <Link
@@ -984,12 +979,6 @@ export function HouseholdOrders() {
                 <Headphones size={20} />
               </Link>
             </div>
-
-            {/* Primary Action Button */}
-            <Link to="/household/post-scrap" className={styles.mobilePrimaryPostBtn}>
-              <Plus size={20} strokeWidth={2.6} />
-              <span>Post Scrap</span>
-            </Link>
 
             {/* Active Pickup Card */}
             {activeOrder && activeOrder.stage !== 'completed' && activeOrder.stage !== 'cancelled' && (

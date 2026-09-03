@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
+  LuMegaphone,
   LuShieldCheck as ShieldCheck,
   LuTrendingUp as TrendingUp,
   LuPlus as Plus,
@@ -307,6 +308,36 @@ const PROMO_SLIDES: PromoSlide[] = [
     type: 'gold-banner',
     title: 'Turn your scrap into value',
     subtitle: 'Doorstep pickup • Accurate weighing\nBest prices • Instant payment',
+    link: '/household/post-scrap',
+  },
+];
+
+interface PromoTickerMessage {
+  id: string;
+  badge?: string;
+  text: string;
+  link: string;
+}
+
+const PROMO_TICKER_MESSAGES: PromoTickerMessage[] = [
+  {
+    id: 'puja-special',
+    text: 'Sell unused scrap before the festival and earn extra cash! ✨',
+    link: '/household/post-scrap',
+  },
+  {
+    id: 'market-rates',
+    text: "Check today's verified scrap rates before you sell.",
+    link: '/household/rates',
+  },
+  {
+    id: 'doorstep-pickup',
+    text: 'Got unused scrap at home? Book a doorstep pickup today.',
+    link: '/household/post-scrap',
+  },
+  {
+    id: 'clean-home',
+    text: 'Clean your home • Turn old metal & appliances into instant cash.',
     link: '/household/post-scrap',
   },
 ];
@@ -850,6 +881,42 @@ export function HouseholdDashboard() {
           <ChevronDown size={14} className={styles.addressPillChevron} />
         </button>
       </div>
+
+      {/* =========================================================================
+          PROMOTIONAL NEWS TICKER (EXACT MATCH REFERENCE UI)
+          ========================================================================= */}
+      <Link
+        to="/household/post-scrap"
+        className={styles.promoTickerStrip}
+        aria-label="Puja Special Offer: Sell unused scrap before the festival and earn extra cash"
+      >
+        <div className={styles.bannerLeftSection}>
+          <LuMegaphone size={19} className={styles.bannerMegaphoneIcon} aria-hidden="true" />
+          <span className={styles.bannerBadgePill}>PUJA SPECIAL</span>
+          <span className={styles.bannerVerticalDivider} aria-hidden="true" />
+        </div>
+
+        <div className={styles.bannerMarqueeWindow}>
+          <div className={styles.bannerMarqueeTrack}>
+            {[0, 1].map((copyIdx) => (
+              <div
+                key={copyIdx}
+                className={styles.bannerItemsGroup}
+                aria-hidden={copyIdx === 1 ? 'true' : undefined}
+              >
+                {PROMO_TICKER_MESSAGES.map((msg) => (
+                  <span key={`${copyIdx}-${msg.id}`} className={styles.bannerMessageItem}>
+                    <span className={styles.bannerMessageText}>{msg.text}</span>
+                    <span className={styles.bannerItemDivider} aria-hidden="true">
+                      •
+                    </span>
+                  </span>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+      </Link>
 
       {/* =========================================================================
           2. TOP PROMOTIONAL HERO / IMAGE SLIDER (POLISHED PRODUCTION MOBILE CAROUSEL)
