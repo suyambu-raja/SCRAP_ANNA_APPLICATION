@@ -111,7 +111,7 @@ export function HouseholdSupport() {
             <p className={styles.channelSub}>Instant chat assistance & live photo verification</p>
           </div>
           <a
-            href="https://wa.me/919840123456?text=Hi%20Scrap%20Anna%2C%20I%20need%20assistance%20with%20my%20scrap%20pickup."
+            href="https://wa.me/919840123456?text=Hi%20Bill%20Scrap%2C%20I%20need%20assistance%20with%20my%20scrap%20pickup."
             target="_blank"
             rel="noopener noreferrer"
             className={styles.channelActionBtn}
@@ -132,11 +132,11 @@ export function HouseholdSupport() {
             <p className={styles.channelSub}>Official queries, bill disputes, & complaints</p>
           </div>
           <a
-            href="mailto:support@scrapanna.com?subject=Household%20Scrap%20Pickup%20Query"
+            href="mailto:support@billscrap.com?subject=Household%20Scrap%20Pickup%20Query"
             className={styles.channelActionBtn}
           >
             <Mail size={15} />
-            <span>support@scrapanna.com</span>
+            <span>support@billscrap.com</span>
           </a>
         </div>
       </div>

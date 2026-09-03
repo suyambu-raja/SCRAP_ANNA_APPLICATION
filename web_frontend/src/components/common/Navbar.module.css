@@ -68,6 +68,22 @@
   display: block;
 }
 
+.brandTitleText {
+  font-size: 1.25rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  color: #111827;
+  line-height: 1;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.brandTitleYellow {
+  color: #FBC21A;
+}
+
 .brandTaglineExact {
   font-size: 0.58rem;
   font-weight: 700;
@@ -276,6 +292,10 @@
 
   .logoTextImg {
     height: 17px;
+  }
+
+  .brandTitleText {
+    font-size: 1.05rem;
   }
 
   .brandTaglineExact {

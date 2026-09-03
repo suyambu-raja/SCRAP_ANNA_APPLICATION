@@ -88,7 +88,7 @@ export function RequestAdditionalRoleModal({ isOpen, onClose }: RequestAdditiona
             </div>
             <div>
               <h2 className={styles.modalTitle}>Request Additional Role</h2>
-              <p className={styles.modalSubtitle}>Apply for multi-profile verification on Scrap Anna</p>
+              <p className={styles.modalSubtitle}>Apply for multi-profile verification on Bill Scrap</p>
             </div>
           </div>
           <button type="button" className={styles.closeBtn} onClick={onClose} aria-label="Close">

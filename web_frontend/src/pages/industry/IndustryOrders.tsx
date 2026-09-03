@@ -852,7 +852,7 @@ export default function IndustryOrders() {
                       <div className={styles.invoiceHeaderTop}>
                         <div className={styles.brandCol}>
                           <div className={styles.invoiceBrandLogo}>
-                            <span className={styles.brandNameBold}>SCRAP ANNA</span>
+                            <span className={styles.brandNameBold}>BILL SCRAP</span>
                             <span className={styles.brandDot}>•</span>
                             <span className={styles.brandSubText}>Recycle • Reuse • Recover</span>
                           </div>

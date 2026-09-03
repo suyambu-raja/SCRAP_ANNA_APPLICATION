@@ -551,7 +551,7 @@ export default function MerchantProfile() {
               </div>
               <div className={styles.helpContactItem}>
                 <Mail size={15} color="#2563eb" />
-                <a href="mailto:support@scrapanna.com">support@scrapanna.com</a>
+                <a href="mailto:support@billscrap.com">support@billscrap.com</a>
               </div>
             </div>
           </div>

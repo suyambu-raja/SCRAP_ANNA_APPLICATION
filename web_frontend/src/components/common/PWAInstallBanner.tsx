@@ -17,7 +17,7 @@ export function PWAInstallBanner() {
           <Download size={20} />
         </div>
         <div className={styles.text}>
-          <p className={styles.title}>Install Scrap Anna App</p>
+          <p className={styles.title}>Install Bill Scrap App</p>
           <p className={styles.sub}>Quick access to live prices, instant pickup booking & notifications</p>
         </div>
       </div>

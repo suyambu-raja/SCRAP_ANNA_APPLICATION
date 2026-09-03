@@ -63,7 +63,7 @@ const SAMPLE_REFERRALS: ReferralHistoryItem[] = [
 export function HouseholdReferEarn() {
   const user = useAuthStore((s) => s.user);
   const referralCode = user?.name ? `${user.name.split(' ')[0].toUpperCase()}50` : 'ARUN50';
-  const referralLink = `https://scrapanna.com/signup?ref=${referralCode}`;
+  const referralLink = `https://billscrap.com/signup?ref=${referralCode}`;
 
   const [copied, setCopied] = useState(false);
 
@@ -74,7 +74,7 @@ export function HouseholdReferEarn() {
   };
 
   const whatsappShareText = encodeURIComponent(
-    `Hey! I use Scrap Anna to sell scrap at home with digital scale weighing and instant spot UPI payment. Use my referral code *${referralCode}* to get ₹50 extra bonus on your first scrap pickup! ♻️💰 ${referralLink}`
+    `Hey! I use Bill Scrap to sell scrap at home with digital scale weighing and instant spot UPI payment. Use my referral code *${referralCode}* to get ₹50 extra bonus on your first scrap pickup! ♻️💰 ${referralLink}`
   );
 
   return (
@@ -89,7 +89,7 @@ export function HouseholdReferEarn() {
 
           <h1 className={styles.heroTitle}>Give ₹50, Get ₹50 Instant Cash</h1>
           <p className={styles.heroSubtitle}>
-            Invite your friends and neighbors to recycle scrap with Scrap Anna. When they complete their first doorstep pickup, you both receive ₹50 credited directly to your UPI account!
+            Invite your friends and neighbors to recycle scrap with Bill Scrap. When they complete their first doorstep pickup, you both receive ₹50 credited directly to your UPI account!
           </p>
 
           {/* Referral Code & Share Row */}
@@ -143,7 +143,7 @@ export function HouseholdReferEarn() {
 
       {/* 2. HOW IT WORKS 3-STEP GRID */}
       <section className={styles.howItWorksCard}>
-        <h3 className={styles.sectionTitle}>How Scrap Anna Referral Works</h3>
+        <h3 className={styles.sectionTitle}>How Bill Scrap Referral Works</h3>
 
         <div className={styles.stepsGrid}>
           <div className={styles.stepCard}>

@@ -1,34 +1,32 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
-  ShieldCheck,
-  TrendingUp,
-  Plus,
-  Calendar,
-  CheckCircle2,
-  IndianRupee,
-  Truck,
-  Star,
-  Send,
-  Clock,
-  ChevronRight,
-  ChevronLeft,
-  ChevronDown,
-  X,
-  Eye,
-  Maximize2,
-  MapPin,
-  Search,
-  Navigation,
-  Home as HomeIcon,
-  Briefcase,
-  MoreVertical,
-  Bell,
-  Radio,
-  Phone,
-  Recycle,
-  User as UserIcon,
-} from 'lucide-react';
+  LuShieldCheck as ShieldCheck,
+  LuTrendingUp as TrendingUp,
+  LuPlus as Plus,
+  LuCalendar as Calendar,
+  LuCircleCheck as CheckCircle2,
+  LuIndianRupee as IndianRupee,
+  LuTruck as Truck,
+  LuStar as Star,
+  LuSend as Send,
+  LuClock as Clock,
+  LuChevronRight as ChevronRight,
+  LuChevronLeft as ChevronLeft,
+  LuChevronDown as ChevronDown,
+  LuX as X,
+  LuMapPin as MapPin,
+  LuSearch as Search,
+  LuNavigation as Navigation,
+  LuHouse as HomeIcon,
+  LuBriefcase as Briefcase,
+  LuPhone as Phone,
+  LuRecycle as Recycle,
+  LuUser as UserIcon,
+  LuCheck,
+  LuCircleCheck as LuCheckCircle,
+  LuEllipsisVertical as MoreVertical,
+} from 'react-icons/lu';
 import { useAuthStore } from '@/store/useAuthStore';
 import styles from './HouseholdDashboard.module.css';
 
@@ -270,6 +268,14 @@ const PROMO_SLIDES: PromoSlide[] = [
     link: '/household/post-scrap',
     alt: 'Nearby scrap collectors ready to pickup - Fast Pickup, Fair Pricing, Digital Payment',
     bgColor: '#111215',
+  },
+  {
+    id: 'reusable-products',
+    type: 'image',
+    image: '/promo-reusable-products.png',
+    link: '/household/products',
+    alt: 'Reusable Products - Good for you. Great for the planet. Voice chat to negotiate.',
+    bgColor: '#EBF1E8',
   },
   {
     id: 'market-rates',
@@ -613,63 +619,53 @@ export function HouseholdDashboard() {
   const [reviewText, setReviewText] = useState('');
   const [submittedReview, setSubmittedReview] = useState(false);
 
-  // How it Works Single-Step Carousel Loop
+  // How it Works Single-Step Cross-Fade Loop
   const [howStepIndex, setHowStepIndex] = useState(0);
-  const [isHowTransitioning, setIsHowTransitioning] = useState(true);
-  const howStepTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [isHowPaused, setIsHowPaused] = useState(false);
+  const howStepTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const howResumeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const carouselSteps = [...HOW_IT_WORKS_STEPS, HOW_IT_WORKS_STEPS[0]];
-
-  const startHowStepTimer = useCallback(() => {
+  const resetHowStepTimer = useCallback(() => {
     if (howStepTimerRef.current) clearInterval(howStepTimerRef.current);
     howStepTimerRef.current = setInterval(() => {
       if (!document.hidden) {
-        setIsHowTransitioning(true);
-        setHowStepIndex((prev) => {
-          if (prev >= carouselSteps.length - 1) return 1;
-          return prev + 1;
-        });
+        setHowStepIndex((prev) => (prev + 1) % HOW_IT_WORKS_STEPS.length);
       }
-    }, 3500);
-  }, [carouselSteps.length]);
+    }, 2500); // 2000ms display + 500ms fade
+  }, []);
 
   useEffect(() => {
-    startHowStepTimer();
+    if (!isHowPaused) {
+      resetHowStepTimer();
+    } else if (howStepTimerRef.current) {
+      clearInterval(howStepTimerRef.current);
+    }
     return () => {
       if (howStepTimerRef.current) clearInterval(howStepTimerRef.current);
+      if (howResumeTimerRef.current) clearTimeout(howResumeTimerRef.current);
     };
-  }, [startHowStepTimer]);
-
-  const handleHowTransitionEnd = () => {
-    if (howStepIndex >= carouselSteps.length - 1) {
-      setIsHowTransitioning(false);
-      setHowStepIndex(0);
-    }
-  };
-
-  useEffect(() => {
-    if (!isHowTransitioning) {
-      const raf = requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          setIsHowTransitioning(true);
-        });
-      });
-      return () => cancelAnimationFrame(raf);
-    }
-  }, [isHowTransitioning]);
+  }, [isHowPaused, resetHowStepTimer]);
 
   const handleHowDotClick = (dotIdx: number) => {
-    setIsHowTransitioning(true);
     setHowStepIndex(dotIdx);
-    startHowStepTimer();
+    if (!isHowPaused) {
+      resetHowStepTimer();
+    }
   };
 
-  // Post Scrap Modal State
-  const [isBookModalOpen, setIsBookModalOpen] = useState(false);
-  const [selectedMaterial, setSelectedMaterial] = useState('Scrap Iron (Heavy Melting Steel)');
-  const [approxWeight, setApproxWeight] = useState('15');
-  const [pickupDate, setPickupDate] = useState('2025-05-15');
-  const [pickupSlot, setPickupSlot] = useState('Morning (09:00 AM - 12:00 PM)');
+  const handleHowMouseEnter = () => setIsHowPaused(true);
+  const handleHowMouseLeave = () => setIsHowPaused(false);
+  const handleHowTouchStart = () => {
+    if (howResumeTimerRef.current) clearTimeout(howResumeTimerRef.current);
+    setIsHowPaused(true);
+  };
+  const handleHowTouchEnd = () => {
+    if (howResumeTimerRef.current) clearTimeout(howResumeTimerRef.current);
+    howResumeTimerRef.current = setTimeout(() => {
+      setIsHowPaused(false);
+    }, 1500);
+  };
+
 
   // Lightbox Keyboard Navigation
   useEffect(() => {
@@ -721,11 +717,6 @@ export function HouseholdDashboard() {
     }, 3500);
   };
 
-  const handleBookOrder = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsBookModalOpen(false);
-    navigate('/household/post-scrap');
-  };
 
   // Filter saved addresses by search
   const filteredAddresses = savedAddresses.filter(
@@ -929,10 +920,10 @@ export function HouseholdDashboard() {
           >
             <div className={styles.statCardTopRow}>
               <div className={styles.statSquircleIcon}>
-                <Calendar size={22} strokeWidth={2.4} />
+                <Calendar size={18} strokeWidth={2.4} />
               </div>
               <div className={styles.statTopRightBadge}>
-                <Clock size={13} color="#1E3A20" strokeWidth={2.4} />
+                <Clock size={12} color="#1E3A20" strokeWidth={2.4} />
                 <span>Today, 04:15 PM</span>
               </div>
             </div>
@@ -954,10 +945,10 @@ export function HouseholdDashboard() {
           >
             <div className={styles.statCardTopRow}>
               <div className={styles.statSquircleIcon}>
-                <Recycle size={22} strokeWidth={2.4} />
+                <Recycle size={18} strokeWidth={2.4} />
               </div>
               <div className={styles.statTopRightBadge}>
-                <UserIcon size={13} color="#1E3A20" strokeWidth={2.4} />
+                <UserIcon size={12} color="#1E3A20" strokeWidth={2.4} />
                 <span>12 Pickups</span>
               </div>
             </div>
@@ -981,10 +972,10 @@ export function HouseholdDashboard() {
           >
             <div className={styles.statCardTopRow}>
               <div className={styles.statSquircleIcon}>
-                <IndianRupee size={22} strokeWidth={2.6} />
+                <IndianRupee size={18} strokeWidth={2.6} />
               </div>
               <div className={styles.statTopRightBadge}>
-                <Calendar size={13} color="#1E3A20" strokeWidth={2.4} />
+                <Calendar size={12} color="#1E3A20" strokeWidth={2.4} />
                 <span>This Month</span>
               </div>
             </div>
@@ -1080,18 +1071,22 @@ export function HouseholdDashboard() {
             {/* Bottom: 3-Step Process Chain Tracker */}
             <div className={styles.miniStageTracker}>
               <div className={`${styles.miniStep} ${styles.miniStepDone}`}>
-                <div className={styles.miniCircle}>✓</div>
+                <div className={styles.miniCircle}>
+                  <LuCheck size={11} strokeWidth={3} aria-hidden="true" />
+                </div>
                 <span>Confirmed</span>
               </div>
               <div className={`${styles.miniLine} ${styles.miniLineActive}`} />
               <div className={`${styles.miniStep} ${styles.miniStepActive}`}>
-                <div className={styles.miniCircle}><Truck size={13} /></div>
+                <div className={styles.miniCircle}>
+                  <Truck size={13} aria-hidden="true" />
+                </div>
                 <span>On the way</span>
               </div>
               <div className={styles.miniLine} />
               <div className={styles.miniStep}>
                 <div className={styles.miniCircle}>
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+                  <HomeIcon size={13} aria-hidden="true" />
                 </div>
                 <span>Arrived</span>
               </div>
@@ -1099,7 +1094,13 @@ export function HouseholdDashboard() {
           </div>
 
           {/* How It Works Card - Single Step Transition */}
-          <div className={styles.howItWorksCard}>
+          <div
+            className={styles.howItWorksCard}
+            onMouseEnter={handleHowMouseEnter}
+            onMouseLeave={handleHowMouseLeave}
+            onTouchStart={handleHowTouchStart}
+            onTouchEnd={handleHowTouchEnd}
+          >
             <div className={styles.howItWorksHeader}>
               <h3 className={styles.howItWorksTitle}>How it works</h3>
               <div className={styles.howStepDots}>
@@ -1108,9 +1109,7 @@ export function HouseholdDashboard() {
                     key={idx}
                     type="button"
                     className={`${styles.howDot} ${
-                      idx === (howStepIndex % HOW_IT_WORKS_STEPS.length)
-                        ? styles.howDotActive
-                        : ''
+                      idx === howStepIndex ? styles.howDotActive : ''
                     }`}
                     onClick={() => handleHowDotClick(idx)}
                     aria-label={`Step ${idx + 1}`}
@@ -1120,26 +1119,21 @@ export function HouseholdDashboard() {
             </div>
 
             <div className={styles.howStepViewport}>
-              <div
-                className={styles.howStepTrack}
-                onTransitionEnd={handleHowTransitionEnd}
-                style={{
-                  transform: `translateX(-${howStepIndex * 100}%)`,
-                  transition: isHowTransitioning
-                    ? 'transform 450ms cubic-bezier(0.25, 1, 0.5, 1)'
-                    : 'none',
-                }}
-              >
-                {carouselSteps.map((item, idx) => (
-                  <div key={`${item.step}-${idx}`} className={styles.howSingleStepSlide}>
-                    <div className={styles.howNumCircle}>{item.step}</div>
-                    <div className={styles.howTextCol}>
-                      <strong>{item.title}</strong>
-                      <span>{item.desc}</span>
-                    </div>
+              {HOW_IT_WORKS_STEPS.map((item, idx) => (
+                <div
+                  key={item.step}
+                  className={`${styles.howSingleStepSlide} ${
+                    idx === howStepIndex ? styles.howSingleStepSlideActive : ''
+                  }`}
+                  aria-hidden={idx !== howStepIndex}
+                >
+                  <div className={styles.howNumCircle}>{item.step}</div>
+                  <div className={styles.howTextCol}>
+                    <strong>{item.title}</strong>
+                    <span>{item.desc}</span>
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -1165,13 +1159,6 @@ export function HouseholdDashboard() {
                 <div
                   key={item.id}
                   className={styles.rateRowCard}
-                  onClick={() => {
-                    setSelectedMaterial(item.name);
-                    setIsBookModalOpen(true);
-                  }}
-                  role="button"
-                  tabIndex={0}
-                  title={`Click to post scrap for ${item.name}`}
                 >
                   <div className={styles.rateRowLeft}>
                     <div className={styles.rateRowThumb} style={{ background: item.iconBg }}>
@@ -1259,8 +1246,8 @@ export function HouseholdDashboard() {
 
               <div className={styles.reviewActionRow}>
                 <button type="submit" className={styles.submitReviewBtn}>
-                  <Send size={14} />
-                  <span>{submittedReview ? 'Review Submitted! ✨' : 'Submit Review'}</span>
+                  {submittedReview ? <LuCheckCircle size={14} aria-hidden="true" /> : <Send size={14} aria-hidden="true" />}
+                  <span>{submittedReview ? 'Review Submitted!' : 'Submit Review'}</span>
                 </button>
               </div>
             </form>
@@ -1547,99 +1534,6 @@ export function HouseholdDashboard() {
         </div>
       )}
 
-      {/* QUICK POST SCRAP MODAL */}
-      {isBookModalOpen && (
-        <div className={styles.modalOverlay} onClick={() => setIsBookModalOpen(false)}>
-          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-            <div className={styles.modalHeader}>
-              <div>
-                <h3 className={styles.modalTitle}>Post Doorstep Scrap</h3>
-                <p className={styles.modalSubtitle}>
-                  Schedule doorstep pickup with verified digital weighing
-                </p>
-              </div>
-              <button
-                type="button"
-                className={styles.modalCloseBtn}
-                onClick={() => setIsBookModalOpen(false)}
-              >
-                <X size={18} />
-              </button>
-            </div>
-
-            <form onSubmit={handleBookOrder} className={styles.modalForm}>
-              <div className={styles.formGroup}>
-                <label className={styles.formLabel}>Selected Scrap Material</label>
-                <input
-                  type="text"
-                  className={styles.formInput}
-                  value={selectedMaterial}
-                  onChange={(e) => setSelectedMaterial(e.target.value)}
-                  required
-                />
-              </div>
-
-              <div className={styles.formRow}>
-                <div className={styles.formGroup}>
-                  <label className={styles.formLabel}>Approx Weight (KG)</label>
-                  <input
-                    type="number"
-                    className={styles.formInput}
-                    value={approxWeight}
-                    onChange={(e) => setApproxWeight(e.target.value)}
-                    placeholder="e.g. 15"
-                    min="1"
-                    required
-                  />
-                </div>
-
-                <div className={styles.formGroup}>
-                  <label className={styles.formLabel}>Preferred Date</label>
-                  <input
-                    type="date"
-                    className={styles.formInput}
-                    value={pickupDate}
-                    onChange={(e) => setPickupDate(e.target.value)}
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className={styles.formGroup}>
-                <label className={styles.formLabel}>Time Slot</label>
-                <select
-                  className={styles.formSelect}
-                  value={pickupSlot}
-                  onChange={(e) => setPickupSlot(e.target.value)}
-                >
-                  <option value="Morning (09:00 AM - 12:00 PM)">
-                    Morning (09:00 AM - 12:00 PM)
-                  </option>
-                  <option value="Afternoon (12:00 PM - 04:00 PM)">
-                    Afternoon (12:00 PM - 04:00 PM)
-                  </option>
-                  <option value="Evening (04:00 PM - 07:00 PM)">
-                    Evening (04:00 PM - 07:00 PM)
-                  </option>
-                </select>
-              </div>
-
-              <div className={styles.modalFooter}>
-                <button
-                  type="button"
-                  className={styles.modalCancelBtn}
-                  onClick={() => setIsBookModalOpen(false)}
-                >
-                  Cancel
-                </button>
-                <button type="submit" className={styles.modalSubmitBtn}>
-                  <span>Schedule Pickup</span>
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

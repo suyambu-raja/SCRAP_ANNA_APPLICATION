@@ -18,7 +18,7 @@ export function MobileHeader() {
         <Link to={user ? `/dashboard/${user.role}` : '/home'} className={styles.brand}>
           <img
             src="/logo-icon.png"
-            alt="Scrap Anna"
+            alt="Bill Scrap"
             className={styles.logoImg}
             onError={(e) => { (e.currentTarget as HTMLElement).style.display = 'none'; }}
           />

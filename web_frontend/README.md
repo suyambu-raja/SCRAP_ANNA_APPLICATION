@@ -1,11 +1,11 @@
-# ♻️ Scrap Anna — Web Frontend
+# ♻️ Bill Scrap — Web Frontend
 
 [![React](https://img.shields.io/badge/Frontend-React%20%7C%20Next.js%20%7C%20Vite-blue?logo=react)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/Language-TypeScript-3178C6?logo=typescript)](https://www.typescriptlang.org/)
 [![Status](https://img.shields.io/badge/Status-In%20Development-orange)](#)
 [![Backend](https://img.shields.io/badge/Backend-Django%20REST%20Framework-092E20?logo=django)](https://www.djangoproject.com/)
 
-The **Web Frontend** for **Scrap Anna** — an intelligent digital scrap recycling, marketplace, and doorstep collection ecosystem. This portal provides a seamless web interface for **households (Users)**, **commercial entities (Companies)**, and **scrap dealers (Merchants)** to manage doorstep pickups, view daily live scrap market rates, participate in bulk scrap auctions/bidding, and handle digital billing and payouts.
+The **Web Frontend** for **Bill Scrap** — an intelligent digital scrap recycling, marketplace, and doorstep collection ecosystem. This portal provides a seamless web interface for **households (Users)**, **commercial entities (Companies)**, and **scrap dealers (Merchants)** to manage doorstep pickups, view daily live scrap market rates, participate in bulk scrap auctions/bidding, and handle digital billing and payouts.
 
 ---
 
@@ -31,7 +31,7 @@ The **Web Frontend** for **Scrap Anna** — an intelligent digital scrap recycli
 
 ## 🌟 Overview
 
-**Scrap Anna** connects the unorganized scrap collection industry into an automated, transparent, and high-efficiency digital marketplace. The **Web Frontend** serves as the central desktop and mobile-responsive hub for:
+**Bill Scrap** connects the unorganized scrap collection industry into an automated, transparent, and high-efficiency digital marketplace. The **Web Frontend** serves as the central desktop and mobile-responsive hub for:
 
 1. **Transparent Scrap Rates**: Daily updated price ranges per kg/unit across metals, e-waste, plastics, paper, and appliances.
 2. **Doorstep Pickup Scheduling**: Quick pickup requests with location mapping, category selection, and automated merchant dispatch within a defined radius.
@@ -182,7 +182,7 @@ VITE_API_BASE_URL=http://localhost:8000/api/v1
 VITE_WS_BASE_URL=ws://localhost:8000/ws
 
 # Application Metadata
-VITE_APP_NAME="Scrap Anna"
+VITE_APP_NAME="Bill Scrap"
 VITE_APP_ENV=development
 
 # Map & Geolocation API (Mapbox / Google Maps / OpenStreetMap)
@@ -279,4 +279,4 @@ The frontend routes are protected by role-based route guards:
 
 ## 📄 License
 
-This project is part of the **Scrap Anna** application suite. All rights reserved.
+This project is part of the **Bill Scrap** application suite. All rights reserved.

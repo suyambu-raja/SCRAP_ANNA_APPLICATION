@@ -59,12 +59,12 @@ export default function Login() {
         <div className={styles.header}>
           <img
             src="/logo-icon.png"
-            alt="Scrap Anna"
+            alt="Bill Scrap"
             className={styles.logoImg}
             onError={(e) => { (e.currentTarget as HTMLElement).style.display = 'none'; }}
           />
           <h1 className={styles.title}>Let's get you started</h1>
-          <p className={styles.subtitle}>Enter your mobile number to continue with Scrap Anna.</p>
+          <p className={styles.subtitle}>Enter your mobile number to continue with Bill Scrap.</p>
         </div>
 
         <form onSubmit={handleSubmit} className={styles.form}>

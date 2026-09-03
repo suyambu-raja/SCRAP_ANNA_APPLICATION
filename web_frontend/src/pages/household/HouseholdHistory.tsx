@@ -192,7 +192,7 @@ export function HouseholdHistory() {
       <body>
         <div class="header">
           <div>
-            <div class="brand">SCRAP ANNA</div>
+            <div class="brand">BILL SCRAP</div>
             <div style="font-size: 0.8rem; color: #64748b;">Verified Doorstep Scrap Recycler • Chennai</div>
           </div>
           <div style="text-align: right;">

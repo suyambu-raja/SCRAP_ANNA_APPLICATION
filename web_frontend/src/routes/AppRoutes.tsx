@@ -55,6 +55,16 @@ const HouseholdSupport = lazy(() =>
     default: m.HouseholdSupport,
   }))
 );
+const HouseholdReusableProducts = lazy(() =>
+  import('@/pages/household/HouseholdReusableProducts').then((m) => ({
+    default: m.HouseholdReusableProducts,
+  }))
+);
+const HouseholdProductDetail = lazy(() =>
+  import('@/pages/household/HouseholdProductDetail').then((m) => ({
+    default: m.HouseholdProductDetail,
+  }))
+);
 
 /* Merchant Modern Pages */
 const MerchantDashboard = lazy(() => import('@/pages/dashboard/MerchantDashboard'));
@@ -143,6 +153,9 @@ export function AppRoutes() {
           <Route path="/household/post-scrap" element={<HouseholdPostScrap />} />
           <Route path="/household/history" element={<HouseholdHistory />} />
           <Route path="/household/orders" element={<HouseholdOrders />} />
+          <Route path="/household/products" element={<HouseholdReusableProducts />} />
+          <Route path="/household/reusable-products" element={<HouseholdReusableProducts />} />
+          <Route path="/household/products/:id" element={<HouseholdProductDetail />} />
           <Route path="/household/notifications" element={<HouseholdNotifications />} />
           <Route path="/household/profile" element={<HouseholdProfile />} />
           <Route path="/household/refer-earn" element={<HouseholdReferEarn />} />

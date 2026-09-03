@@ -76,6 +76,7 @@ export default function Home() {
     'COP_001', // Copper Scrap
     'BRS_001', // Brass Scrap
     'IRON_001', // Scrap Iron
+    'HAP_001', // AC Scrap
     'PLS_007', // Mixed plastic
     'CRD_001', // Corrugated Cardboard
   ];
@@ -110,7 +111,7 @@ export default function Home() {
             </h1>
 
             <p className={styles.heroDescExact}>
-              Scrap Anna is starting its journey in Chennai, connecting households, merchants and industries on one digital platform for transparent transactions, fair prices and a cleaner future.
+              Bill Scrap is starting its journey in Chennai, connecting households, merchants and industries on one digital platform for transparent transactions, fair prices and a cleaner future.
             </p>
 
             {/* 4 Feature Badges Row */}
@@ -163,7 +164,7 @@ export default function Home() {
                     icon={<ArrowRight size={18} />}
                     onClick={() => navigate('/login')}
                   >
-                    {isTamil ? 'ஸ்கிராப் அன்னாவில் சேரவும்' : 'Join Scrap Anna'}
+                    {isTamil ? 'பில் ஸ்கிராப்பில் சேரவும்' : 'Join Bill Scrap'}
                   </Button>
                   <button
                     type="button"
@@ -204,7 +205,7 @@ export default function Home() {
 
             <img
               src="/hero-truck.png"
-              alt="Scrap Anna branded truck loaded with scrap metal, city skyline and barrels"
+              alt="Bill Scrap branded truck loaded with scrap metal, city skyline and barrels"
               width="640"
               height="480"
               className={styles.heroTruckImgExact}
@@ -350,7 +351,7 @@ export default function Home() {
               </div>
               <h3 className={styles.stepCardTitle}>2. Merchant Pickup</h3>
               <p className={styles.stepCardDesc}>
-                A verified Scrap Anna merchant partner arrives at your doorstep on your chosen date and weighs items using 100% digital scales.
+                A verified Bill Scrap merchant partner arrives at your doorstep on your chosen date and weighs items using 100% digital scales.
               </p>
               <div className={styles.stepFeatureList}>
                 <div className={styles.stepFeatureItem}>
@@ -461,12 +462,12 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 6. Why Choose Scrap Anna — 4-Column Trust Assurances */}
+        {/* 6. Why Choose Bill Scrap — 4-Column Trust Assurances */}
         <section id="why-choose-us" className={styles.contentSection}>
           <div className={styles.sectionHeaderCentered}>
             <span className={styles.sectionCategoryTag}>Security & Quality</span>
             <h2 className={styles.sectionMainHeading}>
-              Why Choose <span className={styles.yellowText}>Scrap</span> Anna?
+              Why Choose <span className={styles.yellowText}>Bill </span>Scrap?
             </h2>
             <p className={styles.sectionLeadText}>
               Built from the ground up to provide transparency, security, and fair market value.
@@ -571,7 +572,7 @@ export default function Home() {
                   icon={<ArrowRight size={18} />}
                   onClick={() => navigate('/login')}
                 >
-                  Join Scrap Anna Today — Free
+                  Join Bill Scrap Today — Free
                 </Button>
               </div>
             </div>
@@ -586,7 +587,7 @@ export default function Home() {
             <div className={styles.videoModalHeader}>
               <div className={styles.videoModalTitle}>
                 <span style={{ color: 'var(--color-primary)' }}>▶</span>
-                <span>How Scrap Anna Works — Step by Step</span>
+                <span>How Bill Scrap Works — Step by Step</span>
               </div>
               <button
                 type="button"
@@ -602,7 +603,7 @@ export default function Home() {
               <iframe
                 className={styles.videoIframe}
                 src="https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?autoplay=1"
-                title="How Scrap Anna Works Video"
+                title="How Bill Scrap Works Video"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
               />
@@ -625,7 +626,7 @@ export default function Home() {
           <div className={styles.footerBrandCol}>
             <Link to="/home" className={styles.footerBrandTitleLink}>
               <span className={styles.footerBrandText}>
-                Scrap <span className={styles.footerYellowSpan}>Anna</span>
+                Bill <span className={styles.footerYellowSpan}>Scrap</span>
               </span>
             </Link>
             <p className={styles.footerDescText}>
@@ -731,16 +732,16 @@ export default function Home() {
             <a href="#grievance" className={styles.footerNavLink}>Grievance Redressal</a>
           </div>
 
-          {/* Column 4: Contact Scrap Anna */}
+          {/* Column 4: Contact Bill Scrap */}
           <div className={styles.footerNavCol}>
-            <h4 className={styles.footerNavTitle}>Contact Scrap Anna</h4>
+            <h4 className={styles.footerNavTitle}>Contact Bill Scrap</h4>
             <div className={styles.contactItemRow}>
               <MapPin size={16} className={styles.contactYellowIcon} />
               <span>Chennai, Tamil Nadu, India</span>
             </div>
-            <a href="mailto:scrap.anna.shop@gmail.com" className={styles.contactItemRow}>
+            <a href="mailto:support@billscrap.com" className={styles.contactItemRow}>
               <Mail size={16} className={styles.contactYellowIcon} />
-              <span>scrap.anna.shop@gmail.com</span>
+              <span>support@billscrap.com</span>
             </a>
             <a href="tel:+917338995341" className={styles.contactItemRow}>
               <Phone size={16} className={styles.contactYellowIcon} />
@@ -752,7 +753,7 @@ export default function Home() {
         {/* Bottom Copyright Bar */}
         <div className={styles.footerBottomBar}>
           <div className={styles.footerBottomInner}>
-            <p>© {new Date().getFullYear()} Scrap Anna. All Rights Reserved.</p>
+            <p>© {new Date().getFullYear()} Bill Scrap Technologies. All Rights Reserved.</p>
             <div className={styles.footerBottomLinks}>
               <a href="#privacy" className={styles.footerSublink}>Privacy Policy</a>
               <span>•</span>

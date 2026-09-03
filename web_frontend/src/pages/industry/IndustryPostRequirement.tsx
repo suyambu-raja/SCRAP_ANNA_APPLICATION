@@ -874,7 +874,7 @@ export default function IndustryPostRequirement() {
                 </p>
               </div>
 
-              {/* Primary Submit Button (Scrap Anna Yellow #FFC107) */}
+              {/* Primary Submit Button (Bill Scrap Yellow #FFC107) */}
               <button type="submit" className={styles.primarySubmitBtnYellow}>
                 <span>Submit Pickup Request ({items.length} Item{items.length > 1 ? 's' : ''})</span>
                 <ArrowRight size={16} />

@@ -284,8 +284,8 @@ export default function RegisterRole() {
         {roleStep === 1 && (
           <div>
             <div className={styles.headerCentered}>
-              <img src="/logo-icon.png" alt="Scrap Anna" className={styles.logoImg} />
-              <h1 className={styles.title}>How will you use Scrap Anna?</h1>
+              <img src="/logo-icon.png" alt="Bill Scrap" className={styles.logoImg} />
+              <h1 className={styles.title}>How will you use Bill Scrap?</h1>
               <p className={styles.subtitle}>Choose the option that best describes you.</p>
             </div>
 

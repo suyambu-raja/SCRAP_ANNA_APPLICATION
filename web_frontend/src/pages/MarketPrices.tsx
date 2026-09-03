@@ -380,7 +380,7 @@ export default function MarketPrices() {
                   icon={<ArrowRight size={16} />}
                   onClick={() => navigate('/login')}
                 >
-                  Join Scrap Anna →
+                  Join Bill Scrap →
                 </Button>
               </div>
             </div>

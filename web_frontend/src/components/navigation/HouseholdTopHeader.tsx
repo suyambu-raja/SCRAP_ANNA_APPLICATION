@@ -1,18 +1,18 @@
 import { useState, useRef, useEffect } from 'react';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
 import {
-  Bell,
-  Phone,
-  Plus,
-  ChevronDown,
-  User,
-  LogOut,
-  Clock,
-  Settings,
-  ShieldCheck,
-  Gift,
-  Headphones,
-} from 'lucide-react';
+  LuBell as Bell,
+  LuPhone as Phone,
+  LuPlus as Plus,
+  LuChevronDown as ChevronDown,
+  LuUser as User,
+  LuLogOut as LogOut,
+  LuClock as Clock,
+  LuSettings as Settings,
+  LuShieldCheck as ShieldCheck,
+  LuGift as Gift,
+  LuHeadphones as Headphones,
+} from 'react-icons/lu';
 import { useAuthStore } from '@/store/useAuthStore';
 import styles from './HouseholdTopHeader.module.css';
 
@@ -113,6 +113,12 @@ export function HouseholdTopHeader() {
         subtitle: 'Manage your doorstep pickup addresses and contact info',
       };
     }
+    if (path.includes('/household/products') || path.includes('/household/reusable-products')) {
+      return {
+        title: 'Reusable Products',
+        subtitle: 'Find useful products from verified local merchants and give them a second life',
+      };
+    }
     return {
       title: 'Household Dashboard',
       subtitle: 'Overview of doorstep scrap pickups, live market rates, and earnings',
@@ -138,12 +144,12 @@ export function HouseholdTopHeader() {
       {/* 1. Left: Mobile Brand Logo & Name / Desktop Page Meta */}
       <div className={styles.titleCol}>
         <Link to="/household" className={styles.mobileBrandLink}>
-          <img src="/logo-icon.png" alt="Scrap Anna" className={styles.mobileLogoImg} />
+          <img src="/logo-icon.png" alt="Bill Scrap" className={styles.mobileLogoImg} />
           <div className={styles.mobileBrandTextWrap}>
             <div className={styles.mobileBrandRow}>
               <span className={styles.mobileBrandTitle}>
-                <span className={styles.brandTitleScrap}>Scrap </span>
-                <span className={styles.brandTitleAnna}>Anna</span>
+                <span className={styles.brandTitleScrap}>Bill </span>
+                <span className={styles.brandTitleAnna}>Scrap</span>
               </span>
             </div>
             <span className={styles.mobileShopName}>CONNECT • COLLECT • RECYCLE</span>
@@ -202,6 +208,15 @@ export function HouseholdTopHeader() {
               >
                 <User size={16} />
                 <span>My Profile</span>
+              </Link>
+
+              <Link
+                to="/household/history"
+                className={styles.dropdownItem}
+                onClick={() => setProfileDropdownOpen(false)}
+              >
+                <Clock size={16} color="#059669" />
+                <span>Order History</span>
               </Link>
 
               <Link

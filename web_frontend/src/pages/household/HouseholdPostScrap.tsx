@@ -1,33 +1,33 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
-  MapPin,
-  Calendar,
-  Clock,
-  Image as ImageIcon,
-  Video as VideoIcon,
-  Camera,
-  X,
-  Plus,
-  CheckCircle2,
-  Package,
-  ArrowRight,
-  ArrowLeft,
-  Maximize2,
-  RefreshCw,
-  Edit2,
-  Check,
-  Headphones,
-  Sun,
-  Moon,
-  Tag,
-  ChevronDown,
-  ShieldCheck,
-  Scale,
-  Lightbulb,
-  Home as HomeIcon,
-  Briefcase,
-} from 'lucide-react';
+  LuMapPin as MapPin,
+  LuCalendar as Calendar,
+  LuClock as Clock,
+  LuImage as ImageIcon,
+  LuVideo as VideoIcon,
+  LuCamera as Camera,
+  LuX as X,
+  LuPlus as Plus,
+  LuCircleCheck as CheckCircle2,
+  LuPackage as Package,
+  LuArrowRight as ArrowRight,
+  LuArrowLeft as ArrowLeft,
+  LuMaximize2 as Maximize2,
+  LuRefreshCw as RefreshCw,
+  LuPencil as Edit2,
+  LuCheck as Check,
+  LuHeadphones as Headphones,
+  LuSun as Sun,
+  LuMoon as Moon,
+  LuTag as Tag,
+  LuChevronDown as ChevronDown,
+  LuShieldCheck as ShieldCheck,
+  LuScale as Scale,
+  LuLightbulb as Lightbulb,
+  LuHouse as HomeIcon,
+  LuBriefcase as Briefcase,
+} from 'react-icons/lu';
 import styles from './HouseholdPostScrap.module.css';
 import { useBodyScrollLock } from '../../hooks/useBodyScrollLock';
 
@@ -633,8 +633,8 @@ export function HouseholdPostScrap() {
           <div className={styles.sectionHeadingGroup} style={{ marginTop: '0.5rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }}>
               <h2 className={styles.sectionHeading}>2. Scrap Photos &amp; Videos</h2>
-              <span style={{ fontSize: '0.8rem', color: '#059669', fontWeight: 800 }}>
-                ✓ {uploadedList.length} Media Uploaded
+              <span style={{ fontSize: '0.8rem', color: '#059669', fontWeight: 800, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                <Check size={14} strokeWidth={3} aria-hidden="true" /> {uploadedList.length} Media Uploaded
               </span>
             </div>
             <p className={styles.sectionSubheading}>
@@ -884,7 +884,9 @@ export function HouseholdPostScrap() {
                     )}
                   </div>
                   <p className={styles.addressFullString}>{activeSavedAddress.fullAddress}</p>
-                  <span className={styles.addressDistanceText}>📍 12.5 km away</span>
+                  <span className={styles.addressDistanceText} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                    <MapPin size={13} aria-hidden="true" /> 12.5 km away
+                  </span>
                 </div>
               </div>
 

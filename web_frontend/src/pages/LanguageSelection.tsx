@@ -23,7 +23,7 @@ export default function LanguageSelection() {
         <div className={styles.header}>
           <img
             src="/logo-icon.png"
-            alt="Scrap Anna"
+            alt="Bill Scrap"
             className={styles.logoImg}
             onError={(e) => { (e.currentTarget as HTMLElement).style.display = 'none'; }}
           />

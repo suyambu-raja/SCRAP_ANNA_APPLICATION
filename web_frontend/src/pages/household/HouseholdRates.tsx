@@ -2,16 +2,16 @@ import { useEffect, useState, useRef, useCallback } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
-  ArrowLeft,
-  ArrowRight,
-  MapPin,
-  Info,
-  Layers,
-  Sparkles,
-  Cpu,
-  FileText,
-  Tag,
-} from 'lucide-react';
+  LuArrowLeft as ArrowLeft,
+  LuArrowRight as ArrowRight,
+  LuMapPin as MapPin,
+  LuInfo as Info,
+  LuLayers as Layers,
+  LuSparkles as Sparkles,
+  LuCpu as Cpu,
+  LuFileText as FileText,
+  LuTag as Tag,
+} from 'react-icons/lu';
 import { Button, SkeletonCard } from '@/components/common';
 import { PriceCard } from '@/components/cards/PriceCard';
 import { getMarketPrices, getScrapCategories } from '@/services';
@@ -374,10 +374,10 @@ export function HouseholdRates() {
                 <Button
                   size="md"
                   className={styles.ctaYellowBtn}
-                  icon={<ArrowRight size={16} />}
+                  icon={<ArrowRight size={16} aria-hidden="true" />}
                   onClick={() => navigate('/household/post-scrap')}
                 >
-                  Post Scrap →
+                  Post Scrap
                 </Button>
               </div>
             </div>

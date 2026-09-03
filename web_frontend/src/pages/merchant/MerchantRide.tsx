@@ -1108,7 +1108,7 @@ export default function MerchantRide() {
             {/* Trust Footer */}
             <footer className={styles.trustFooter}>
               <ShieldCheck size={16} className={styles.trustIcon} />
-              <span>Protected by Scrap Anna verified digital weighing and real-time OTP confirmation.</span>
+              <span>Protected by Bill Scrap verified digital weighing and real-time OTP confirmation.</span>
             </footer>
           </section>
 

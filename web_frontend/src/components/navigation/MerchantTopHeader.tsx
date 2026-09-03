@@ -103,12 +103,12 @@ export function MerchantTopHeader() {
       {/* Left: Mobile Brand Logo & Name / Desktop Dynamic Page Title */}
       <div className={styles.leftCol}>
         <Link to="/dashboard/merchant" className={styles.mobileBrandLink}>
-          <img src="/logo-icon.png" alt="Scrap Anna" className={styles.mobileLogoImg} />
+          <img src="/logo-icon.png" alt="Bill Scrap" className={styles.mobileLogoImg} />
           <div className={styles.mobileBrandTextWrap}>
             <div className={styles.mobileBrandRow}>
               <span className={styles.mobileBrandTitle}>
-                <span className={styles.brandTitleScrap}>Scrap </span>
-                <span className={styles.brandTitleAnna}>Anna</span>
+                <span className={styles.brandTitleScrap}>Bill </span>
+                <span className={styles.brandTitleAnna}>Scrap</span>
               </span>
             </div>
             <span className={styles.mobileShopName}>CONNECT • COLLECT • RECYCLE</span>

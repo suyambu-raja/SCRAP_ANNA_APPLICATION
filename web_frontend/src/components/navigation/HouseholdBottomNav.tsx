@@ -1,11 +1,11 @@
 import { NavLink, useLocation } from 'react-router-dom';
 import {
-  LayoutDashboard,
-  TrendingUp,
-  PlusCircle,
-  ShoppingBag,
-  Clock,
-} from 'lucide-react';
+  LuLayoutDashboard,
+  LuTrendingUp,
+  LuCirclePlus,
+  LuShoppingBag,
+  LuPackage,
+} from 'react-icons/lu';
 import styles from './HouseholdBottomNav.module.css';
 
 export function HouseholdBottomNav() {
@@ -22,7 +22,7 @@ export function HouseholdBottomNav() {
       id: 'dashboard',
       label: 'Home',
       to: '/household',
-      icon: <LayoutDashboard size={20} />,
+      icon: <LuLayoutDashboard size={20} aria-hidden="true" />,
       isActive:
         location.pathname === '/household' ||
         location.pathname === '/household/',
@@ -31,14 +31,14 @@ export function HouseholdBottomNav() {
       id: 'market-rates',
       label: 'Rates',
       to: '/household/rates',
-      icon: <TrendingUp size={20} />,
+      icon: <LuTrendingUp size={20} aria-hidden="true" />,
       isActive: location.pathname.includes('/household/rates'),
     },
     {
       id: 'post-scrap',
       label: 'Post Scrap',
       to: '/household/post-scrap',
-      icon: <PlusCircle size={22} />,
+      icon: <LuCirclePlus size={22} aria-hidden="true" />,
       isActive: location.pathname.includes('/household/post-scrap'),
       isCenterAction: true,
     },
@@ -46,16 +46,16 @@ export function HouseholdBottomNav() {
       id: 'orders',
       label: 'Orders',
       to: '/household/orders',
-      icon: <ShoppingBag size={20} />,
+      icon: <LuShoppingBag size={20} aria-hidden="true" />,
       badge: '2',
       isActive: location.pathname.includes('/household/orders'),
     },
     {
-      id: 'history',
-      label: 'History',
-      to: '/household/history',
-      icon: <Clock size={20} />,
-      isActive: location.pathname.includes('/household/history'),
+      id: 'products',
+      label: 'Products',
+      to: '/household/products',
+      icon: <LuPackage size={20} aria-hidden="true" />,
+      isActive: location.pathname.includes('/household/products'),
     },
   ];
 

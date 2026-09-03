@@ -10,7 +10,7 @@
   box-sizing: border-box;
 }
 
-/* 2. Hero Section — Exact Replica of Scrap Anna Company Site */
+/* 2. Hero Section — Exact Replica of Bill Scrap Company Site */
 .heroSectionExact {
   background-color: var(--color-white);
   overflow: hidden;
@@ -42,22 +42,27 @@
 .badgeYellow {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.45rem;
   font-size: 0.75rem;
-  font-weight: 750;
-  background-color: #FFFDF5;
-  color: #111827;
-  border: 1.5px solid #FBC21A;
-  padding: 0.35rem 0.85rem;
+  font-weight: 800;
+  background: linear-gradient(180deg, #FFF8DC 0%, #FFEEBA 100%);
+  color: #1E3A20;
+  border: 1.5px solid #FFDE7A;
+  padding: 0.38rem 0.95rem;
   border-radius: var(--radius-pill);
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  box-shadow: 0 2px 8px rgba(251, 194, 26, 0.18);
+  box-shadow: 0 4px 14px -2px rgba(248, 191, 29, 0.25), 0 2px 6px rgba(0, 0, 0, 0.04);
   transition: all 0.2s ease;
 }
 
+.badgeYellow:hover {
+  border-color: #F8BF1D;
+  box-shadow: 0 6px 18px -2px rgba(248, 191, 29, 0.35);
+}
+
 .locationPinAnim {
-  color: #D97706;
+  color: #1E3A20;
   display: inline-block;
   animation: pinBounce 1.8s cubic-bezier(0.28, 0.84, 0.42, 1) infinite;
   transform-origin: bottom center;
@@ -388,7 +393,7 @@
   transform: translateY(-2px);
 }
 
-/* Trust Assurance Cards (Why Choose Scrap Anna?) */
+/* Trust Assurance Cards (Why Choose Bill Scrap?) */
 .trustAssuranceCard {
   background: var(--color-white);
   border: 1.5px solid var(--color-border);
@@ -702,27 +707,29 @@
 
 /* Single Price Note */
 .singlePriceNoteBox {
-  background: #FFFBEB;
-  border: 1px solid #FDE68A;
-  border-radius: 12px;
+  background: linear-gradient(180deg, #FFF8DC 0%, #FFEEBA 100%);
+  border: 1.5px solid #FFDE7A;
+  border-radius: 14px;
   padding: 1rem 1.25rem;
   display: flex;
   align-items: flex-start;
   gap: 0.75rem;
   margin-bottom: 1.5rem;
-  color: #92400E;
+  color: #1E3A20;
   font-size: 0.86rem;
   line-height: 1.5;
+  box-shadow: 0 4px 14px -2px rgba(248, 191, 29, 0.18), 0 2px 6px rgba(0, 0, 0, 0.03);
 }
 
 .noteInfoIcon {
-  color: #D97706;
+  color: #1E3A20;
   flex-shrink: 0;
   margin-top: 1px;
 }
 
 .noteContent strong {
-  color: #78350F;
+  color: #163318;
+  font-weight: 800;
   margin-right: 0.25rem;
 }
 

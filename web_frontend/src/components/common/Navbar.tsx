@@ -134,18 +134,16 @@ export function Navbar() {
     >
       <div className={styles.navbarContainer}>
         {/* Brand / Logo */}
-        <Link to="/home" className={styles.brandLink} aria-label="Scrap Anna Home">
+        <Link to="/home" className={styles.brandLink} aria-label="Bill Scrap Home">
           <img
             src="/logo-icon.png"
-            alt="Scrap Anna Emblem"
+            alt="Bill Scrap Emblem"
             className={styles.logoEmblem}
           />
           <div className={styles.brandTextCol}>
-            <img
-              src="/logo-text.png"
-              alt="Scrap Anna"
-              className={styles.logoTextImg}
-            />
+            <span className={styles.brandTitleText}>
+              BILL <span className={styles.brandTitleYellow}>SCRAP</span>
+            </span>
             <div className={styles.brandTaglineExact}>
               Connect • Collect • Recycle
             </div>

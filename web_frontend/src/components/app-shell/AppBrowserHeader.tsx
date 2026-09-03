@@ -19,10 +19,10 @@ export function AppBrowserHeader() {
     <header className={styles.headerWrapper}>
       <div className={styles.headerContainer}>
         {/* Left Logo / App Brand */}
-        <Link to="/app/home" className={styles.brandLink} aria-label="Scrap Anna App">
-          <img src="/logo-icon.png" alt="Scrap Anna" className={styles.logoIcon} />
+        <Link to="/app/home" className={styles.brandLink} aria-label="Bill Scrap App">
+          <img src="/logo-icon.png" alt="Bill Scrap" className={styles.logoIcon} />
           <div className={styles.brandText}>
-            <span className={styles.brandTitle}>Scrap Anna</span>
+            <span className={styles.brandTitle}>Bill Scrap</span>
             <span className={styles.brandSub}>App Dashboard</span>
           </div>
         </Link>
@@ -50,7 +50,7 @@ export function AppBrowserHeader() {
               type="button"
               className={styles.installBtn}
               onClick={installPWA}
-              title="Install Scrap Anna PWA for offline and full screen app experience"
+              title="Install Bill Scrap PWA for offline and full screen app experience"
             >
               <Download size={15} />
               <span>Install App</span>

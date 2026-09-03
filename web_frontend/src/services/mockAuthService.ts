@@ -132,7 +132,7 @@ export async function registerRoleUser(data: RoleRegistrationData): Promise<{ us
       id: `USR${String(db.users.length + 1).padStart(3, '0')}`,
       role: data.role,
       name: displayName,
-      email: data.email || `${data.role}_${Date.now()}@scrapanna.in`,
+      email: data.email || `${data.role}_${Date.now()}@billscrap.in`,
       phone: normPhone,
       language: data.language || 'en',
       location: {

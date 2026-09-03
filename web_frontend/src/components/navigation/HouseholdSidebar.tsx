@@ -1,18 +1,18 @@
 import { NavLink, Link, useLocation } from 'react-router-dom';
 import {
-  LayoutDashboard,
-  TrendingUp,
-  PlusCircle,
-  ShoppingBag,
-  Clock,
-  Bell,
-  User,
-  ChevronLeft,
-  ChevronRight,
-  ShieldCheck,
-  Gift,
-  Headphones,
-} from 'lucide-react';
+  LuLayoutDashboard,
+  LuTrendingUp,
+  LuCirclePlus,
+  LuShoppingBag,
+  LuPackage,
+  LuClock,
+  LuUser,
+  LuChevronLeft,
+  LuChevronRight,
+  LuShieldCheck,
+  LuGift,
+  LuHeadphones,
+} from 'react-icons/lu';
 import styles from './HouseholdSidebar.module.css';
 
 interface HouseholdSidebarProps {
@@ -28,7 +28,7 @@ export function HouseholdSidebar({ isCollapsed, onToggle }: HouseholdSidebarProp
       id: 'dashboard',
       label: 'Home',
       to: '/household',
-      icon: <LayoutDashboard size={19} />,
+      icon: <LuLayoutDashboard size={19} aria-hidden="true" />,
       isActive:
         location.pathname === '/household' ||
         location.pathname === '/household/' ||
@@ -39,7 +39,7 @@ export function HouseholdSidebar({ isCollapsed, onToggle }: HouseholdSidebarProp
       id: 'market-rates',
       label: 'Market Prices',
       to: '/household/rates',
-      icon: <TrendingUp size={19} />,
+      icon: <LuTrendingUp size={19} aria-hidden="true" />,
       isActive:
         location.pathname.includes('/household/rates') ||
         location.pathname.includes('/household/market-prices'),
@@ -48,22 +48,29 @@ export function HouseholdSidebar({ isCollapsed, onToggle }: HouseholdSidebarProp
       id: 'post-scrap',
       label: 'Post Scrap',
       to: '/household/post-scrap',
-      icon: <PlusCircle size={19} />,
+      icon: <LuCirclePlus size={19} aria-hidden="true" />,
       isActive: location.pathname.includes('/household/post-scrap'),
     },
     {
       id: 'orders',
       label: 'Orders',
       to: '/household/orders',
-      icon: <ShoppingBag size={19} />,
+      icon: <LuShoppingBag size={19} aria-hidden="true" />,
       badge: '1',
       isActive: location.pathname === '/household/orders',
+    },
+    {
+      id: 'reusable-products',
+      label: 'Products',
+      to: '/household/products',
+      icon: <LuPackage size={19} aria-hidden="true" />,
+      isActive: location.pathname.includes('/household/products'),
     },
     {
       id: 'history',
       label: 'History',
       to: '/household/history',
-      icon: <Clock size={19} />,
+      icon: <LuClock size={19} aria-hidden="true" />,
       badge: '12',
       isActive: location.pathname.includes('/household/history'),
     },
@@ -74,14 +81,14 @@ export function HouseholdSidebar({ isCollapsed, onToggle }: HouseholdSidebarProp
       id: 'profile',
       label: 'My Profile',
       to: '/household/profile',
-      icon: <User size={19} />,
+      icon: <LuUser size={19} aria-hidden="true" />,
       isActive: location.pathname.includes('/household/profile'),
     },
     {
       id: 'refer-earn',
       label: 'Refer & Earn',
       to: '/household/refer-earn',
-      icon: <Gift size={19} />,
+      icon: <LuGift size={19} aria-hidden="true" />,
       badge: '₹50',
       isActive: location.pathname.includes('/household/refer-earn'),
     },
@@ -89,7 +96,7 @@ export function HouseholdSidebar({ isCollapsed, onToggle }: HouseholdSidebarProp
       id: 'support',
       label: 'Support',
       to: '/household/support',
-      icon: <Headphones size={19} />,
+      icon: <LuHeadphones size={19} aria-hidden="true" />,
       isActive: location.pathname.includes('/household/support'),
     },
   ];
@@ -115,7 +122,7 @@ export function HouseholdSidebar({ isCollapsed, onToggle }: HouseholdSidebarProp
           {!isCollapsed && (
             <div className={styles.brandTextGroup}>
               <div className={styles.brandTitleRow}>
-                <span className={styles.brandName}>Scrap Anna</span>
+                <span className={styles.brandName}>Bill Scrap</span>
                 <span className={styles.roleTag}>HOUSEHOLD</span>
               </div>
               <span className={styles.brandSubtitle}>Household Scrap Portal</span>
@@ -177,7 +184,7 @@ export function HouseholdSidebar({ isCollapsed, onToggle }: HouseholdSidebarProp
           <div className={styles.postCtaCard}>
             <div className={styles.postCtaHeader}>
               <div className={styles.postCtaIconBox}>
-                <PlusCircle size={18} />
+                <LuCirclePlus size={18} aria-hidden="true" />
               </div>
               <div className={styles.postCtaTitle}>Have scrap at home?</div>
             </div>
@@ -195,7 +202,7 @@ export function HouseholdSidebar({ isCollapsed, onToggle }: HouseholdSidebarProp
       <div className={styles.footerWrap}>
         {!isCollapsed && (
           <div className={styles.enterpriseTrustBadge}>
-            <ShieldCheck size={16} className={styles.trustIcon} />
+            <LuShieldCheck size={16} className={styles.trustIcon} aria-hidden="true" />
             <span>Verified Household User</span>
           </div>
         )}
@@ -207,10 +214,10 @@ export function HouseholdSidebar({ isCollapsed, onToggle }: HouseholdSidebarProp
           title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
           {isCollapsed ? (
-            <ChevronRight size={17} />
+            <LuChevronRight size={17} aria-hidden="true" />
           ) : (
             <>
-              <ChevronLeft size={17} />
+              <LuChevronLeft size={17} aria-hidden="true" />
               <span className={styles.toggleText}>Collapse Sidebar</span>
             </>
           )}

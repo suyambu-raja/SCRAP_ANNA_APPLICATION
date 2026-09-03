@@ -10,9 +10,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'favicon.svg', 'favicon-32x32.png', 'apple-touch-icon.png'],
       manifest: {
-        name: 'Scrap Anna',
-        short_name: 'Scrap Anna',
-        description: 'Connect, Collect and Recycle with Scrap Anna.',
+        name: 'Bill Scrap',
+        short_name: 'Bill Scrap',
+        description: 'Connect, Collect and Recycle with Bill Scrap.',
         theme_color: '#FBC21A',
         background_color: '#FFFFFF',
         display: 'standalone',

@@ -1497,7 +1497,7 @@ export default function MerchantOrders() {
                           fill="none"
                         />
 
-                        {/* Origin Depot Pin: Scrap Anna Guindy Depot (420, 310) */}
+                        {/* Origin Depot Pin: Bill Scrap Guindy Depot (420, 310) */}
                         <g transform="translate(420, 310)">
                           <circle r="18" fill="#22c55e" opacity="0.25" />
                           <circle r="10" fill="#16a34a" filter="url(#embeddedPinShadow)" />
@@ -1585,7 +1585,7 @@ export default function MerchantOrders() {
                         <span className={styles.routeDotGreen} />
                         <div className={styles.routeTextCol}>
                           <span className={styles.routePointLabel}>ORIGIN DEPOT</span>
-                          <span className={styles.routePointAddress}>Scrap Anna Merchant Depot, SIDCO Guindy, Chennai</span>
+                          <span className={styles.routePointAddress}>Bill Scrap Merchant Depot, SIDCO Guindy, Chennai</span>
                         </div>
                       </div>
 

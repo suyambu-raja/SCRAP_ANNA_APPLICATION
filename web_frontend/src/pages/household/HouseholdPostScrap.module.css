@@ -1875,7 +1875,7 @@
     margin-top: 0.25rem;
   }
 
-  /* Why Post Scrap on Scrap Anna Section */
+  /* Why Post Scrap on Bill Scrap Section */
   .mobileWhyPostSection {
     background: #fffdf5;
     border: 1.5px solid #fef08a;
@@ -2019,7 +2019,7 @@
 
   .bottomSheetModal,
   .allPhotosModal {
-    background: #20242D; /* Signature Scrap Anna Graphite #20242D */
+    background: #20242D; /* Signature Bill Scrap Graphite #20242D */
     width: 100%;
     max-width: 500px;
     border-radius: 24px 24px 0 0;

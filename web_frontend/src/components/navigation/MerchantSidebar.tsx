@@ -126,12 +126,12 @@ export function MerchantSidebar({ isCollapsed, onToggle }: MerchantSidebarProps)
     >
       <div className={styles.sidebarTop}>
         {/* Brand Header */}
-        <Link to="/dashboard/merchant" className={styles.brandHeader} title="Scrap Anna Merchant">
+        <Link to="/dashboard/merchant" className={styles.brandHeader} title="Bill Scrap Merchant">
           <div className={styles.brandGroup}>
             <div className={styles.brandLogoBox}>
               <img
                 src="/logo.png"
-                alt="Scrap Anna Logo"
+                alt="Bill Scrap Logo"
                 className={styles.logoImg}
                 onError={(e) => {
                   (e.target as HTMLImageElement).src = '/logo-icon.png';
@@ -141,7 +141,7 @@ export function MerchantSidebar({ isCollapsed, onToggle }: MerchantSidebarProps)
             {!isCollapsed && (
               <div className={styles.brandTextCol}>
                 <span className={styles.brandTitle}>
-                  SCRAP <span className={styles.brandTitleHighlight}>ANNA</span>
+                  BILL <span className={styles.brandTitleHighlight}>SCRAP</span>
                 </span>
                 <span className={styles.brandSubtitle}>
                   CONNECT • COLLECT • RECYCLE

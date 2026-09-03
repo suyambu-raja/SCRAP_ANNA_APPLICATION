@@ -13,7 +13,7 @@ import styles from './IndustryLayout.module.css';
  * - Left collapsible sidebar (~250px expanded / ~74px collapsed) for Desktop
  * - Slim top header with dynamic page title, support phone, notifications, and company profile
  * - Fixed 5-item bottom navigation for Mobile
- * - Full remaining width main content area matching Scrap Anna's White/Yellow/Graphite aesthetic
+ * - Full remaining width main content area matching Bill Scrap's White/Yellow/Graphite aesthetic
  */
 export function IndustryLayout() {
   const [isCollapsed, setIsCollapsed] = useState(false);

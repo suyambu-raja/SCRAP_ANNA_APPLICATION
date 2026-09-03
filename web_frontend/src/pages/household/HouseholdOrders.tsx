@@ -1,32 +1,32 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  CheckCircle2,
-  MapPin,
-  Calendar,
-  Clock,
-  User,
-  Phone,
-  Truck,
-  Plus,
-  Navigation,
-  Info,
-  Scale,
-  ShieldCheck,
-  IndianRupee,
-  Star,
-  ArrowRight,
-  Receipt,
-  FileText,
-  X,
-  AlertCircle,
-  Eye,
-  Maximize2,
-  ArrowLeft,
-  Headphones,
-  ChevronRight,
-  Check,
-} from 'lucide-react';
+  LuCircleCheck as CheckCircle2,
+  LuMapPin as MapPin,
+  LuCalendar as Calendar,
+  LuClock as Clock,
+  LuUser as User,
+  LuPhone as Phone,
+  LuTruck as Truck,
+  LuPlus as Plus,
+  LuNavigation as Navigation,
+  LuInfo as Info,
+  LuScale as Scale,
+  LuShieldCheck as ShieldCheck,
+  LuIndianRupee as IndianRupee,
+  LuStar as Star,
+  LuArrowRight as ArrowRight,
+  LuReceipt as Receipt,
+  LuFileText as FileText,
+  LuX as X,
+  LuCircleAlert as AlertCircle,
+  LuEye as Eye,
+  LuMaximize2 as Maximize2,
+  LuArrowLeft as ArrowLeft,
+  LuHeadphones as Headphones,
+  LuChevronRight as ChevronRight,
+  LuCheck as Check,
+} from 'react-icons/lu';
 import styles from './HouseholdOrders.module.css';
 import { useBodyScrollLock } from '../../hooks/useBodyScrollLock';
 
@@ -345,7 +345,7 @@ const getStatusMessage = (order: HouseholdOrder) => {
     case 'bill_confirmation':
       return 'Please review the final weight and amount before confirming.';
     case 'completed':
-      return 'Thank you for recycling with Scrap Anna.';
+      return 'Thank you for recycling with Bill Scrap.';
     case 'cancelled':
       return 'This doorstep pickup request has been cancelled.';
     default:
@@ -498,19 +498,42 @@ export function HouseholdOrders() {
                   : styles.tabStatusPillYellow
               }
             >
-              {ord.stage === 'completed'
-                ? '✓ Completed'
-                : ord.stage === 'cancelled'
-                ? '✕ Cancelled'
-                : ord.stage === 'bill_confirmation'
-                ? '● Confirm Bill'
-                : ord.stage === 'pickup'
-                ? '● Weighing Scrap'
-                : ord.stage === 'arriving'
-                ? '● Merchant Arriving'
-                : ord.stage === 'confirmed'
-                ? '● Confirmed'
-                : '● Awaiting Quotes'}
+              {ord.stage === 'completed' ? (
+                <>
+                  <CheckCircle2 size={12} aria-hidden="true" style={{ marginRight: 4 }} />
+                  Completed
+                </>
+              ) : ord.stage === 'cancelled' ? (
+                <>
+                  <X size={12} aria-hidden="true" style={{ marginRight: 4 }} />
+                  Cancelled
+                </>
+              ) : ord.stage === 'bill_confirmation' ? (
+                <>
+                  <Receipt size={12} aria-hidden="true" style={{ marginRight: 4 }} />
+                  Confirm Bill
+                </>
+              ) : ord.stage === 'pickup' ? (
+                <>
+                  <Scale size={12} aria-hidden="true" style={{ marginRight: 4 }} />
+                  Weighing Scrap
+                </>
+              ) : ord.stage === 'arriving' ? (
+                <>
+                  <Truck size={12} aria-hidden="true" style={{ marginRight: 4 }} />
+                  Merchant Arriving
+                </>
+              ) : ord.stage === 'confirmed' ? (
+                <>
+                  <Check size={12} aria-hidden="true" style={{ marginRight: 4 }} />
+                  Confirmed
+                </>
+              ) : (
+                <>
+                  <Clock size={12} aria-hidden="true" style={{ marginRight: 4 }} />
+                  Awaiting Quotes
+                </>
+              )}
             </span>
           </button>
         ))}
@@ -606,7 +629,7 @@ export function HouseholdOrders() {
             </div>
             {reviewSubmitted && (
               <span className={styles.ratingThanksText}>
-                Thank you! Your private feedback helps Scrap Anna maintain top quality. ✨
+                Thank you! Your private feedback helps Bill Scrap maintain top quality.
               </span>
             )}
           </div>
@@ -772,7 +795,9 @@ export function HouseholdOrders() {
                   className={styles.simulateNextBtn}
                   onClick={() => setOrderStage(activeOrder.id, 'pickup')}
                 >
-                  Driver Arrived → Start Weighing
+                  <span>Driver Arrived</span>
+                  <ArrowRight size={13} aria-hidden="true" style={{ marginLeft: 6 }} />
+                  <span>Start Weighing</span>
                 </button>
               </div>
             </div>
@@ -793,7 +818,9 @@ export function HouseholdOrders() {
                 className={styles.simulateNextBtn}
                 onClick={() => setOrderStage(activeOrder.id, 'bill_confirmation')}
               >
-                Merchant Submitted Bill → Review Final Bill
+                <span>Merchant Submitted Bill</span>
+                <ArrowRight size={13} aria-hidden="true" style={{ marginLeft: 6 }} />
+                <span>Review Final Bill</span>
               </button>
             </div>
           ) : activeOrder.stage === 'confirmed' ? (
@@ -810,7 +837,9 @@ export function HouseholdOrders() {
                 className={styles.simulateNextBtn}
                 onClick={() => setOrderStage(activeOrder.id, 'arriving')}
               >
-                Driver Dispatched → Track Arrival
+                <span>Driver Dispatched</span>
+                <ArrowRight size={13} aria-hidden="true" style={{ marginLeft: 6 }} />
+                <span>Track Arrival</span>
               </button>
             </div>
           ) : (
@@ -890,7 +919,7 @@ export function HouseholdOrders() {
                     <div className={styles.merchantNameCol}>
                       <h4 className={styles.merchantName}>{activeOrder.merchantName}</h4>
                       <span className={styles.ratingBadge}>
-                        ★ {activeOrder.merchantRating} • Verified Doorstep Partner
+                        <Star size={12} fill="#F59E0B" color="#F59E0B" aria-hidden="true" style={{ marginRight: 3, verticalAlign: -1 }} /> {activeOrder.merchantRating} • Verified Doorstep Partner
                       </span>
                     </div>
                   </div>
@@ -984,7 +1013,7 @@ export function HouseholdOrders() {
                       </div>
                       <div className={styles.activeCardMerchantDetails}>
                         <span className={styles.activeCardMerchantName}>
-                          {activeOrder.merchantName || 'Scrap Anna Partner'}
+                          {activeOrder.merchantName || 'Bill Scrap Partner'}
                         </span>
                         <span
                           className={
@@ -1226,7 +1255,7 @@ export function HouseholdOrders() {
                           {currentMobileOrder.merchantName}
                         </span>
                         <span className={styles.merchantRatingText}>
-                          ★ {currentMobileOrder.merchantRating || 4.8} (230+ pickups)
+                          <Star size={12} fill="#F59E0B" color="#F59E0B" aria-hidden="true" style={{ marginRight: 3, verticalAlign: -1 }} /> {currentMobileOrder.merchantRating || 4.8} (230+ pickups)
                         </span>
                       </div>
                     </div>
@@ -1483,14 +1512,14 @@ export function HouseholdOrders() {
               <div className={styles.supportingCard}>
                 <h4 className={styles.supportingCardTitle}>
                   <span>Merchant Partner</span>
-                  <span style={{ fontSize: '0.72rem', color: '#16a34a', fontWeight: 700 }}>
-                    ✓ Verified
+                  <span style={{ fontSize: '0.72rem', color: '#16a34a', fontWeight: 700, display: 'inline-flex', alignItems: 'center' }}>
+                    <Check size={12} strokeWidth={3} aria-hidden="true" style={{ marginRight: 3 }} /> Verified
                   </span>
                 </h4>
                 <div className={styles.supportingInfoRow}>
                   <User size={16} />
                   <span>
-                    {currentMobileOrder.merchantName} (★ {currentMobileOrder.merchantRating || 4.8})
+                    {currentMobileOrder.merchantName} (<Star size={11} fill="#F59E0B" color="#F59E0B" aria-hidden="true" style={{ verticalAlign: -1 }} /> {currentMobileOrder.merchantRating || 4.8})
                   </span>
                 </div>
                 <div className={styles.supportingInfoRow}>

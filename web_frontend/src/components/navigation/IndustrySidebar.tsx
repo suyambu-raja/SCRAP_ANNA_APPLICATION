@@ -98,13 +98,13 @@ export function IndustrySidebar({ isCollapsed, onToggle }: IndustrySidebarProps)
       <div className={styles.brandHeader}>
         <Link to="/industry/dashboard" className={styles.brandLink}>
           <div className={styles.logoWrap}>
-            <img src="/logo-icon.png" alt="Scrap Anna" className={styles.logoIcon} />
+            <img src="/logo-icon.png" alt="Bill Scrap" className={styles.logoIcon} />
           </div>
 
           {!isCollapsed && (
             <div className={styles.brandTextGroup}>
               <div className={styles.brandTitleRow}>
-                <span className={styles.brandName}>Scrap Anna</span>
+                <span className={styles.brandName}>Bill Scrap</span>
                 <span className={styles.roleTag}>INDUSTRY</span>
               </div>
               <span className={styles.brandSubtitle}>B2B Enterprise Portal</span>

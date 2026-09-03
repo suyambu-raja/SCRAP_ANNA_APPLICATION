@@ -57,14 +57,14 @@ export function MerchantNavbar({ activeTab = 'dashboard' }: MerchantNavbarProps)
     <header className={styles.merchantHeader}>
       <div className={styles.navContainer}>
         {/* Brand / Logo */}
-        <Link to="/dashboard/merchant" className={styles.brandGroup} aria-label="Scrap Anna Dashboard">
+        <Link to="/dashboard/merchant" className={styles.brandGroup} aria-label="Bill Scrap Dashboard">
           <div className={styles.brandLogo}>
-            <img src="/logo.png" alt="Scrap Anna" className={styles.logoIcon} onError={(e) => {
+            <img src="/logo.png" alt="Bill Scrap" className={styles.logoIcon} onError={(e) => {
               (e.currentTarget as HTMLImageElement).src = '/logo-icon.png';
             }} />
             <div className={styles.brandTextCol}>
               <span className={styles.brandTitle}>
-                SCRAP <span className={styles.brandTitleHighlight}>ANNA</span>
+                BILL <span className={styles.brandTitleHighlight}>SCRAP</span>
               </span>
               <span className={styles.brandSubtitle}>
                 CONNECT • COLLECT • RECYCLE

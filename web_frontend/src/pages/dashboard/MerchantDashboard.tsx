@@ -555,7 +555,7 @@ export default function MerchantDashboard({ merchantTrustStatus = 'priority' }: 
 
             <p className={styles.heroDescription}>
               Get more pickups. Give the best price.<br />
-              Grow your business with Scrap Anna.
+              Grow your business with Bill Scrap.
             </p>
 
             <div className={styles.heroFeaturesRow}>
@@ -682,7 +682,7 @@ export default function MerchantDashboard({ merchantTrustStatus = 'priority' }: 
           <div className={styles.heroRight}>
             <img
               src="/hero-truck.png"
-              alt="Scrap Anna Commercial Truck"
+              alt="Bill Scrap Commercial Truck"
               width="640"
               height="480"
               className={styles.heroTruckImg}

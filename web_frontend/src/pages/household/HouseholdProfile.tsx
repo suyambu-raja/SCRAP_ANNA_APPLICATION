@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
   User,
   Phone,
@@ -21,6 +22,8 @@ import {
   CheckCircle2,
   X,
   Store,
+  Clock,
+  ArrowRight,
 } from 'lucide-react';
 import { useAuthStore } from '@/store/useAuthStore';
 import { RequestAdditionalRoleModal } from '@/components/common';
@@ -176,7 +179,29 @@ export function HouseholdProfile() {
         </div>
       </section>
 
-      {/* 2. NAVIGATION TABS */}
+      {/* 2. ORDER HISTORY & PAST PICKUPS QUICK CARD */}
+      <div className={styles.historyActionCard}>
+        <div className={styles.historyActionLeft}>
+          <div className={styles.historyIconWrap}>
+            <Clock size={24} className={styles.historyClockIcon} />
+          </div>
+          <div className={styles.historyTextGroup}>
+            <div className={styles.historyTitleRow}>
+              <h3 className={styles.historyCardTitle}>Order History & Past Pickups</h3>
+              <span className={styles.historyCountBadge}>12 Completed Pickups</span>
+            </div>
+            <p className={styles.historyCardSubtitle}>
+              Review past doorstep pickups, digital weighing receipts, item weight breakdowns, and payout slips.
+            </p>
+          </div>
+        </div>
+        <Link to="/household/history" className={styles.viewHistoryBtn}>
+          <span>View Order History</span>
+          <ArrowRight size={16} />
+        </Link>
+      </div>
+
+      {/* 3. NAVIGATION TABS */}
       <div className={styles.tabsContainer}>
         <button
           type="button"
@@ -467,7 +492,7 @@ export function HouseholdProfile() {
               <h3 className={styles.cardTitle}>Pickup Coverage</h3>
             </div>
             <p style={{ margin: 0, fontSize: '0.84rem', color: '#64748b', lineHeight: 1.45 }}>
-              Scrap Anna provides certified doorstep pickup across all major areas in <strong>Chennai</strong> including Anna Nagar, Kilpauk, Shenoy Nagar, Guindy, T. Nagar, Adyar, Velachery, and OMR.
+              Bill Scrap provides certified doorstep pickup across all major areas in <strong>Chennai</strong> including Anna Nagar, Kilpauk, Shenoy Nagar, Guindy, T. Nagar, Adyar, Velachery, and OMR.
             </p>
             <div style={{ background: '#ecfdf5', padding: '0.85rem', borderRadius: '10px', border: '1px solid #a7f3d0', fontSize: '0.8rem', color: '#065f46' }}>
               ⚡ <strong>Instant Weighing:</strong> Our verified drivers bring calibrated digital weigh scales to every doorstep address.
