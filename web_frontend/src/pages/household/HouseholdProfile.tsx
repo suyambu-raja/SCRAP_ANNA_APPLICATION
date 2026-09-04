@@ -24,6 +24,9 @@ import {
   Store,
   Clock,
   ArrowRight,
+  ChevronRight,
+  Headphones,
+  MessageSquare,
 } from 'lucide-react';
 import { useAuthStore } from '@/store/useAuthStore';
 import { RequestAdditionalRoleModal } from '@/components/common';
@@ -64,6 +67,8 @@ export function HouseholdProfile() {
   // Tab State
   const [activeTab, setActiveTab] = useState<'personal' | 'addresses' | 'payment' | 'notifications'>('personal');
   const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
+  const [isMobileEditContactOpen, setIsMobileEditContactOpen] = useState(false);
+  const [isMobileAddressesOpen, setIsMobileAddressesOpen] = useState(false);
 
   // Personal Info Form State
   const [fullName, setFullName] = useState(user?.name || 'Ramesh Kumar');
@@ -133,7 +138,11 @@ export function HouseholdProfile() {
 
   return (
     <div className={styles.pageContainer}>
-      {/* 1. HERO PROFILE CARD */}
+      {/* ===================================================================
+          DESKTOP PROFILE VIEW (FULL MULTI-TAB PORTAL, 100% PRESERVED)
+          =================================================================== */}
+      <div className={styles.desktopProfileView}>
+        {/* 1. HERO PROFILE CARD */}
       <section className={styles.profileHeroCard}>
         <div className={styles.profileUserGroup}>
           <div className={styles.avatarLarge}>
@@ -708,7 +717,230 @@ export function HouseholdProfile() {
           </div>
         </div>
       )}
+    </div> {/* /.desktopProfileView */}
 
+      {/* ===================================================================
+          MOBILE PROFILE VIEW (EXACT MATCH PROPOSED DESIGN)
+          =================================================================== */}
+      <div className={styles.mobileProfileView}>
+        {/* 1. Profile Header Card */}
+        <div className={styles.mobileHeroHeader}>
+          <div className={styles.mobileAvatar}>
+            {fullName.charAt(0).toUpperCase()}
+          </div>
+          <div className={styles.mobileUserInfo}>
+            <div className={styles.mobileVerifiedBadge}>
+              <ShieldCheck size={13} className={styles.mobileVerifiedIcon} />
+              <span>Verified Household</span>
+            </div>
+            <h1 className={styles.mobileUserName}>{fullName}</h1>
+            <div className={styles.mobileLocationRow}>
+              <MapPin size={13} className={styles.mobileLocationIcon} />
+              <span>Anna Nagar, Chennai</span>
+            </div>
+            <div className={styles.mobilePhoneRow}>
+              <Phone size={13} className={styles.mobilePhoneIcon} />
+              <span>{phone}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* 2. Quick Stats Row (3 Columns) */}
+        <div className={styles.mobileQuickStats}>
+          <div className={styles.mobileStatItem}>
+            <span className={styles.mobileStatValue}>118.6 KG</span>
+            <span className={styles.mobileStatLabel}>Total Recycled</span>
+          </div>
+          <div className={styles.mobileStatDivider} />
+          <div className={styles.mobileStatItem}>
+            <span className={styles.mobileStatValue}>12</span>
+            <span className={styles.mobileStatLabel}>Completed Pickups</span>
+          </div>
+          <div className={styles.mobileStatDivider} />
+          <div className={styles.mobileStatItem}>
+            <span className={styles.mobileStatValue}>₹3,450</span>
+            <span className={styles.mobileStatLabel}>Total Earned</span>
+          </div>
+        </div>
+
+        {/* 3. Order History & Past Pickups Card */}
+        <Link to="/household/history" className={styles.mobileHistoryCard}>
+          <div className={styles.mobileHistoryLeft}>
+            <div className={styles.mobileHistoryIconBox}>
+              <Clock size={20} className={styles.mobileHistoryClockIcon} />
+            </div>
+            <div className={styles.mobileHistoryTextCol}>
+              <h2 className={styles.mobileHistoryTitle}>Order History & Past Pickups</h2>
+              <span className={styles.mobileHistoryCountBadge}>12 Completed Pickups</span>
+            </div>
+          </div>
+          <ChevronRight size={18} className={styles.mobileChevron} />
+        </Link>
+
+        {/* 4. Account & Contact Information Section */}
+        <div className={styles.mobileSection}>
+          <h2 className={styles.mobileSectionTitle}>Account & Contact Information</h2>
+          <div className={styles.mobileListCard}>
+            <div
+              className={styles.mobileListRow}
+              onClick={() => setIsMobileEditContactOpen(true)}
+              role="button"
+              tabIndex={0}
+            >
+              <div className={styles.mobileListRowLeft}>
+                <Phone size={17} className={styles.mobileRowIcon} />
+                <div className={styles.mobileRowTextGroup}>
+                  <span className={styles.mobileRowLabel}>Mobile Number</span>
+                  <span className={styles.mobileRowValue}>{phone}</span>
+                </div>
+              </div>
+              <ChevronRight size={18} className={styles.mobileChevron} />
+            </div>
+
+            <div className={styles.mobileRowDivider} />
+
+            <div
+              className={styles.mobileListRow}
+              onClick={() => setIsMobileEditContactOpen(true)}
+              role="button"
+              tabIndex={0}
+            >
+              <div className={styles.mobileListRowLeft}>
+                <Mail size={17} className={styles.mobileRowIcon} />
+                <div className={styles.mobileRowTextGroup}>
+                  <span className={styles.mobileRowLabel}>Email Address</span>
+                  <span className={styles.mobileRowValue}>{email}</span>
+                </div>
+              </div>
+              <ChevronRight size={18} className={styles.mobileChevron} />
+            </div>
+
+            <div className={styles.mobileRowDivider} />
+
+            <div
+              className={styles.mobileListRow}
+              onClick={() => setIsMobileEditContactOpen(true)}
+              role="button"
+              tabIndex={0}
+            >
+              <div className={styles.mobileListRowLeft}>
+                <MessageSquare size={17} className={styles.mobileRowIcon} />
+                <div className={styles.mobileRowTextGroup}>
+                  <span className={styles.mobileRowLabel}>Alternate Phone / WhatsApp</span>
+                  <span className={styles.mobileRowValue}>{alternatePhone}</span>
+                </div>
+              </div>
+              <ChevronRight size={18} className={styles.mobileChevron} />
+            </div>
+          </div>
+
+          <button
+            type="button"
+            className={styles.mobileEditContactBtn}
+            onClick={() => setIsMobileEditContactOpen(true)}
+          >
+            Edit Contact Information
+          </button>
+        </div>
+
+        {/* 5. Saved Addresses Card */}
+        <div
+          className={styles.mobileAddressesCard}
+          onClick={() => setIsMobileAddressesOpen(true)}
+          role="button"
+          tabIndex={0}
+        >
+          <div className={styles.mobileAddressesLeft}>
+            <MapPin size={18} className={styles.mobileAddressesIcon} />
+            <span className={styles.mobileAddressesLabel}>Saved Addresses</span>
+          </div>
+          <div className={styles.mobileAddressesRight}>
+            <span className={styles.mobileAddressesCountBadge}>{addressList.length}</span>
+            <ChevronRight size={18} className={styles.mobileChevron} />
+          </div>
+        </div>
+
+        {/* 6. Account & Security Section */}
+        <div className={styles.mobileSection}>
+          <h2 className={styles.mobileSectionTitle}>Account & Security</h2>
+          <div className={styles.mobileListCard}>
+            <div className={styles.mobileListRow}>
+              <div className={styles.mobileListRowLeft}>
+                <div className={styles.mobileRoleIconBox}>
+                  <ShieldCheck size={18} color="#16a34a" />
+                </div>
+                <div className={styles.mobileRowTextGroup}>
+                  <span className={styles.mobileRoleTitle}>Current Role</span>
+                  <span className={styles.mobileRoleSubtitle}>Household Profile</span>
+                </div>
+              </div>
+              <div className={styles.mobileRoleRight}>
+                <span className={styles.mobileRoleActivePill}>Verified & Active</span>
+                <ChevronRight size={18} className={styles.mobileChevron} />
+              </div>
+            </div>
+
+            <div className={styles.mobileRowDivider} />
+
+            <div
+              className={styles.mobileListRow}
+              onClick={() => setIsRoleModalOpen(true)}
+              role="button"
+              tabIndex={0}
+            >
+              <div className={styles.mobileListRowLeft}>
+                <User size={18} className={styles.mobileRowIcon} />
+                <div className={styles.mobileRowTextGroup}>
+                  <span className={styles.mobileRoleTitle}>Request Additional Role</span>
+                  <span className={styles.mobileRoleSubtitle}>Merchant or Industry Profile</span>
+                </div>
+              </div>
+              <ChevronRight size={18} className={styles.mobileChevron} />
+            </div>
+
+            <div className={styles.mobileRowDivider} />
+
+            <div className={styles.mobileListRow}>
+              <div className={styles.mobileListRowLeft}>
+                <Lock size={18} className={styles.mobileRowIcon} />
+                <div className={styles.mobileRowTextGroup}>
+                  <span className={styles.mobileRoleTitle}>Mobile OTP Login</span>
+                  <span className={styles.mobileRoleSubtitle}>Password-free secure auth</span>
+                </div>
+              </div>
+              <ChevronRight size={18} className={styles.mobileChevron} />
+            </div>
+          </div>
+
+          {/* Standalone Logout Button */}
+          <div className={styles.mobileLogoutBoxWrap}>
+            <button
+              type="button"
+              className={styles.mobileLogoutBtn}
+              onClick={() => logout()}
+            >
+              <LogOut size={16} />
+              <span>Logout of Account</span>
+            </button>
+          </div>
+        </div>
+
+        {/* 7. Need Help? Card */}
+        <Link to="/household/support" className={styles.mobileNeedHelpCard}>
+          <div className={styles.mobileNeedHelpLeft}>
+            <Headphones size={20} className={styles.mobileNeedHelpIcon} />
+            <div className={styles.mobileRowTextGroup}>
+              <span className={styles.mobileNeedHelpTitle}>Need Help?</span>
+              <span className={styles.mobileNeedHelpSubtitle}>Contact support for any assistance</span>
+            </div>
+          </div>
+          <ChevronRight size={18} className={styles.mobileChevron} />
+        </Link>
+      </div>
+
+      {/* ===================================================================
+          MODALS (ADD ADDRESS, EDIT CONTACT, SAVED ADDRESSES, ROLE)
+          =================================================================== */}
       {/* ADD ADDRESS MODAL */}
       {isAddAddressOpen && (
         <div className={styles.modalOverlay} onClick={() => setIsAddAddressOpen(false)}>
@@ -729,9 +961,8 @@ export function HouseholdProfile() {
                   onChange={(e) => setNewTag(e.target.value)}
                 >
                   <option>Home</option>
-                  <option>Office</option>
-                  <option>Apartment</option>
-                  <option>Shop</option>
+                  <option>Work</option>
+                  <option>Warehouse</option>
                   <option>Other</option>
                 </select>
               </div>
@@ -774,6 +1005,137 @@ export function HouseholdProfile() {
                 Save Address
               </button>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* MOBILE EDIT CONTACT DETAILS MODAL */}
+      {isMobileEditContactOpen && (
+        <div className={styles.modalOverlay} onClick={() => setIsMobileEditContactOpen(false)}>
+          <div className={styles.mobileModalBox} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.cardHeaderGroup}>
+              <h3 className={styles.cardTitle}>Edit Contact Details</h3>
+              <button
+                type="button"
+                onClick={() => setIsMobileEditContactOpen(false)}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748b' }}
+                aria-label="Close"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <form
+              onSubmit={(e) => {
+                handleSavePersonal(e);
+                setIsMobileEditContactOpen(false);
+              }}
+              style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '0.75rem' }}
+            >
+              <div>
+                <label className={styles.fieldLabel}>Full Name</label>
+                <input
+                  type="text"
+                  className={styles.textInput}
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  required
+                />
+              </div>
+              <div>
+                <label className={styles.fieldLabel}>Mobile Number</label>
+                <input
+                  type="tel"
+                  className={styles.textInput}
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  required
+                />
+              </div>
+              <div>
+                <label className={styles.fieldLabel}>Email Address</label>
+                <input
+                  type="email"
+                  className={styles.textInput}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
+              <div>
+                <label className={styles.fieldLabel}>Alternate Phone / WhatsApp</label>
+                <input
+                  type="tel"
+                  className={styles.textInput}
+                  value={alternatePhone}
+                  onChange={(e) => setAlternatePhone(e.target.value)}
+                />
+              </div>
+              <button type="submit" className={styles.saveBtn} style={{ width: '100%', justifyContent: 'center' }}>
+                Save Changes
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* MOBILE SAVED ADDRESSES MODAL */}
+      {isMobileAddressesOpen && (
+        <div className={styles.modalOverlay} onClick={() => setIsMobileAddressesOpen(false)}>
+          <div className={styles.mobileModalBox} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.cardHeaderGroup}>
+              <h3 className={styles.cardTitle}>Saved Addresses ({addressList.length})</h3>
+              <button
+                type="button"
+                onClick={() => setIsMobileAddressesOpen(false)}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748b' }}
+                aria-label="Close"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', marginTop: '0.75rem' }}>
+              {addressList.map((addr) => (
+                <div
+                  key={addr.id}
+                  className={`${styles.addressCard} ${addr.isDefault ? styles.addressCardDefault : ''}`}
+                  onClick={() => handleSetDefaultAddress(addr.id)}
+                  role="button"
+                  tabIndex={0}
+                >
+                  <div className={styles.addressCardTop}>
+                    <div className={styles.addressCardTopLeft}>
+                      <MapPin size={15} className={styles.addressCardIcon} />
+                      <span className={styles.addressTagBadge}>{addr.tag}</span>
+                      {addr.isDefault && <span className={styles.defaultPill}>Default</span>}
+                    </div>
+                    {addr.isDefault ? (
+                      <span className={styles.defaultActiveBadge}>✓ Default</span>
+                    ) : (
+                      <span className={styles.setAsDefaultBtn}>Set as Default</span>
+                    )}
+                  </div>
+                  <p className={styles.addressText}>{addr.fullAddress}</p>
+                  <div className={styles.landmarkBox}>
+                    <span className={styles.landmarkText}>
+                      <strong>Landmark:</strong> {addr.landmark} · <strong>Pincode:</strong> {addr.pincode}
+                    </span>
+                  </div>
+                </div>
+              ))}
+              <button
+                type="button"
+                className={styles.addAddressBtn}
+                onClick={() => {
+                  setIsMobileAddressesOpen(false);
+                  setIsAddAddressOpen(true);
+                }}
+              >
+                <Plus size={16} />
+                <span>Add New Address</span>
+              </button>
+            </div>
           </div>
         </div>
       )}

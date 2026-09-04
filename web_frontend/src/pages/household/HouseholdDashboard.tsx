@@ -31,6 +31,7 @@ import {
 } from 'react-icons/lu';
 import { useAuthStore } from '@/store/useAuthStore';
 import { submitPrivateFeedback } from '@/services/feedbackService';
+import { useBodyScrollLock } from '@/hooks/useBodyScrollLock';
 import styles from './HouseholdDashboard.module.css';
 
 interface DeliveryAddress {
@@ -668,6 +669,9 @@ export function HouseholdDashboard() {
   const [improvementSuggestions, setImprovementSuggestions] = useState('');
   const [isSubmittingFeedback, setIsSubmittingFeedback] = useState(false);
   const [feedbackSuccess, setFeedbackSuccess] = useState(false);
+
+  // Prevent background scroll bleed when address bottom sheet, lightbox, or feedback modal is open
+  useBodyScrollLock(isAddressSheetOpen || Boolean(selectedGalleryPickup) || isFeedbackModalOpen);
 
   // How it Works Single-Step Cross-Fade Loop
   const [howStepIndex, setHowStepIndex] = useState(0);
@@ -1396,7 +1400,7 @@ export function HouseholdDashboard() {
           ========================================================================= */}
       {isAddressSheetOpen && (
         <div
-          className={styles.bottomSheetBackdrop}
+          className={styles.bottomSheetOverlay || styles.bottomSheetBackdrop}
           onClick={() => setIsAddressSheetOpen(false)}
         >
           <div

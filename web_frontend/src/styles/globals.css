@@ -133,29 +133,41 @@ h4 { font-size: var(--text-h4); font-weight: 600; line-height: 1.35; }
   }
 }
 
-/* ===== Background Scroll Lock & Isolation for Modals & Position-Based Overlays ===== */
+/* ===== Background Scroll Lock & Isolation for Modals, Sheets & Overlays ===== */
+html.modal-open,
 body.modal-open {
   overflow: hidden !important;
+  height: 100% !important;
   overscroll-behavior: none !important;
-  touch-action: none !important;
 }
 
-/* Prevent scroll chaining/bleed from modal dialogs to background */
-[class*="modalOverlay"],
-[class*="modal_overlay"],
-[class*="confirmModalOverlay"],
-[class*="workflowModalOverlay"],
-[class*="videoModalOverlay"] {
+/* Prevent scroll chaining/bleed from any modal, sheet, or drawer overlay to background */
+[class*="overlay" i],
+[class*="backdrop" i] {
   overscroll-behavior: contain !important;
   touch-action: none;
 }
 
-[class*="modalContent"],
-[class*="modal_content"],
-[class*="modalBody"],
-[class*="modal_body"] {
+/* Ensure inner scrollable content within modals and sheets scrolls smoothly and isolates its scroll */
+[class*="modalContent" i],
+[class*="modal_content" i],
+[class*="modalContainer" i],
+[class*="modal_container" i],
+[class*="modalBody" i],
+[class*="modal_body" i],
+[class*="cartModalBody" i],
+[class*="cartModalContainer" i],
+[class*="sheetBody" i],
+[class*="sheetContainer" i],
+[class*="addressSheet" i],
+[class*="drawerBody" i],
+[class*="drawerContainer" i],
+[class*="lightboxViewer" i],
+[class*="feedbackModalBody" i],
+[class*="feedbackModalContainer" i] {
   overscroll-behavior: contain !important;
   -webkit-overflow-scrolling: touch;
   touch-action: pan-y;
 }
+
 

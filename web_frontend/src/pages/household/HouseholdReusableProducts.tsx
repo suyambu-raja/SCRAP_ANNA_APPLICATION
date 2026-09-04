@@ -35,6 +35,7 @@ import {
   type MerchantConfirmationStatus,
 } from '@/services/reusableProductService';
 import styles from './HouseholdReusableProducts.module.css';
+import { useBodyScrollLock } from '@/hooks/useBodyScrollLock';
 
 const CATEGORY_TABS = [
   { id: 'All', label: 'All', icon: LuLayoutGrid },
@@ -55,6 +56,9 @@ export function HouseholdReusableProducts() {
   const [cartItems, setCartItems] = useState<ReusableCartItem[]>(() => getReusableCart());
   const [cartFilterStatus, setCartFilterStatus] = useState<'all' | MerchantConfirmationStatus>('all');
   const [cartToast, setCartToast] = useState<{ message: string; type: 'success' | 'info' } | null>(null);
+
+  // Prevent background scroll bleed when cart drawer or modal is open
+  useBodyScrollLock(isCartOpen || showHowItWorks);
 
   useEffect(() => {
     setCartItems(getReusableCart());

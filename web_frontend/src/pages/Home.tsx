@@ -32,6 +32,7 @@ import { SkeletonCard } from '@/components/common/SkeletonLoader';
 import { getMarketPrices, getScrapCategories } from '@/services';
 import { useAuthStore } from '@/store/useAuthStore';
 import type { MarketPrice, ScrapCategory } from '@/types';
+import { useBodyScrollLock } from '@/hooks/useBodyScrollLock';
 import styles from './Home.module.css';
 
 export default function Home() {
@@ -48,6 +49,9 @@ export default function Home() {
   const [selectedRoleCard, setSelectedRoleCard] = useState<number | null>(null);
   const [selectedStepCard, setSelectedStepCard] = useState<number | null>(null);
   const [accessibilityActive, setAccessibilityActive] = useState(false);
+
+  // Prevent background scrolling when video modal is open
+  useBodyScrollLock(showVideoModal);
 
   const isTamil = i18n.language === 'ta';
 

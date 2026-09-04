@@ -55,6 +55,11 @@ const HouseholdSupport = lazy(() =>
     default: m.HouseholdSupport,
   }))
 );
+const HouseholdSupportBot = lazy(() =>
+  import('@/pages/household/HouseholdSupportBot').then((m) => ({
+    default: m.HouseholdSupportBot,
+  }))
+);
 const HouseholdReusableProducts = lazy(() =>
   import('@/pages/household/HouseholdReusableProducts').then((m) => ({
     default: m.HouseholdReusableProducts,
@@ -162,6 +167,8 @@ export function AppRoutes() {
           <Route path="/household/refer" element={<HouseholdReferEarn />} />
           <Route path="/household/support" element={<HouseholdSupport />} />
           <Route path="/household/help" element={<HouseholdSupport />} />
+          <Route path="/household/support/bot" element={<HouseholdSupportBot />} />
+          <Route path="/household/bot" element={<HouseholdSupportBot />} />
         </Route>
 
         {/* ================================================================

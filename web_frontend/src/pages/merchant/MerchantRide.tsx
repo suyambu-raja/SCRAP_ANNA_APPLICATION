@@ -26,6 +26,7 @@ import {
   AlertCircle,
   CheckSquare,
 } from 'lucide-react';
+import { useBodyScrollLock } from '@/hooks/useBodyScrollLock';
 import styles from './MerchantRide.module.css';
 
 export interface ConfirmedRideOrder {
@@ -304,6 +305,9 @@ export default function MerchantRide() {
   const [completingStop, setCompletingStop] = useState<ConfirmedRideOrder | null>(null);
   const [otpInput, setOtpInput] = useState('');
   const [measuredWeight, setMeasuredWeight] = useState('');
+
+  // Prevent background scroll bleed when completion modal is open
+  useBodyScrollLock(Boolean(completingStop));
 
   const triggerToast = (msg: string) => {
     setToastMessage(msg);

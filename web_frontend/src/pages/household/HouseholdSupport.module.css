@@ -1,12 +1,12 @@
 /* ==========================================================================
-   HOUSEHOLD SUPPORT & HELPLINE STYLING
+   HOUSEHOLD SUPPORT & HELPLINE STYLING (YELLOW + GRAPHITE + WHITE THEME)
    ========================================================================== */
 
 .pageContainer {
   width: 100%;
-  max-width: 1100px;
+  max-width: 1120px;
   margin: 0 auto;
-  padding: 1.5rem 1.75rem 1.25rem 1.75rem;
+  padding: 1.5rem 1.75rem 2rem 1.75rem;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -16,34 +16,44 @@
 }
 
 /* --------------------------------------------------------------------------
-   HERO SUPPORT BANNER
+   1. HERO HEADER (CLEAN LIGHT THEME WITH GRAPHITE & GOLD ACCENTS)
    -------------------------------------------------------------------------- */
-.heroBanner {
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-  border: 1px solid #334155;
+.heroSection {
+  background: linear-gradient(135deg, #fffdf2 0%, #ffffff 100%);
+  border: 1px solid #e2e8f0;
   border-radius: 20px;
-  padding: 2.25rem;
-  color: #ffffff;
+  padding: 1.5rem 2rem;
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.heroContent {
   display: flex;
   flex-direction: column;
-  gap: 0.85rem;
-  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.15);
+  gap: 0.5rem;
 }
 
 .heroBadge {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  background: rgba(16, 185, 129, 0.15);
-  color: #10b981;
-  border: 1px solid rgba(16, 185, 129, 0.35);
-  font-size: 0.74rem;
+  background: #f8fafc;
+  color: #0f172a;
+  border: 1px solid #e2e8f0;
+  font-size: 0.72rem;
   font-weight: 800;
   padding: 0.25rem 0.65rem;
-  border-radius: 6px;
+  border-radius: 9999px;
   width: fit-content;
   text-transform: uppercase;
   letter-spacing: 0.04em;
+}
+
+.heroBadgeIcon {
+  color: #f8bf1d;
 }
 
 .heroTitle {
@@ -51,55 +61,197 @@
   font-weight: 900;
   margin: 0;
   letter-spacing: -0.01em;
-  color: #ffffff;
+  color: #0f172a;
 }
 
 .heroSubtitle {
   font-size: 0.88rem;
-  color: #cbd5e1;
+  color: #64748b;
   margin: 0;
-  line-height: 1.5;
-  max-width: 600px;
+  line-height: 1.55;
+  max-width: 680px;
 }
 
 /* --------------------------------------------------------------------------
-   CONTACT CHANNELS 3-COLUMN GRID
+   2. AUTOMATED BOT PROMO CARD (SINGLE PROMINENT CARD LINKING TO BOT PAGE)
    -------------------------------------------------------------------------- */
+.botPromoCard {
+  background: linear-gradient(135deg, #ffffff 0%, #fffdf5 100%);
+  border: 2px solid #f8bf1d;
+  border-radius: 20px;
+  padding: 1.65rem 2rem;
+  box-shadow: 0 6px 24px rgba(248, 191, 29, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+}
+
+.botPromoCard:hover {
+  box-shadow: 0 8px 30px rgba(248, 191, 29, 0.18);
+  transform: translateY(-2px);
+}
+
+.botPromoLeft {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+  flex: 1;
+}
+
+.botPromoIconBox {
+  width: 54px;
+  height: 54px;
+  border-radius: 14px;
+  background: #0f172a;
+  color: #f8bf1d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
+}
+
+.botPromoTextGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.botPromoTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.botPromoTitle {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: #0f172a;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.botPromoOnlineBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #ecfdf5;
+  color: #059669;
+  border: 1px solid #a7f3d0;
+  font-size: 0.72rem;
+  font-weight: 750;
+  padding: 0.15rem 0.6rem;
+  border-radius: 9999px;
+}
+
+.onlineDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+}
+
+.botPromoDesc {
+  font-size: 0.88rem;
+  color: #475569;
+  margin: 0;
+  line-height: 1.5;
+  max-width: 620px;
+}
+
+.launchBotBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: #f8bf1d;
+  color: #0f172a;
+  font-size: 0.92rem;
+  font-weight: 850;
+  padding: 0.85rem 1.45rem;
+  border-radius: 12px;
+  text-decoration: none;
+  white-space: nowrap;
+  box-shadow: 0 4px 14px rgba(248, 191, 29, 0.3);
+  transition: all 0.18s ease;
+  flex-shrink: 0;
+}
+
+.launchBotBtn:hover {
+  background: #eab308;
+  transform: translateX(3px);
+}
+
+/* --------------------------------------------------------------------------
+   3. CONTACT CHANNELS (2-COLUMN: WHATSAPP & EMAIL ONLY)
+   -------------------------------------------------------------------------- */
+.channelsSection {
+  width: 100%;
+}
+
 .channelsGrid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 1fr 1fr;
   gap: 1.25rem;
 }
 
 .channelCard {
   background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 16px;
-  padding: 1.5rem;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 1.35rem 1.5rem;
   box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  transition: all 0.15s ease;
+  justify-content: space-between;
+  gap: 1.15rem;
+  transition: all 0.18s ease;
 }
 
 .channelCard:hover {
   transform: translateY(-2px);
-  border-color: #cbd5e1;
+  border-color: #f8bf1d;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
 }
 
-.channelIconBox {
-  width: 44px;
-  height: 44px;
+.channelTop {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.whatsappIconBox {
+  width: 46px;
+  height: 46px;
   border-radius: 12px;
+  background: #f0fdf4;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+}
+
+.emailIconBox {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background: #eff6ff;
+  color: #2563eb;
+  border: 1px solid #bfdbfe;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
 .channelTitle {
   font-size: 1.05rem;
-  font-weight: 800;
+  font-weight: 850;
   color: #0f172a;
   margin: 0;
 }
@@ -108,55 +260,118 @@
   font-size: 0.78rem;
   color: #64748b;
   margin: 0;
+  margin-top: 2px;
+  line-height: 1.4;
 }
 
-.channelActionBtn {
+.channelFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding-top: 0.5rem;
+  border-top: 1px solid #f1f5f9;
+}
+
+.responseTimePill {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #475569;
+}
+
+.whatsappActionBtn {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 0.4rem;
-  background: #0f172a;
-  color: #fbc21a;
+  gap: 0.45rem;
+  background: #16a34a;
+  color: #ffffff;
   font-size: 0.82rem;
   font-weight: 800;
-  padding: 0.6rem 1rem;
-  border-radius: 8px;
+  padding: 0.6rem 1.15rem;
+  border-radius: 10px;
   text-decoration: none;
-  border: none;
-  cursor: pointer;
-  margin-top: auto;
+  transition: all 0.15s ease;
+  box-shadow: 0 2px 6px rgba(22, 163, 74, 0.2);
+}
+
+.whatsappActionBtn:hover {
+  background: #15803d;
+}
+
+.emailActionBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: #0f172a;
+  color: #f8bf1d;
+  font-size: 0.82rem;
+  font-weight: 800;
+  padding: 0.6rem 1.15rem;
+  border-radius: 10px;
+  text-decoration: none;
   transition: all 0.15s ease;
 }
 
-.channelActionBtn:hover {
+.emailActionBtn:hover {
   background: #1e293b;
 }
 
 /* --------------------------------------------------------------------------
-   2-COLUMN SUPPORT GRID: TICKET FORM & FAQ
+   4. TWO-COLUMN: TICKET FORM & FAQ ACCORDION
    -------------------------------------------------------------------------- */
-.supportTwoColGrid {
+.twoColSection {
   display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
+  grid-template-columns: 1.15fr 0.85fr;
   gap: 1.5rem;
+  align-items: start;
 }
 
 .sectionCard {
   background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 16px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 18px;
   padding: 1.75rem 2rem;
   box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+  box-sizing: border-box;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.cardHeaderIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: #f8fafc;
+  color: #0f172a;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
 .cardTitle {
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   font-weight: 900;
   color: #0f172a;
   margin: 0;
+}
+
+.cardSubtitle {
+  font-size: 0.78rem;
+  color: #64748b;
+  margin: 0;
+  margin-top: 2px;
 }
 
 /* Ticket Form */
@@ -174,54 +389,119 @@
 
 .fieldLabel {
   font-size: 0.8rem;
-  font-weight: 700;
+  font-weight: 750;
   color: #334155;
   margin: 0;
 }
 
-.inputField,
 .selectField,
 .textareaField {
   width: 100%;
   padding: 0.65rem 0.85rem;
-  border-radius: 8px;
-  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  border: 1.5px solid #cbd5e1;
   background: #f8fafc;
   font-family: inherit;
-  font-size: 0.85rem;
+  font-size: 0.86rem;
   color: #0f172a;
   box-sizing: border-box;
   outline: none;
   transition: all 0.15s ease;
 }
 
-.inputField:focus,
 .selectField:focus,
 .textareaField:focus {
   background: #ffffff;
-  border-color: #f59e0b;
-  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+  border-color: #f8bf1d;
+  box-shadow: 0 0 0 3px rgba(248, 191, 29, 0.2);
 }
 
 .submitTicketBtn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.45rem;
-  background: #fbc21a;
+  gap: 0.5rem;
+  background: #f8bf1d;
   color: #0f172a;
-  font-size: 0.85rem;
-  font-weight: 900;
-  padding: 0.7rem 1.5rem;
-  border-radius: 8px;
-  border: 1.5px solid #e5aa00;
+  font-size: 0.88rem;
+  font-weight: 850;
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  border: none;
   cursor: pointer;
   transition: all 0.15s ease;
+  box-shadow: 0 2px 8px rgba(248, 191, 29, 0.25);
   width: fit-content;
 }
 
 .submitTicketBtn:hover {
-  background: #f59e0b;
+  background: #eab308;
+  transform: translateY(-1px);
+}
+
+.ticketSuccessBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1.5rem 1rem;
+  gap: 0.75rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+}
+
+.ticketSuccessIcon {
+  color: #10b981;
+}
+
+.ticketSuccessTitle {
+  font-size: 1.15rem;
+  font-weight: 850;
+  color: #0f172a;
+  margin: 0;
+}
+
+.ticketSuccessText {
+  font-size: 0.82rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.ticketIdPill {
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: #0f172a;
+  background: #fffdf5;
+  border: 1.5px solid #f8bf1d;
+  padding: 0.35rem 1rem;
+  border-radius: 9999px;
+  letter-spacing: 0.04em;
+}
+
+.ticketSuccessSub {
+  font-size: 0.78rem;
+  color: #64748b;
+  max-width: 400px;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.anotherTicketBtn {
+  background: #0f172a;
+  color: #ffffff;
+  border: none;
+  font-size: 0.8rem;
+  font-weight: 750;
+  padding: 0.55rem 1.15rem;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: background 0.15s ease;
+}
+
+.anotherTicketBtn:hover {
+  background: #1e293b;
 }
 
 /* FAQ Accordion */
@@ -233,15 +513,20 @@
 
 .faqItem {
   border: 1px solid #e2e8f0;
-  border-radius: 10px;
+  border-radius: 12px;
   overflow: hidden;
-  background: #f8fafc;
+  background: #ffffff;
+  transition: all 0.15s ease;
+}
+
+.faqItem:hover {
+  border-color: #cbd5e1;
 }
 
 .faqHeader {
   width: 100%;
-  padding: 0.85rem 1rem;
-  background: none;
+  padding: 0.95rem 1.15rem;
+  background: #f8fafc;
   border: none;
   display: flex;
   align-items: center;
@@ -252,40 +537,102 @@
   color: #0f172a;
   cursor: pointer;
   font-family: inherit;
+  gap: 0.75rem;
 }
 
 .faqBody {
-  padding: 0.85rem 1rem;
+  padding: 0.95rem 1.15rem;
   background: #ffffff;
   border-top: 1px solid #f1f5f9;
   font-size: 0.82rem;
-  color: #64748b;
-  line-height: 1.5;
+  color: #475569;
+  line-height: 1.55;
 }
 
 /* --------------------------------------------------------------------------
-   RESPONSIVE
+   RESPONSIVE / MOBILE OPTIMIZATIONS
    -------------------------------------------------------------------------- */
 @media (max-width: 900px) {
+  .topicChipsGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+
   .channelsGrid {
     grid-template-columns: 1fr;
   }
 
-  .supportTwoColGrid {
+  .twoColSection {
     grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 768px) {
   .pageContainer {
-    padding: 1rem 0.85rem 1rem 0.85rem;
+    padding: 0.85rem 0.85rem 1.5rem 0.85rem;
+    gap: 1rem;
+  }
+
+  .heroSection {
+    padding: 1.25rem 1rem;
+    border-radius: 16px;
+  }
+
+  .heroTitle {
+    font-size: 1.4rem;
+  }
+
+  .botPromoCard {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1.25rem 1rem;
+    gap: 1.15rem;
+    border-radius: 16px;
+  }
+
+  .botPromoLeft {
+    gap: 0.85rem;
+  }
+
+  .botPromoIconBox {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+  }
+
+  .botPromoTitle {
+    font-size: 1.1rem;
+  }
+
+  .launchBotBtn {
+    width: 100%;
+    justify-content: center;
+    box-sizing: border-box;
   }
 
   .sectionCard {
     padding: 1.25rem 1rem;
+    border-radius: 16px;
   }
 
   .submitTicketBtn {
     width: 100%;
+  }
+
+  .channelCard {
+    padding: 1.15rem 1rem;
+    border-radius: 16px;
+  }
+
+  .channelFooter {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.65rem;
+  }
+
+  .whatsappActionBtn,
+  .emailActionBtn {
+    justify-content: center;
+    width: 100%;
+    box-sizing: border-box;
   }
 }

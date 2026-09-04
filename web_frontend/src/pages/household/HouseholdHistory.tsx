@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { useSearchParams, Link } from 'react-router-dom';
 import {
   Clock,
   Search,
@@ -13,11 +14,13 @@ import {
   Printer,
   Scale,
   ShieldCheck,
-  Eye,
   ChevronRight,
+  ArrowLeft,
+  LifeBuoy,
+  Receipt,
 } from 'lucide-react';
-import styles from './HouseholdHistory.module.css';
 import { useBodyScrollLock } from '../../hooks/useBodyScrollLock';
+import styles from './HouseholdHistory.module.css';
 
 interface OrderItemSummary {
   material: string;
@@ -57,7 +60,7 @@ const HISTORY_DATA: OrderHistoryRecord[] = [
       { material: 'Scrap Iron Rods', weightKg: 18.4, ratePerKg: 38.5, imageUrl: '/scrap-iron.png' },
       { material: 'Household Aluminium', weightKg: 8.0, ratePerKg: 135, imageUrl: '/scrap-household-aluminium.png' },
     ],
-    amount: 2580.4,
+    amount: 3372,
     status: 'completed',
     paymentStatus: 'Paid',
     paymentMethod: 'UPI',
@@ -77,7 +80,7 @@ const HISTORY_DATA: OrderHistoryRecord[] = [
       { material: 'Brass Fittings & Taps', weightKg: 1.0, ratePerKg: 490, imageUrl: '/scrap-brass.jpg' },
       { material: 'Corrugated Cardboard', weightKg: 3.0, ratePerKg: 13, imageUrl: '/scrap-cardboard.png' },
     ],
-    amount: 780.0,
+    amount: 852,
     status: 'completed',
     paymentStatus: 'Paid',
     paymentMethod: 'Cash on Delivery',
@@ -96,7 +99,7 @@ const HISTORY_DATA: OrderHistoryRecord[] = [
       { material: 'Bright Copper Coils', weightKg: 1.5, ratePerKg: 720, imageUrl: '/scrap-copper.jpg' },
       { material: 'Corrugated Cardboard', weightKg: 17.2, ratePerKg: 13, imageUrl: '/scrap-cardboard.png' },
     ],
-    amount: 1303.6,
+    amount: 1304,
     status: 'completed',
     paymentStatus: 'Paid',
     paymentMethod: 'UPI',
@@ -116,7 +119,7 @@ const HISTORY_DATA: OrderHistoryRecord[] = [
       { material: 'Brass Scrap', weightKg: 1.8, ratePerKg: 490, imageUrl: '/scrap-brass.jpg' },
       { material: 'Old Newspapers', weightKg: 23.8, ratePerKg: 14, imageUrl: '/scrap-color-papers.png' },
     ],
-    amount: 2092.7,
+    amount: 2093,
     status: 'completed',
     paymentStatus: 'Paid',
     paymentMethod: 'UPI',
@@ -135,7 +138,7 @@ const HISTORY_DATA: OrderHistoryRecord[] = [
       { material: 'Computer Motherboard / CPU', weightKg: 2.5, ratePerKg: 320, imageUrl: '/scrap-cpu.jpg' },
       { material: 'Copper Tubes', weightKg: 0.2, ratePerKg: 720, imageUrl: '/scrap-copper-wire.jpg' },
     ],
-    amount: 944.0,
+    amount: 944,
     status: 'cancelled',
     paymentStatus: '-',
     paymentMethod: '-',
@@ -145,15 +148,47 @@ const HISTORY_DATA: OrderHistoryRecord[] = [
   },
 ];
 
+const getShortMaterialName = (fullName: string): string => {
+  if (!fullName) return '';
+  const lower = fullName.toLowerCase();
+  if (lower.includes('copper')) return 'Copper';
+  if (lower.includes('iron')) return 'Iron';
+  if (lower.includes('aluminium')) return 'Aluminium';
+  if (lower.includes('brass')) return 'Brass';
+  if (lower.includes('cardboard')) return 'Cardboard';
+  if (lower.includes('newspaper') || lower.includes('paper')) return 'Newspaper';
+  if (lower.includes('cpu') || lower.includes('motherboard')) return 'CPU/Board';
+  return (
+    fullName
+      .replace(/\bscrap\b/gi, '')
+      .replace(/\bhousehold\b/gi, '')
+      .trim() || fullName
+  );
+};
+
+const formatAmount = (val: number): string => {
+  if (val == null || isNaN(val)) return '0';
+  return Math.round(val).toString();
+};
+
 export function HouseholdHistory() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const orderId = searchParams.get('orderId');
+
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<'ALL' | 'COMPLETED' | 'CANCELLED'>('ALL');
-  const [selectedOrder, setSelectedOrder] = useState<OrderHistoryRecord | null>(null);
+  const [showBillModal, setShowBillModal] = useState(false);
 
-  // Prevent background scrolling when receipt modal is open
-  useBodyScrollLock(Boolean(selectedOrder));
+  // Freeze background scrolling whenever the separate Bill & Receipt modal is open
+  useBodyScrollLock(showBillModal);
 
-  // Filter Data
+  // Active selected order if viewing full order details
+  const selectedOrder = useMemo(() => {
+    if (!orderId) return null;
+    return HISTORY_DATA.find((o) => o.id === orderId || o.orderNumber === orderId) || null;
+  }, [orderId]);
+
+  // Filter Data for the compact list
   const filteredData = useMemo(() => {
     return HISTORY_DATA.filter((order) => {
       const matchesSearch =
@@ -167,6 +202,17 @@ export function HouseholdHistory() {
       return matchesSearch && matchesStatus;
     });
   }, [searchTerm, statusFilter]);
+
+  const handleSelectOrder = (id: string) => {
+    setSearchParams({ orderId: id });
+    setShowBillModal(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleBackToList = () => {
+    setShowBillModal(false);
+    setSearchParams({});
+  };
 
   const handlePrintReceipt = (order: OrderHistoryRecord) => {
     const printWindow = window.open('', '_blank');
@@ -227,7 +273,7 @@ export function HouseholdHistory() {
                 <td><strong>${it.material}</strong></td>
                 <td>${it.weightKg} KG</td>
                 <td>₹${it.ratePerKg}</td>
-                <td style="text-align: right; font-weight: 800;">₹${(it.weightKg * it.ratePerKg).toFixed(2)}</td>
+                <td style="text-align: right; font-weight: 800;">₹${formatAmount(it.weightKg * it.ratePerKg)}</td>
               </tr>
             `).join('')}
           </tbody>
@@ -235,7 +281,7 @@ export function HouseholdHistory() {
 
         <div class="total-box">
           <span>TOTAL PAYOUT RECEIVED:</span>
-          <span style="color: #fbc21a;">₹${order.amount.toFixed(2)}</span>
+          <span style="color: #fbc21a;">₹${formatAmount(order.amount)}</span>
         </div>
 
         <div class="footer">
@@ -255,448 +301,472 @@ export function HouseholdHistory() {
 
   return (
     <div className={styles.pageContainer}>
-      {/* ===================================================================
-         DESKTOP HISTORY VIEW (UNTOUCHED, PRESERVED 100%)
-         =================================================================== */}
-      <div className={styles.desktopHistoryView}>
-        {/* 1. Header with Clock Icon */}
-      <div className={styles.headerBlock}>
-        <div className={styles.headerIconCircle}>
-          <Clock size={24} />
-        </div>
-        <div className={styles.headerTitles}>
-          <h1 className={styles.mainTitle}>History</h1>
-          <p className={styles.mainSubtitle}>
-            View all your past completed and cancelled doorstep scrap pickups.
-          </p>
-        </div>
-      </div>
-
-      {/* 2. Filter Tabs & Search Bar */}
-      <div className={styles.filterBar}>
-        {/* Status Pills: All, Completed, Cancelled */}
-        <div className={styles.statusPillsRow}>
-          {[
-            { id: 'ALL', label: 'All Pickups' },
-            { id: 'COMPLETED', label: 'Completed' },
-            { id: 'CANCELLED', label: 'Cancelled' },
-          ].map((tab) => (
-            <button
-              key={tab.id}
-              type="button"
-              className={`${styles.filterPillBtn} ${
-                statusFilter === tab.id ? styles.filterPillActive : ''
-              }`}
-              onClick={() => setStatusFilter(tab.id as any)}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
-
-        {/* Search Box */}
-        <div className={styles.searchBoxWrap}>
-          <Search size={16} className={styles.searchIcon} />
-          <input
-            type="text"
-            className={styles.searchInput}
-            placeholder="Search by order ID or scrap material..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          {searchTerm && (
+      {/* ====================================================================
+          VIEW 1: FULL ORDER DETAILS PAGE (WHEN AN ORDER IS SELECTED)
+          ==================================================================== */}
+      {selectedOrder ? (
+        <div className={styles.detailsViewContainer}>
+          {/* Top Bar Navigation */}
+          <div className={styles.detailsTopBar}>
             <button
               type="button"
-              className={styles.clearSearchBtn}
-              onClick={() => setSearchTerm('')}
+              className={styles.backToListBtn}
+              onClick={handleBackToList}
             >
-              <X size={15} />
+              <ArrowLeft size={18} />
+              <span>Back to History</span>
             </button>
-          )}
-        </div>
-      </div>
-
-      {/* 3. History Cards Grid (Clean, human-readable cards) */}
-      <div className={styles.historyCardsGrid}>
-        {filteredData.map((order) => (
-          <div
-            key={order.id}
-            className={styles.historyCard}
-            onClick={() => setSelectedOrder(order)}
-            role="button"
-            tabIndex={0}
-          >
-            {/* Top Row: Date & Status */}
-            <div className={styles.cardTopRow}>
-              <div className={styles.dateCol}>
-                <span className={styles.dateText}>{order.dateTime}</span>
-                <span className={styles.orderIdBadge}>#{order.orderNumber}</span>
-              </div>
-
-              {order.status === 'completed' ? (
-                <span className={styles.statusBadgeGreen}>
-                  <CheckCircle2 size={13} />
-                  <span>Completed</span>
-                </span>
-              ) : (
-                <span className={styles.statusBadgeRed}>
-                  <AlertCircle size={13} />
-                  <span>Cancelled</span>
-                </span>
-              )}
-            </div>
-
-            {/* Middle: Scrap Items Thumbnails & List */}
-            <div className={styles.itemsRow}>
-              <div className={styles.thumbsStack}>
-                {order.items.slice(0, 3).map((item, idx) => (
-                  <img
-                    key={idx}
-                    src={item.imageUrl}
-                    alt={item.material}
-                    className={styles.itemThumbImg}
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = '/household-scrap-bundle.jpg';
-                    }}
-                  />
-                ))}
-              </div>
-
-              <div className={styles.itemsSummaryCol}>
-                <span className={styles.materialsText}>
-                  {order.items.map((i) => i.material).join(', ')}
-                </span>
-                <span className={styles.weightText}>
-                  Total: {order.totalWeightKg} KG ({order.items.length} items)
-                </span>
-              </div>
-            </div>
-
-            {/* Bottom Row: Merchant & Amount */}
-            <div className={styles.cardBottomRow}>
-              <div className={styles.merchantCol}>
-                <span className={styles.merchantLabel}>EXECUTIVE</span>
-                <span className={styles.merchantName}>{order.executiveName || 'Assigned Driver'}</span>
-              </div>
-
-              <div className={styles.payoutCol}>
-                <span className={styles.payoutLabel}>
-                  {order.status === 'completed' ? 'PAYOUT RECEIVED' : 'ESTIMATE'}
-                </span>
-                <span className={styles.payoutAmount}>₹{order.amount.toFixed(2)}</span>
-              </div>
-            </div>
-
-            <div className={styles.viewDetailsBtnRow}>
-              <span>View Details & Receipt</span>
-              <ChevronRight size={15} />
-            </div>
+            <button
+              type="button"
+              className={styles.printReceiptBtn}
+              onClick={() => setShowBillModal(true)}
+            >
+              <Receipt size={15} />
+              <span>View Bill & Receipt</span>
+            </button>
           </div>
-        ))}
-      </div>
 
-      {filteredData.length === 0 && (
-        <div className={styles.emptyState}>
-          <Clock size={36} color="#94A3B8" />
-          <h4 className={styles.emptyTitle}>No past pickups found</h4>
-          <p className={styles.emptySubtitle}>
-            {searchTerm
-              ? `No orders match "${searchTerm}".`
-              : 'You have no pickups in this filter category.'}
-          </p>
-          <button
-            type="button"
-            className={styles.resetFilterBtn}
-            onClick={() => {
-              setStatusFilter('ALL');
-              setSearchTerm('');
-            }}
-          >
-            Show All Pickups
-          </button>
-        </div>
-      )}
-      </div> {/* /.desktopHistoryView */}
-
-      {/* ===================================================================
-         MOBILE HISTORY VIEW (MOBILE-ONLY REFINED UI)
-         =================================================================== */}
-      <div className={styles.mobileHistoryView}>
-        {/* 1. Compact Headline */}
-        <div className={styles.mobileHeaderBlock}>
-          <h1 className={styles.mobileMainTitle}>History</h1>
-          <p className={styles.mobileMainSubtitle}>View your past scrap pickups.</p>
-        </div>
-
-        {/* 2. Filter Row: All, Completed, Cancelled */}
-        <div className={styles.mobileFiltersRow}>
-          {[
-            { id: 'ALL', label: 'All' },
-            { id: 'COMPLETED', label: 'Completed' },
-            { id: 'CANCELLED', label: 'Cancelled' },
-          ].map((tab) => (
-            <button
-              key={tab.id}
-              type="button"
-              className={`${styles.mobileFilterPillBtn} ${
-                statusFilter === tab.id ? styles.mobileFilterPillActive : ''
-              }`}
-              onClick={() => setStatusFilter(tab.id as any)}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
-
-        {/* 3. Full-width Search Bar */}
-        <div className={styles.mobileSearchBoxWrap}>
-          <Search size={16} className={styles.mobileSearchIcon} />
-          <input
-            type="text"
-            className={styles.mobileSearchInput}
-            placeholder="Search orders or scrap"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          {searchTerm && (
-            <button
-              type="button"
-              className={styles.mobileClearSearchBtn}
-              onClick={() => setSearchTerm('')}
-              aria-label="Clear search"
-            >
-              <X size={15} />
-            </button>
-          )}
-        </div>
-
-        {/* 4. History Cards List */}
-        <div className={styles.mobileHistoryCardsList}>
-          {filteredData.map((order) => (
-            <div
-              key={order.id}
-              className={styles.mobileHistoryCard}
-              onClick={() => setSelectedOrder(order)}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => e.key === 'Enter' && setSelectedOrder(order)}
-            >
-              {/* Section 1: Top Row */}
-              <div className={styles.mobileCardTopRow}>
-                <div className={styles.mobileDateCol}>
-                  <Calendar size={13} className={styles.mobileDateIcon} />
-                  <span className={styles.mobileDateText}>{order.dateTime}</span>
-                </div>
-                <div className={styles.mobileTopRightBadges}>
-                  <span className={styles.mobileOrderIdBadge}>#{order.orderNumber}</span>
-                  {order.status === 'completed' ? (
-                    <span className={styles.mobileStatusBadgeGreen}>
-                      <CheckCircle2 size={11} />
+          {/* 1. Order Identity & Status Banner */}
+          <section className={styles.detailsHeaderCard}>
+            <div className={styles.detailsHeaderMain}>
+              <div className={styles.detailsHeaderLeft}>
+                <div className={styles.detailsTitleRow}>
+                  <h1 className={styles.detailsOrderNumber}>Order #{selectedOrder.orderNumber}</h1>
+                  {selectedOrder.status === 'completed' ? (
+                    <span className={styles.statusBadgeCompleted}>
+                      <CheckCircle2 size={12} />
                       <span>Completed</span>
                     </span>
                   ) : (
-                    <span className={styles.mobileStatusBadgeRed}>
-                      <AlertCircle size={11} />
+                    <span className={styles.statusBadgeCancelled}>
+                      <AlertCircle size={12} />
                       <span>Cancelled</span>
                     </span>
                   )}
                 </div>
+                <div className={styles.detailsMetaSubrow}>
+                  <Calendar size={13} className={styles.detailsMetaIcon} />
+                  <span>{selectedOrder.dateTime}</span>
+                  <span className={styles.detailsDotDivider}>•</span>
+                  <span className={styles.billSlipTag}>{selectedOrder.billSlipNumber}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Contextual Status Banner */}
+            <div
+              className={
+                selectedOrder.status === 'completed'
+                  ? styles.statusBannerGreen
+                  : styles.statusBannerRed
+              }
+            >
+              {selectedOrder.status === 'completed' ? (
+                <>
+                  <CheckCircle2 size={16} className={styles.statusBannerIcon} />
+                  <span>
+                    Pickup completed at doorstep. Payout settled via {selectedOrder.paymentMethod}.
+                  </span>
+                </>
+              ) : (
+                <>
+                  <AlertCircle size={16} className={styles.statusBannerIcon} />
+                  <span>
+                    Order cancelled: {selectedOrder.cancellationReason || 'Cancelled by user'}.
+                  </span>
+                </>
+              )}
+            </div>
+          </section>
+
+          {/* 2. Executive & Pickup Location Cards */}
+          <div className={styles.metaCardsGrid}>
+            <section className={styles.metaCard}>
+              <div className={styles.metaCardHeader}>
+                <Truck size={17} className={styles.metaCardIcon} />
+                <h3 className={styles.metaCardHeading}>Pickup Executive</h3>
+              </div>
+              <div className={styles.metaCardBody}>
+                <p className={styles.metaPrimaryText}>
+                  {selectedOrder.executiveName || 'Assigned Doorstep Executive'}
+                </p>
+                {selectedOrder.executivePhone && (
+                  <p className={styles.metaSubText}>Contact: {selectedOrder.executivePhone}</p>
+                )}
+              </div>
+            </section>
+
+            <section className={styles.metaCard}>
+              <div className={styles.metaCardHeader}>
+                <MapPin size={17} className={styles.metaCardIcon} />
+                <h3 className={styles.metaCardHeading}>Pickup Address</h3>
+              </div>
+              <div className={styles.metaCardBody}>
+                <p className={styles.metaPrimaryText}>
+                  {selectedOrder.pickupAddress || 'Customer Doorstep Address'}
+                </p>
+              </div>
+            </section>
+          </div>
+
+          {/* 3. PROMPT CARD: View Bill & Payment Settlement */}
+          <section className={styles.billPromptCard}>
+            <div className={styles.billPromptContent}>
+              <div className={styles.billPromptLeft}>
+                <div className={styles.billPromptIconWrap}>
+                  <Receipt size={24} className={styles.billPromptIcon} />
+                </div>
+                <div className={styles.billPromptTexts}>
+                  <span className={styles.billPromptBadge}>FINAL SETTLEMENT BILL</span>
+                  <h2 className={styles.billPromptTitle}>Pickup Bill & Scrap Breakdown</h2>
+                  <p className={styles.billPromptMeta}>
+                    {selectedOrder.items.length} materials weighed • Total: {selectedOrder.totalWeightKg} kg
+                  </p>
+                </div>
               </div>
 
-              {/* Section 2: Scrap Summary */}
-              <div className={styles.mobileScrapSummaryRow}>
-                <div className={styles.mobileThumbsGroup}>
-                  {order.items.slice(0, 3).map((item, idx) => (
+              <div className={styles.billPromptRight}>
+                <div className={styles.billPromptAmountBlock}>
+                  <span className={styles.billPromptAmountLabel}>
+                    {selectedOrder.status === 'completed' ? 'Total Payout Received' : 'Estimated Payout'}
+                  </span>
+                  <span className={styles.billPromptAmountValue}>₹{formatAmount(selectedOrder.amount)}</span>
+                  <span className={styles.billPromptPayMethod}>Paid via {selectedOrder.paymentMethod}</span>
+                </div>
+
+                <button
+                  type="button"
+                  className={styles.viewBillCtaBtn}
+                  onClick={() => setShowBillModal(true)}
+                  aria-label="View the bill"
+                >
+                  <span>View Bill & Receipt</span>
+                  <ChevronRight size={17} />
+                </button>
+              </div>
+            </div>
+          </section>
+
+          {/* 4. Support / Helpdesk Strip */}
+          <div className={styles.detailsHelpStrip}>
+            <div className={styles.helpStripLeft}>
+              <LifeBuoy size={18} className={styles.helpStripIcon} />
+              <span>Need help or have a question about this past order?</span>
+            </div>
+            <Link to="/household/support" className={styles.helpStripBtn}>
+              Get Support
+            </Link>
+          </div>
+
+          {/* ====================================================================
+              SEPARATE SCREEN / MODAL: CLASSIC PAYMENT RECEIPT & BILL
+              ==================================================================== */}
+          {showBillModal && (
+            <div className={styles.modalOverlay} onClick={() => setShowBillModal(false)}>
+              <div
+                className={styles.modalContent}
+                onClick={(e) => e.stopPropagation()}
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="modal-bill-title"
+              >
+                {/* Modal Header */}
+                <div className={styles.modalHeader}>
+                  <div className={styles.modalTitleGroup}>
+                    <span className={styles.modalOrderBadge}>#{selectedOrder.orderNumber}</span>
+                    <h3 id="modal-bill-title" className={styles.modalTitle}>Pickup Summary & Receipt</h3>
+                  </div>
+                  <button
+                    type="button"
+                    className={styles.modalCloseBtn}
+                    onClick={() => setShowBillModal(false)}
+                    aria-label="Close receipt modal"
+                  >
+                    <X size={18} />
+                  </button>
+                </div>
+
+                {/* Modal Body */}
+                <div className={styles.modalBody}>
+                  {/* Status Banner */}
+                  <div
+                    className={
+                      selectedOrder.status === 'completed'
+                        ? styles.modalSuccessBanner
+                        : styles.modalCancelledBanner
+                    }
+                  >
+                    {selectedOrder.status === 'completed' ? (
+                      <>
+                        <CheckCircle2 size={18} className={styles.bannerIconGreen} />
+                        <span>Pickup completed on {selectedOrder.dateTime}. Spot payment paid via {selectedOrder.paymentMethod}.</span>
+                      </>
+                    ) : (
+                      <>
+                        <AlertCircle size={18} className={styles.bannerIconRed} />
+                        <span>Pickup cancelled ({selectedOrder.cancellationReason || 'Cancelled'}).</span>
+                      </>
+                    )}
+                  </div>
+
+                  {/* Order Meta Box */}
+                  <div className={styles.modalMetaGrid}>
+                    <div>
+                      <span className={styles.metaLabel}>EXECUTIVE / MERCHANT</span>
+                      <strong className={styles.metaValue}>{selectedOrder.executiveName}</strong>
+                    </div>
+                    <div>
+                      <span className={styles.metaLabel}>PICKUP LOCATION</span>
+                      <strong className={styles.metaValue}>{selectedOrder.pickupAddress}</strong>
+                    </div>
+                  </div>
+
+                  {/* Items Breakdown Table */}
+                  <div className={styles.itemsTableWrap}>
+                    <div className={styles.breakdownHeadingRow}>
+                      <div className={styles.scaleIconWrap}>
+                        <Scale size={16} />
+                      </div>
+                      <div>
+                        <h4 className={styles.breakdownHeading}>Scrap Materials Weighed</h4>
+                        <span className={styles.breakdownSub}>
+                          {selectedOrder.items.length} materials • Total Weight: {selectedOrder.totalWeightKg} kg
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className={styles.tableResponsiveWrapper}>
+                      <table className={styles.receiptTable}>
+                        <thead>
+                          <tr>
+                            <th style={{ width: '40%' }}>Material</th>
+                            <th style={{ width: '20%' }}>Qty</th>
+                            <th style={{ width: '18%' }}>Rate</th>
+                            <th style={{ width: '22%', textAlign: 'right' }}>Amount</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {selectedOrder.items.map((item, idx) => (
+                            <tr key={idx}>
+                              <td className={styles.materialCell} title={item.material}>
+                                <span className={styles.modalItemNameMobile}>
+                                  {getShortMaterialName(item.material)}
+                                </span>
+                                <span className={styles.modalItemNameDesktop}>
+                                  {item.material}
+                                </span>
+                              </td>
+                              <td className={styles.modalWeightCol}>{item.weightKg} kg</td>
+                              <td className={styles.modalRateCol}>₹{item.ratePerKg}</td>
+                              <td className={styles.modalSubtotalCol}>
+                                ₹{formatAmount(item.weightKg * item.ratePerKg)}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                  {/* Payout Summary Box */}
+                  <div className={styles.modalTotalBox}>
+                    <div>
+                      <span className={styles.totalBoxLabel}>Total Payout</span>
+                      <span className={styles.totalBoxSubtext}>Payment Status: {selectedOrder.paymentStatus}</span>
+                    </div>
+                    <span className={styles.totalBoxAmount}>₹{formatAmount(selectedOrder.amount)}</span>
+                  </div>
+
+                  {/* Digital Scale Trust Badge */}
+                  <div className={styles.modalScaleTrust}>
+                    <ShieldCheck size={16} className={styles.modalTrustIcon} />
+                    <span>Calibrated digital weighing scale verified in real-time at your doorstep.</span>
+                  </div>
+                </div>
+
+                {/* Modal Footer */}
+                <div className={styles.modalFooter}>
+                  <button
+                    type="button"
+                    className={styles.printReceiptBtnModal}
+                    onClick={() => handlePrintReceipt(selectedOrder)}
+                  >
+                    <Printer size={15} />
+                    <span>Print / Save Receipt</span>
+                  </button>
+                  <button
+                    type="button"
+                    className={styles.closeBtnModal}
+                    onClick={() => setShowBillModal(false)}
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      ) : (
+        /* ====================================================================
+           VIEW 2: COMPACT ORDER HISTORY LIST
+           ==================================================================== */
+        <div className={styles.listViewContainer}>
+          {/* 1. Header with concise title and subtitle */}
+          <header className={styles.headerBlock}>
+            <div className={styles.headerTitles}>
+              <h1 className={styles.mainTitle}>History</h1>
+              <p className={styles.mainSubtitle}>View your past scrap pickups.</p>
+            </div>
+          </header>
+
+          {/* 2. Filters & Compact Search */}
+          <div className={styles.controlsBar}>
+            {/* Filter Tabs: All, Completed, Cancelled */}
+            <div className={styles.filterPillsRow}>
+              {[
+                { id: 'ALL', label: 'All' },
+                { id: 'COMPLETED', label: 'Completed' },
+                { id: 'CANCELLED', label: 'Cancelled' },
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  type="button"
+                  className={`${styles.filterPillBtn} ${
+                    statusFilter === tab.id ? styles.filterPillActive : ''
+                  }`}
+                  onClick={() => setStatusFilter(tab.id as any)}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Compact Search Box */}
+            <div className={styles.searchBoxWrap}>
+              <Search size={15} className={styles.searchIcon} />
+              <input
+                type="text"
+                className={styles.searchInput}
+                placeholder="Search orders or scrap"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              {searchTerm && (
+                <button
+                  type="button"
+                  className={styles.clearSearchBtn}
+                  onClick={() => setSearchTerm('')}
+                  aria-label="Clear search"
+                >
+                  <X size={14} />
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* 3. Compact Order Cards List */}
+          <div className={styles.orderCardsList}>
+            {filteredData.map((order) => {
+              const primaryItem = order.items[0];
+              const additionalCount = order.items.length - 1;
+              const productSummaryText =
+                additionalCount > 0
+                  ? `${primaryItem?.material || 'Scrap'} + ${additionalCount} more`
+                  : primaryItem?.material || 'Scrap Material';
+
+              // Short formatted date e.g. "01 May 2025"
+              const shortDate = order.dateTime.split(' • ')[0];
+
+              return (
+                <div
+                  key={order.id}
+                  className={styles.compactOrderCard}
+                  onClick={() => handleSelectOrder(order.id)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => e.key === 'Enter' && handleSelectOrder(order.id)}
+                  aria-label={`Order #${order.orderNumber}, ${order.status}, Payout ₹${formatAmount(order.amount)}`}
+                >
+                  {/* Top Row: Status on left, Date and Order ID on right */}
+                  <div className={styles.cardTopRow}>
+                    <div className={styles.cardStatusGroup}>
+                      {order.status === 'completed' ? (
+                        <span className={styles.statusBadgeCompleted}>
+                          <CheckCircle2 size={11} className={styles.statusIcon} />
+                          <span>Completed</span>
+                        </span>
+                      ) : (
+                        <span className={styles.statusBadgeCancelled}>
+                          <AlertCircle size={11} className={styles.statusIcon} />
+                          <span>Cancelled</span>
+                        </span>
+                      )}
+                    </div>
+
+                    <div className={styles.cardMetaRight}>
+                      <span className={styles.cardDate}>{shortDate}</span>
+                      <span className={styles.cardOrderId}>#{order.orderNumber}</span>
+                    </div>
+                  </div>
+
+                  {/* Middle Row: Single thumbnail + Product summary + Total weight */}
+                  <div className={styles.cardMiddleRow}>
                     <img
-                      key={idx}
-                      src={item.imageUrl}
-                      alt={item.material}
-                      className={styles.mobileThumbImg}
+                      src={primaryItem?.imageUrl || '/household-scrap-bundle.jpg'}
+                      alt={primaryItem?.material || 'Scrap'}
+                      className={styles.cardThumbImg}
                       onError={(e) => {
                         (e.target as HTMLImageElement).src = '/household-scrap-bundle.jpg';
                       }}
                     />
-                  ))}
-                </div>
+                    <div className={styles.cardProductInfo}>
+                      <h2 className={styles.cardProductTitle}>{productSummaryText}</h2>
+                      <span className={styles.cardWeightText}>
+                        Total: {order.totalWeightKg} kg
+                      </span>
+                    </div>
+                  </div>
 
-                <div className={styles.mobileScrapTextCol}>
-                  <h3 className={styles.mobileScrapMaterialsTitle}>
-                    {order.items.map((i) => i.material).join(', ')}
-                  </h3>
-                  <div className={styles.mobileScrapMetricsRow}>
-                    <span className={styles.mobileWeightText}>
-                      Total: {order.totalWeightKg} kg
-                    </span>
-                    <span className={styles.mobileItemsCountText}>
-                      ({order.items.length} {order.items.length === 1 ? 'item' : 'items'})
-                    </span>
+                  {/* Bottom Row: Payout & subtle chevron */}
+                  <div className={styles.cardBottomRow}>
+                    <div className={styles.cardPayoutBlock}>
+                      <span className={styles.cardPayoutLabel}>Payout</span>
+                      <span className={styles.cardPayoutValue}>
+                        ₹{formatAmount(order.amount)}
+                      </span>
+                    </div>
+
+                    <div className={styles.cardActionBlock}>
+                      <ChevronRight size={18} className={styles.cardChevronIcon} />
+                    </div>
                   </div>
                 </div>
-              </div>
-
-              {/* Section 3: Executive Area */}
-              <div className={styles.mobileExecutiveBox}>
-                <div className={styles.mobileExecutiveLeft}>
-                  <span className={styles.mobileExecutiveLabel}>EXECUTIVE</span>
-                  <span className={styles.mobileExecutiveName}>
-                    {order.executiveName || 'Assigned Driver'}
-                  </span>
-                </div>
-                <div className={styles.mobilePayoutRight}>
-                  <span className={styles.mobilePayoutLabel}>
-                    {order.status === 'completed' ? 'PAYOUT' : 'ESTIMATE'}
-                  </span>
-                  <span className={styles.mobilePayoutAmount}>
-                    ₹{order.amount.toFixed(2)}
-                  </span>
-                </div>
-              </div>
-
-              {/* Section 4: Action */}
-              <div className={styles.mobileCardActionRow}>
-                <span className={styles.mobileViewDetailsText}>View Details</span>
-                <ChevronRight size={15} className={styles.mobileChevronIcon} />
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Empty State */}
-        {filteredData.length === 0 && (
-          <div className={styles.mobileEmptyState}>
-            <Clock size={32} color="#94A3B8" />
-            <h4 className={styles.mobileEmptyTitle}>No past pickups found</h4>
-            <p className={styles.mobileEmptySubtitle}>
-              {searchTerm
-                ? `No pickups match "${searchTerm}".`
-                : 'No orders found in this category.'}
-            </p>
-            <button
-              type="button"
-              className={styles.mobileResetFilterBtn}
-              onClick={() => {
-                setStatusFilter('ALL');
-                setSearchTerm('');
-              }}
-            >
-              Show All
-            </button>
+              );
+            })}
           </div>
-        )}
-      </div>
 
-      {/* 4. DETAIL RECEIPT MODAL */}
-      {selectedOrder && (
-        <div className={styles.modalOverlay} onClick={() => setSelectedOrder(null)}>
-          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-            <div className={styles.modalHeader}>
-              <div className={styles.modalTitleGroup}>
-                <span className={styles.modalOrderBadge}>#{selectedOrder.orderNumber}</span>
-                <h3 className={styles.modalTitle}>Pickup Summary & Receipt</h3>
-              </div>
+          {/* Empty State */}
+          {filteredData.length === 0 && (
+            <div className={styles.emptyState}>
+              <Clock size={32} className={styles.emptyIcon} />
+              <h3 className={styles.emptyTitle}>No past pickups found</h3>
+              <p className={styles.emptySubtitle}>
+                {searchTerm
+                  ? `No pickups match "${searchTerm}".`
+                  : 'You have no pickups in this filter category.'}
+              </p>
               <button
                 type="button"
-                className={styles.modalCloseBtn}
-                onClick={() => setSelectedOrder(null)}
+                className={styles.resetFilterBtn}
+                onClick={() => {
+                  setStatusFilter('ALL');
+                  setSearchTerm('');
+                }}
               >
-                <X size={18} />
+                Show All Pickups
               </button>
             </div>
-
-            <div className={styles.modalBody}>
-              {/* Status Banner */}
-              <div
-                className={
-                  selectedOrder.status === 'completed'
-                    ? styles.modalSuccessBanner
-                    : styles.modalCancelledBanner
-                }
-              >
-                {selectedOrder.status === 'completed' ? (
-                  <>
-                    <CheckCircle2 size={18} color="#059669" />
-                    <span>Pickup completed on {selectedOrder.dateTime}. Spot payment paid via {selectedOrder.paymentMethod}.</span>
-                  </>
-                ) : (
-                  <>
-                    <AlertCircle size={18} color="#DC2626" />
-                    <span>Pickup cancelled ({selectedOrder.cancellationReason || 'Cancelled'}).</span>
-                  </>
-                )}
-              </div>
-
-              {/* Order Meta Box */}
-              <div className={styles.modalMetaGrid}>
-                <div>
-                  <span className={styles.metaLabel}>EXECUTIVE / MERCHANT</span>
-                  <strong className={styles.metaValue}>{selectedOrder.executiveName}</strong>
-                </div>
-                <div>
-                  <span className={styles.metaLabel}>PICKUP LOCATION</span>
-                  <strong className={styles.metaValue}>{selectedOrder.pickupAddress}</strong>
-                </div>
-              </div>
-
-              {/* Items Breakdown Table */}
-              <div className={styles.itemsTableWrap}>
-                <h4 className={styles.breakdownHeading}>Scrap Materials Weighed</h4>
-                <table className={styles.receiptTable}>
-                  <thead>
-                    <tr>
-                      <th style={{ width: '42%' }}>Material</th>
-                      <th style={{ width: '20%' }}>Qty</th>
-                      <th style={{ width: '18%' }}>Rate</th>
-                      <th style={{ width: '20%', textAlign: 'right' }}>Amount</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {selectedOrder.items.map((item, idx) => (
-                      <tr key={idx}>
-                        <td style={{ fontWeight: 700 }}>{item.material}</td>
-                        <td>{item.weightKg} KG</td>
-                        <td>₹{item.ratePerKg}</td>
-                        <td style={{ textAlign: 'right', fontWeight: 800, color: '#059669' }}>
-                          ₹{(item.weightKg * item.ratePerKg).toFixed(2)}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-
-              {/* Payout Summary Box */}
-              <div className={styles.modalTotalBox}>
-                <div>
-                  <span className={styles.totalBoxLabel}>Total Payout</span>
-                  <span className={styles.totalBoxSubtext}>Payment Status: {selectedOrder.paymentStatus}</span>
-                </div>
-                <span className={styles.totalBoxAmount}>₹{selectedOrder.amount.toFixed(2)}</span>
-              </div>
-
-              <div className={styles.modalScaleTrust}>
-                <ShieldCheck size={16} color="#15803D" />
-                <span>Verified digital scale weighing recorded at customer doorstep.</span>
-              </div>
-            </div>
-
-            <div className={styles.modalFooter}>
-              <button
-                type="button"
-                className={styles.printReceiptBtn}
-                onClick={() => handlePrintReceipt(selectedOrder)}
-              >
-                <Printer size={15} />
-                <span>Print / Save Receipt</span>
-              </button>
-              <button
-                type="button"
-                className={styles.closeBtn}
-                onClick={() => setSelectedOrder(null)}
-              >
-                Close
-              </button>
-            </div>
-          </div>
+          )}
         </div>
       )}
     </div>

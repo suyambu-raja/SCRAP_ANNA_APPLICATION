@@ -1,44 +1,40 @@
 /* ==========================================================================
-   HOUSEHOLD HISTORY STYLING - CLEAN, HUMAN-READABLE CARDS & RECEIPT MODAL
+   HOUSEHOLD ORDER HISTORY STYLING
+   Compact Order List -> Full Order Details Page
    ========================================================================== */
 
 .pageContainer {
   width: 100%;
-  max-width: 1200px;
+  max-width: 960px;
   margin: 0 auto;
-  padding: 1.5rem 1.5rem 1rem 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  padding: 1.5rem 1.25rem 2.5rem 1.25rem;
   box-sizing: border-box;
   font-family: inherit;
   color: #0f172a;
 }
 
-/* Header */
-.headerBlock {
+/* ==========================================================================
+   VIEW 2: COMPACT ORDER HISTORY LIST
+   ========================================================================== */
+
+.listViewContainer {
   display: flex;
-  align-items: center;
-  gap: 1rem;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
 }
 
-.headerIconCircle {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: #fef3c7;
-  color: #d97706;
+/* 1. Header Block */
+.headerBlock {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  box-shadow: 0 2px 8px rgba(217, 119, 6, 0.15);
+  flex-direction: column;
+  gap: 0.25rem;
 }
 
 .headerTitles {
   display: flex;
   flex-direction: column;
-  gap: 0.15rem;
+  gap: 0.2rem;
 }
 
 .mainTitle {
@@ -46,40 +42,47 @@
   font-weight: 900;
   color: #0f172a;
   margin: 0;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
 }
 
 .mainSubtitle {
   font-size: 0.85rem;
   color: #64748b;
   margin: 0;
+  font-weight: 500;
+  line-height: 1.3;
 }
 
-/* Filter Bar */
-.filterBar {
+/* 2. Controls Bar (Filter Pills & Compact Search) */
+.controlsBar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 0.75rem;
   flex-wrap: wrap;
 }
 
-.statusPillsRow {
+.filterPillsRow {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.45rem;
 }
 
 .filterPillBtn {
-  padding: 0.55rem 1.15rem;
-  font-size: 0.825rem;
-  font-weight: 700;
+  height: 36px;
+  padding: 0 1rem;
+  font-size: 0.8rem;
+  font-weight: 750;
   border-radius: 9999px;
-  border: 1px solid #e2e8f0;
+  border: 1.5px solid #e2e8f0;
   background: #ffffff;
   color: #475569;
   cursor: pointer;
   transition: all 0.15s ease;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .filterPillBtn:hover {
@@ -87,240 +90,262 @@
   color: #0f172a;
 }
 
+.filterPillBtn:active {
+  transform: scale(0.98);
+}
+
 .filterPillActive {
   background: #0f172a !important;
   border-color: #0f172a !important;
-  color: #fbc21a !important;
+  color: #f8bf1d !important;
   font-weight: 900 !important;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.15);
 }
 
 .searchBoxWrap {
   position: relative;
   display: flex;
   align-items: center;
-  min-width: 280px;
+  height: 36px;
+  flex: 1;
+  min-width: 200px;
+  max-width: 340px;
 }
 
 .searchIcon {
   position: absolute;
-  left: 0.85rem;
+  left: 0.75rem;
   color: #94a3b8;
   pointer-events: none;
 }
 
 .searchInput {
   width: 100%;
-  padding: 0.6rem 2.25rem 0.6rem 2.4rem;
+  height: 100%;
+  padding: 0 2rem 0 2.2rem;
   font-size: 0.825rem;
+  font-weight: 600;
   border: 1.5px solid #e2e8f0;
   border-radius: 10px;
   background: #ffffff;
   color: #0f172a;
   outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.searchInput::placeholder {
+  color: #94a3b8;
+  font-weight: 500;
 }
 
 .searchInput:focus {
-  border-color: #f59e0b;
+  border-color: #f8bf1d;
+  box-shadow: 0 0 0 3px rgba(248, 191, 29, 0.15);
 }
 
 .clearSearchBtn {
   position: absolute;
-  right: 0.75rem;
+  right: 0.65rem;
   background: transparent;
   border: none;
   color: #94a3b8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
   cursor: pointer;
 }
 
-/* History Cards Grid */
-.historyCardsGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  gap: 1.25rem;
+/* 3. Compact Order Cards List */
+.orderCardsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
   width: 100%;
 }
 
-.historyCard {
+.compactOrderCard {
   background: #ffffff;
   border: 1px solid #e2e8f0;
-  border-radius: 16px;
-  padding: 1.25rem;
+  border-radius: 14px;
+  padding: 0.85rem 1rem;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  gap: 0.6rem;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
+  box-sizing: border-box;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  text-decoration: none;
+  color: inherit;
 }
 
-.historyCard:hover {
-  transform: translateY(-2px);
-  border-color: #f59e0b;
-  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.07);
+.compactOrderCard:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+  transform: translateY(-1px);
 }
 
+.compactOrderCard:active {
+  transform: scale(0.995);
+  border-color: #f8bf1d;
+}
+
+/* Top Row: Status badge & Date / Order ID */
 .cardTopRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
-  border-bottom: 1px solid #f1f5f9;
-  padding-bottom: 0.75rem;
 }
 
-.dateCol {
+.cardStatusGroup {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
 }
 
-.dateText {
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: #475569;
-}
-
-.orderIdBadge {
-  background: #f1f5f9;
-  color: #0f172a;
-  font-size: 0.7rem;
-  font-weight: 800;
-  padding: 0.15rem 0.45rem;
-  border-radius: 4px;
-}
-
-.statusBadgeGreen {
+.statusBadgeCompleted {
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
+  gap: 0.25rem;
   background: #ecfdf5;
   color: #059669;
-  font-size: 0.725rem;
+  font-size: 0.7rem;
   font-weight: 800;
   padding: 0.2rem 0.55rem;
   border-radius: 9999px;
   border: 1px solid #a7f3d0;
+  letter-spacing: 0.01em;
 }
 
-.statusBadgeRed {
+.statusBadgeCancelled {
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
-  background: #fee2e2;
+  gap: 0.25rem;
+  background: #fef2f2;
   color: #dc2626;
-  font-size: 0.725rem;
+  font-size: 0.7rem;
   font-weight: 800;
   padding: 0.2rem 0.55rem;
   border-radius: 9999px;
-  border: 1px solid #fca5a5;
+  border: 1px solid #fecaca;
+  letter-spacing: 0.01em;
 }
 
-.itemsRow {
+.cardMetaRight {
   display: flex;
   align-items: center;
-  gap: 0.85rem;
+  gap: 0.5rem;
 }
 
-.thumbsStack {
+.cardDate {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: #64748b;
+  white-space: nowrap;
+}
+
+.cardOrderId {
+  font-size: 0.72rem;
+  font-weight: 750;
+  color: #475569;
+  background: #f1f5f9;
+  padding: 0.15rem 0.45rem;
+  border-radius: 6px;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+/* Middle Row: Single thumbnail + Product summary + Total weight */
+.cardMiddleRow {
   display: flex;
   align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.cardThumbImg {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  object-fit: cover;
+  border: 1px solid #f1f5f9;
+  background: #f8fafc;
   flex-shrink: 0;
 }
 
-.itemThumbImg {
-  width: 44px;
-  height: 44px;
-  border-radius: 8px;
-  object-fit: cover;
-  border: 1.5px solid #ffffff;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  margin-right: -10px;
-}
-
-.itemsSummaryCol {
+.cardProductInfo {
   display: flex;
   flex-direction: column;
   gap: 0.15rem;
-  margin-left: 10px;
-  overflow: hidden;
+  min-width: 0;
+  flex: 1;
 }
 
-.materialsText {
-  font-size: 0.85rem;
+.cardProductTitle {
+  font-size: 0.88rem;
   font-weight: 800;
   color: #0f172a;
+  margin: 0;
+  line-height: 1.25;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.weightText {
-  font-size: 0.75rem;
+.cardWeightText {
+  font-size: 0.76rem;
+  font-weight: 700;
   color: #64748b;
 }
 
+/* Bottom Row: Payout & subtle chevron */
 .cardBottomRow {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
-  gap: 0.5rem;
-  background: #f8fafc;
-  padding: 0.75rem 0.85rem;
-  border-radius: 10px;
+  padding-top: 0.45rem;
+  border-top: 1px solid #f8fafc;
 }
 
-.merchantCol {
+.cardPayoutBlock {
   display: flex;
-  flex-direction: column;
-  gap: 0.1rem;
+  align-items: baseline;
+  gap: 0.4rem;
 }
 
-.merchantLabel {
-  font-size: 0.65rem;
-  font-weight: 800;
-  color: #94a3b8;
+.cardPayoutLabel {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #64748b;
   text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
 
-.merchantName {
-  font-size: 0.8rem;
-  font-weight: 800;
-  color: #334155;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 160px;
-}
-
-.payoutCol {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.1rem;
-}
-
-.payoutLabel {
-  font-size: 0.65rem;
-  font-weight: 800;
-  color: #94a3b8;
-  text-transform: uppercase;
-}
-
-.payoutAmount {
-  font-size: 1.15rem;
+.cardPayoutValue {
+  font-size: 1.05rem;
   font-weight: 900;
-  color: #059669;
+  color: #0f172a;
+  line-height: 1;
 }
 
-.viewDetailsBtnRow {
+.cardActionBlock {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  gap: 0.25rem;
-  font-size: 0.75rem;
-  font-weight: 800;
-  color: #d97706;
-  padding-top: 0.25rem;
+  color: #94a3b8;
+}
+
+.cardChevronIcon {
+  transition: transform 0.15s ease, color 0.15s ease;
+}
+
+.compactOrderCard:hover .cardChevronIcon {
+  transform: translateX(3px);
+  color: #0f172a;
 }
 
 /* Empty State */
@@ -329,38 +354,419 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 3.5rem 1.5rem;
   text-align: center;
-  background: #f8fafc;
+  padding: 3rem 1.5rem;
+  background: #ffffff;
   border-radius: 16px;
-  border: 1px dashed #cbd5e1;
+  border: 1.5px dashed #cbd5e1;
+  gap: 0.65rem;
+}
+
+.emptyIcon {
+  color: #94a3b8;
 }
 
 .emptyTitle {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 800;
   color: #0f172a;
-  margin: 0.75rem 0 0.25rem 0;
+  margin: 0;
 }
 
 .emptySubtitle {
   font-size: 0.825rem;
   color: #64748b;
-  margin: 0 0 1rem 0;
+  margin: 0;
 }
 
 .resetFilterBtn {
+  margin-top: 0.5rem;
   background: #0f172a;
-  color: #fbc21a;
-  font-weight: 800;
+  color: #ffffff;
   font-size: 0.8rem;
+  font-weight: 800;
   padding: 0.5rem 1.15rem;
   border-radius: 8px;
   border: none;
   cursor: pointer;
+  transition: all 0.15s ease;
 }
 
-/* Detail Receipt Modal */
+.resetFilterBtn:hover {
+  background: #1e293b;
+}
+
+/* ==========================================================================
+   VIEW 1: FULL ORDER DETAILS PAGE (WHEN AN ORDER IS SELECTED)
+   ========================================================================== */
+
+.detailsViewContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+/* Top Navigation Bar */
+.detailsTopBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.backToListBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: transparent;
+  border: none;
+  color: #0f172a;
+  font-size: 0.875rem;
+  font-weight: 800;
+  cursor: pointer;
+  padding: 0.4rem 0.2rem;
+  border-radius: 6px;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.backToListBtn:hover {
+  color: #f59e0b;
+  transform: translateX(-2px);
+}
+
+.printReceiptBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #f8bf1d;
+  color: #0f172a;
+  font-size: 0.8rem;
+  font-weight: 900;
+  padding: 0.45rem 0.85rem;
+  border-radius: 8px;
+  border: 1px solid #e5a700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.printReceiptBtn:hover {
+  background: #f5b300;
+}
+
+/* 1. Header Card */
+.detailsHeaderCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.03);
+}
+
+.detailsHeaderMain {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.detailsHeaderLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.detailsTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.detailsOrderNumber {
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: #0f172a;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.detailsMetaSubrow {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.8rem;
+  color: #64748b;
+  font-weight: 600;
+  flex-wrap: wrap;
+}
+
+.detailsMetaIcon {
+  color: #94a3b8;
+}
+
+.detailsDotDivider {
+  color: #cbd5e1;
+}
+
+.billSlipTag {
+  font-family: monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #475569;
+  background: #f1f5f9;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+}
+
+.statusBannerGreen {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #065f46;
+  padding: 0.65rem 0.85rem;
+  border-radius: 10px;
+  font-size: 0.825rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.statusBannerRed {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+  padding: 0.65rem 0.85rem;
+  border-radius: 10px;
+  font-size: 0.825rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.statusBannerIcon {
+  flex-shrink: 0;
+}
+
+/* 2. Section Card (Used for Materials & Payout) */
+.detailsSectionCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.03);
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.sectionHeaderIconWrap {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.sectionTitle {
+  font-size: 1.05rem;
+  font-weight: 850;
+  color: #0f172a;
+  margin: 0;
+}
+
+.sectionSubtitle {
+  font-size: 0.78rem;
+  color: #64748b;
+  margin: 0.15rem 0 0;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   VIEW BILL PROMPT CARD (ORDER DETAILS)
+   ========================================================================== */
+
+.billPromptCard {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 1.25rem 1.35rem;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  box-sizing: border-box;
+}
+
+.billPromptContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.billPromptLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.95rem;
+  min-width: 0;
+}
+
+.billPromptIconWrap {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(248, 191, 29, 0.15);
+  color: #b45309;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.billPromptIcon {
+  color: #b45309;
+}
+
+.billPromptTexts {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.billPromptBadge {
+  font-size: 0.65rem;
+  font-weight: 850;
+  color: #b45309;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.billPromptTitle {
+  font-size: 1.05rem;
+  font-weight: 850;
+  color: #0f172a;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.billPromptMeta {
+  font-size: 0.8rem;
+  color: #64748b;
+  margin: 0;
+  font-weight: 600;
+}
+
+.billPromptRight {
+  display: flex;
+  align-items: center;
+  gap: 1.35rem;
+  flex-wrap: wrap;
+}
+
+.billPromptAmountBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.15rem;
+}
+
+.billPromptAmountLabel {
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.billPromptAmountValue {
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: #059669;
+  line-height: 1.1;
+}
+
+.billPromptPayMethod {
+  font-size: 0.72rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.viewBillCtaBtn {
+  background: #0f172a;
+  color: #f8bf1d;
+  border: none;
+  border-radius: 10px;
+  padding: 0.65rem 1.15rem;
+  font-size: 0.825rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.12);
+  white-space: nowrap;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.viewBillCtaBtn:hover {
+  background: #1e293b;
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 5px 14px rgba(15, 23, 42, 0.18);
+}
+
+.viewBillCtaBtn:active {
+  transform: scale(0.98);
+}
+
+.billPromptTrustRow {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: #f8fafc;
+  border-top: 1px solid #f1f5f9;
+  margin-top: 0.25rem;
+  padding-top: 0.65rem;
+  font-size: 0.76rem;
+  color: #15803d;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.billPromptTrustIcon {
+  flex-shrink: 0;
+  color: #16a34a;
+}
+
+/* ==========================================================================
+   SEPARATE BILL & PAYMENT RECEIPT MODAL (CLASSIC DESIGN)
+   ========================================================================== */
+
 .modalOverlay {
   position: fixed;
   inset: 0;
@@ -379,16 +785,17 @@
 .modalContent {
   background: #ffffff;
   width: 100%;
-  max-width: 520px;
-  max-height: calc(100dvh - 2rem);
+  max-width: 540px;
+  max-height: calc(100dvh - 2.5rem);
   border-radius: 18px;
   overflow: hidden;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.25);
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
   margin: auto;
   position: relative;
+  border: 1px solid #e2e8f0;
   overscroll-behavior: contain;
   touch-action: pan-y;
 }
@@ -410,9 +817,10 @@
 }
 
 .modalOrderBadge {
-  font-size: 0.7rem;
-  font-weight: 800;
+  font-size: 0.72rem;
+  font-weight: 850;
   color: #d97706;
+  letter-spacing: 0.02em;
 }
 
 .modalTitle {
@@ -480,6 +888,16 @@
   gap: 0.5rem;
 }
 
+.bannerIconGreen {
+  color: #059669;
+  flex-shrink: 0;
+}
+
+.bannerIconRed {
+  color: #dc2626;
+  flex-shrink: 0;
+}
+
 .modalMetaGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -488,6 +906,7 @@
   padding: 0.85rem 1rem;
   border-radius: 10px;
   font-size: 0.8rem;
+  border: 1px solid #f1f5f9;
 }
 
 .metaLabel {
@@ -496,56 +915,147 @@
   font-weight: 800;
   color: #94a3b8;
   text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
 .metaValue {
   color: #0f172a;
+  font-weight: 750;
+  margin-top: 0.15rem;
+  display: block;
+  font-size: 0.8rem;
+  line-height: 1.3;
 }
 
 .itemsTableWrap {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.5rem;
+}
+
+.breakdownHeadingRow {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.scaleIconWrap {
+  color: #64748b;
+  display: flex;
+  align-items: center;
 }
 
 .breakdownHeading {
-  font-size: 0.775rem;
-  font-weight: 800;
+  font-size: 0.825rem;
+  font-weight: 850;
   color: #0f172a;
   margin: 0;
   text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.breakdownSub {
+  font-size: 0.75rem;
+  color: #64748b;
+  font-weight: 600;
+  margin-left: auto;
+}
+
+.tableResponsiveWrapper {
+  overflow-x: hidden;
+  width: 100%;
 }
 
 .receiptTable {
   width: 100%;
+  table-layout: fixed;
   border-collapse: collapse;
   font-size: 0.8rem;
-  table-layout: fixed;
 }
 
 .receiptTable th {
   text-align: left;
-  padding: 0.45rem 0.35rem;
+  padding: 0.5rem 0.25rem;
   color: #64748b;
   font-weight: 800;
   font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 0.03em;
   border-bottom: 1.5px solid #e2e8f0;
+  box-sizing: border-box;
 }
 
 .receiptTable td {
-  padding: 0.55rem 0.35rem;
+  padding: 0.65rem 0.25rem;
   border-bottom: 1px solid #f1f5f9;
   color: #0f172a;
   vertical-align: middle;
+  box-sizing: border-box;
+}
+
+.materialCell {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding-right: 0.25rem;
+}
+
+.modalItemNameMobile {
+  display: block;
+  font-weight: 750;
+  color: #0f172a;
+  font-size: 0.82rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.modalItemNameDesktop {
+  display: none;
+  font-weight: 750;
+  color: #0f172a;
+  font-size: 0.82rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (min-width: 640px) {
+  .modalItemNameMobile {
+    display: none;
+  }
+  .modalItemNameDesktop {
+    display: block;
+  }
+}
+
+.modalWeightCol {
+  font-weight: 700;
+  color: #334155;
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+
+.modalRateCol {
+  color: #64748b;
+  font-weight: 600;
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+
+.modalSubtotalCol {
+  font-weight: 850;
+  color: #059669;
+  text-align: right;
+  font-size: 0.825rem;
+  white-space: nowrap;
 }
 
 .modalTotalBox {
-  background: #20242D;
+  background: #0f172a;
   color: #ffffff;
   border-radius: 12px;
-  padding: 0.85rem 1.15rem;
+  padding: 0.95rem 1.25rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -554,602 +1064,294 @@
 .totalBoxLabel {
   display: block;
   font-size: 0.75rem;
-  font-weight: 800;
-  color: #fbc21a;
+  font-weight: 850;
+  color: #f8bf1d;
   text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
 .totalBoxSubtext {
+  display: block;
   font-size: 0.7rem;
   color: #94a3b8;
+  font-weight: 500;
+  margin-top: 0.1rem;
 }
 
 .totalBoxAmount {
-  font-size: 1.35rem;
+  font-size: 1.45rem;
   font-weight: 900;
-  color: #fbc21a;
+  color: #f8bf1d;
 }
 
 .modalScaleTrust {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
-  font-size: 0.725rem;
+  gap: 0.45rem;
+  font-size: 0.75rem;
   color: #15803d;
   font-weight: 600;
+  background: #f0fdf4;
+  padding: 0.6rem 0.85rem;
+  border-radius: 8px;
+  border: 1px solid #dcfce7;
+}
+
+.modalTrustIcon {
+  color: #16a34a;
+  flex-shrink: 0;
 }
 
 .modalFooter {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
+  gap: 0.75rem;
   padding: 0.85rem 1.35rem;
   border-top: 1px solid #f1f5f9;
-  background: #f8fafc;
-  flex-shrink: 0;
-  gap: 0.75rem;
-}
-
-.printReceiptBtn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  background: #fbc21a;
-  color: #0f172a;
-  font-size: 0.8rem;
-  font-weight: 900;
-  padding: 0.55rem 1rem;
-  border-radius: 8px;
-  border: 1px solid #e5aa00;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.closeBtn {
-  padding: 0.55rem 1rem;
-  border: 1px solid #cbd5e1;
   background: #ffffff;
-  color: #475569;
+  flex-shrink: 0;
+}
+
+.printReceiptBtnModal {
+  background: #0f172a;
+  color: #f8bf1d;
+  border: none;
+  border-radius: 9px;
+  padding: 0.55rem 1.15rem;
   font-size: 0.8rem;
-  font-weight: 700;
-  border-radius: 8px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
   cursor: pointer;
   transition: all 0.15s ease;
 }
 
-.desktopHistoryView {
+.printReceiptBtnModal:hover {
+  background: #1e293b;
+  color: #ffffff;
+}
+
+.closeBtnModal {
+  background: #f1f5f9;
+  color: #475569;
+  border: none;
+  border-radius: 9px;
+  padding: 0.55rem 1.15rem;
+  font-size: 0.8rem;
+  font-weight: 750;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.closeBtnModal:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+/* 4. Meta Cards (Executive & Location) */
+.metaCardsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.metaCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 1rem 1.15rem;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  width: 100%;
+  gap: 0.5rem;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.03);
 }
 
-.mobileHistoryView {
-  display: none;
+.metaCardHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #64748b;
 }
+
+.metaCardIcon {
+  color: #94a3b8;
+}
+
+.metaCardHeading {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #475569;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.metaCardBody {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.metaPrimaryText {
+  font-size: 0.88rem;
+  font-weight: 750;
+  color: #0f172a;
+  margin: 0;
+  line-height: 1.35;
+}
+
+.metaSubText {
+  font-size: 0.78rem;
+  color: #64748b;
+  margin: 0;
+  font-weight: 600;
+}
+
+/* 5. Help Strip */
+.detailsHelpStrip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fffdf2;
+  border: 1px solid #ffde7a;
+  padding: 0.85rem 1.15rem;
+  border-radius: 12px;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.helpStripLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.825rem;
+  font-weight: 600;
+  color: #1e3a20;
+}
+
+.helpStripIcon {
+  color: #b45309;
+  flex-shrink: 0;
+}
+
+.helpStripBtn {
+  background: #0f172a;
+  color: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 800;
+  padding: 0.45rem 0.85rem;
+  border-radius: 8px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.helpStripBtn:hover {
+  background: #1e293b;
+  color: #f8bf1d;
+}
+
+/* ==========================================================================
+   RESPONSIVE ADJUSTMENTS (MOBILE-FIRST)
+   ========================================================================== */
 
 @media (max-width: 768px) {
-  .desktopHistoryView {
-    display: none !important;
-  }
-
-  .mobileHistoryView {
-    display: flex !important;
-    flex-direction: column;
-    gap: 1rem;
-    width: 100%;
-    box-sizing: border-box;
-  }
-
   .pageContainer {
-    padding: 1rem 1rem 1rem 1rem !important;
-    gap: 1rem !important;
-    max-width: 100vw !important;
-    overflow-x: hidden !important;
+    padding: 1rem 1rem 2rem 1rem;
+    max-width: 100%;
   }
 
-  /* 1. Mobile Headline */
-  .mobileHeaderBlock {
-    display: flex;
+  .controlsBar {
     flex-direction: column;
-    gap: 0.25rem;
-    width: 100%;
-  }
-
-  .mobileMainTitle {
-    font-size: 1.45rem;
-    font-weight: 900;
-    color: #0f172a;
-    letter-spacing: -0.02em;
-    margin: 0;
-    line-height: 1.15;
-  }
-
-  .mobileMainSubtitle {
-    font-size: 0.8rem;
-    color: #64748b;
-    font-weight: 600;
-    margin: 0;
-    line-height: 1.3;
-  }
-
-  /* 2. Mobile Filters Row (All, Completed, Cancelled) */
-  .mobileFiltersRow {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  .mobileFilterPillBtn {
-    flex: 1;
-    height: 38px;
-    padding: 0 0.5rem;
-    font-size: 0.8rem;
-    font-weight: 750;
-    border-radius: 10px;
-    border: 1.5px solid #e2e8f0;
-    background: #ffffff;
-    color: #475569;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.15s ease;
-    white-space: nowrap;
-    user-select: none;
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  .mobileFilterPillBtn:active {
-    transform: scale(0.98);
-  }
-
-  .mobileFilterPillActive {
-    background: #20242D !important;
-    border-color: #20242D !important;
-    color: #fbc21a !important;
-    font-weight: 900 !important;
-    box-shadow: 0 2px 8px rgba(32, 36, 45, 0.2);
-  }
-
-  /* 3. Mobile Search Box */
-  .mobileSearchBoxWrap {
-    position: relative;
-    display: flex;
-    align-items: center;
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  .mobileSearchIcon {
-    position: absolute;
-    left: 0.85rem;
-    color: #94a3b8;
-    pointer-events: none;
-  }
-
-  .mobileSearchInput {
-    width: 100%;
-    height: 42px;
-    padding: 0 2.25rem 0 2.4rem;
-    font-size: 0.84rem;
-    font-weight: 600;
-    border: 1.5px solid #e2e8f0;
-    border-radius: 12px;
-    background: #ffffff;
-    color: #0f172a;
-    outline: none;
-    box-sizing: border-box;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
-  }
-
-  .mobileSearchInput::placeholder {
-    color: #94a3b8;
-    font-weight: 500;
-  }
-
-  .mobileSearchInput:focus {
-    border-color: #f59e0b;
-    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.12);
-  }
-
-  .mobileClearSearchBtn {
-    position: absolute;
-    right: 0.75rem;
-    background: transparent;
-    border: none;
-    color: #94a3b8;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 4px;
-    cursor: pointer;
-  }
-
-  /* 4. Mobile History Cards List */
-  .mobileHistoryCardsList {
-    display: flex;
-    flex-direction: column;
-    gap: 0.85rem;
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  .mobileHistoryCard {
-    background: #ffffff;
-    border: 1.5px solid #e2e8f0;
-    border-radius: 16px;
-    padding: 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-    cursor: pointer;
-    transition: transform 0.15s ease, border-color 0.15s ease;
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  .mobileHistoryCard:active {
-    transform: scale(0.99);
-    border-color: #f59e0b;
-  }
-
-  /* Section 1: Top Row */
-  .mobileCardTopRow {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.5rem;
-    border-bottom: 1px solid #f1f5f9;
-    padding-bottom: 0.65rem;
-  }
-
-  .mobileDateCol {
-    display: flex;
-    align-items: center;
-    gap: 0.35rem;
-    color: #64748b;
-    min-width: 0;
-  }
-
-  .mobileDateIcon {
-    flex-shrink: 0;
-    color: #94a3b8;
-  }
-
-  .mobileDateText {
-    font-size: 0.74rem;
-    font-weight: 750;
-    color: #475569;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .mobileTopRightBadges {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    flex-shrink: 0;
-  }
-
-  .mobileOrderIdBadge {
-    background: #f1f5f9;
-    color: #0f172a;
-    font-size: 0.68rem;
-    font-weight: 800;
-    padding: 0.15rem 0.45rem;
-    border-radius: 6px;
-    letter-spacing: 0.01em;
-  }
-
-  .mobileStatusBadgeGreen {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    background: #dcfce7;
-    color: #15803d;
-    font-size: 0.65rem;
-    font-weight: 800;
-    padding: 0.15rem 0.45rem;
-    border-radius: 9999px;
-    border: 1px solid #bbf7d0;
-  }
-
-  .mobileStatusBadgeRed {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    background: #fee2e2;
-    color: #dc2626;
-    font-size: 0.65rem;
-    font-weight: 800;
-    padding: 0.15rem 0.45rem;
-    border-radius: 9999px;
-    border: 1px solid #fca5a5;
-  }
-
-  /* Section 2: Scrap Summary */
-  .mobileScrapSummaryRow {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    width: 100%;
-  }
-
-  .mobileThumbsGroup {
-    display: flex;
-    align-items: center;
-    flex-shrink: 0;
-  }
-
-  .mobileThumbImg {
-    width: 42px;
-    height: 42px;
-    border-radius: 8px;
-    object-fit: cover;
-    border: 1.5px solid #ffffff;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
-    margin-right: -8px;
-  }
-
-  .mobileScrapTextCol {
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-    margin-left: 8px;
-    flex: 1;
-    min-width: 0;
-  }
-
-  .mobileScrapMaterialsTitle {
-    font-size: 0.85rem;
-    font-weight: 800;
-    color: #0f172a;
-    margin: 0;
-    line-height: 1.25;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  .mobileScrapMetricsRow {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-size: 0.73rem;
-  }
-
-  .mobileWeightText {
-    font-weight: 800;
-    color: #16a34a;
-  }
-
-  .mobileItemsCountText {
-    font-weight: 600;
-    color: #64748b;
-  }
-
-  /* Section 3: Executive Area */
-  .mobileExecutiveBox {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.5rem;
-    background: #f8fafc;
-    border: 1px solid #f1f5f9;
-    padding: 0.65rem 0.85rem;
-    border-radius: 10px;
-    min-height: 44px;
-    box-sizing: border-box;
-  }
-
-  .mobileExecutiveLeft {
-    display: flex;
-    flex-direction: column;
-    gap: 0.1rem;
-    flex: 1;
-    min-width: 0;
-  }
-
-  .mobileExecutiveLabel {
-    font-size: 0.62rem;
-    font-weight: 850;
-    color: #94a3b8;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-  }
-
-  .mobileExecutiveName {
-    font-size: 0.78rem;
-    font-weight: 800;
-    color: #334155;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .mobilePayoutRight {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 0.1rem;
-    flex-shrink: 0;
-  }
-
-  .mobilePayoutLabel {
-    font-size: 0.62rem;
-    font-weight: 850;
-    color: #94a3b8;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-  }
-
-  .mobilePayoutAmount {
-    font-size: 1.05rem;
-    font-weight: 900;
-    color: #16a34a;
-    line-height: 1.1;
-  }
-
-  /* Section 4: Action */
-  .mobileCardActionRow {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 0.25rem;
-    color: #16a34a;
-    font-size: 0.76rem;
-    font-weight: 850;
-    padding-top: 0.1rem;
-  }
-
-  .mobileViewDetailsText {
-    white-space: nowrap;
-  }
-
-  .mobileChevronIcon {
-    color: #16a34a;
-    transition: transform 0.15s ease;
-  }
-
-  .mobileHistoryCard:active .mobileChevronIcon {
-    transform: translateX(2px);
-  }
-
-  /* Mobile Empty State */
-  .mobileEmptyState {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 3rem 1.5rem;
-    background: #ffffff;
-    border-radius: 16px;
-    border: 1.5px dashed #cbd5e1;
+    align-items: stretch;
     gap: 0.65rem;
   }
 
-  .mobileEmptyTitle {
-    font-size: 1rem;
-    font-weight: 800;
-    color: #0f172a;
-    margin: 0;
+  .filterPillsRow {
+    width: 100%;
   }
 
-  .mobileEmptySubtitle {
-    font-size: 0.8rem;
-    color: #64748b;
-    margin: 0;
+  .filterPillBtn {
+    flex: 1;
+    text-align: center;
+    padding: 0 0.5rem;
   }
 
-  .mobileResetFilterBtn {
-    margin-top: 0.5rem;
-    padding: 0.6rem 1.25rem;
-    background: #fbc21a;
-    color: #0f172a;
-    font-size: 0.8rem;
-    font-weight: 850;
-    border: 1px solid #e5aa00;
-    border-radius: 10px;
-    cursor: pointer;
+  .searchBoxWrap {
+    max-width: 100%;
+    width: 100%;
   }
 
-  .historyCardsGrid {
+  .compactOrderCard {
+    padding: 0.75rem 0.85rem;
+    gap: 0.55rem;
+  }
+
+  .cardThumbImg {
+    width: 40px;
+    height: 40px;
+  }
+
+  .cardProductTitle {
+    font-size: 0.85rem;
+  }
+
+  .metaCardsGrid {
     grid-template-columns: 1fr;
   }
 
-  .modalMetaGrid {
-    grid-template-columns: 1fr;
+  .billPromptCard {
+    padding: 1rem;
+    gap: 0.75rem;
   }
 
-  /* Modal Mobile Responsiveness - Anchored top and bottom with smooth scrolling body */
+  .billPromptContent {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.85rem;
+  }
+
+  .billPromptRight {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .billPromptAmountBlock {
+    align-items: flex-start;
+  }
+
+  .viewBillCtaBtn {
+    width: 100%;
+    justify-content: center;
+    padding: 0.75rem 1rem;
+  }
+
   .modalOverlay {
     padding: 0.75rem;
     align-items: center;
     justify-content: center;
-    z-index: 99999;
-    overscroll-behavior: contain;
-    touch-action: none;
   }
 
   .modalContent {
-    width: 100%;
-    max-width: 100%;
     max-height: calc(100dvh - 1.5rem);
     border-radius: 16px;
-    margin: auto;
-    overscroll-behavior: contain;
-    touch-action: pan-y;
   }
 
   .modalHeader {
     padding: 0.95rem 1rem 0.85rem 1rem;
   }
 
-  .modalTitle {
-    font-size: 1.05rem;
-  }
-
   .modalBody {
     padding: 0.85rem 1rem;
     gap: 0.85rem;
-    overscroll-behavior: contain;
-    touch-action: pan-y;
-  }
-
-  .modalSuccessBanner,
-  .modalCancelledBanner {
-    padding: 0.65rem 0.85rem;
-    font-size: 0.74rem;
-    border-radius: 8px;
   }
 
   .modalMetaGrid {
     grid-template-columns: 1fr;
     gap: 0.55rem;
-    padding: 0.75rem 0.85rem;
-    border-radius: 8px;
-  }
-
-  .metaLabel {
-    font-size: 0.62rem;
-  }
-
-  .metaValue {
-    font-size: 0.78rem;
-    line-height: 1.3;
-    display: block;
-    margin-top: 0.15rem;
-  }
-
-  .receiptTable th,
-  .receiptTable td {
-    padding: 0.45rem 0.2rem;
-    font-size: 0.74rem;
-  }
-
-  .modalTotalBox {
-    padding: 0.75rem 0.95rem;
-    border-radius: 10px;
-  }
-
-  .totalBoxLabel {
-    font-size: 0.7rem;
-  }
-
-  .totalBoxAmount {
-    font-size: 1.2rem;
-  }
-
-  .modalScaleTrust {
-    font-size: 0.7rem;
   }
 
   .modalFooter {
@@ -1157,15 +1359,11 @@
     gap: 0.5rem;
   }
 
-  .printReceiptBtn,
-  .closeBtn {
+  .printReceiptBtnModal,
+  .closeBtnModal {
     flex: 1;
     min-height: 40px;
-    padding: 0.5rem 0.75rem;
-    font-size: 0.78rem;
-    display: flex;
-    align-items: center;
     justify-content: center;
-    border-radius: 8px;
   }
 }
+

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import {
   Gift,
   Copy,
@@ -12,6 +12,7 @@ import {
   ArrowRight,
   Send,
   MessageCircle,
+  MapPin,
 } from 'lucide-react';
 import { useAuthStore } from '@/store/useAuthStore';
 import styles from './HouseholdReferEarn.module.css';
@@ -66,11 +67,37 @@ export function HouseholdReferEarn() {
   const referralLink = `https://billscrap.com/signup?ref=${referralCode}`;
 
   const [copied, setCopied] = useState(false);
+  const [activeCardIndex, setActiveCardIndex] = useState(0);
+  const [activeStepIndex, setActiveStepIndex] = useState<number | null>(null);
+  const swipeTrackRef = useRef<HTMLDivElement>(null);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(referralLink);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleSwipeScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const target = e.currentTarget;
+    const cardWidth = target.offsetWidth * 0.75;
+    if (cardWidth > 0) {
+      const index = Math.round(target.scrollLeft / cardWidth);
+      setActiveCardIndex(Math.min(Math.max(index, 0), 2));
+    }
+  };
+
+  const scrollToCard = (index: number) => {
+    if (!swipeTrackRef.current) return;
+    const track = swipeTrackRef.current;
+    const cards = track.children;
+    if (cards[index]) {
+      (cards[index] as HTMLElement).scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'start',
+      });
+      setActiveCardIndex(index);
+    }
   };
 
   const whatsappShareText = encodeURIComponent(
@@ -79,7 +106,7 @@ export function HouseholdReferEarn() {
 
   return (
     <div className={styles.pageContainer}>
-      {/* 1. HERO REFERRAL BANNER */}
+      {/* 1. HERO REFERRAL BANNER (GRAPHITE COLOR SAME AS FOOTER) */}
       <section className={styles.heroBanner}>
         <div className={styles.heroLeft}>
           <div className={styles.heroBadge}>
@@ -117,26 +144,77 @@ export function HouseholdReferEarn() {
             </a>
           </div>
         </div>
+      </section>
 
-        {/* Right Stats Strip */}
-        <div className={styles.heroRightCard}>
-          <div className={styles.heroStatItem}>
-            <span className={styles.heroStatLabel}>Total Bonus Earned</span>
-            <span className={styles.heroStatNumberGold}>₹150.00</span>
+      {/* 2. REFERRAL STATS SWIPE CARDS VIEW (SEPARATE BELOW CONTAINER) */}
+      <section className={styles.statsSwipeSection}>
+        <div className={styles.swipeHeaderRow}>
+          <div>
+            <h2 className={styles.swipeSectionTitle}>Your Referral Performance</h2>
+            <p className={styles.swipeSectionSubtitle}>Real-time metrics for invited friends and bonuses</p>
           </div>
 
-          <div style={{ height: '1px', background: 'rgba(255,255,255,0.08)' }} />
+          <div className={styles.swipeDotsIndicator}>
+            {[0, 1, 2].map((idx) => (
+              <button
+                key={idx}
+                type="button"
+                className={`${styles.swipeDot} ${activeCardIndex === idx ? styles.swipeDotActive : ''}`}
+                onClick={() => scrollToCard(idx)}
+                aria-label={`Go to slide ${idx + 1}`}
+              />
+            ))}
+          </div>
+        </div>
 
-          <div className={styles.heroStatItem}>
-            <span className={styles.heroStatLabel}>Successful Pickups</span>
-            <span className={styles.heroStatNumberGreen}>3 Friends</span>
+        <div
+          ref={swipeTrackRef}
+          className={styles.swipeCardsTrack}
+          onScroll={handleSwipeScroll}
+        >
+          {/* Card 1: Total Bonus Earned */}
+          <div className={`${styles.swipeStatCard} ${styles.cardGoldAccent}`}>
+            <div className={styles.cardHeaderRow}>
+              <span className={styles.cardLabel}>TOTAL BONUS EARNED</span>
+              <div className={styles.cardIconBadgeGold}>
+                <IndianRupee size={18} />
+              </div>
+            </div>
+            <div className={styles.cardMainValueGold}>₹150</div>
+            <div className={styles.cardFooterNote}>
+              <Sparkles size={14} className={styles.sparkleIcon} />
+              <span>Directly credited to your UPI</span>
+            </div>
           </div>
 
-          <div style={{ height: '1px', background: 'rgba(255,255,255,0.08)' }} />
+          {/* Card 2: Successful Pickups */}
+          <div className={`${styles.swipeStatCard} ${styles.cardGreenAccent}`}>
+            <div className={styles.cardHeaderRow}>
+              <span className={styles.cardLabel}>SUCCESSFUL PICKUPS</span>
+              <div className={styles.cardIconBadgeGreen}>
+                <CheckCircle2 size={18} />
+              </div>
+            </div>
+            <div className={styles.cardMainValueGreen}>3 Friends</div>
+            <div className={styles.cardFooterNote}>
+              <Users size={14} />
+              <span>Completed doorstep scrap pickup</span>
+            </div>
+          </div>
 
-          <div className={styles.heroStatItem}>
-            <span className={styles.heroStatLabel}>Pending Pickups</span>
-            <span style={{ fontSize: '1.4rem', fontWeight: 900, color: '#cbd5e1' }}>1 Friend</span>
+          {/* Card 3: Pending Pickups */}
+          <div className={`${styles.swipeStatCard} ${styles.cardSlateAccent}`}>
+            <div className={styles.cardHeaderRow}>
+              <span className={styles.cardLabel}>PENDING PICKUPS</span>
+              <div className={styles.cardIconBadgeSlate}>
+                <Clock size={18} />
+              </div>
+            </div>
+            <div className={styles.cardMainValueWhite}>1 Friend</div>
+            <div className={styles.cardFooterNote}>
+              <Clock size={14} />
+              <span>Scheduled doorstep booking pending</span>
+            </div>
           </div>
         </div>
       </section>
@@ -146,7 +224,14 @@ export function HouseholdReferEarn() {
         <h3 className={styles.sectionTitle}>How Bill Scrap Referral Works</h3>
 
         <div className={styles.stepsGrid}>
-          <div className={styles.stepCard}>
+          <div
+            className={`${styles.stepCard} ${activeStepIndex === 0 ? styles.stepCardBright : ''}`}
+            onClick={() => setActiveStepIndex((prev) => (prev === 0 ? null : 0))}
+            role="button"
+            tabIndex={0}
+            aria-pressed={activeStepIndex === 0}
+            onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && setActiveStepIndex((prev) => (prev === 0 ? null : 0))}
+          >
             <div className={styles.stepNumberCircle}>1</div>
             <h4 className={styles.stepTitle}>Share Your Link</h4>
             <p className={styles.stepDesc}>
@@ -154,7 +239,14 @@ export function HouseholdReferEarn() {
             </p>
           </div>
 
-          <div className={styles.stepCard}>
+          <div
+            className={`${styles.stepCard} ${activeStepIndex === 1 ? styles.stepCardBright : ''}`}
+            onClick={() => setActiveStepIndex((prev) => (prev === 1 ? null : 1))}
+            role="button"
+            tabIndex={0}
+            aria-pressed={activeStepIndex === 1}
+            onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && setActiveStepIndex((prev) => (prev === 1 ? null : 1))}
+          >
             <div className={styles.stepNumberCircle}>2</div>
             <h4 className={styles.stepTitle}>Friend Books Pickup</h4>
             <p className={styles.stepDesc}>
@@ -162,7 +254,14 @@ export function HouseholdReferEarn() {
             </p>
           </div>
 
-          <div className={styles.stepCard}>
+          <div
+            className={`${styles.stepCard} ${activeStepIndex === 2 ? styles.stepCardBright : ''}`}
+            onClick={() => setActiveStepIndex((prev) => (prev === 2 ? null : 2))}
+            role="button"
+            tabIndex={0}
+            aria-pressed={activeStepIndex === 2}
+            onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && setActiveStepIndex((prev) => (prev === 2 ? null : 2))}
+          >
             <div className={styles.stepNumberCircle}>3</div>
             <h4 className={styles.stepTitle}>Both Get ₹50 Cash</h4>
             <p className={styles.stepDesc}>
@@ -183,7 +282,8 @@ export function HouseholdReferEarn() {
           </div>
         </div>
 
-        <div style={{ width: '100%', overflowX: 'auto' }}>
+        {/* Desktop View: Full Table (Unchanged on Desktop) */}
+        <div className={styles.desktopFriendsTableWrap}>
           <table className={styles.friendsTable}>
             <thead>
               <tr>
@@ -216,12 +316,69 @@ export function HouseholdReferEarn() {
                     )}
                   </td>
                   <td style={{ textAlign: 'right', fontWeight: 900, color: ref.status === 'completed' ? '#059669' : '#94a3b8' }}>
-                    {ref.status === 'completed' ? `+₹${ref.bonusEarned}.00` : 'Pending'}
+                    {ref.status === 'completed' ? `+₹${ref.bonusEarned}` : 'Pending'}
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
+        </div>
+
+        {/* Mobile View: Dedicated single card for each referral */}
+        <div className={styles.mobileFriendsCardsList}>
+          {SAMPLE_REFERRALS.map((ref) => (
+            <div key={ref.id} className={styles.mobileFriendCard}>
+              <div className={styles.mobileFriendTopRow}>
+                <div className={styles.mobileFriendIdentity}>
+                  <div className={styles.mobileFriendAvatar}>
+                    {ref.name
+                      .split(' ')
+                      .map((n) => n[0])
+                      .join('')
+                      .slice(0, 2)}
+                  </div>
+                  <div>
+                    <h4 className={styles.mobileFriendName}>{ref.name}</h4>
+                    <span className={styles.mobileFriendDate}>Joined {ref.date}</span>
+                  </div>
+                </div>
+
+                <div className={styles.mobileBonusCol}>
+                  <span className={styles.mobileBonusLabel}>Bonus</span>
+                  <span
+                    className={
+                      ref.status === 'completed'
+                        ? styles.mobileBonusValueEarned
+                        : styles.mobileBonusValuePending
+                    }
+                  >
+                    {ref.status === 'completed' ? `+₹${ref.bonusEarned}` : '₹50 Pending'}
+                  </span>
+                </div>
+              </div>
+
+              <div className={styles.mobileFriendBottomRow}>
+                <div className={styles.mobileFriendLocation}>
+                  <MapPin size={13} className={styles.mobileLocIcon} />
+                  <span>{ref.area}</span>
+                </div>
+
+                <div>
+                  {ref.status === 'completed' ? (
+                    <span className={styles.statusCompletedPill}>
+                      <CheckCircle2 size={12} />
+                      <span>Pickup Completed</span>
+                    </span>
+                  ) : (
+                    <span className={styles.statusPendingPill}>
+                      <Clock size={12} />
+                      <span>Booking Pending</span>
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
     </div>

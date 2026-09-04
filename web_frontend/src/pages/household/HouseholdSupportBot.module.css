@@ -1,0 +1,772 @@
+/* ==========================================================================
+   HOUSEHOLD SUPPORT ASSISTANT (CHATBOT UI MATCHING MOCKUP)
+   Colors: Graphite (#0F172A), BillScrap Yellow (#F8BF1D), White/Slate (#F8FAFC)
+   Layout: Mobile-first 520px centered container
+   ========================================================================== */
+
+.pageContainer {
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 0.75rem 1rem 3.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+  box-sizing: border-box;
+  font-family: inherit;
+  color: #0f172a;
+  min-height: 100vh;
+}
+
+/* --------------------------------------------------------------------------
+   TOP NAVIGATION BAR
+   -------------------------------------------------------------------------- */
+.topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.25rem 0 0.5rem 0;
+  position: relative;
+}
+
+.backIconButton {
+  background: transparent;
+  border: none;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0.4rem;
+  border-radius: 8px;
+  transition: background 0.15s ease;
+  width: 36px;
+  height: 36px;
+}
+
+.backIconButton:hover {
+  background: #f1f5f9;
+}
+
+.pageTitle {
+  font-size: 1.15rem;
+  font-weight: 850;
+  color: #0f172a;
+  margin: 0;
+  letter-spacing: -0.01em;
+  text-align: center;
+}
+
+.headerSpacer {
+  width: 36px;
+}
+
+/* --------------------------------------------------------------------------
+   SCREEN 1: INITIAL STATE (HERO CARD & QUESTION LIST)
+   -------------------------------------------------------------------------- */
+.screenOneView {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  animation: fadeIn 0.2s ease;
+}
+
+/* Dark Hero Card */
+.heroDarkCard {
+  background: #0f172a;
+  border-radius: 20px;
+  padding: 1.5rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.16);
+  color: #ffffff;
+}
+
+.heroTopRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.statusPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  color: #34d399;
+  font-size: 0.72rem;
+  font-weight: 750;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  letter-spacing: 0.02em;
+}
+
+.greenDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+}
+
+.heroHeading {
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.heroSubtext {
+  font-size: 0.84rem;
+  color: #94a3b8;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Section Header: Select a question */
+.sectionHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin-top: 0.15rem;
+}
+
+.sectionHeading {
+  font-size: 1.05rem;
+  font-weight: 850;
+  color: #0f172a;
+  margin: 0;
+}
+
+.sectionSubtext {
+  font-size: 0.82rem;
+  color: #64748b;
+  margin: 0;
+}
+
+/* Question Cards List */
+.questionList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.questionCard {
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 0.95rem 1.15rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.85rem;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  transition: all 0.18s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  min-height: 52px;
+  box-sizing: border-box;
+}
+
+.questionCard:hover {
+  border-color: #f8bf1d;
+  background: #fffdf5;
+  transform: translateX(3px);
+  box-shadow: 0 4px 12px rgba(248, 191, 29, 0.12);
+}
+
+.questionCardLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  flex: 1;
+}
+
+.questionIconBox {
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.questionCardText {
+  font-size: 0.9rem;
+  font-weight: 750;
+  color: #0f172a;
+  line-height: 1.35;
+}
+
+.questionCardChevron {
+  color: #94a3b8;
+  flex-shrink: 0;
+  transition: transform 0.15s ease, color 0.15s ease;
+}
+
+.questionCard:hover .questionCardChevron {
+  color: #0f172a;
+  transform: translateX(2px);
+}
+
+/* Fallback Card */
+.fallbackCard {
+  width: 100%;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 1rem 1.15rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.85rem;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  margin-top: 0.25rem;
+  transition: all 0.18s ease;
+  box-sizing: border-box;
+}
+
+.fallbackCard:hover {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.04);
+}
+
+.fallbackCardLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  flex: 1;
+}
+
+.lightbulbIconBox {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #fef9c3;
+  color: #d97706;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.fallbackTextGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.fallbackTitle {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+.fallbackDesc {
+  font-size: 0.78rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.fallbackChevron {
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+
+/* --------------------------------------------------------------------------
+   SCREEN 2: CHAT CONVERSATION VIEW
+   -------------------------------------------------------------------------- */
+.screenTwoView {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  animation: fadeIn 0.25s ease;
+}
+
+.chatMessagesContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+}
+
+/* Assistant Message Row */
+.assistantMessageRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.chatAvatarWrap {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.messageBubbleColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  max-width: 86%;
+}
+
+.greetingBubble {
+  background: #f1f5f9;
+  border-radius: 16px 16px 16px 4px;
+  padding: 0.95rem 1.15rem;
+  color: #1e293b;
+}
+
+.greetingText {
+  font-size: 0.88rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.messageTimestamp {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  margin-left: 0.25rem;
+}
+
+/* User Message Row */
+.userMessageRow {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.userMessageBubbleColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.35rem;
+  max-width: 82%;
+}
+
+.userQuestionBubble {
+  background: #f8bf1d;
+  color: #0f172a;
+  font-weight: 800;
+  font-size: 0.88rem;
+  padding: 0.75rem 1.15rem;
+  border-radius: 16px 16px 4px 16px;
+  box-shadow: 0 2px 8px rgba(248, 191, 29, 0.25);
+  line-height: 1.4;
+  text-align: right;
+}
+
+.userMessageTimestamp {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  margin-right: 0.25rem;
+}
+
+/* Assistant Answer Card Bubble */
+.answerCardBubble {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px 16px 16px 4px;
+  padding: 1.15rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  box-shadow: 0 3px 12px rgba(15, 23, 42, 0.05);
+}
+
+.answerHeader {
+  font-size: 0.92rem;
+  font-weight: 850;
+  color: #0f172a;
+  margin: 0;
+}
+
+.answerBodyText {
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: #334155;
+  margin: 0;
+}
+
+/* Need More Help Card Inside Answer Bubble (Signature Note Style) */
+.needHelpCard {
+  background: linear-gradient(180deg, #FFF8DC 0%, #FFEEBA 100%);
+  border: 1.5px solid #FFDE7A;
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.needHelpHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.needHelpIconBox {
+  color: #1E3A20;
+  display: flex;
+  align-items: center;
+}
+
+.needHelpTitle {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #1E3A20;
+}
+
+.needHelpDesc {
+  font-size: 0.8rem;
+  color: #1E3A20;
+  margin: 0;
+  line-height: 1.45;
+  font-weight: 600;
+}
+
+/* Primary Action Button (Go to Orders etc.) */
+.actionBtnWrap {
+  margin-top: 0.15rem;
+}
+
+.primaryActionBtn {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: #f8bf1d;
+  color: #0f172a;
+  font-size: 0.88rem;
+  font-weight: 800;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: all 0.15s ease;
+  box-sizing: border-box;
+}
+
+.primaryActionBtn:hover {
+  background: #e5ac10;
+  transform: translateY(-1px);
+}
+
+/* Was this helpful? Section */
+.feedbackSection {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 1rem 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.feedbackHeading {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+.feedbackBtnRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.feedbackBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  color: #334155;
+  font-size: 0.86rem;
+  font-weight: 750;
+  padding: 0.6rem 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: inherit;
+}
+
+.feedbackBtn:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #0f172a;
+}
+
+.feedbackBtnActive {
+  background: #0f172a !important;
+  color: #ffffff !important;
+  border-color: #0f172a !important;
+}
+
+.feedbackSuccessText {
+  font-size: 0.8rem;
+  color: #059669;
+  font-weight: 750;
+  margin: 0;
+}
+
+.feedbackHelpText {
+  font-size: 0.8rem;
+  color: #b45309;
+  margin: 0;
+  line-height: 1.45;
+}
+
+.feedbackWhatsAppLink {
+  color: #059669;
+  font-weight: 750;
+  text-decoration: underline;
+}
+
+/* Related Questions Section */
+.relatedSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.relatedHeading {
+  font-size: 0.92rem;
+  font-weight: 850;
+  color: #0f172a;
+  margin: 0;
+}
+
+.relatedList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.relatedQuestionCard {
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 0.85rem 1.05rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  transition: all 0.15s ease;
+  box-sizing: border-box;
+}
+
+.relatedQuestionCard:hover {
+  border-color: #f8bf1d;
+  background: #fffdf5;
+  transform: translateX(2px);
+}
+
+.relatedQuestionText {
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: #0f172a;
+  flex: 1;
+}
+
+.relatedQuestionChevron {
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+
+/* Bottom Navigation Wrap */
+.bottomNavWrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.35rem;
+}
+
+.backToAllBtn {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  color: #0f172a;
+  font-size: 0.88rem;
+  font-weight: 800;
+  padding: 0.75rem 1.25rem;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: inherit;
+}
+
+.backToAllBtn:hover {
+  background: #f8fafc;
+  border-color: #0f172a;
+}
+
+/* --------------------------------------------------------------------------
+   ESCALATION MODAL (WHEN USER TAPS BOTTOM FALLBACK CARD)
+   -------------------------------------------------------------------------- */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
+  animation: fadeIn 0.2s ease;
+}
+
+.modalContent {
+  width: 100%;
+  max-width: 520px;
+  background: #ffffff;
+  border-radius: 20px 20px 0 0;
+  padding: 1.5rem 1.25rem 2.25rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  box-sizing: border-box;
+  box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.15);
+  animation: slideUp 0.25s ease;
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modalTitle {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #0f172a;
+  margin: 0;
+}
+
+.modalCloseBtn {
+  background: transparent;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  padding: 0.35rem;
+  border-radius: 8px;
+}
+
+.modalCloseBtn:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.modalSub {
+  font-size: 0.84rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.modalActions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 0.35rem;
+}
+
+.modalWhatsAppBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: #10b981;
+  color: #ffffff;
+  font-size: 0.88rem;
+  font-weight: 800;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  text-decoration: none;
+  transition: background 0.15s ease;
+}
+
+.modalWhatsAppBtn:hover {
+  background: #059669;
+}
+
+.modalEmailBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: #0f172a;
+  color: #ffffff;
+  font-size: 0.88rem;
+  font-weight: 800;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  text-decoration: none;
+  transition: background 0.15s ease;
+}
+
+.modalEmailBtn:hover {
+  background: #1e293b;
+}
+
+.modalTicketBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  color: #0f172a;
+  font-size: 0.88rem;
+  font-weight: 800;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.modalTicketBtn:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+/* --------------------------------------------------------------------------
+   KEYFRAME ANIMATIONS
+   -------------------------------------------------------------------------- */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}

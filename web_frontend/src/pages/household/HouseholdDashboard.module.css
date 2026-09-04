@@ -87,6 +87,10 @@
   transform: translateY(-1px);
 }
 
+.addressPillBtn * {
+  pointer-events: none;
+}
+
 .addressPillLeft {
   display: flex;
   align-items: center;
@@ -1353,6 +1357,8 @@
   justify-content: center;
   padding: 1rem;
   box-sizing: border-box;
+  overscroll-behavior: contain;
+  touch-action: none;
 }
 
 .feedbackModalContainer {
@@ -1367,6 +1373,7 @@
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
   animation: modalPop 0.2s ease-out;
   box-sizing: border-box;
+  overscroll-behavior: contain;
 }
 
 @keyframes modalPop {
@@ -1438,6 +1445,9 @@
   flex-direction: column;
   gap: 1.15rem;
   box-sizing: border-box;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
 }
 
 .feedbackPrivateBanner {
@@ -1646,6 +1656,7 @@
 /* --------------------------------------------------------------------------
    5. ADDRESS SELECTOR BOTTOM SHEET (MATCHING REFERENCE UI)
    -------------------------------------------------------------------------- */
+.bottomSheetOverlay,
 .bottomSheetBackdrop {
   position: fixed;
   inset: 0;
@@ -1655,6 +1666,8 @@
   display: flex;
   align-items: flex-end;
   justify-content: center;
+  overscroll-behavior: contain;
+  touch-action: none;
 }
 
 .bottomSheetContainer {
@@ -1671,6 +1684,7 @@
   overflow: hidden;
   border: 1px solid var(--scrap-border);
   border-bottom: none;
+  overscroll-behavior: contain;
 }
 
 @keyframes slideUpSheet {
@@ -1733,6 +1747,9 @@
   flex-direction: column;
   gap: 0.95rem;
   box-sizing: border-box;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
 }
 
 .sheetSearchWrap {
@@ -2047,6 +2064,8 @@
   align-items: center;
   justify-content: center;
   padding: 1.5rem;
+  overscroll-behavior: contain;
+  touch-action: none;
 }
 
 .lightboxBox {
@@ -2059,6 +2078,7 @@
   display: flex;
   flex-direction: column;
   box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+  overscroll-behavior: contain;
 }
 
 .lightboxHeader {

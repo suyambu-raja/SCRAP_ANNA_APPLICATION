@@ -74,6 +74,11 @@ interface HouseholdOrder {
   cancellationReason?: string;
 }
 
+const formatAmount = (val?: number | null): string => {
+  if (val == null || isNaN(val)) return '0';
+  return Math.round(val).toString();
+};
+
 const SAMPLE_ORDERS: HouseholdOrder[] = [
   {
     id: 'ord-1',
@@ -101,7 +106,7 @@ const SAMPLE_ORDERS: HouseholdOrder[] = [
         rate: '₹720 / KG',
         actualWeighedKg: 2.8,
         ratePerKg: 720,
-        subtotal: 2016.0,
+        subtotal: 2016,
         imageUrl: '/scrap-copper-wire.jpg',
       },
       {
@@ -111,7 +116,7 @@ const SAMPLE_ORDERS: HouseholdOrder[] = [
         rate: '₹38.50 / KG',
         actualWeighedKg: 9.2,
         ratePerKg: 38.5,
-        subtotal: 354.2,
+        subtotal: 354,
         imageUrl: '/scrap-iron.png',
       },
       {
@@ -121,11 +126,11 @@ const SAMPLE_ORDERS: HouseholdOrder[] = [
         rate: '₹14.50 / KG',
         actualWeighedKg: 14.5,
         ratePerKg: 14.5,
-        subtotal: 210.25,
+        subtotal: 210,
         imageUrl: '/scrap-cardboard.png',
       },
     ],
-    finalSettledTotal: 2580.45,
+    finalSettledTotal: 2580,
   },
   {
     id: 'ord-2',
@@ -186,7 +191,7 @@ const SAMPLE_ORDERS: HouseholdOrder[] = [
         rate: '₹32 / KG',
         actualWeighedKg: 65.4,
         ratePerKg: 32,
-        subtotal: 2092.8,
+        subtotal: 2093,
         imageUrl: '/scrap-iron.png',
       },
       {
@@ -196,11 +201,11 @@ const SAMPLE_ORDERS: HouseholdOrder[] = [
         rate: '₹14.15 / KG',
         actualWeighedKg: 53.2,
         ratePerKg: 14.15,
-        subtotal: 752.2,
+        subtotal: 752,
         imageUrl: '/scrap-cardboard.png',
       },
     ],
-    finalSettledTotal: 2845.0,
+    finalSettledTotal: 2845,
   },
 ];
 
@@ -568,7 +573,7 @@ export function HouseholdOrders() {
           <div>
             <span className={styles.successTopLabel}>Pickup Completed Successfully</span>
             <h2 className={styles.completedPayoutAmount}>
-              ₹{activeOrder.finalSettledTotal?.toFixed(2)} Paid
+              ₹{formatAmount(activeOrder.finalSettledTotal)} Paid
             </h2>
             <p className={styles.completedPayoutDesc}>
               Instant spot payment transferred to your UPI / Cash on Hand.
@@ -688,7 +693,7 @@ export function HouseholdOrders() {
                       <td>{it.actualWeighedKg} KG</td>
                       <td>₹{it.ratePerKg}/KG</td>
                       <td style={{ textAlign: 'right', fontWeight: 800, color: '#059669' }}>
-                        ₹{it.subtotal?.toFixed(2)}
+                        ₹{formatAmount(it.subtotal)}
                       </td>
                     </tr>
                   ))}
@@ -702,7 +707,7 @@ export function HouseholdOrders() {
                 <span className={styles.billTotalSubtext}>Instant spot payment via UPI / Cash</span>
               </div>
               <span className={styles.billTotalValue}>
-                ₹{activeOrder.finalSettledTotal?.toFixed(2)}
+                ₹{formatAmount(activeOrder.finalSettledTotal)}
               </span>
             </div>
           </div>
@@ -1377,7 +1382,7 @@ export function HouseholdOrders() {
                               ₹{it.ratePerKg || (it.rate ? it.rate.replace(/[^0-9.]/g, '') : '')}
                             </td>
                             <td className={styles.billItemAmountCell}>
-                              ₹{it.subtotal?.toFixed(2)}
+                              ₹{formatAmount(it.subtotal)}
                             </td>
                           </tr>
                         ))}
@@ -1390,7 +1395,7 @@ export function HouseholdOrders() {
                         <span className={styles.billTotalSubLabel}>Spot payout via UPI / Cash</span>
                       </div>
                       <span className={styles.billTotalValue}>
-                        ₹{currentMobileOrder.finalSettledTotal?.toFixed(2) || '2,580.45'}
+                        ₹{formatAmount(currentMobileOrder.finalSettledTotal || 2580)}
                       </span>
                     </div>
                   </div>
@@ -1425,7 +1430,7 @@ export function HouseholdOrders() {
                     <div className={styles.completedMetricItem}>
                       <span className={styles.completedMetricLabel}>Amount Paid</span>
                       <span className={styles.completedMetricValue}>
-                        ₹{currentMobileOrder.finalSettledTotal?.toFixed(2) || '2,845'}
+                        ₹{formatAmount(currentMobileOrder.finalSettledTotal || 2845)}
                       </span>
                     </div>
                   </div>

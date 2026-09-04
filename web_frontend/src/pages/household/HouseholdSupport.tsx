@@ -1,17 +1,17 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
-  Headphones,
-  Phone,
+  Bot,
+  Sparkles,
   MessageCircle,
   Mail,
-  HelpCircle,
   Send,
   CheckCircle2,
   ChevronDown,
   ChevronUp,
-  FileText,
-  Clock,
+  ArrowRight,
   ShieldCheck,
+  FileText,
 } from 'lucide-react';
 import styles from './HouseholdSupport.module.css';
 
@@ -24,45 +24,52 @@ interface FaqItem {
 const FAQS: FaqItem[] = [
   {
     id: 'f-1',
-    question: 'How does digital weigh scale verification work?',
+    question: 'Is there any minimum scrap weight required for doorstep pickup?',
     answer:
-      'Our verified doorstep executives carry government-calibrated digital weighing scales. The scale reading is displayed directly to you and synced in real-time to your digital weigh slip.',
+      'No strict minimum! However, to make doorstep collection sustainable, we recommend a total scrap bundle of at least 10 KG across mixed categories (e.g., newspapers, cardboard, metals, or appliances).',
   },
   {
     id: 'f-2',
-    question: 'When will I receive my scrap payout?',
+    question: 'Can I choose cash instead of UPI payment?',
     answer:
-      'Immediately upon digital weighing! As soon as you confirm the bill and share your 4-digit confirmation OTP, the payment is transferred in real-time via Spot UPI or paid in cash on hand.',
+      'Yes! During pickup, you can choose between spot UPI transfer to your phone/QR code or direct cash in hand paid by our verified doorstep partner.',
   },
   {
     id: 'f-3',
-    question: 'What scrap materials are accepted for doorstep pickup?',
+    question: 'Do your drivers bring bags or containers to carry the scrap?',
     answer:
-      'We accept all household scrap categories: Copper Wires & Motors, Brass & Bronze, Iron & Steel, Aluminium Utensils & Sections, Old Newspapers & Cardboard boxes, Plastic containers, and E-Waste (CPUs, Motherboards, Appliances).',
+      'Yes. Our executives carry heavy-duty recycling bags and calibrated digital scales to safely weigh and transport scrap from your doorstep or apartment.',
   },
   {
     id: 'f-4',
-    question: 'Can I reschedule or cancel a booked pickup?',
+    question: 'Are digital weighing slips saved for tax or housing records?',
     answer:
-      'Yes, you can reschedule your date and preferred time slot free of charge anytime from the Orders page before the executive reaches your address.',
+      'Yes. Every completed pickup generates a permanent digital receipt with timestamp, category breakdown, net weight, rate per KG, and total payout accessible anytime under Order History.',
   },
 ];
 
 export function HouseholdSupport() {
-  const [openFaqId, setOpenFaqId] = useState<string | null>('f-1');
+  // Ticket Form State
   const [orderId, setOrderId] = useState('SA123456');
   const [issueType, setIssueType] = useState('Weigh Scale / Pricing Query');
   const [description, setDescription] = useState('');
-  const [submitted, setSubmitted] = useState(false);
+  const [submittedTicketId, setSubmittedTicketId] = useState<string | null>(null);
+  const [isSubmittingTicket, setIsSubmittingTicket] = useState(false);
+
+  // FAQ Accordion State
+  const [openFaqId, setOpenFaqId] = useState<string | null>('f-1');
 
   const handleSubmitTicket = (e: React.FormEvent) => {
     e.preventDefault();
     if (!description.trim()) return;
-    setSubmitted(true);
+    setIsSubmittingTicket(true);
+
     setTimeout(() => {
+      const generatedId = `TKT-${Math.floor(1000 + Math.random() * 9000)}`;
+      setSubmittedTicketId(generatedId);
+      setIsSubmittingTicket(false);
       setDescription('');
-      setSubmitted(false);
-    }, 4000);
+    }, 600);
   };
 
   const toggleFaq = (id: string) => {
@@ -71,143 +78,196 @@ export function HouseholdSupport() {
 
   return (
     <div className={styles.pageContainer}>
-      {/* 1. HERO SUPPORT BANNER */}
-      <section className={styles.heroBanner}>
-        <div className={styles.heroBadge}>
-          <Headphones size={14} />
-          <span>24/7 Household Support & Helpline</span>
+      {/* 1. HERO HEADER */}
+      <section className={styles.heroSection}>
+        <div className={styles.heroContent}>
+          <div className={styles.heroBadge}>
+            <Sparkles size={14} className={styles.heroBadgeIcon} />
+            <span>Support &amp; Help Desk</span>
+          </div>
+          <h1 className={styles.heroTitle}>Household Help &amp; Support</h1>
         </div>
-
-        <h1 className={styles.heroTitle}>How can we help you today?</h1>
-        <p className={styles.heroSubtitle}>
-          Have a question about your doorstep scrap pickup, weighing scale accuracy, or spot payment? Our Chennai support team is here to assist you.
-        </p>
       </section>
 
-      {/* 2. THREE CONTACT CHANNELS */}
-      <div className={styles.channelsGrid}>
-        {/* Channel 1: Phone Support */}
-        <div className={styles.channelCard}>
-          <div className={styles.channelIconBox} style={{ background: '#ecfdf5', color: '#059669' }}>
-            <Phone size={22} />
+      {/* 2. AUTOMATED BOT FEATURED CARD (ONE CARD LINKING TO DEDICATED BOT PAGE) */}
+      <section className={styles.botPromoCard}>
+        <div className={styles.botPromoLeft}>
+          <div className={styles.botPromoIconBox}>
+            <Bot size={26} />
           </div>
-          <div>
-            <h3 className={styles.channelTitle}>Helpline Support</h3>
-            <p className={styles.channelSub}>Speak directly to our Chennai customer desk</p>
-          </div>
-          <a href="tel:+919840123456" className={styles.channelActionBtn}>
-            <Phone size={15} />
-            <span>+91 98401 23456</span>
-          </a>
-        </div>
-
-        {/* Channel 2: WhatsApp Chat */}
-        <div className={styles.channelCard}>
-          <div className={styles.channelIconBox} style={{ background: '#f0fdf4', color: '#16a34a' }}>
-            <MessageCircle size={22} />
-          </div>
-          <div>
-            <h3 className={styles.channelTitle}>WhatsApp Support</h3>
-            <p className={styles.channelSub}>Instant chat assistance & live photo verification</p>
-          </div>
-          <a
-            href="https://wa.me/919840123456?text=Hi%20Bill%20Scrap%2C%20I%20need%20assistance%20with%20my%20scrap%20pickup."
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.channelActionBtn}
-            style={{ background: '#16a34a', color: '#ffffff' }}
-          >
-            <MessageCircle size={15} />
-            <span>Chat on WhatsApp</span>
-          </a>
-        </div>
-
-        {/* Channel 3: Email Desk */}
-        <div className={styles.channelCard}>
-          <div className={styles.channelIconBox} style={{ background: '#eff6ff', color: '#2563eb' }}>
-            <Mail size={22} />
-          </div>
-          <div>
-            <h3 className={styles.channelTitle}>Email Desk</h3>
-            <p className={styles.channelSub}>Official queries, bill disputes, & complaints</p>
-          </div>
-          <a
-            href="mailto:support@billscrap.com?subject=Household%20Scrap%20Pickup%20Query"
-            className={styles.channelActionBtn}
-          >
-            <Mail size={15} />
-            <span>support@billscrap.com</span>
-          </a>
-        </div>
-      </div>
-
-      {/* 3. TWO-COLUMN: TICKET FORM & FAQ ACCORDION */}
-      <div className={styles.supportTwoColGrid}>
-        {/* Left: Raise a Support Ticket */}
-        <div className={styles.sectionCard}>
-          <div>
-            <h3 className={styles.cardTitle}>Raise a Support Request</h3>
-            <p style={{ margin: '0.25rem 0 0', fontSize: '0.8rem', color: '#64748b' }}>
-              Submit an issue and our team will get in touch with you within 15 minutes.
+          <div className={styles.botPromoTextGroup}>
+            <div className={styles.botPromoTitleRow}>
+              <h2 className={styles.botPromoTitle}>BillScrap Automated Assistant</h2>
+              <span className={styles.botPromoOnlineBadge}>
+                <span className={styles.onlineDot} /> Online • 24/7 Available
+              </span>
+            </div>
+            <p className={styles.botPromoDesc}>
+              Instant answers for pickups, weighing, and payments.
             </p>
           </div>
-
-          <form onSubmit={handleSubmitTicket} className={styles.ticketForm}>
-            <div className={styles.fieldGroup}>
-              <label className={styles.fieldLabel}>Select Related Order</label>
-              <select
-                className={styles.selectField}
-                value={orderId}
-                onChange={(e) => setOrderId(e.target.value)}
-              >
-                <option value="SA123456">Order #SA123456 (01 May 2025 • ₹1,850)</option>
-                <option value="SA123455">Order #SA123455 (28 Apr 2025 • ₹780)</option>
-                <option value="SA123454">Order #SA123454 (25 Apr 2025 • ₹1,250)</option>
-                <option value="GENERAL">General Query / Not Order Specific</option>
-              </select>
-            </div>
-
-            <div className={styles.fieldGroup}>
-              <label className={styles.fieldLabel}>Issue Category</label>
-              <select
-                className={styles.selectField}
-                value={issueType}
-                onChange={(e) => setIssueType(e.target.value)}
-              >
-                <option>Weigh Scale / Pricing Query</option>
-                <option>Executive Delay / Reschedule</option>
-                <option>UPI / Cash Payment Issue</option>
-                <option>Scrap Rate Discrepancy</option>
-                <option>Other Feedback</option>
-              </select>
-            </div>
-
-            <div className={styles.fieldGroup}>
-              <label className={styles.fieldLabel}>Describe your issue</label>
-              <textarea
-                className={styles.textareaField}
-                placeholder="Please provide details about what happened..."
-                rows={4}
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                required
-              />
-            </div>
-
-            <button type="submit" className={styles.submitTicketBtn}>
-              <Send size={15} />
-              <span>{submitted ? 'Ticket Submitted (#TKT-8492) ✨' : 'Submit Support Request'}</span>
-            </button>
-          </form>
         </div>
 
-        {/* Right: FAQ Accordion */}
+        <Link to="/household/support/bot" className={styles.launchBotBtn}>
+          <Bot size={18} />
+          <span>Chat with Assistant</span>
+          <ArrowRight size={16} />
+        </Link>
+      </section>
+
+      {/* 3. CONTACT CHANNELS (WHATSAPP & EMAIL ONLY - NO CALL SUPPORT) */}
+      <section className={styles.channelsSection}>
+        <div className={styles.channelsGrid}>
+          {/* WhatsApp Support */}
+          <div className={styles.channelCard}>
+            <div className={styles.channelTop}>
+              <div className={styles.whatsappIconBox}>
+                <MessageCircle size={24} />
+              </div>
+              <div>
+                <h3 className={styles.channelTitle}>WhatsApp Support</h3>
+                <p className={styles.channelSub}>Fast assistance, live ETA &amp; weight slip confirmation</p>
+              </div>
+            </div>
+            <div className={styles.channelFooter}>
+              <span className={styles.responseTimePill}>⚡ Replies in 10–15 mins</span>
+              <a
+                href="https://wa.me/919840123456?text=Hi%20Bill%20Scrap%2C%20I%20need%20assistance%20with%20my%20household%20scrap%20pickup."
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.whatsappActionBtn}
+              >
+                <MessageCircle size={16} />
+                <span>Chat on WhatsApp</span>
+              </a>
+            </div>
+          </div>
+
+          {/* Email Support Desk */}
+          <div className={styles.channelCard}>
+            <div className={styles.channelTop}>
+              <div className={styles.emailIconBox}>
+                <Mail size={24} />
+              </div>
+              <div>
+                <h3 className={styles.channelTitle}>Email Support Desk</h3>
+                <p className={styles.channelSub}>Official queries, payment receipts &amp; bill disputes</p>
+              </div>
+            </div>
+            <div className={styles.channelFooter}>
+              <span className={styles.responseTimePill}>🕒 Replies in 2–4 hours</span>
+              <a
+                href="mailto:support@billscrap.com?subject=Household%20Scrap%20Support%20Request"
+                className={styles.emailActionBtn}
+              >
+                <Mail size={16} />
+                <span>support@billscrap.com</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. TWO-COLUMN: TICKET FORM & FAQ ACCORDION */}
+      <section className={styles.twoColSection}>
+        {/* Left: Raise a Support Request */}
         <div className={styles.sectionCard}>
-          <div>
-            <h3 className={styles.cardTitle}>Frequently Asked Questions</h3>
-            <p style={{ margin: '0.25rem 0 0', fontSize: '0.8rem', color: '#64748b' }}>
-              Quick answers to common doorstep pickup questions.
-            </p>
+          <div className={styles.cardHeader}>
+            <div className={styles.cardHeaderIcon}>
+              <FileText size={18} />
+            </div>
+            <div>
+              <h3 className={styles.cardTitle}>Raise a Support Request</h3>
+              <p className={styles.cardSubtitle}>Submit an inquiry and get an asynchronous ticket ID</p>
+            </div>
+          </div>
+
+          {submittedTicketId ? (
+            <div className={styles.ticketSuccessBox}>
+              <div className={styles.ticketSuccessIcon}>
+                <CheckCircle2 size={32} />
+              </div>
+              <h4 className={styles.ticketSuccessTitle}>Ticket Submitted Successfully!</h4>
+              <p className={styles.ticketSuccessText}>
+                Your request has been logged under Ticket ID:
+              </p>
+              <span className={styles.ticketIdPill}>{submittedTicketId}</span>
+              <p className={styles.ticketSuccessSub}>
+                Our Chennai operations desk will review this issue and update you via WhatsApp &amp; SMS within 15 minutes.
+              </p>
+              <button
+                type="button"
+                className={styles.anotherTicketBtn}
+                onClick={() => setSubmittedTicketId(null)}
+              >
+                Submit Another Request
+              </button>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmitTicket} className={styles.ticketForm}>
+              <div className={styles.fieldGroup}>
+                <label className={styles.fieldLabel}>Related Order</label>
+                <select
+                  className={styles.selectField}
+                  value={orderId}
+                  onChange={(e) => setOrderId(e.target.value)}
+                >
+                  <option value="SA123456">Order #SA123456 (Anna Nagar • ₹1,850)</option>
+                  <option value="SA123455">Order #SA123455 (Shenoy Nagar • ₹780)</option>
+                  <option value="SA123454">Order #SA123454 (Kilpauk • ₹1,250)</option>
+                  <option value="GENERAL">General Query / Not Order Specific</option>
+                </select>
+              </div>
+
+              <div className={styles.fieldGroup}>
+                <label className={styles.fieldLabel}>Issue Category</label>
+                <select
+                  className={styles.selectField}
+                  value={issueType}
+                  onChange={(e) => setIssueType(e.target.value)}
+                >
+                  <option>Weigh Scale / Pricing Accuracy</option>
+                  <option>Executive Delayed / Reschedule</option>
+                  <option>UPI / Spot Cash Payment Status</option>
+                  <option>Scrap Rate Discrepancy</option>
+                  <option>Other Feedback / Suggestion</option>
+                </select>
+              </div>
+
+              <div className={styles.fieldGroup}>
+                <label className={styles.fieldLabel}>Describe the issue</label>
+                <textarea
+                  className={styles.textareaField}
+                  placeholder="Provide a brief explanation of what happened..."
+                  rows={4}
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  required
+                />
+              </div>
+
+              <button
+                type="submit"
+                className={styles.submitTicketBtn}
+                disabled={isSubmittingTicket}
+              >
+                <Send size={15} />
+                <span>{isSubmittingTicket ? 'Submitting...' : 'Submit Support Request'}</span>
+              </button>
+            </form>
+          )}
+        </div>
+
+        {/* Right: Frequently Asked Questions */}
+        <div className={styles.sectionCard}>
+          <div className={styles.cardHeader}>
+            <div className={styles.cardHeaderIcon}>
+              <ShieldCheck size={18} />
+            </div>
+            <div>
+              <h3 className={styles.cardTitle}>Frequently Asked Questions</h3>
+              <p className={styles.cardSubtitle}>Quick answers for doorstep scrap pickups</p>
+            </div>
           </div>
 
           <div className={styles.faqList}>
@@ -229,7 +289,7 @@ export function HouseholdSupport() {
             })}
           </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 }
