@@ -1,0 +1,467 @@
+/* ==========================================================================
+   BILL SCRAP LOADING ANIMATION
+   - Minimalist Yellow Canvas (No Road)
+   - Refined Vehicle Silhouette Centered
+   - Staggered Drop-In Scrap Physics (Gear, Plates, Shards, Canister)
+   - Rapid Acceleration & Vehicle Drive-Off to Right
+   ========================================================================== */
+
+.splashCanvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  background-color: #ffd600;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  user-select: none;
+  z-index: 999999;
+  font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* --------------------------------------------------------------------------
+   TOP HEADER BRANDING
+   -------------------------------------------------------------------------- */
+.topHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.75rem;
+  z-index: 20;
+}
+
+.brandGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.brandTitle {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #1e293b;
+  letter-spacing: -0.02em;
+}
+
+.brandDot {
+  color: #64748b;
+  font-size: 0.85rem;
+}
+
+.brandSub {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #475569;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.testingBadge {
+  background: #1e293b;
+  color: #fbc21a;
+  font-size: 0.685rem;
+  font-weight: 800;
+  padding: 0.2rem 0.55rem;
+  border-radius: 9999px;
+  letter-spacing: 0.03em;
+  margin-left: 0.25rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.skipBtn {
+  background: rgba(255, 255, 255, 0.45);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #1e293b;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.35rem 0.85rem;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.skipBtn:hover {
+  background: rgba(255, 255, 255, 0.8);
+  transform: translateX(2px);
+}
+
+/* --------------------------------------------------------------------------
+   STAGE CONTAINER: VEHICLE CENTERED WITH GENEROUS TOP GAP
+   -------------------------------------------------------------------------- */
+.stageContainer {
+  flex: 1;
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding-top: 4.5rem;
+}
+
+/* Truck Motion Rig */
+.truckMotionRig {
+  width: 380px;
+  max-width: 88vw;
+  position: relative;
+  z-index: 10;
+  will-change: transform;
+  pointer-events: none;
+}
+
+/* State 1: Truck Centered */
+.truckCentered {
+  transform: translateX(0);
+  transition: transform 0.3s ease-out;
+}
+
+/* State 2: Truck Engine Revving / Ready */
+.truckRevving {
+  animation: engineRevShake 0.14s infinite alternate ease-in-out;
+}
+
+@keyframes engineRevShake {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  100% {
+    transform: translateY(-2.5px) rotate(0.25deg);
+  }
+}
+
+/* State 3: Truck Accelerating and Driving Off to the Right */
+.truckDrivingOff {
+  animation: driveOffRight 1.45s cubic-bezier(0.32, 0, 0.2, 1) forwards;
+}
+
+@keyframes driveOffRight {
+  0% {
+    transform: translateX(0) skewX(0deg);
+  }
+  20% {
+    transform: translateX(-20px) skewX(1.5deg);
+  }
+  100% {
+    transform: translateX(120vw) skewX(-3deg);
+  }
+}
+
+/* Suspension Rig & Impact Bounce on scrap landing */
+.suspensionRig {
+  position: relative;
+  width: 100%;
+  transform-origin: bottom center;
+}
+
+.suspensionDip {
+  animation: impactDip 0.32s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+
+@keyframes impactDip {
+  0% {
+    transform: translateY(0) scaleY(1);
+  }
+  35% {
+    transform: translateY(6px) scaleY(0.96);
+  }
+  70% {
+    transform: translateY(-2px) scaleY(1.01);
+  }
+  100% {
+    transform: translateY(0) scaleY(1);
+  }
+}
+
+.truckSvgWrap {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 16px 26px rgba(0, 0, 0, 0.22));
+}
+
+.truckSvg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/* --------------------------------------------------------------------------
+   SCRAP ITEMS DROP-IN PHYSICS ANIMATION
+   -------------------------------------------------------------------------- */
+.scrapDropWrapper,
+.scrapItem {
+  transition: opacity 0.1s ease;
+  will-change: transform, opacity;
+}
+
+.scrapItemHidden {
+  opacity: 0;
+  transform: translateY(-260px) scale(0.8);
+}
+
+.scrapItemLanded {
+  opacity: 1;
+  animation: dropSettle 0.46s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes dropSettle {
+  0% {
+    opacity: 0;
+    transform: translateY(-260px) scale(0.75);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(7px) scale(1.06);
+  }
+  80% {
+    transform: translateY(-3px) scale(0.98);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   WHEEL SPINNING (On Drive Off)
+   -------------------------------------------------------------------------- */
+.wheelRig {
+  transform-origin: 0 0;
+  will-change: transform;
+}
+
+.wheelSpinning {
+  animation: spinWheelsRapidly 0.3s linear infinite;
+}
+
+@keyframes spinWheelsRapidly {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   EXHAUST & SPEED EFFECTS
+   -------------------------------------------------------------------------- */
+.exhaustPuffContainer {
+  position: absolute;
+  left: 10px;
+  bottom: 42px;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.exhaustPuff1,
+.exhaustPuff2,
+.exhaustPuff3 {
+  position: absolute;
+  background: radial-gradient(circle, rgba(24, 30, 41, 0.6) 0%, rgba(24, 30, 41, 0) 75%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.exhaustPuffIdle .exhaustPuff1 {
+  width: 16px;
+  height: 16px;
+  animation: exhaustPuffIdleAnim 1.2s infinite ease-out;
+  animation-delay: 0s;
+}
+
+.exhaustPuffIdle .exhaustPuff2 {
+  width: 22px;
+  height: 22px;
+  animation: exhaustPuffIdleAnim 1.2s infinite ease-out;
+  animation-delay: 0.4s;
+}
+
+.exhaustPuffIdle .exhaustPuff3 {
+  width: 28px;
+  height: 28px;
+  animation: exhaustPuffIdleAnim 1.2s infinite ease-out;
+  animation-delay: 0.8s;
+}
+
+@keyframes exhaustPuffIdleAnim {
+  0% {
+    opacity: 0.8;
+    transform: translate(0, 0) scale(0.5);
+  }
+  50% {
+    opacity: 0.55;
+    transform: translate(-22px, -14px) scale(1.4);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-46px, -30px) scale(2.2);
+  }
+}
+
+.exhaustPuffFast .exhaustPuff1 {
+  width: 20px;
+  height: 20px;
+  animation: exhaustPuffFastAnim 0.4s infinite ease-out;
+  animation-delay: 0s;
+}
+
+.exhaustPuffFast .exhaustPuff2 {
+  width: 26px;
+  height: 26px;
+  animation: exhaustPuffFastAnim 0.4s infinite ease-out;
+  animation-delay: 0.14s;
+}
+
+.exhaustPuffFast .exhaustPuff3 {
+  width: 32px;
+  height: 32px;
+  animation: exhaustPuffFastAnim 0.4s infinite ease-out;
+  animation-delay: 0.28s;
+}
+
+@keyframes exhaustPuffFastAnim {
+  0% {
+    opacity: 0.9;
+    transform: translate(0, 0) scale(0.6);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-60px, -24px) scale(2.8);
+  }
+}
+
+.speedTrail {
+  position: absolute;
+  left: -32px;
+  top: 45%;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  opacity: 0.8;
+}
+
+.trailLine1,
+.trailLine2,
+.trailLine3 {
+  height: 2.5px;
+  border-radius: 9999px;
+  background: rgba(30, 41, 59, 0.55);
+  animation: speedLineAnim 0.25s infinite alternate ease-in-out;
+}
+
+.trailLine1 {
+  width: 32px;
+  animation-delay: 0s;
+}
+
+.trailLine2 {
+  width: 48px;
+  animation-delay: 0.08s;
+}
+
+.trailLine3 {
+  width: 26px;
+  animation-delay: 0.15s;
+}
+
+@keyframes speedLineAnim {
+  from {
+    opacity: 0.3;
+    transform: scaleX(0.7);
+  }
+  to {
+    opacity: 0.95;
+    transform: scaleX(1.4);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   FOOTER SLOGAN / STATUS
+   -------------------------------------------------------------------------- */
+.loadingFooter {
+  padding: 1.5rem 1.5rem 2.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+}
+
+.progressContainer {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sloganText {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #1e293b;
+  text-align: center;
+  letter-spacing: -0.01em;
+  transition: all 0.2s ease;
+}
+
+/* --------------------------------------------------------------------------
+   RESPONSIVE TUNING FOR MOBILE (REDUCED ANIMATION SIZE)
+   -------------------------------------------------------------------------- */
+@media (max-width: 640px) {
+  .stageContainer {
+    padding: 3.5rem 1rem 0 1rem;
+  }
+
+  .truckMotionRig {
+    width: 230px;
+    max-width: 72vw;
+  }
+
+  .exhaustPuffContainer {
+    left: 6px;
+    bottom: 26px;
+  }
+
+  .exhaustPuffIdle .exhaustPuff1 {
+    width: 12px;
+    height: 12px;
+  }
+
+  .exhaustPuffIdle .exhaustPuff2 {
+    width: 16px;
+    height: 16px;
+  }
+
+  .exhaustPuffIdle .exhaustPuff3 {
+    width: 20px;
+    height: 20px;
+  }
+
+  .loadingFooter {
+    padding: 0.75rem 1rem 1.75rem 1rem;
+  }
+
+  .sloganText {
+    font-size: 0.88rem;
+    letter-spacing: -0.01em;
+  }
+}
+
+@media (max-width: 420px) {
+  .truckMotionRig {
+    width: 195px;
+    max-width: 66vw;
+  }
+
+  .sloganText {
+    font-size: 0.82rem;
+  }
+}

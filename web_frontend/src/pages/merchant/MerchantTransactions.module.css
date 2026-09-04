@@ -1,0 +1,979 @@
+/* Merchant Transactions Page Styling */
+.pageContainer {
+  width: 100%;
+  padding: 1.5rem 1.75rem 3rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  box-sizing: border-box;
+  background-color: #ffffff;
+  color: #1e293b;
+  font-family: var(--font-family, 'Inter', -apple-system, BlinkMacSystemFont, sans-serif);
+  position: relative;
+}
+
+/* Two-column layout when detail panel is active/pinned or responsive drawer */
+.contentGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  transition: all 0.25s ease;
+}
+
+.contentGridWithDetail {
+  grid-template-columns: 1fr 350px;
+}
+
+.mainCol {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-width: 0;
+}
+
+/* ==========================================================================
+   PAGE HEADER
+   ========================================================================== */
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.titleGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.pageTitle {
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.pageSubtitle {
+  font-size: 0.9rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.dateRangeBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.55rem 0.9rem;
+  font-size: 0.825rem;
+  font-weight: 600;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.dateRangeBtn:hover {
+  border-color: #cbd5e1;
+  background-color: #f8fafc;
+}
+
+.downloadReportBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #fbc21a;
+  color: #0f172a;
+  border: 1px solid #e5aa00;
+  border-radius: 8px;
+  padding: 0.6rem 1.15rem;
+  font-size: 0.85rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(251, 194, 26, 0.25);
+  transition: all 0.15s ease;
+}
+
+.downloadReportBtn:hover {
+  background-color: #f59e0b;
+  transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   4 SUMMARY KPI CARDS
+   ========================================================================== */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.85rem;
+}
+
+.statCard {
+  background: #ffffff;
+  border: 1px solid #edf2f7;
+  border-radius: 14px;
+  padding: 1.1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.95rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+}
+
+.statIconCircle {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.iconAmber {
+  background-color: #fff8eb;
+  color: #d97706;
+  border: 1px solid #fed7aa;
+}
+
+.iconGreen {
+  background-color: #f0fdf4;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
+}
+
+.iconOrange {
+  background-color: #fff7ed;
+  color: #ea580c;
+  border: 1px solid #ffedd5;
+}
+
+.iconBlue {
+  background-color: #eff6ff;
+  color: #2563eb;
+  border: 1px solid #bfdbfe;
+}
+
+.statContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.statLabel {
+  font-size: 0.75rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.statValue {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.15;
+}
+
+.statTrend {
+  font-size: 0.72rem;
+  color: #64748b;
+}
+
+.trendGreen {
+  color: #16a34a;
+  font-weight: 700;
+}
+
+.trendRed {
+  color: #dc2626;
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   FILTER / SEARCH BAR
+   ========================================================================== */
+.filterCard {
+  background: #ffffff;
+  border: 1px solid #edf2f7;
+  border-radius: 14px;
+  padding: 0.85rem 1.15rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.015);
+}
+
+.searchBox {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.5rem 0.85rem;
+  flex: 1;
+  min-width: 260px;
+}
+
+.searchInput {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 0.85rem;
+  color: #0f172a;
+  width: 100%;
+}
+
+.searchInput::placeholder {
+  color: #94a3b8;
+}
+
+.filterSelectsGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.filterSelect {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.825rem;
+  color: #334155;
+  background-color: #ffffff;
+  outline: none;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.clearFiltersBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #2563eb;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.clearFiltersBtn:hover {
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   TRANSACTIONS TABLE
+   ========================================================================== */
+.tableContainer {
+  background: #ffffff;
+  border: 1px solid #edf2f7;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+  display: flex;
+  flex-direction: column;
+}
+
+.tableWrapper {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.transactionsTable {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.825rem;
+}
+
+.transactionsTable th {
+  background-color: #f8fafc;
+  padding: 0.85rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #64748b;
+  border-bottom: 1px solid #edf2f7;
+  white-space: nowrap;
+}
+
+.transactionsTable td {
+  padding: 0.95rem 1rem;
+  border-bottom: 1px solid #f1f5f9;
+  color: #334155;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.tableRow {
+  transition: background-color 0.12s ease;
+  cursor: pointer;
+}
+
+.tableRow:hover {
+  background-color: #f8fafc;
+}
+
+.tableRowSelected {
+  background-color: #fffdf5 !important;
+}
+
+.txnIdText {
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.orderIdText {
+  color: #64748b;
+  font-size: 0.8rem;
+}
+
+.customerText {
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.amountText {
+  font-weight: 800;
+  color: #0f172a;
+}
+
+/* Status Pill Badges */
+.pillPaid,
+.pillCompleted {
+  display: inline-block;
+  background-color: #dcfce7;
+  color: #16a34a;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #bbf7d0;
+}
+
+.pillPending {
+  display: inline-block;
+  background-color: #fef3c7;
+  color: #d97706;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #fde68a;
+}
+
+.pillFailed {
+  display: inline-block;
+  background-color: #fef2f2;
+  color: #dc2626;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #fecaca;
+}
+
+.pillRefunded {
+  display: inline-block;
+  background-color: #f3e8ff;
+  color: #9333ea;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #e9d5ff;
+}
+
+.actionEyeBtn {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.actionEyeBtn:hover {
+  background-color: #ffffff;
+  color: #0f172a;
+  border-color: #fbc21a;
+}
+
+/* Table Footer / Pagination */
+.tableFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1.25rem;
+  background-color: #ffffff;
+  border-top: 1px solid #edf2f7;
+  font-size: 0.8rem;
+  color: #64748b;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.paginationControls {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.pageBtn {
+  min-width: 30px;
+  height: 30px;
+  padding: 0 0.45rem;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  background-color: #ffffff;
+  color: #475569;
+  font-size: 0.785rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+
+.pageBtn:hover {
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+
+.pageBtnActive {
+  background-color: #fbc21a !important;
+  color: #1e293b !important;
+  border-color: #fbc21a !important;
+  font-weight: 800;
+}
+
+.pageEllipsis {
+  padding: 0 0.25rem;
+  color: #94a3b8;
+}
+
+/* ==========================================================================
+   SIDE-BY-SIDE ANALYTICS CHARTS
+   ========================================================================== */
+.chartsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+.chartCard {
+  background: #ffffff;
+  border: 1px solid #edf2f7;
+  border-radius: 16px;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+}
+
+.chartHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.chartTitle {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+.viewReportLink {
+  font-size: 0.785rem;
+  font-weight: 700;
+  color: #2563eb;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.viewReportLink:hover {
+  text-decoration: underline;
+}
+
+.svgChartWrapper {
+  width: 100%;
+  height: 200px;
+  position: relative;
+}
+
+.chartLegendBottom {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.legendColorBar {
+  width: 14px;
+  height: 4px;
+  border-radius: 2px;
+  background-color: #f59e0b;
+}
+
+/* Donut Chart Layout */
+.donutLayout {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 1.5rem;
+}
+
+.donutSvgBox {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  flex-shrink: 0;
+}
+
+.donutCenterText {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.donutAmount {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.1;
+}
+
+.donutLabel {
+  font-size: 0.7rem;
+  color: #64748b;
+}
+
+.donutLegendList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  flex: 1;
+}
+
+.donutLegendItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.785rem;
+}
+
+.donutMaterialLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: #334155;
+  font-weight: 500;
+}
+
+.donutDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.donutValuesRight {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.donutPercent {
+  color: #64748b;
+  font-size: 0.75rem;
+  min-width: 32px;
+  text-align: right;
+}
+
+.donutValue {
+  font-weight: 700;
+  color: #0f172a;
+  min-width: 60px;
+  text-align: right;
+}
+
+/* ==========================================================================
+   RIGHT-SIDE DETAIL PANEL (Transaction Details)
+   ========================================================================== */
+.detailPanel {
+  background: #ffffff;
+  border: 1px solid #edf2f7;
+  border-radius: 16px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
+  align-self: start;
+}
+
+.detailHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 0.75rem;
+}
+
+.detailTitle {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+.closeBtn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 2px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.closeBtn:hover {
+  color: #0f172a;
+}
+
+.statusHeaderBlock {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f8fafc;
+  padding: 0.75rem 0.85rem;
+  border-radius: 10px;
+}
+
+.statusHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.checkCircleGreen {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: #16a34a;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.txnHeadingText {
+  display: flex;
+  flex-direction: column;
+}
+
+.txnHeadingId {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.txnHeadingOrder {
+  font-size: 0.7rem;
+  color: #64748b;
+}
+
+.detailSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.detailSectionTitle {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin: 0;
+}
+
+.customerCardBox {
+  background-color: #ffffff;
+  border: 1px solid #f1f5f9;
+  border-radius: 10px;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.customerNameText {
+  font-size: 0.875rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.customerLocText {
+  font-size: 0.75rem;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.scrapDetailRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background-color: #f8fafc;
+  border-radius: 10px;
+  padding: 0.65rem 0.75rem;
+}
+
+.scrapImgMini {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+  border-radius: 6px;
+  background-color: #ffffff;
+  padding: 2px;
+  border: 1px solid #e2e8f0;
+}
+
+.scrapDetailMeta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.35rem 0.75rem;
+  font-size: 0.75rem;
+  flex: 1;
+}
+
+.scrapMetaItem {
+  display: flex;
+  flex-direction: column;
+}
+
+.scrapMetaLabel {
+  font-size: 0.68rem;
+  color: #94a3b8;
+}
+
+.scrapMetaValue {
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.paymentSummaryBox {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 0.65rem;
+}
+
+.paymentSummaryRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.785rem;
+  color: #475569;
+}
+
+.netAmountRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  font-weight: 800;
+  color: #0f172a;
+  border-top: 1px dashed #e2e8f0;
+  padding-top: 0.45rem;
+  margin-top: 0.2rem;
+}
+
+.netAmountGreen {
+  color: #16a34a;
+  font-size: 1rem;
+}
+
+.metaInfoList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  color: #64748b;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 0.65rem;
+}
+
+.metaInfoRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.detailActionsRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+  margin-top: 0.25rem;
+}
+
+.downloadInvoiceBtn {
+  background-color: #fbc21a;
+  color: #1e293b;
+  border: none;
+  border-radius: 8px;
+  padding: 0.55rem;
+  font-size: 0.785rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  transition: background-color 0.15s ease;
+}
+
+.downloadInvoiceBtn:hover {
+  background-color: #e5aa00;
+}
+
+.viewOrderBtn {
+  background-color: #ffffff;
+  color: #1e293b;
+  border: 1.5px solid #1e293b;
+  border-radius: 8px;
+  padding: 0.55rem;
+  font-size: 0.785rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  text-decoration: none;
+  transition: background-color 0.15s ease;
+}
+
+.viewOrderBtn:hover {
+  background-color: #f8fafc;
+}
+
+/* Order Timeline (5 Steps) */
+.timelineList {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  margin-top: 0.35rem;
+}
+
+.timelineStep {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  position: relative;
+  padding-bottom: 0.95rem;
+}
+
+.timelineStep:last-child {
+  padding-bottom: 0;
+}
+
+.timelineIconCol {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stepCheckCircle {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background-color: #16a34a;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  flex-shrink: 0;
+  z-index: 2;
+}
+
+.timelineStepLine {
+  width: 1px;
+  border-left: 2px solid #bbf7d0;
+  flex: 1;
+  min-height: 18px;
+  margin-top: 2px;
+}
+
+.timelineTextCol {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex: 1;
+}
+
+.timelineTitle {
+  font-size: 0.785rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.timelineTime {
+  font-size: 0.685rem;
+  color: #64748b;
+}
+
+@media (max-width: 1200px) {
+  .contentGridWithDetail {
+    grid-template-columns: 1fr;
+  }
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .chartsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+}

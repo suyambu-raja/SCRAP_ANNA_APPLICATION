@@ -1,0 +1,139 @@
+/* ==========================================================================
+   HOUSEHOLD MOBILE BOTTOM NAVIGATION STYLING
+   Only visible on Mobile screens (<= 768px). Completely hidden on Desktop.
+   ========================================================================== */
+
+.mobileBottomNav {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobileBottomNav {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    background: #20242D; /* Exact Graphite #20242D */
+    border-top: 1px solid #2d323e;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.35);
+    z-index: 999;
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+
+  .navInner {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    height: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 0 0.5rem;
+  }
+
+  .navItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    flex: 1;
+    height: 100%;
+    min-height: 48px;
+    text-decoration: none;
+    color: #94a3b8;
+    transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .iconWrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    transition: transform 0.15s ease;
+  }
+
+  .navLabel {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    transition: color 0.15s ease;
+  }
+
+  .badgePill {
+    position: absolute;
+    top: -3px;
+    right: -6px;
+    background: #fbc21a;
+    color: #0f172a;
+    font-size: 0.6rem;
+    font-weight: 900;
+    min-width: 15px;
+    height: 15px;
+    padding: 0 3px;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px solid #20242D;
+    line-height: 1;
+  }
+
+  /* Active state */
+  .navItemActive {
+    color: #fbc21a !important;
+  }
+
+  .navItemActive .iconWrap {
+    transform: translateY(-2px);
+  }
+
+  .navItemActive .navLabel {
+    color: #fbc21a;
+    font-weight: 900;
+  }
+
+  /* Center Quick Action (+ Post Scrap) */
+  .centerActionItem {
+    position: relative;
+  }
+
+  .centerIconWrap {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    background: #fbc21a;
+    color: #0f172a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: -12px;
+    box-shadow: 0 4px 12px rgba(251, 194, 26, 0.4);
+    border: 2px solid #0f172a;
+    transition: transform 0.15s ease, background 0.15s ease;
+  }
+
+  .centerActionItem:hover .centerIconWrap,
+  .centerActionItem:active .centerIconWrap {
+    transform: scale(1.08) translateY(-1px);
+    background: #f59e0b;
+  }
+
+  .centerActionItem .navLabel {
+    color: #cbd5e1;
+    font-weight: 800;
+    margin-top: 1px;
+  }
+
+  .centerActionItem.navItemActive .centerIconWrap {
+    background: #f59e0b;
+    box-shadow: 0 4px 16px rgba(245, 158, 11, 0.6);
+  }
+}

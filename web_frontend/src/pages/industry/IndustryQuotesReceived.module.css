@@ -1,0 +1,1589 @@
+/* ==========================================================================
+   INDUSTRY QUOTES RECEIVED (ENTERPRISE B2B PROCUREMENT DESIGN SYSTEM)
+   Brand Rules:
+   - Primary Yellow: #FFC107 (Hover: #FFB300)
+   - Dark Graphite: #1F2328 / #111827
+   - Graphite Secondary: #4B5563 / #64748B
+   - White: #FFFFFF
+   - Light Background: #F7F8FA
+   - Border: #E2E8F0
+   ========================================================================== */
+
+.pageContainer {
+  width: 100%;
+  max-width: 1520px;
+  margin: 0 auto;
+  padding: 1.5rem 1.75rem 6rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  box-sizing: border-box;
+  background-color: #ffffff;
+  color: #18202a;
+}
+
+/* ==========================================================================
+   1. PAGE HEADER SECTION
+   ========================================================================== */
+.headerSection {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  border-bottom: 1.5px solid #e2e8f0;
+  padding-bottom: 1.25rem;
+}
+
+.headerLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.headerBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #1f2328;
+  color: #ffc107;
+  border: 1px solid #1f2328;
+  font-size: 0.685rem;
+  font-weight: 900;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  letter-spacing: 0.06em;
+  width: fit-content;
+}
+
+.sparkleIcon {
+  color: #ffc107;
+}
+
+.pageTitle {
+  font-size: 1.85rem;
+  font-weight: 900;
+  color: #1f2328;
+  margin: 0;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.pageSubtitle {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.headerControls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.searchBox {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.45rem 0.85rem;
+  width: 220px;
+  transition: all 0.15s ease;
+}
+
+.searchBox:focus-within {
+  border-color: #ffc107;
+  box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.2);
+}
+
+.searchIcon {
+  color: #64748b;
+  flex-shrink: 0;
+}
+
+.searchInput {
+  border: none;
+  outline: none;
+  font-size: 0.825rem;
+  color: #18202a;
+  width: 100%;
+  background: transparent;
+}
+
+.sortBox {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.45rem 0.75rem;
+}
+
+.sortIcon {
+  color: #64748b;
+  flex-shrink: 0;
+}
+
+.sortSelect {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 0.825rem;
+  font-weight: 700;
+  color: #1f2328;
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   2. COMPACT SUMMARY STATISTICS STRIP
+   ========================================================================== */
+.statsSummaryStrip {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 0.65rem 1rem;
+  border-radius: 10px;
+}
+
+.statChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.775rem;
+}
+
+.statNumber {
+  background: #1f2328;
+  color: #ffc107;
+  font-size: 0.725rem;
+  font-weight: 900;
+  padding: 0.1rem 0.45rem;
+  border-radius: 4px;
+}
+
+.statLabel {
+  color: #64748b;
+  font-weight: 600;
+}
+
+.statText {
+  color: #1f2328;
+  font-weight: 800;
+}
+
+.statMono {
+  font-family: monospace;
+  color: #1f2328;
+  font-weight: 900;
+  background: #f1f5f9;
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+.statChipBest {
+  background: #fffdf5;
+  border-color: #ffc107;
+}
+
+.statHighlightText {
+  color: #16a34a;
+  font-weight: 900;
+  font-size: 0.825rem;
+}
+
+/* ==========================================================================
+   3. MERCHANT QUOTATION CARDS LIST
+   ========================================================================== */
+.quotesListContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.quoteCard {
+  background: #ffffff;
+  border: 1.5px solid #fef08a; /* Soft light yellow border */
+  border-radius: 14px;
+  overflow: hidden;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 16px rgba(251, 194, 26, 0.08);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  cursor: pointer;
+}
+
+.quoteCard:hover {
+  transform: translateY(-2px);
+  border-color: #fde047;
+  box-shadow: 0 8px 24px rgba(251, 194, 26, 0.16);
+}
+
+.quoteCard:active,
+.quoteCard:focus-within,
+.quoteCardSelected {
+  border: 2px solid #fbc21a !important; /* Vibrant bright yellow border on click */
+  box-shadow: 0 0 0 3px rgba(251, 194, 26, 0.38), 0 10px 30px rgba(251, 194, 26, 0.22) !important;
+}
+
+.quoteCardAccepted {
+  border-color: #16a34a !important;
+  background: #fcfdfc;
+}
+
+/* CARD TOP: Merchant Identity (Solid Dark Graphite Header) */
+.cardHeader {
+  background: #1f2328;
+  padding: 1.15rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  border-bottom: 1px solid #2b3137;
+}
+
+.merchantProfileWrap {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.merchantAvatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: #2b3137;
+  border: 1px solid rgba(255, 193, 7, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.avatarIcon {
+  color: #ffc107;
+}
+
+.merchantInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.merchantNameRow {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+}
+
+.merchantName {
+  font-size: 1.05rem;
+  font-weight: 900;
+  color: #ffffff;
+  margin: 0;
+}
+
+.verifiedBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: rgba(22, 163, 74, 0.2);
+  border: 1px solid #16a34a;
+  color: #4ade80;
+  font-size: 0.685rem;
+  font-weight: 800;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+}
+
+.shieldIcon {
+  color: #4ade80;
+}
+
+.bestValueBadge {
+  background: #ffc107;
+  color: #1f2328;
+  font-size: 0.65rem;
+  font-weight: 900;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  letter-spacing: 0.04em;
+  border: 1px solid #ffb300;
+}
+
+.shopLocation {
+  font-size: 0.775rem;
+  color: #94a3b8;
+}
+
+.merchantMetaRow {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.75rem;
+  color: #cbd5e1;
+  flex-wrap: wrap;
+  margin-top: 1px;
+}
+
+.ratingBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: #ffffff;
+  font-weight: 800;
+}
+
+.starIcon {
+  color: #ffc107;
+  fill: #ffc107;
+}
+
+.pickupsCount {
+  color: #e2e8f0;
+  font-weight: 600;
+}
+
+.timeAgo {
+  color: #94a3b8;
+}
+
+/* ==========================================================================
+   CARD BODY: TWO-COLUMN B2B PROCUREMENT SPLIT
+   ========================================================================== */
+.cardBodySplit {
+  display: grid;
+  grid-template-columns: 1fr 310px;
+  gap: 1.5rem;
+  align-items: start;
+  padding: 1.5rem;
+}
+
+.leftCol {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 0;
+}
+
+/* 1. Itemized Rates Table */
+.itemizedSection {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.sectionHeadingRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0.85rem;
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  flex-wrap: wrap;
+}
+
+.sectionHeadingTitle {
+  font-size: 0.775rem;
+  font-weight: 900;
+  color: #1f2328;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.sectionHelperNote {
+  font-size: 0.685rem;
+  color: #64748b;
+}
+
+.itemizedTable {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.tableHeadRow {
+  display: grid;
+  grid-template-columns: 1fr 110px 140px;
+  padding: 0.5rem 0.85rem;
+  background: #f1f5f9;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.tableDataRow {
+  display: grid;
+  grid-template-columns: 1fr 110px 140px;
+  padding: 0.55rem 0.85rem;
+  font-size: 0.775rem;
+  color: #1f2328;
+  border-bottom: 1px solid #f1f5f9;
+  align-items: center;
+  background: #ffffff;
+}
+
+.tableDataRow:last-child {
+  border-bottom: none;
+}
+
+.tableDataRowAlt {
+  background: #f8fafc;
+}
+
+.rowMaterialName {
+  font-weight: 700;
+  color: #1f2328;
+}
+
+.rowQty {
+  color: #4b5563;
+  font-weight: 600;
+}
+
+.rowRate {
+  color: #1f2328;
+  font-weight: 800;
+}
+
+.rowRate strong {
+  color: #1f2328;
+  background: #fffdf5;
+  border: 1px solid rgba(255, 193, 7, 0.4);
+  padding: 1px 4px;
+  border-radius: 4px;
+}
+
+/* 2. Logistics Information (4 Compact Horizontal Blocks) */
+.logisticsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+}
+
+.logisticsBlock {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.6rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.logisticsBlockHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.logisticsIcon {
+  color: #1f2328;
+}
+
+.logisticsBlockLabel {
+  font-size: 0.65rem;
+  font-weight: 900;
+  color: #64748b;
+  letter-spacing: 0.04em;
+}
+
+.logisticsMainVal {
+  font-size: 0.75rem;
+  color: #1f2328;
+  line-height: 1.25;
+}
+
+/* 3. Merchant Voice Request */
+.compactVoiceSection {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.65rem 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.voiceHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.voiceLabelRow {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.voiceHeaderIcon {
+  color: #1f2328;
+}
+
+.voiceLabelText {
+  font-size: 0.725rem;
+  font-weight: 800;
+  color: #1f2328;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.voiceDurationBadge {
+  background: #e2e8f0;
+  color: #475569;
+  font-size: 0.685rem;
+  font-weight: 700;
+  padding: 0.1rem 0.45rem;
+  border-radius: 4px;
+}
+
+.voicePlayerStrip {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.miniPlayBtn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #1f2328;
+  color: #ffc107;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+.miniPlayBtn:hover {
+  background: #2b3137;
+  transform: scale(1.06);
+}
+
+.miniPlayBtnActive {
+  background: #ffc107;
+  color: #1f2328;
+}
+
+.waveformContainer {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 26px;
+  flex: 1;
+  min-width: 0;
+  background: #ffffff;
+  padding: 0 0.4rem;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.waveformBar {
+  flex: 1;
+  min-width: 2px;
+  max-width: 4px;
+  background: #cbd5e1;
+  border-radius: 2px;
+  transition: height 0.2s ease, background-color 0.2s ease;
+}
+
+.waveformBarPlaying {
+  background: #ffc107;
+  animation: frequencyJump 0.8s infinite ease-in-out alternate;
+}
+
+@keyframes frequencyJump {
+  0% {
+    transform: scaleY(0.4);
+    background: #ffc107;
+  }
+  50% {
+    transform: scaleY(1.3);
+    background: #eab308;
+  }
+  100% {
+    transform: scaleY(0.6);
+    background: #f59e0b;
+  }
+}
+
+.voiceTimestamp {
+  font-size: 0.725rem;
+  font-weight: 800;
+  color: #475569;
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   RIGHT COLUMN: RATES STATUS & ACTIONS (NO ESTIMATED TOTAL)
+   ========================================================================== */
+.rightCol {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.quoteFinancialCard {
+  background: #ffffff;
+  border: 1.5px solid #1f2328;
+  border-radius: 12px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+}
+
+.quoteFinancialTop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 4px;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 0.85rem;
+}
+
+.estLabel {
+  font-size: 0.65rem;
+  font-weight: 900;
+  color: #64748b;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.ratesCountBlock {
+  padding: 0.35rem 0.75rem;
+  background: #fffdf5;
+  border: 1.5px solid #ffc107;
+  border-radius: 8px;
+  margin: 0.25rem 0;
+}
+
+.ratesCountHeading {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #1f2328;
+}
+
+.weighbridgeNote {
+  font-size: 0.685rem;
+  color: #64748b;
+  line-height: 1.35;
+}
+
+.itemsSummaryLine {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #16a34a;
+  background: #f0fdf4;
+  padding: 0.45rem 0.65rem;
+  border-radius: 6px;
+  border: 1px solid #bbf7d0;
+}
+
+.checkIconGreen {
+  color: #16a34a;
+  flex-shrink: 0;
+}
+
+.actionButtonsCol {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.primaryAcceptBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  background: #ffc107;
+  border: 1.5px solid #1f2328;
+  color: #1f2328;
+  font-size: 0.85rem;
+  font-weight: 900;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 2px 8px rgba(255, 193, 7, 0.3);
+  width: 100%;
+}
+
+.primaryAcceptBtn:hover {
+  background: #1f2328;
+  color: #ffc107;
+  transform: translateY(-1px);
+}
+
+.secondaryViewBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  background: #ffffff;
+  border: 1.5px solid #1f2328;
+  color: #1f2328;
+  font-size: 0.785rem;
+  font-weight: 800;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  width: 100%;
+}
+
+.secondaryViewBtn:hover {
+  background: #f7f8fa;
+  border-color: #000000;
+}
+
+.acceptedTag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #16a34a;
+  font-size: 0.8rem;
+  font-weight: 900;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  width: 100%;
+}
+
+/* ==========================================================================
+   4. MODALS (ACCEPT CONFIRMATION & DETAILED QUOTE)
+   ========================================================================== */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(31, 35, 40, 0.75);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 1.5rem;
+  animation: fadeIn 0.15s ease-out;
+}
+
+.modalCard {
+  background: #ffffff;
+  border-radius: 16px;
+  max-width: 520px;
+  width: 100%;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
+  border: 1.5px solid #1f2328;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.modalCardLarge {
+  background: #ffffff;
+  border-radius: 16px;
+  max-width: 680px;
+  width: 100%;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
+  border: 1.5px solid #1f2328;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+}
+
+.modalHeader {
+  padding: 1.15rem 1.35rem;
+  border-bottom: 1px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.detailedHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.detailedHeaderIcon {
+  color: #ffc107;
+  background: #1f2328;
+  padding: 8px;
+  border-radius: 8px;
+  box-sizing: content-box;
+}
+
+.detailedHeaderSub {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.modalMainTitle {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #1f2328;
+  margin: 0;
+}
+
+.modalCloseBtn {
+  background: #f7f8fa;
+  border: 1px solid #e2e8f0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  cursor: pointer;
+}
+
+.modalCloseBtn:hover {
+  background: #1f2328;
+  color: #ffc107;
+}
+
+.modalBody {
+  padding: 1.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  overflow-y: auto;
+}
+
+.modalNotice {
+  font-size: 0.85rem;
+  color: #4b5563;
+  margin: 0;
+}
+
+.modalReviewDetailsBox {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.reviewRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.775rem;
+}
+
+.reviewLabel {
+  color: #64748b;
+}
+
+.reviewVal {
+  color: #1f2328;
+  font-weight: 800;
+  text-align: right;
+}
+
+.reviewValHighlight {
+  color: #16a34a;
+  font-weight: 900;
+}
+
+.securityWarningBox {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.45rem;
+  background: #fffdf5;
+  border: 1px solid #ffc107;
+  padding: 0.65rem 0.85rem;
+  border-radius: 8px;
+}
+
+.securityWarningBox p {
+  margin: 0;
+  font-size: 0.725rem;
+  color: #4b5563;
+  line-height: 1.35;
+}
+
+.infoIconYellow {
+  color: #1f2328;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.modalFooter {
+  padding: 1rem 1.35rem;
+  border-top: 1px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  background: #ffffff;
+}
+
+.cancelModalBtn {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  color: #4b5563;
+  font-size: 0.825rem;
+  font-weight: 800;
+  padding: 0.65rem 1.15rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.cancelModalBtn:hover {
+  background: #f7f8fa;
+  color: #1f2328;
+}
+
+.confirmMerchantBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #ffc107;
+  border: 1.5px solid #1f2328;
+  color: #1f2328;
+  font-size: 0.85rem;
+  font-weight: 900;
+  padding: 0.65rem 1.25rem;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(255, 193, 7, 0.3);
+}
+
+.confirmMerchantBtn:hover {
+  background: #1f2328;
+  color: #ffc107;
+}
+
+/* Detailed Schedule in Modal */
+.detailedTableSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.detailedSectionTitle {
+  font-size: 0.8rem;
+  font-weight: 900;
+  color: #1f2328;
+  margin: 0;
+}
+
+.detailedTable {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.detailedHeadRow {
+  display: grid;
+  grid-template-columns: 1fr 120px 160px;
+  padding: 0.55rem 0.85rem;
+  background: #f1f5f9;
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #475569;
+  text-transform: uppercase;
+}
+
+.detailedDataRow {
+  display: grid;
+  grid-template-columns: 1fr 120px 160px;
+  padding: 0.6rem 0.85rem;
+  font-size: 0.775rem;
+  color: #1f2328;
+  border-bottom: 1px solid #f1f5f9;
+  background: #ffffff;
+  align-items: center;
+}
+
+.detailedMatName {
+  font-weight: 700;
+}
+
+.rateText {
+  color: #1f2328;
+}
+
+.detailedNoticeRow {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.75rem 0.85rem;
+  background: #f0fdf4;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #16a34a;
+  border-top: 1.5px solid #bbf7d0;
+}
+
+.detailedLogisticsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.detailedLogItem {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.6rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.detailedLogLabel {
+  font-size: 0.685rem;
+  color: #64748b;
+  font-weight: 700;
+}
+
+.detailedLogVal {
+  font-size: 0.785rem;
+  color: #1f2328;
+}
+
+/* Success Modal */
+.successModalCard {
+  background: #ffffff;
+  border-radius: 16px;
+  max-width: 480px;
+  width: 100%;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
+  border: 1.5px solid #1f2328;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
+}
+
+.successRing {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.successCheckIcon {
+  color: #16a34a;
+}
+
+.successTitle {
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: #1f2328;
+  margin: 0;
+}
+
+.successDesc {
+  font-size: 0.85rem;
+  color: #4b5563;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.nextOtpBox {
+  background: #f8fafc;
+  border: 1.5px solid #1f2328;
+  border-radius: 10px;
+  padding: 0.85rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.nextOtpLabel {
+  font-size: 0.65rem;
+  font-weight: 900;
+  color: #64748b;
+  letter-spacing: 0.05em;
+}
+
+.nextOtpVal {
+  font-size: 1.85rem;
+  font-weight: 900;
+  color: #1f2328;
+  letter-spacing: 0.1em;
+}
+
+.nextOtpSub {
+  font-size: 0.7rem;
+  color: #64748b;
+}
+
+.successModalButtons {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.viewOrderPrimaryBtn {
+  flex: 1.2;
+  background: #ffc107;
+  border: 1.5px solid #1f2328;
+  color: #1f2328;
+  font-size: 0.825rem;
+  font-weight: 900;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.stayQuotesBtn {
+  flex: 1;
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  color: #4b5563;
+  font-size: 0.825rem;
+  font-weight: 800;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ==========================================================================
+   5. MOBILE-FIRST UNIFIED REQUESTS & QUOTES STYLES
+   ========================================================================== */
+
+.mobileRequestsWrapper {
+  display: none;
+}
+
+.mobileQuotesHeaderRow {
+  display: none;
+}
+
+.mobileSelectedReqBanner {
+  display: none;
+}
+
+.mobileHidden {
+  display: none !important;
+}
+
+/* ==========================================================================
+   6. RESPONSIVE DESIGN (Desktop strictly untouched above 768px)
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .cardBodySplit {
+    grid-template-columns: 1fr;
+  }
+  .logisticsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .pageContainer {
+    padding: 0.85rem;
+    gap: 1rem;
+  }
+
+  /* When on mobile without selected request, hide the quotes section and show mobile requests list */
+  .mobileOnlyHideQuotes {
+    display: none !important;
+  }
+
+  .mobileRequestsWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+  }
+
+  .mobileHeaderBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .mobileHeaderBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: #fffdf5;
+    color: #b45309;
+    font-size: 0.65rem;
+    font-weight: 900;
+    padding: 0.15rem 0.5rem;
+    border-radius: 6px;
+    border: 1px solid #fde68a;
+    width: fit-content;
+  }
+
+  .mobileMainHeading {
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: #0f172a;
+    margin: 0;
+  }
+
+  .mobileSubHeading {
+    font-size: 0.785rem;
+    color: #64748b;
+    margin: 0;
+  }
+
+  .mobileFilterPillsTrack {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    overflow-x: auto;
+    padding: 0.5rem 0;
+    scrollbar-width: none;
+  }
+
+  .mobileFilterPill {
+    padding: 0.4rem 0.85rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    color: #475569;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+
+  .mobileFilterPillActive {
+    background: #0f172a !important;
+    color: #ffc107 !important;
+    border-color: #0f172a !important;
+  }
+
+  /* Request Cards */
+  .mobileRequestCardsList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .mobileRequestCard {
+    background: #ffffff;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    transition: all 0.15s ease;
+  }
+
+  .mobileRequestCard:active {
+    transform: scale(0.98);
+    border-color: #ffc107;
+  }
+
+  .reqCardTopRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .reqIdBadge {
+    font-size: 0.725rem;
+    font-weight: 900;
+    background: #0f172a;
+    color: #ffffff;
+    padding: 0.15rem 0.5rem;
+    border-radius: 5px;
+    letter-spacing: 0.04em;
+  }
+
+  .quotesReceivedBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    background: #fffdf5;
+    color: #b45309;
+    font-size: 0.7rem;
+    font-weight: 900;
+    padding: 0.15rem 0.5rem;
+    border-radius: 5px;
+    border: 1px solid #fde68a;
+  }
+
+  .awaitingBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    background: #f8fafc;
+    color: #64748b;
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 0.15rem 0.5rem;
+    border-radius: 5px;
+    border: 1px solid #e2e8f0;
+  }
+
+  .closedBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    background: #f0fdf4;
+    color: #16a34a;
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 0.15rem 0.5rem;
+    border-radius: 5px;
+    border: 1px solid #bbf7d0;
+  }
+
+  .reqMaterialTitle {
+    font-size: 0.925rem;
+    font-weight: 900;
+    color: #0f172a;
+    margin: 0;
+    line-height: 1.35;
+  }
+
+  .reqMetaStack {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-size: 0.75rem;
+    color: #64748b;
+    background: #f8fafc;
+    padding: 0.6rem 0.75rem;
+    border-radius: 8px;
+    border: 1px solid #edf2f7;
+  }
+
+  .reqMetaItem {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  .metaIcon {
+    color: #94a3b8;
+    flex-shrink: 0;
+  }
+
+  .reqLocationTruncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .reqCardBottomRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding-top: 0.35rem;
+    border-top: 1px solid #f1f5f9;
+  }
+
+  .reqPostedTime {
+    font-size: 0.7rem;
+    color: #94a3b8;
+  }
+
+  .viewQuotesMobileBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    background: #ffc107;
+    color: #0f172a;
+    font-size: 0.75rem;
+    font-weight: 900;
+    padding: 0.35rem 0.75rem;
+    border-radius: 6px;
+    border: 1px solid #e5aa00;
+    cursor: pointer;
+  }
+
+  .reqAwaitingText {
+    font-size: 0.725rem;
+    font-style: italic;
+    color: #94a3b8;
+  }
+
+  /* Quotes Step 2 Mobile Elements */
+  .mobileQuotesHeaderRow {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.75rem;
+  }
+
+  .mobileBackToReqsBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    color: #0f172a;
+    font-size: 0.785rem;
+    font-weight: 800;
+    padding: 0.45rem 0.85rem;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  .backChevronRotate {
+    transform: rotate(180deg);
+  }
+
+  .mobileSelectedReqBanner {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    background: #0f172a;
+    color: #ffffff;
+    border-radius: 12px;
+    padding: 0.85rem 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .bannerTopLine {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .bannerReqId {
+    font-size: 0.75rem;
+    font-weight: 900;
+    color: #ffc107;
+    letter-spacing: 0.04em;
+  }
+
+  .bannerQuotesCount {
+    font-size: 0.7rem;
+    font-weight: 800;
+    background: rgba(255, 193, 7, 0.2);
+    color: #ffc107;
+    padding: 0.1rem 0.45rem;
+    border-radius: 4px;
+  }
+
+  .bannerMatTitle {
+    font-size: 0.825rem;
+    font-weight: 700;
+    color: #e2e8f0;
+    margin: 0;
+    line-height: 1.35;
+  }
+
+  .bannerScheduleRow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    font-size: 0.7rem;
+    color: #94a3b8;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 0.4rem;
+  }
+
+  .headerSection {
+    display: none; /* Desktop header replaced by mobileSelectedReqBanner */
+  }
+
+  .statsSummaryStrip {
+    display: none;
+  }
+
+  .quoteCard {
+    padding: 1rem;
+  }
+
+  .logisticsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .tableHeadRow,
+  .tableDataRow {
+    grid-template-columns: 1fr 70px 90px;
+    font-size: 0.75rem;
+  }
+
+  .detailedHeadRow,
+  .detailedDataRow {
+    grid-template-columns: 1fr 70px 100px;
+  }
+
+  .quoteFinancialCard {
+    padding: 1rem;
+  }
+
+  .modalCard,
+  .detailedModalCard,
+  .successModalCard {
+    width: 95%;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 1.25rem;
+  }
+
+  .successModalButtons {
+    flex-direction: column;
+  }
+
+  .viewOrderPrimaryBtn,
+  .stayQuotesBtn {
+    width: 100%;
+    flex: none;
+  }
+}

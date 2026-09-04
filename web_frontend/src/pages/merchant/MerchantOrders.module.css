@@ -1,0 +1,3208 @@
+/* ==========================================================================
+   Merchant Orders Page CSS (Redesigned with Prominent Images & Customer-First)
+   ========================================================================== */
+
+.pageWrapper {
+  min-height: 100vh;
+  width: 100%;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  color: #1e293b;
+  font-family: var(--font-family, 'Inter', -apple-system, BlinkMacSystemFont, sans-serif);
+}
+
+.mainContainer {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 1.5rem 1.75rem 3.5rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  box-sizing: border-box;
+}
+
+/* Toast Banner */
+.toastBanner {
+  position: fixed;
+  top: 75px;
+  right: 2rem;
+  background-color: #0f172a;
+  color: #fbc21a;
+  padding: 0.85rem 1.35rem;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(251, 194, 26, 0.3);
+  z-index: 9999;
+  animation: slideInRight 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Two Column Layout: Main (70%) + Right Sidebar (30%) */
+.ordersLayoutGrid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 1.75rem;
+  align-items: start;
+}
+
+/* ==========================================================================
+   LEFT MAIN CONTENT (ORDERS LIST)
+   ========================================================================== */
+.mainCol {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* 1. Page Header */
+.pageHeaderRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.headerTitleGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pageTitle {
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.pageSubtitle {
+  font-size: 0.9rem;
+  color: #64748b;
+  margin: 0;
+}
+
+/* 2. Stats Strip Grid (5 Columns: Total, Pending, Scheduled, Completed, Cancelled) */
+.statsStripGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.75rem;
+}
+
+.statCard {
+  background-color: #ffffff;
+  border: 1px solid #edf2f7;
+  border-bottom: 3.5px solid #fbc21a;
+  border-radius: 14px;
+  padding: 0.95rem 1.15rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+}
+
+.statIconCircle {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.iconYellow {
+  background-color: #fffdf5;
+  color: #d97706;
+  border: 1px solid #fef3c7;
+}
+
+.iconBlue {
+  background-color: #eff6ff;
+  color: #2563eb;
+  border: 1px solid #dbeafe;
+}
+
+.iconOrange {
+  background-color: #fff7ed;
+  color: #ea580c;
+  border: 1px solid #ffedd5;
+}
+
+.iconGreen {
+  background-color: #f0fdf4;
+  color: #16a34a;
+  border: 1px solid #dcfce7;
+}
+
+.iconRed {
+  background-color: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fee2e2;
+}
+
+.statContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.statLabel {
+  font-size: 0.72rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.statValue {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.15;
+}
+
+.statTrend {
+  font-size: 0.685rem;
+  color: #94a3b8;
+}
+
+.trendGreen {
+  color: #16a34a;
+  font-weight: 700;
+}
+
+.trendBlue {
+  color: #2563eb;
+  font-weight: 700;
+}
+
+.trendRed {
+  color: #dc2626;
+  font-weight: 700;
+}
+
+/* 3. Tabs & Sort Row */
+.tabsBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid #f1f5f9;
+  padding-bottom: 0.25rem;
+  margin-top: 0.25rem;
+}
+
+.tabsList {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  overflow-x: auto;
+}
+
+.tabItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #64748b;
+  padding: 0.55rem 0.85rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  margin-bottom: -2px;
+  white-space: nowrap;
+}
+
+.tabItem:hover {
+  color: #0f172a;
+}
+
+.tabActive {
+  color: #0f172a !important;
+  border-bottom-color: #fbc21a !important;
+}
+
+.tabBadge {
+  background-color: #f1f5f9;
+  color: #64748b;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.1rem 0.45rem;
+  border-radius: 9999px;
+}
+
+.tabActive .tabBadge {
+  background-color: #fbc21a;
+  color: #0f172a;
+  font-weight: 800;
+}
+
+.sortSelector {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.825rem;
+  color: #334155;
+  font-weight: 600;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  padding: 0.45rem 0.85rem;
+  border-radius: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* 4. Orders List */
+.requestsList,
+.ordersList {
+  display: flex;
+  flex-direction: column;
+  gap: 1.35rem;
+}
+
+.orderCard {
+  background: #ffffff;
+  border: 1px solid #edf2f7;
+  border-bottom: 3.5px solid #fbc21a;
+  border-radius: 18px;
+  padding: 1.35rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
+  transition: all 0.2s ease;
+}
+
+.orderCard:hover {
+  border-color: #cbd5e1;
+  border-bottom-color: #fbc21a;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.06);
+  transform: translateY(-2px);
+}
+
+/* Card Header Row: Customer Name & Order ID */
+.cardHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 0.65rem;
+}
+
+.cardHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.statusPillGreen {
+  background-color: #dcfce7;
+  color: #16a34a;
+  font-size: 0.685rem;
+  font-weight: 800;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #bbf7d0;
+}
+
+.statusPillBlue {
+  background-color: #eff6ff;
+  color: #2563eb;
+  font-size: 0.685rem;
+  font-weight: 800;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #bfdbfe;
+}
+
+.statusPillYellow {
+  background-color: #fef3c7;
+  color: #d97706;
+  font-size: 0.685rem;
+  font-weight: 800;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #fde68a;
+}
+
+.statusPillRed {
+  background-color: #fef2f2;
+  color: #dc2626;
+  font-size: 0.685rem;
+  font-weight: 800;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #fecaca;
+}
+
+.customerGroup {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+}
+
+.customerLabel {
+  font-size: 0.75rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.customerName {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.customerTypeBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.72rem;
+  color: #475569;
+  font-weight: 700;
+  background-color: #f1f5f9;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+}
+
+.orderIdMuted {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  font-weight: 600;
+  font-family: monospace;
+}
+
+/* Card Body Grid (Image Showcase + Details + Status Actions) */
+.cardBodyGrid,
+.orderBodyGrid {
+  display: grid;
+  grid-template-columns: 240px 1fr 180px;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+/* 1. Large Image Showcase Column */
+.imageShowcaseCol {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.largeImgFrame {
+  width: 100%;
+  height: 190px;
+  min-height: 190px;
+  border-radius: 12px;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.largeImgFrame:hover {
+  border-color: #fbc21a;
+  box-shadow: 0 4px 12px rgba(251, 194, 26, 0.2);
+}
+
+.largeMaterialImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.largeImgFrame:hover .largeMaterialImg {
+  transform: scale(1.06);
+}
+
+.zoomHoverBadge {
+  position: absolute;
+  top: 0.45rem;
+  right: 0.45rem;
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(4px);
+  color: #ffffff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  opacity: 0.85;
+  transition: all 0.15s ease;
+}
+
+.largeImgFrame:hover .zoomHoverBadge {
+  opacity: 1;
+  background: #0f172a;
+  color: #fbc21a;
+  transform: scale(1.05);
+}
+
+.conditionOverlayBadge {
+  position: absolute;
+  bottom: 0.45rem;
+  left: 0.45rem;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(4px);
+  color: #ffffff;
+  font-size: 0.685rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+
+.materialTitleBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.materialTitle {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  line-height: 1.25;
+}
+
+.quantityTag {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.quantityHighlight {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.confirmedDateTag {
+  font-size: 0.72rem;
+  color: #64748b;
+}
+
+/* 2. Middle Column: Address & Details */
+.detailsCol {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.detailRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+}
+
+.detailIcon {
+  color: #64748b;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.addressCol,
+.pickupTimeRow {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.detailLabel {
+  font-size: 0.685rem;
+  font-weight: 700;
+  color: #94a3b8;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.addressValue {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #334155;
+  line-height: 1.4;
+}
+
+.pickupTimeValue {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.confirmedSubtext {
+  font-size: 0.825rem;
+  color: #475569;
+  font-weight: 600;
+}
+
+/* 3. Right Column: Status & Action Buttons */
+.statusActionCol {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.85rem;
+}
+
+.statusGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+}
+
+.statusHeader {
+  font-size: 0.685rem;
+  color: #94a3b8;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.statePill {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+}
+
+.statePending {
+  background-color: #eff6ff;
+  color: #2563eb;
+  border: 1px solid #bfdbfe;
+}
+
+.stateScheduled {
+  background-color: #fef3c7;
+  color: #d97706;
+  border: 1px solid #fde68a;
+}
+
+.stateCompleted {
+  background-color: #dcfce7;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
+}
+
+.stateCancelled {
+  background-color: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.stateSubtext {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
+  font-size: 0.72rem;
+  color: #64748b;
+  text-align: right;
+}
+
+.stateSubtext strong {
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.buttonsStack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  width: 100%;
+}
+
+.primaryActionBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  background-color: #fbc21a;
+  border: 1px solid #e5aa00;
+  color: #0f172a;
+  font-size: 0.85rem;
+  font-weight: 800;
+  padding: 0.65rem 1rem;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(251, 194, 26, 0.35);
+}
+
+.primaryActionBtn:hover {
+  background-color: #f59e0b;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.45);
+  transform: translateY(-1px);
+}
+
+.primaryActionBtn:active {
+  transform: translateY(0);
+}
+
+.completedActionBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  background-color: #16a34a;
+  border: 1px solid #15803d;
+  color: #ffffff;
+  font-size: 0.85rem;
+  font-weight: 800;
+  padding: 0.65rem 1rem;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(22, 163, 74, 0.25);
+}
+
+.completedActionBtn:hover {
+  background-color: #15803d;
+  box-shadow: 0 4px 12px rgba(21, 128, 61, 0.35);
+  transform: translateY(-1px);
+}
+
+.outlineYellowBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  background-color: #fbc21a;
+  border: 1px solid #e5aa00;
+  color: #0f172a;
+  font-size: 0.85rem;
+  font-weight: 800;
+  padding: 0.65rem 1rem;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(251, 194, 26, 0.35);
+}
+
+.outlineYellowBtn:hover {
+  background-color: #f59e0b;
+  transform: translateY(-1px);
+}
+
+.outlineDarkBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  background-color: #0f172a;
+  color: #ffffff;
+  border: none;
+  font-size: 0.825rem;
+  font-weight: 700;
+  padding: 0.55rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  width: 100%;
+}
+
+.outlineDarkBtn:hover {
+  background-color: #1e293b;
+}
+
+.cardFooterNote {
+  background: #fef2f2;
+  border-radius: 8px;
+  padding: 0.45rem 0.75rem;
+  color: #dc2626;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   RIGHT SIDEBAR
+   ========================================================================== */
+.sidebarCol {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.sidebarCard {
+  background: #ffffff;
+  border: 1px solid #edf2f7;
+  border-radius: 16px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.95rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+}
+
+.sidebarHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sidebarCardTitle {
+  font-size: 0.925rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.clearAllBtn {
+  background: transparent;
+  border: none;
+  color: #2563eb;
+  font-size: 0.785rem;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0;
+}
+
+.clearAllBtn:hover {
+  text-decoration: underline;
+}
+
+.filterField {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.filterLabel {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.selectWrapper {
+  position: relative;
+  width: 100%;
+}
+
+.filterSelect {
+  width: 100%;
+  background-color: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 0.5rem 2rem 0.5rem 0.75rem;
+  font-size: 0.825rem;
+  font-weight: 600;
+  color: #0f172a;
+  appearance: none;
+  cursor: pointer;
+}
+
+.selectChevron {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #64748b;
+  pointer-events: none;
+}
+
+/* Steps list */
+.stepsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.stepItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+}
+
+.stepNumber {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background-color: #fbc21a;
+  color: #0f172a;
+  font-size: 0.72rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.stepText {
+  font-size: 0.785rem;
+  color: #475569;
+  line-height: 1.4;
+}
+
+/* Performance Grid */
+.perfGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.perfItem {
+  background: #f8fafc;
+  border: 1px solid #edf2f7;
+  border-radius: 10px;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.perfLabel {
+  font-size: 0.685rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.perfValue {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.perfValueGreen {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #16a34a;
+}
+
+.perfValueYellow {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #d97706;
+}
+
+.helpText {
+  font-size: 0.785rem;
+  color: #64748b;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.helpPhoneBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  background-color: #0f172a;
+  color: #ffffff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 0.65rem 1rem;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.helpPhoneBtn:hover {
+  background-color: #1e293b;
+}
+
+/* ==========================================================================
+   FLOATING IMAGE LIGHTBOX MODAL
+   ========================================================================== */
+.floatingImageOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(15, 23, 42, 0.82);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 1.5rem;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.floatingImageCard {
+  background: #ffffff;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 680px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  animation: floatingModalPop 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes floatingModalPop {
+  from {
+    transform: scale(0.9) translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+.floatingImageHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #f1f5f9;
+  background: #ffffff;
+}
+
+.floatingImageTitleBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.floatingImageTitle {
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: #0f172a;
+  margin: 0;
+}
+
+.floatingImageTags {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.floatingBadgeCondition {
+  background-color: #f1f5f9;
+  color: #475569;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.15rem 0.55rem;
+  border-radius: 6px;
+}
+
+.floatingBadgeQty {
+  background-color: #dcfce7;
+  color: #16a34a;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.15rem 0.55rem;
+  border-radius: 6px;
+}
+
+.floatingPosterName {
+  font-size: 0.75rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.floatingCloseBtn {
+  background: #f1f5f9;
+  border: none;
+  color: #475569;
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.floatingCloseBtn:hover {
+  background-color: #0f172a;
+  color: #ffffff;
+  transform: rotate(90deg);
+}
+
+.floatingImageBody {
+  width: 100%;
+  max-height: 480px;
+  min-height: 320px;
+  background-color: #0f172a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.floatingImg {
+  width: 100%;
+  height: 100%;
+  max-height: 480px;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.floatingImageCard:hover .floatingImg {
+  transform: scale(1.02);
+}
+
+.floatingImageFooter {
+  padding: 0.75rem 1.5rem;
+  background: #f8fafc;
+  border-top: 1px solid #f1f5f9;
+  text-align: center;
+  font-size: 0.75rem;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.mobileOrderTopTabs {
+  display: none;
+}
+
+.workflowModalOverlay {
+  position: fixed;
+  inset: 0;
+  background-color: #0b1120;
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  animation: fadeIn 0.2s ease;
+}
+
+.workflowModalCard {
+  background: #f8fafc;
+  width: 100vw;
+  height: 100vh;
+  max-width: 100vw;
+  max-height: 100vh;
+  border-radius: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.workflowModalHeader {
+  padding: 1.1rem 2rem;
+  border-bottom: 1px solid #1e293b;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #0f172a;
+  color: #ffffff;
+  flex-shrink: 0;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+}
+
+.workflowHeaderLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.workflowHeaderTag {
+  font-size: 0.685rem;
+  font-weight: 800;
+  color: #fbc21a;
+  letter-spacing: 0.08em;
+}
+
+.workflowHeaderTitle {
+  font-size: 1.35rem;
+  font-weight: 900;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.workflowHeaderCustomer {
+  font-size: 0.85rem;
+  color: #cbd5e1;
+}
+
+.workflowCloseBtn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.workflowCloseBtn:hover {
+  background: #dc2626;
+  border-color: #dc2626;
+  color: #ffffff;
+  transform: rotate(90deg) scale(1.08);
+}
+
+/* Stepper */
+.workflowStepper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 2rem;
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  flex-shrink: 0;
+  overflow-x: auto;
+}
+
+.stepItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  opacity: 0.45;
+}
+
+.stepItemActive {
+  opacity: 1;
+}
+
+.stepNumber {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #cbd5e1;
+  color: #0f172a;
+  font-size: 0.75rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stepItemActive .stepNumber {
+  background: #fbc21a;
+  color: #0f172a;
+  box-shadow: 0 2px 8px rgba(251, 194, 26, 0.45);
+}
+
+.stepLabel {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.stepConnector {
+  flex: 1;
+  height: 2px;
+  background: #e2e8f0;
+  margin: 0 8px;
+  position: relative;
+  top: -7px;
+}
+
+/* Modal Body */
+.workflowModalBody {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.75rem 2rem 5rem 2rem;
+  max-width: 980px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.stageContentBox {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.stageHeroBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.825rem;
+  font-weight: 800;
+  color: #0f172a;
+  background: #fef3c7;
+  border: 1px solid #fde68a;
+  padding: 0.4rem 0.75rem;
+  border-radius: 8px;
+  width: fit-content;
+}
+
+/* Embedded Live Map Viewport */
+.embeddedMapViewport {
+  background: #0f172a;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid #334155;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.2);
+  display: flex;
+  flex-direction: column;
+}
+
+.liveNavTurnHeader {
+  background: #1e293b;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.turnIconCircle {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #16a34a;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.3);
+}
+
+.turnTextCol {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.turnTitle {
+  font-size: 0.85rem;
+  color: #ffffff;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.turnSub {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.liveGpsDotPulse {
+  font-size: 0.65rem;
+  font-weight: 900;
+  background: rgba(34, 197, 94, 0.2);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.4);
+  padding: 3px 8px;
+  border-radius: 9999px;
+  letter-spacing: 0.05em;
+  animation: pulseBeacon 2s infinite;
+}
+
+@keyframes pulseBeacon {
+  0% {
+    opacity: 0.7;
+    transform: scale(0.98);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.03);
+  }
+  100% {
+    opacity: 0.7;
+    transform: scale(0.98);
+  }
+}
+
+.liveMapGraphicBox {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  background: #f1f5f9;
+  overflow: hidden;
+}
+
+.embeddedMapSvg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.mapFloatingControls {
+  position: absolute;
+  bottom: 0.65rem;
+  right: 0.65rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 10;
+}
+
+.mapCtrlBtn {
+  width: 28px;
+  height: 28px;
+  background: #0f172a;
+  color: #ffffff;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  transition: all 0.15s ease;
+}
+
+.mapCtrlBtn:hover {
+  background: #fbc21a;
+  color: #0f172a;
+  border-color: #fbc21a;
+}
+
+.mapFlowCard {
+  background: #0f172a;
+  color: #ffffff;
+  border-radius: 14px;
+  padding: 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.15);
+}
+
+.mapFlowHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 0.5rem;
+}
+
+.mapFlowHeaderLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.mapFlowTag {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: #fbc21a;
+  letter-spacing: 0.06em;
+}
+
+.mapFlowTitle {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.mapLiveBadge {
+  font-size: 0.65rem;
+  font-weight: 800;
+  background: rgba(34, 197, 94, 0.2);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.4);
+  padding: 2px 7px;
+  border-radius: 9999px;
+}
+
+.routeTimeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  position: relative;
+}
+
+.routePoint {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  position: relative;
+  z-index: 1;
+}
+
+.routeDotGreen {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.3);
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+
+.routeDotRed {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.3);
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+
+.routeLine {
+  position: absolute;
+  left: 5px;
+  top: 14px;
+  bottom: 14px;
+  width: 2px;
+  background: dashed rgba(255, 255, 255, 0.25);
+}
+
+.routeTextCol {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.routePointLabel {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #94a3b8;
+  letter-spacing: 0.04em;
+}
+
+.routePointAddress {
+  font-size: 0.8rem;
+  color: #f1f5f9;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.mapMetricsRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 0.65rem;
+  margin-top: 2px;
+}
+
+.mapMetricItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.mapMetricLabel {
+  font-size: 0.65rem;
+  color: #94a3b8;
+}
+
+.mapMetricVal {
+  font-size: 0.875rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.mapMetricDivider {
+  width: 1px;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.mapTrafficGreen {
+  font-size: 0.875rem;
+  font-weight: 800;
+  color: #4ade80;
+}
+
+/* Agreed Commercial Rate Banner */
+.agreedRateBanner {
+  background: #f0fdf4;
+  border: 1.5px solid #22c55e;
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.agreedRateLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.agreedRateLabel {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: #15803d;
+  letter-spacing: 0.05em;
+}
+
+.agreedRatePrice {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: #15803d;
+}
+
+.agreedRatePrice small {
+  font-size: 0.75rem;
+  color: #166534;
+  font-weight: 700;
+}
+
+.agreedRateMaterial {
+  font-size: 0.75rem;
+  color: #334155;
+  font-weight: 600;
+}
+
+.agreedRateRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.agreedRateEstLabel {
+  font-size: 0.65rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.agreedRateTotal {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.navigationActionsRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.65rem;
+}
+
+.mapLinkBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  background: #0f172a;
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.65rem 0.75rem;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: background-color 0.15s ease;
+}
+
+.mapLinkBtn:hover {
+  background: #1e293b;
+}
+
+.callCustomerBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #0f172a;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.65rem 0.75rem;
+  border-radius: 10px;
+  text-decoration: none;
+}
+
+.primaryActionCta {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  background: #16a34a;
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 800;
+  padding: 0.8rem 1rem;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 3px 10px rgba(22, 163, 74, 0.3);
+}
+
+.primaryActionCta:hover {
+  background: #15803d;
+  transform: translateY(-1px);
+}
+
+.stageInstructionText {
+  font-size: 0.85rem;
+  color: #475569;
+  line-height: 1.45;
+  margin: 0;
+}
+
+/* OTP Inputs */
+.otpInputGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 1.25rem;
+}
+
+.otpLabel {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.otpLargeInput {
+  width: 180px;
+  text-align: center;
+  font-size: 1.75rem;
+  font-weight: 900;
+  letter-spacing: 0.3em;
+  padding: 0.5rem 0.75rem;
+  border: 2px solid #cbd5e1;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #0f172a;
+  outline: none;
+}
+
+.otpLargeInput:focus {
+  border-color: #fbc21a;
+  box-shadow: 0 0 0 4px rgba(251, 194, 26, 0.25);
+}
+
+.otpHelperText {
+  font-size: 0.72rem;
+  color: #64748b;
+}
+
+/* Bill Preparation Header */
+.billPrepHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.addBillProductBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: #0f172a;
+  color: #fbc21a;
+  border: 1.5px solid #fbc21a;
+  font-size: 0.825rem;
+  font-weight: 800;
+  padding: 0.55rem 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.1);
+}
+
+.addBillProductBtn:hover {
+  background: #1e293b;
+  color: #ffffff;
+  border-color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.billInstructionNotice {
+  background: #f1f5f9;
+  border-left: 3.5px solid #fbc21a;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  font-size: 0.825rem;
+  color: #334155;
+  margin: 0;
+  line-height: 1.45;
+}
+
+/* Universal Top Scrap Search Bar */
+.universalScrapSearchBox {
+  background: #ffffff;
+  border: 1.5px solid #0f172a;
+  border-radius: 14px;
+  padding: 1.15rem 1.25rem;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.scrapSearchHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.scrapSearchHeaderLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.785rem;
+  font-weight: 900;
+  color: #0f172a;
+  letter-spacing: 0.04em;
+}
+
+.scrapSearchHelpText {
+  font-size: 0.72rem;
+  color: #64748b;
+}
+
+.scrapSearchInputWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  background: #f8fafc;
+  border: 2px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 0.65rem 0.85rem;
+  transition: all 0.15s ease;
+}
+
+.scrapSearchInputWrapper:focus-within {
+  border-color: #fbc21a;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(251, 194, 26, 0.25);
+}
+
+.scrapSearchIcon {
+  color: #64748b;
+  flex-shrink: 0;
+}
+
+.scrapSearchInput {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.scrapSearchInput::placeholder {
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.clearSearchQueryBtn {
+  background: #e2e8f0;
+  border: none;
+  color: #475569;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.clearSearchQueryBtn:hover {
+  background: #cbd5e1;
+  color: #0f172a;
+}
+
+/* Category Explorer Container */
+.categoryExplorerContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+/* Category Tabs Track (Market Price Order) */
+.billingCategoryTabsTrack {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: thin;
+}
+
+.billingCategoryTabBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.85rem;
+  background: #f1f5f9;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 0.775rem;
+  font-weight: 800;
+  color: #475569;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.billingCategoryTabBtn:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+  transform: translateY(-1px);
+}
+
+.billingCategoryTabActive {
+  background: #0f172a !important;
+  color: #fbc21a !important;
+  border-color: #0f172a !important;
+  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.15);
+}
+
+.billingCategoryTabIcon {
+  font-size: 1rem;
+}
+
+.billingCategoryTabLabel {
+  font-weight: 800;
+}
+
+.billingCategoryCount {
+  font-size: 0.7rem;
+  opacity: 0.75;
+}
+
+/* Subcategory Explorer Section */
+.subCategoryExplorerSection {
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.subCategoryHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.activeCatBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.775rem;
+  color: #0f172a;
+}
+
+.clickToAddNotice {
+  font-size: 0.7rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+/* Subcategory Cards Grid */
+.subCategoryCardsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 0.65rem;
+}
+
+.subCategoryCard {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 0.75rem 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.03);
+}
+
+.subCategoryCard:hover {
+  border-color: #fbc21a;
+  background: #fffdf5;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(251, 194, 26, 0.18);
+}
+
+.subCategoryCardTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.35rem;
+}
+
+.subCategoryCategoryTag {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: #64748b;
+  background: #f1f5f9;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+}
+
+.subCategoryName {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.25;
+}
+
+.subCategoryPriceBadge {
+  font-size: 0.8rem;
+  font-weight: 900;
+  color: #15803d;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  padding: 0.15rem 0.45rem;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.subCategoryQuality {
+  font-size: 0.685rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.subCategoryCardBottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.25rem;
+  padding-top: 0.35rem;
+  border-top: 1px dashed #f1f5f9;
+}
+
+.marketStandardTag {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+}
+
+.addSubItemBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: #0f172a;
+  color: #fbc21a;
+  border: none;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.addSubItemBtn:hover {
+  background: #1e293b;
+  color: #ffffff;
+  transform: scale(1.05);
+}
+
+/* Live Search Results */
+.searchLiveResultsBox {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  background: #f8fafc;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 0.85rem;
+}
+
+.searchLiveResultsHeader {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.customAddSubCard {
+  background: #f0fdf4;
+  border: 1.5px dashed #86efac;
+  border-radius: 10px;
+  padding: 0.75rem 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.customAddSubCard:hover {
+  background: #dcfce7;
+  transform: translateY(-2px);
+}
+
+.customAddTag {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: #15803d;
+  text-transform: uppercase;
+}
+
+.customAddTitle {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.customAddHint {
+  font-size: 0.685rem;
+  color: #64748b;
+}
+
+/* Bill Items Stack */
+.billItemsStack {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.billItemCard {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+  transition: border-color 0.15s ease;
+}
+
+.billItemCard:hover {
+  border-color: #cbd5e1;
+}
+
+.billItemCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 0.75rem;
+}
+
+.productHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.itemIndexPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #0f172a;
+  background: #f1f5f9;
+  padding: 0.35rem 0.65rem;
+  border-radius: 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.billMaterialTitleInput {
+  flex: 1;
+  min-width: 0;
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 0.55rem 0.85rem;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #0f172a;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.billMaterialTitleInput:focus {
+  border-color: #fbc21a;
+  box-shadow: 0 0 0 3px rgba(251, 194, 26, 0.25);
+}
+
+.deleteLineItemBtn {
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
+  color: #dc2626;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.deleteLineItemBtn:hover {
+  background: #dc2626;
+  color: #ffffff;
+  transform: scale(1.05);
+}
+
+/* Single Calculation Row: Weight | Rate | Amount */
+.singleCalculationRow {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.calcInputsGroup {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.65rem;
+  flex: 2;
+  min-width: 0;
+}
+
+.calcFieldCol {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.calcAmountCol {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.calcFieldLabel {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #475569;
+  white-space: nowrap;
+}
+
+.calcOperator {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: #94a3b8;
+  padding-bottom: 0.55rem;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.calcEqualsDesktop {
+  display: block;
+}
+
+.calcAmountDisplayBox {
+  display: flex;
+  align-items: center;
+  background: #f0fdf4;
+  border: 1.5px solid #86efac;
+  border-radius: 8px;
+  padding: 0.625rem 0.85rem;
+  min-height: 42px;
+  box-sizing: border-box;
+}
+
+.calcCurrencySymbol {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #16a34a;
+  margin-right: 0.25rem;
+}
+
+.calcAmountValue {
+  font-size: 1.05rem;
+  font-weight: 900;
+  color: #15803d;
+}
+
+.unitInputWrapper {
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 8px;
+  min-width: 0;
+  width: 100%;
+  overflow: hidden;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.unitInputWrapper:focus-within {
+  border-color: #fbc21a;
+  box-shadow: 0 0 0 3px rgba(251, 194, 26, 0.25);
+}
+
+.billNumberInput {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 0.65rem 0.45rem;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #0f172a;
+  outline: none;
+  text-align: left;
+}
+
+/* Remove spin buttons so numbers are never cut off */
+.billNumberInput::-webkit-outer-spin-button,
+.billNumberInput::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.billNumberInput[type=number] {
+  -moz-appearance: textfield;
+}
+
+.unitSuffix {
+  padding-right: 0.65rem;
+  padding-left: 0.2rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #64748b;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.currencyPrefix {
+  padding-left: 0.65rem;
+  padding-right: 0.2rem;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #64748b;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.addAnotherProductDashedBtn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: #ffffff;
+  border: 2px dashed #cbd5e1;
+  color: #0f172a;
+  font-size: 0.875rem;
+  font-weight: 800;
+  padding: 0.85rem;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.addAnotherProductDashedBtn:hover {
+  border-color: #fbc21a;
+  background: #fffdf5;
+  color: #d97706;
+}
+
+/* Adjustments Grid */
+.billAdjustmentsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.adjustmentCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.billSelectInput {
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #0f172a;
+  outline: none;
+}
+
+.billSelectInput:focus {
+  border-color: #fbc21a;
+  box-shadow: 0 0 0 3px rgba(251, 194, 26, 0.25);
+}
+
+.fieldHint {
+  font-size: 0.7rem;
+  color: #94a3b8;
+}
+
+/* Live Bill Summary Card */
+.liveBillSummaryCard {
+  background: #0f172a;
+  color: #ffffff;
+  border-radius: 16px;
+  padding: 1.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.2);
+}
+
+.summaryTopRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 0.85rem;
+}
+
+.summaryMetric {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.summaryMetricLabel {
+  font-size: 0.7rem;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.summaryMetricVal {
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: #fbc21a;
+}
+
+.summaryMetricDivider {
+  width: 1px;
+  height: 28px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.summaryBreakdownTable {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 0.75rem;
+}
+
+.summaryLineRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: #cbd5e1;
+}
+
+.deductionRed {
+  color: #f87171;
+  font-weight: 700;
+}
+
+.summaryGrandTotalRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(34, 197, 94, 0.15);
+  border: 1px solid rgba(34, 197, 94, 0.35);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  margin-top: 0.5rem;
+}
+
+.grandTotalTextCol {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.grandTotalLabel {
+  font-size: 0.75rem;
+  font-weight: 900;
+  color: #4ade80;
+  letter-spacing: 0.05em;
+}
+
+.grandTotalSub {
+  font-size: 0.7rem;
+  color: #94a3b8;
+}
+
+.grandTotalAmountHighlight {
+  font-size: 1.65rem;
+  font-weight: 900;
+  color: #4ade80;
+}
+
+/* Stage 4 Invoice Enhancements */
+/* Stage 4 Invoice Enhancements */
+.invoiceSlipCard {
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 14px;
+  padding: 1.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+}
+
+.invoiceSlipHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 0.85rem;
+}
+
+.invoiceShopInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.billNumberTag {
+  font-size: 0.75rem;
+  font-family: monospace;
+  font-weight: 800;
+  color: #475569;
+  background: #f1f5f9;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  width: fit-content;
+}
+
+.invoiceShopTitle {
+  font-size: 1.2rem;
+  font-weight: 900;
+  color: #0f172a;
+  margin: 2px 0 0 0;
+}
+
+.invoiceShopTagline {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #d97706;
+}
+
+.invoiceCustomerSubtitle {
+  font-size: 0.785rem;
+  color: #475569;
+  margin-top: 4px;
+  display: block;
+}
+
+.invoiceCustomerSubtitle strong {
+  color: #0f172a;
+}
+
+.invoiceMetaRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.invoiceDateText {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.invoiceRcmBadge {
+  font-size: 0.65rem;
+  font-weight: 800;
+  background: #dbeafe;
+  color: #1d4ed8;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+/* Desktop Invoice Table */
+.invoiceTableDesktop {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+}
+
+.invoiceRowHeader {
+  display: grid;
+  grid-template-columns: 35px 2fr 1fr 1fr 1.2fr;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #64748b;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 6px;
+}
+
+.invoiceRowData {
+  display: grid;
+  grid-template-columns: 35px 2fr 1fr 1fr 1.2fr;
+  align-items: center;
+  color: #0f172a;
+  padding: 6px 0;
+  border-bottom: 1px solid #f8fafc;
+}
+
+.textRight {
+  text-align: right;
+}
+
+/* Mobile Invoice Cards View (Hidden on Desktop) */
+.invoiceTableMobile {
+  display: none;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.invoiceMobileItemCard {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 0.75rem 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.invoiceMobileItemTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.invoiceMobileItemNameGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-width: 0;
+}
+
+.itemIndexPillSmall {
+  font-size: 0.685rem;
+  font-weight: 800;
+  color: #475569;
+  background: #e2e8f0;
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.invoiceMobileItemName {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #0f172a;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.invoiceMobileItemTotal {
+  font-size: 0.95rem;
+  font-weight: 900;
+  color: #0f172a;
+  flex-shrink: 0;
+}
+
+.invoiceMobileItemDetails {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.invoiceMobileItemDetails strong {
+  color: #0f172a;
+}
+
+.dotSeparator {
+  color: #94a3b8;
+  font-size: 0.75rem;
+}
+
+.invoiceTotalsBlock {
+  border-top: 1px solid #e2e8f0;
+  padding-top: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  font-size: 0.825rem;
+}
+
+.invoiceTotalRow {
+  display: flex;
+  justify-content: space-between;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.invoiceFinalTotalRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 1.05rem;
+  color: #0f172a;
+  border-top: 1.5px dashed #cbd5e1;
+  padding-top: 0.75rem;
+  margin-top: 0.35rem;
+}
+
+.finalTotalGreen {
+  font-size: 1.45rem;
+  font-weight: 900;
+  color: #16a34a;
+}
+
+.invoiceStampFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border-top: 1px dashed #cbd5e1;
+  padding-top: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+.stampLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.stampQr {
+  color: #0f172a;
+  flex-shrink: 0;
+}
+
+.stampTextCol {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.stampTextCol strong {
+  font-size: 0.75rem;
+  color: #0f172a;
+  letter-spacing: 0.03em;
+}
+
+.stampTextCol span {
+  font-size: 0.685rem;
+  color: #64748b;
+}
+
+.stampStatusPill {
+  font-size: 0.72rem;
+  font-weight: 900;
+  background: #dcfce7;
+  color: #15803d;
+  padding: 0.35rem 0.65rem;
+  border-radius: 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.billActionRow {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.85rem;
+}
+
+.editBillBackBtn {
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  color: #334155;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 0.75rem 1.15rem;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.editBillBackBtn:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+}
+
+/* Settled */
+.settledSuccessCard {
+  background: #f0fdf4;
+  border: 1.5px solid #22c55e;
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.65rem;
+}
+
+.settledCheckIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #16a34a;
+  color: #ffffff;
+  font-size: 1.5rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.settledTitle {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #15803d;
+  margin: 0;
+}
+
+.settledSub {
+  font-size: 0.8rem;
+  color: #475569;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.settledSummaryRow {
+  display: flex;
+  gap: 1.5rem;
+  font-size: 0.825rem;
+  background: #ffffff;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #bbf7d0;
+  margin-top: 0.4rem;
+}
+
+.settledAmountGreen {
+  color: #16a34a;
+}
+
+.settledActionsStack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  width: 100%;
+}
+
+.downloadInvoiceBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  background: #0f172a;
+  color: #ffffff;
+  font-size: 0.85rem;
+  font-weight: 800;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+.closeWorkflowBtn {
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+  font-size: 0.825rem;
+  font-weight: 700;
+  padding: 0.65rem 1rem;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 1100px) {
+  .ordersLayoutGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .mainContainer {
+    padding: 0.85rem 1rem 2.5rem 1rem;
+    gap: 1rem;
+  }
+
+  .ordersLayoutGrid {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 100%;
+    gap: 1rem;
+  }
+
+  .mainCol {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .pageHeaderRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.35rem;
+  }
+
+  .pageTitle {
+    font-size: 1.5rem;
+    line-height: 1.15;
+  }
+
+  .pageSubtitle {
+    font-size: 0.825rem;
+    line-height: 1.4;
+  }
+
+  .statsStripGrid {
+    display: none; /* Streamline on mobile for maximum vertical space */
+  }
+
+  .sidebarCol {
+    display: none !important; /* Hide heavy desktop filter sidebar on mobile */
+  }
+
+  .tabsBar {
+    display: none !important; /* Replaced by mobile 3-tab selector */
+  }
+
+  .mobileOrderTopTabs {
+    display: flex;
+    gap: 0.35rem;
+    background: #0f172a;
+    padding: 4px;
+    border-radius: 12px;
+    margin-bottom: 0.85rem;
+    width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .mobileOrderTopTabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .mobileOrderTabBtn {
+    flex: 1;
+    min-width: fit-content;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.6rem 0.45rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .mobileOrderTabBtnActive {
+    background: #fbc21a !important;
+    color: #0f172a !important;
+    box-shadow: 0 2px 8px rgba(251, 194, 26, 0.35);
+  }
+
+  .cardBodyGrid,
+  .orderBodyGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .largeImgFrame {
+    height: 220px !important;
+    min-height: 220px !important;
+    width: 100% !important;
+    border-radius: 14px !important;
+  }
+
+  .statusActionCol {
+    align-items: stretch;
+  }
+
+  .productHeaderLeft {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.45rem;
+  }
+
+  .singleCalculationRow {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .calcInputsGroup {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .calcInputsGroup .calcFieldCol {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .calcInputsGroup .calcOperator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15rem;
+    font-weight: 900;
+    color: #94a3b8;
+    padding-bottom: 0.55rem;
+    flex-shrink: 0;
+  }
+
+  .calcEqualsDesktop {
+    display: none;
+  }
+
+  .calcAmountCol {
+    width: 100%;
+  }
+
+  .calcAmountDisplayBox {
+    width: 100%;
+    justify-content: flex-start;
+    padding: 0.65rem 0.85rem;
+  }
+
+  .billAdjustmentsGrid {
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+  }
+
+  .adjustmentCard {
+    padding: 0.85rem 1rem;
+  }
+
+  .billActionRow {
+    grid-template-columns: 1fr;
+    gap: 0.65rem;
+  }
+
+  .invoiceTableDesktop {
+    display: none !important;
+  }
+
+  .invoiceTableMobile {
+    display: flex !important;
+  }
+
+  .invoiceSlipCard {
+    padding: 1rem;
+    gap: 0.85rem;
+  }
+
+  .invoiceSlipHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.65rem;
+  }
+
+  .invoiceMetaRight {
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    border-top: 1px dashed #e2e8f0;
+    padding-top: 0.5rem;
+  }
+
+  .invoiceStampFooter {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .subCategoryCardsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Toast Notification Banner (Ultra-Premium Refined Glassmorphic Pill) */
+.toastBanner {
+  position: fixed;
+  top: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 9999px;
+  padding: 0.75rem 1.6rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  box-shadow: 0 20px 40px -8px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  z-index: 99999999;
+  animation: toastBannerSlide 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+  max-width: 92vw;
+  width: max-content;
+  text-align: center;
+}
+
+.toastText {
+  color: #f8fafc;
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.toastSuccess {
+  border-color: rgba(34, 197, 94, 0.4);
+  box-shadow: 0 20px 40px -8px rgba(0, 0, 0, 0.5), 0 0 18px rgba(34, 197, 94, 0.2);
+}
+
+.toastIconSuccess {
+  color: #22c55e;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+}
+
+.toastWarning {
+  border-color: rgba(245, 158, 11, 0.45);
+  box-shadow: 0 20px 40px -8px rgba(0, 0, 0, 0.5), 0 0 18px rgba(245, 158, 11, 0.25);
+}
+
+.toastIconWarning {
+  color: #fbbf24;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+}
+
+.toastDanger {
+  border-color: rgba(239, 68, 68, 0.4);
+  box-shadow: 0 20px 40px -8px rgba(0, 0, 0, 0.5), 0 0 18px rgba(239, 68, 68, 0.2);
+}
+
+.toastIconDanger {
+  color: #f87171;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+}
+
+@keyframes toastBannerSlide {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -24px) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+}
+
+/* Bill Instruction Notification Banner (Yellow Background) */
+.billInstructionNotice {
+  background: #fffbeb;
+  border: 1.5px solid #fde68a;
+  border-left: 4px solid #f59e0b;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  font-size: 0.825rem;
+  font-weight: 700;
+  color: #92400e;
+  line-height: 1.45;
+  margin: 0;
+}
+
+
+
+

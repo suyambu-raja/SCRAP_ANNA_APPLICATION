@@ -1,0 +1,1267 @@
+/* ==========================================================================
+   HOUSEHOLD PRODUCT DETAIL & VOICE COMMUNICATION - BILLSCRAP
+   Redesigned, compact marketplace product detail experience
+   Clean White Cards, Warm Yellow Accents & Aligned Information Hierarchy
+   ========================================================================== */
+
+.pageWrapper {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 1.25rem 1.25rem 1.25rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   1. BACK NAVIGATION
+   -------------------------------------------------------------------------- */
+.backNavRow {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #1e293b;
+  text-decoration: none;
+  padding: 0.42rem 0.85rem;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.backBtn:hover {
+  color: #0f172a;
+  border-color: #F8BF1D;
+  background: #fffdf5;
+  transform: translateX(-2px);
+}
+
+.detailCartBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #1e293b;
+  padding: 0.42rem 0.85rem;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.detailCartBtn:hover {
+  background: #fffdf5;
+  border-color: #F8BF1D;
+  color: #0f172a;
+}
+
+.detailCartBadge {
+  background: #F8BF1D;
+  color: #0f172a;
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 0.1rem 0.42rem;
+  border-radius: 999px;
+}
+
+/* --------------------------------------------------------------------------
+   2. MAIN LAYOUT (DESKTOP 2-COLUMN, MOBILE COMPACT STACK)
+   -------------------------------------------------------------------------- */
+.detailGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.15rem;
+  align-items: start;
+  width: 100%;
+}
+
+/* Columns */
+.productMainCol,
+.interactionCol {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  width: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   3. PRODUCT IMAGE SECTION
+   -------------------------------------------------------------------------- */
+.imageGalleryCard {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
+.mainImageWrap {
+  position: relative;
+  width: 100%;
+  height: 320px;
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.mainProductImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.imageGalleryCard:hover .mainProductImage {
+  transform: scale(1.02);
+}
+
+.fallbackImagePlaceholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: #64748b;
+  height: 100%;
+  width: 100%;
+  font-size: 0.825rem;
+  font-weight: 600;
+}
+
+.imageConditionBadge {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  background: #0f172a;
+  color: #ffffff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.22rem 0.6rem;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  z-index: 2;
+}
+
+.imageNegotiableBadge {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(4px);
+  border: 1px solid #FFDE7A;
+  color: #1E3A20;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.22rem 0.6rem;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  z-index: 2;
+}
+
+/* --------------------------------------------------------------------------
+   4. UNIFIED PRODUCT SUMMARY & DESCRIPTION CARD
+   -------------------------------------------------------------------------- */
+.productSummaryCard {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
+.categoryLabel {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.productTitle {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.priceRow {
+  display: flex;
+  align-items: baseline;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.priceValue {
+  font-size: 1.65rem;
+  font-weight: 900;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+}
+
+.priceStatus {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #166534;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  padding: 0.15rem 0.5rem;
+  border-radius: 6px;
+}
+
+/* Compact Metadata Row (Condition · Location · Distance) */
+.compactMetaRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  font-size: 0.78rem;
+  color: #64748b;
+}
+
+.metaConditionPill {
+  font-weight: 800;
+  color: #0f172a;
+  background: #f1f5f9;
+  padding: 0.15rem 0.5rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+}
+
+.metaDot {
+  color: #cbd5e1;
+  font-weight: 900;
+}
+
+.metaLocationText {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.metaPinIcon {
+  color: #f59e0b;
+  flex-shrink: 0;
+}
+
+.metaDistanceText {
+  font-weight: 600;
+  color: #64748b;
+}
+
+.summaryDivider {
+  height: 1px;
+  background: #f1f5f9;
+  margin: 0.1rem 0;
+}
+
+/* --------------------------------------------------------------------------
+   4B. MERCHANT VOICE DESCRIPTION (REPLACES TEXT CONTENT)
+   -------------------------------------------------------------------------- */
+.merchantVoiceSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.merchantVoiceHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.descTitle {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 0;
+}
+
+.merchantVoiceBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: #fef3c7;
+  color: #92400e;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 9999px;
+  border: 1px solid #fde68a;
+}
+
+.merchantMicBadgeIcon {
+  color: #d97706;
+}
+
+.merchantVoicePlayerCard {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 0.65rem 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  transition: all 0.2s ease;
+}
+
+.merchantVoicePlayerCard:hover {
+  border-color: #cbd5e1;
+  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+}
+
+.merchantPlayBtn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #f8bf1d;
+  color: #0f172a;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  box-shadow: 0 2px 5px rgba(248, 191, 29, 0.35);
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+.merchantPlayBtn:hover {
+  transform: scale(1.05);
+  background: #e5ad10;
+}
+
+.merchantPlayBtn:active {
+  transform: scale(0.95);
+}
+
+.merchantWaveformWrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 24px;
+  overflow: hidden;
+}
+
+.merchantWaveBar {
+  width: 3px;
+  min-height: 4px;
+  background: #cbd5e1;
+  border-radius: 2px;
+  transition: height 0.15s ease, background-color 0.15s ease;
+}
+
+.merchantWaveActive {
+  background: #94a3b8;
+  animation: pulseBar 0.9s infinite ease-in-out alternate;
+}
+
+.merchantWavePlayed {
+  background: #f59e0b;
+}
+
+@keyframes pulseBar {
+  0% {
+    transform: scaleY(0.6);
+  }
+  100% {
+    transform: scaleY(1.3);
+  }
+}
+
+.merchantVoiceDuration {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #475569;
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+.merchantVoiceMetaRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.74rem;
+  color: #64748b;
+  flex-wrap: wrap;
+}
+
+.merchantVoiceAuthor strong {
+  color: #1e293b;
+}
+
+.audioPlayingBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #16a34a;
+}
+
+.greenAudioDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #16a34a;
+  animation: greenPulse 1.2s infinite;
+}
+
+@keyframes greenPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(1.3);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   5. SELLER INFORMATION CARD (COMPACT & NO RATINGS)
+   -------------------------------------------------------------------------- */
+.sellerCard {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
+.sellerCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.sellerSectionTitle {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0;
+}
+
+.verifiedBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #166534;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  padding: 0.18rem 0.55rem;
+  border-radius: 20px;
+}
+
+.sellerIdentityRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.sellerAvatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: #F8BF1D;
+  color: #15171B;
+  font-size: 1.05rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(248, 191, 29, 0.2);
+}
+
+.sellerNames {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.sellerName {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sellerBusinessName {
+  font-size: 0.78rem;
+  color: #64748b;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sellerAreaRow {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.74rem;
+  color: #94a3b8;
+  font-weight: 600;
+  margin-top: 0.1rem;
+}
+
+.sellerPinIcon {
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+
+/* Factual metric - strictly NO stars or ratings */
+.sellerFactualMetric {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 0.45rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #334155;
+}
+
+.metricPackageIcon {
+  color: #64748b;
+  flex-shrink: 0;
+}
+
+.sellerActionsRow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  width: 100%;
+}
+
+.cartActionButtonsWrap {
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.callSellerBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  flex: 1;
+  padding: 0.7rem 0.85rem;
+  background: #F8BF1D;
+  color: #0f172a;
+  border-radius: 10px;
+  font-size: 0.825rem;
+  font-weight: 800;
+  text-decoration: none;
+  border: 1px solid #e0ab16;
+  box-shadow: 0 2px 6px rgba(248, 191, 29, 0.2);
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.callSellerBtn:hover {
+  background: #eab308;
+  transform: translateY(-1px);
+}
+
+.addToCartBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  flex: 1.1;
+  padding: 0.7rem 0.85rem;
+  background: #0f172a;
+  color: #ffffff;
+  border-radius: 10px;
+  font-size: 0.825rem;
+  font-weight: 800;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.15);
+  white-space: nowrap;
+}
+
+.addToCartBtn:hover {
+  background: #1e293b;
+  transform: translateY(-1px);
+}
+
+.inCartConfirmedBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  background: #f0fdf4;
+  color: #15803d;
+  border: 1.5px solid #86efac;
+  border-radius: 10px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.inCartConfirmedBtn:hover {
+  background: #dcfce7;
+}
+
+.inCartRejectedBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1.5px solid #fca5a5;
+  border-radius: 10px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.inCartRejectedBtn:hover {
+  background: #fee2e2;
+}
+
+.inCartPendingBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  background: #fffbeb;
+  color: #b45309;
+  border: 1.5px solid #fde68a;
+  border-radius: 10px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.inCartPendingBtn:hover {
+  background: #fef3c7;
+}
+
+.yardVisitTip {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.45rem;
+  font-size: 0.72rem;
+  color: #234A28;
+  background: linear-gradient(180deg, #FFF8DC 0%, #FFEEBA 100%);
+  border: 1.5px solid #FFDE7A;
+  border-radius: 10px;
+  padding: 0.6rem 0.85rem;
+  margin: 0;
+  line-height: 1.35;
+}
+
+.yardTipIcon {
+  color: #1E3A20;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+/* --------------------------------------------------------------------------
+   6. VOICE MESSAGES SECTION (COMPACT & VOICE-ONLY)
+   -------------------------------------------------------------------------- */
+.voiceSectionCard {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
+.voiceHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.voiceHeadingRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.voiceTitle {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.voiceMicIcon {
+  color: #dc2626;
+  flex-shrink: 0;
+}
+
+.voiceCountBadge {
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #1E3A20;
+  background: linear-gradient(180deg, #FFF8DC 0%, #FFEEBA 100%);
+  border: 1px solid #FFDE7A;
+  padding: 0.15rem 0.5rem;
+  border-radius: 20px;
+}
+
+.voiceContextText {
+  font-size: 0.78rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Conversation Thread History */
+.conversationHistory {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  max-height: 180px;
+  overflow-y: auto;
+  padding-right: 0.2rem;
+}
+
+.conversationHistory::-webkit-scrollbar {
+  width: 4px;
+}
+
+.conversationHistory::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.messageBubble {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: 10px;
+  max-width: 90%;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.bubbleHousehold {
+  align-self: flex-end;
+  background: linear-gradient(180deg, #FFF8DC 0%, #FFEEBA 100%);
+  border: 1px solid #FFDE7A;
+}
+
+.bubbleMerchant {
+  align-self: flex-start;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+
+.bubbleHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.72rem;
+}
+
+.bubbleSenderName {
+  font-weight: 700;
+  color: #1E3A20;
+}
+
+.bubbleMerchant .bubbleSenderName {
+  color: #0f172a;
+}
+
+.bubbleTime {
+  color: #94a3b8;
+  font-size: 0.68rem;
+}
+
+.bubbleHousehold .bubbleTime {
+  color: rgba(30, 58, 32, 0.6);
+}
+
+/* Audio Player inside Bubble */
+.audioPlayerRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.playToggleBtn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #0f172a;
+  color: #ffffff;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: transform 0.15s ease;
+}
+
+.bubbleHousehold .playToggleBtn {
+  background: #1E3A20;
+}
+
+.playToggleBtn:hover {
+  transform: scale(1.05);
+}
+
+.audioWaveformWrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.12rem;
+  height: 16px;
+}
+
+.waveBar {
+  flex: 1;
+  background: #cbd5e1;
+  border-radius: 2px;
+  min-height: 4px;
+  transition: height 0.15s ease, background 0.15s ease;
+}
+
+.bubbleHousehold .waveBar {
+  background: rgba(30, 58, 32, 0.25);
+}
+
+.waveBarActive {
+  background: #F8BF1D;
+}
+
+.bubbleHousehold .waveBarActive {
+  background: #1E3A20;
+}
+
+.audioDurationText {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #64748b;
+  min-width: 28px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.bubbleHousehold .audioDurationText {
+  color: #1E3A20;
+}
+
+/* Voice Recorder Widget */
+.recorderWidget {
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+/* State 1: IDLE */
+.idleState {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.recordPromptText {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #475569;
+  line-height: 1.35;
+}
+
+.primaryMicButton {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #dc2626;
+  color: #ffffff;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.28);
+  flex-shrink: 0;
+  transition: transform 0.15s ease;
+}
+
+.primaryMicButton:hover {
+  background: #b91c1c;
+  transform: scale(1.05);
+}
+
+/* State 2: RECORDING */
+.recordingState {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.recordingIndicatorGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.pulseDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #dc2626;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2);
+  animation: pulseDot 1s infinite;
+}
+
+@keyframes pulseDot {
+  0% { transform: scale(0.9); opacity: 0.8; }
+  50% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(0.9); opacity: 0.8; }
+}
+
+.recordingTimer {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #dc2626;
+  font-variant-numeric: tabular-nums;
+}
+
+.recordingLabel {
+  font-size: 0.75rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.recorderActions {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.cancelRecordBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem 0.75rem;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 7px;
+  color: #64748b;
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.cancelRecordBtn:hover {
+  background: #fee2e2;
+  border-color: #fca5a5;
+  color: #dc2626;
+}
+
+.stopRecordBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  padding: 0.4rem 0.85rem;
+  background: #dc2626;
+  color: #ffffff;
+  border: none;
+  border-radius: 7px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(220, 38, 38, 0.25);
+  transition: background 0.15s ease;
+}
+
+.stopRecordBtn:hover {
+  background: #b91c1c;
+}
+
+/* State 3: PREVIEW */
+.previewState {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.previewHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #334155;
+}
+
+.previewPlayerBox {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+}
+
+.previewActionsRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.deletePreviewBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.45rem 0.75rem;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 7px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.deletePreviewBtn:hover {
+  background: #fee2e2;
+  border-color: #fca5a5;
+  color: #dc2626;
+}
+
+.sendVoiceBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 1rem;
+  background: #0f172a;
+  color: #ffffff;
+  border: none;
+  border-radius: 7px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.sendVoiceBtn:hover {
+  background: #1e293b;
+}
+
+.uploadingState {
+  text-align: center;
+  padding: 0.65rem;
+  color: #64748b;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.disabledVoiceNotice {
+  text-align: center;
+  padding: 0.75rem;
+  color: #94a3b8;
+  font-size: 0.8rem;
+}
+
+/* --------------------------------------------------------------------------
+   7. UNAVAILABLE PRODUCT STATE
+   -------------------------------------------------------------------------- */
+.unavailableBanner {
+  background: #fee2e2;
+  border: 1.5px solid #fca5a5;
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #991b1b;
+}
+
+.unavailableTextGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.unavailableTitle {
+  font-size: 0.9rem;
+  font-weight: 800;
+  margin: 0;
+  color: #991b1b;
+}
+
+.unavailableDesc {
+  font-size: 0.78rem;
+  margin: 0;
+  line-height: 1.4;
+  color: #b91c1c;
+}
+
+/* ==========================================================================
+   MOBILE & TABLET RESPONSIVE ALIGNMENT
+   ========================================================================== */
+@media (max-width: 860px) {
+  .pageWrapper {
+    padding: 0.85rem 0.85rem 1rem 0.85rem;
+    gap: 0.85rem;
+  }
+
+  .detailGrid {
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+  }
+
+  .mainImageWrap {
+    height: 240px;
+  }
+
+  .productTitle {
+    font-size: 1.15rem;
+  }
+
+  .priceValue {
+    font-size: 1.45rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .pageWrapper {
+    padding: 0.75rem 0.75rem 1rem 0.75rem;
+    gap: 0.75rem;
+  }
+
+  .mainImageWrap {
+    height: 210px;
+  }
+
+  .productSummaryCard,
+  .sellerCard,
+  .voiceSectionCard {
+    padding: 1rem;
+    border-radius: 14px;
+    gap: 0.7rem;
+  }
+
+  .productTitle {
+    font-size: 1.1rem;
+  }
+
+  .priceValue {
+    font-size: 1.35rem;
+  }
+
+  .previewActionsRow {
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .deletePreviewBtn,
+  .sendVoiceBtn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .recordingState {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.55rem;
+  }
+
+  .recorderActions {
+    justify-content: flex-end;
+  }
+}

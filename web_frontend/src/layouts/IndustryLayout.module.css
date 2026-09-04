@@ -1,0 +1,51 @@
+/* ==========================================================================
+   INDUSTRY LAYOUT ROOT STYLING
+   ========================================================================== */
+
+.industryLayoutRoot {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  background-color: #f8fafc;
+  font-family: var(--font-family, 'Inter', -apple-system, BlinkMacSystemFont, sans-serif);
+}
+
+.mainWrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  min-height: 100vh;
+  transition: margin-left 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  padding-top: 70px;
+  box-sizing: border-box;
+}
+
+.mainWrapperExpanded {
+  margin-left: 250px;
+}
+
+.mainWrapperCollapsed {
+  margin-left: 74px;
+}
+
+.contentArea {
+  flex: 1;
+  width: 100%;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 768px) {
+  .mainWrapperExpanded,
+  .mainWrapperCollapsed,
+  .mainWrapper {
+    margin-left: 0 !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+    padding-top: 60px !important;
+    padding-bottom: calc(78px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+}

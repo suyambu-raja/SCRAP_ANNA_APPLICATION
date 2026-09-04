@@ -1,0 +1,1369 @@
+/* ==========================================================================
+   HOUSEHOLD ORDER HISTORY STYLING
+   Compact Order List -> Full Order Details Page
+   ========================================================================== */
+
+.pageContainer {
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 2.5rem 1.25rem;
+  box-sizing: border-box;
+  font-family: inherit;
+  color: #0f172a;
+}
+
+/* ==========================================================================
+   VIEW 2: COMPACT ORDER HISTORY LIST
+   ========================================================================== */
+
+.listViewContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+/* 1. Header Block */
+.headerBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.headerTitles {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.mainTitle {
+  font-size: 1.65rem;
+  font-weight: 900;
+  color: #0f172a;
+  margin: 0;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.mainSubtitle {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin: 0;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+/* 2. Controls Bar (Filter Pills & Compact Search) */
+.controlsBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.filterPillsRow {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.filterPillBtn {
+  height: 36px;
+  padding: 0 1rem;
+  font-size: 0.8rem;
+  font-weight: 750;
+  border-radius: 9999px;
+  border: 1.5px solid #e2e8f0;
+  background: #ffffff;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.filterPillBtn:hover {
+  border-color: #cbd5e1;
+  color: #0f172a;
+}
+
+.filterPillBtn:active {
+  transform: scale(0.98);
+}
+
+.filterPillActive {
+  background: #0f172a !important;
+  border-color: #0f172a !important;
+  color: #f8bf1d !important;
+  font-weight: 900 !important;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.15);
+}
+
+.searchBoxWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 36px;
+  flex: 1;
+  min-width: 200px;
+  max-width: 340px;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 0.75rem;
+  color: #94a3b8;
+  pointer-events: none;
+}
+
+.searchInput {
+  width: 100%;
+  height: 100%;
+  padding: 0 2rem 0 2.2rem;
+  font-size: 0.825rem;
+  font-weight: 600;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #0f172a;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.searchInput::placeholder {
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.searchInput:focus {
+  border-color: #f8bf1d;
+  box-shadow: 0 0 0 3px rgba(248, 191, 29, 0.15);
+}
+
+.clearSearchBtn {
+  position: absolute;
+  right: 0.65rem;
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  cursor: pointer;
+}
+
+/* 3. Compact Order Cards List */
+.orderCardsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.compactOrderCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 0.85rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-sizing: border-box;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  text-decoration: none;
+  color: inherit;
+}
+
+.compactOrderCard:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+  transform: translateY(-1px);
+}
+
+.compactOrderCard:active {
+  transform: scale(0.995);
+  border-color: #f8bf1d;
+}
+
+/* Top Row: Status badge & Date / Order ID */
+.cardTopRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.cardStatusGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.statusBadgeCompleted {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: #ecfdf5;
+  color: #059669;
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 0.2rem 0.55rem;
+  border-radius: 9999px;
+  border: 1px solid #a7f3d0;
+  letter-spacing: 0.01em;
+}
+
+.statusBadgeCancelled {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: #fef2f2;
+  color: #dc2626;
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 0.2rem 0.55rem;
+  border-radius: 9999px;
+  border: 1px solid #fecaca;
+  letter-spacing: 0.01em;
+}
+
+.cardMetaRight {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cardDate {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: #64748b;
+  white-space: nowrap;
+}
+
+.cardOrderId {
+  font-size: 0.72rem;
+  font-weight: 750;
+  color: #475569;
+  background: #f1f5f9;
+  padding: 0.15rem 0.45rem;
+  border-radius: 6px;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+/* Middle Row: Single thumbnail + Product summary + Total weight */
+.cardMiddleRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.cardThumbImg {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  object-fit: cover;
+  border: 1px solid #f1f5f9;
+  background: #f8fafc;
+  flex-shrink: 0;
+}
+
+.cardProductInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.cardProductTitle {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cardWeightText {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #64748b;
+}
+
+/* Bottom Row: Payout & subtle chevron */
+.cardBottomRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0.45rem;
+  border-top: 1px solid #f8fafc;
+}
+
+.cardPayoutBlock {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+
+.cardPayoutLabel {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.cardPayoutValue {
+  font-size: 1.05rem;
+  font-weight: 900;
+  color: #0f172a;
+  line-height: 1;
+}
+
+.cardActionBlock {
+  display: flex;
+  align-items: center;
+  color: #94a3b8;
+}
+
+.cardChevronIcon {
+  transition: transform 0.15s ease, color 0.15s ease;
+}
+
+.compactOrderCard:hover .cardChevronIcon {
+  transform: translateX(3px);
+  color: #0f172a;
+}
+
+/* Empty State */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 3rem 1.5rem;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1.5px dashed #cbd5e1;
+  gap: 0.65rem;
+}
+
+.emptyIcon {
+  color: #94a3b8;
+}
+
+.emptyTitle {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+.emptySubtitle {
+  font-size: 0.825rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.resetFilterBtn {
+  margin-top: 0.5rem;
+  background: #0f172a;
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 800;
+  padding: 0.5rem 1.15rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.resetFilterBtn:hover {
+  background: #1e293b;
+}
+
+/* ==========================================================================
+   VIEW 1: FULL ORDER DETAILS PAGE (WHEN AN ORDER IS SELECTED)
+   ========================================================================== */
+
+.detailsViewContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+/* Top Navigation Bar */
+.detailsTopBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.backToListBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: transparent;
+  border: none;
+  color: #0f172a;
+  font-size: 0.875rem;
+  font-weight: 800;
+  cursor: pointer;
+  padding: 0.4rem 0.2rem;
+  border-radius: 6px;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.backToListBtn:hover {
+  color: #f59e0b;
+  transform: translateX(-2px);
+}
+
+.printReceiptBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #f8bf1d;
+  color: #0f172a;
+  font-size: 0.8rem;
+  font-weight: 900;
+  padding: 0.45rem 0.85rem;
+  border-radius: 8px;
+  border: 1px solid #e5a700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.printReceiptBtn:hover {
+  background: #f5b300;
+}
+
+/* 1. Header Card */
+.detailsHeaderCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.03);
+}
+
+.detailsHeaderMain {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.detailsHeaderLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.detailsTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.detailsOrderNumber {
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: #0f172a;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.detailsMetaSubrow {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.8rem;
+  color: #64748b;
+  font-weight: 600;
+  flex-wrap: wrap;
+}
+
+.detailsMetaIcon {
+  color: #94a3b8;
+}
+
+.detailsDotDivider {
+  color: #cbd5e1;
+}
+
+.billSlipTag {
+  font-family: monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #475569;
+  background: #f1f5f9;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+}
+
+.statusBannerGreen {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #065f46;
+  padding: 0.65rem 0.85rem;
+  border-radius: 10px;
+  font-size: 0.825rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.statusBannerRed {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+  padding: 0.65rem 0.85rem;
+  border-radius: 10px;
+  font-size: 0.825rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.statusBannerIcon {
+  flex-shrink: 0;
+}
+
+/* 2. Section Card (Used for Materials & Payout) */
+.detailsSectionCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.03);
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.sectionHeaderIconWrap {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.sectionTitle {
+  font-size: 1.05rem;
+  font-weight: 850;
+  color: #0f172a;
+  margin: 0;
+}
+
+.sectionSubtitle {
+  font-size: 0.78rem;
+  color: #64748b;
+  margin: 0.15rem 0 0;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   VIEW BILL PROMPT CARD (ORDER DETAILS)
+   ========================================================================== */
+
+.billPromptCard {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 1.25rem 1.35rem;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  box-sizing: border-box;
+}
+
+.billPromptContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.billPromptLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.95rem;
+  min-width: 0;
+}
+
+.billPromptIconWrap {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(248, 191, 29, 0.15);
+  color: #b45309;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.billPromptIcon {
+  color: #b45309;
+}
+
+.billPromptTexts {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.billPromptBadge {
+  font-size: 0.65rem;
+  font-weight: 850;
+  color: #b45309;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.billPromptTitle {
+  font-size: 1.05rem;
+  font-weight: 850;
+  color: #0f172a;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.billPromptMeta {
+  font-size: 0.8rem;
+  color: #64748b;
+  margin: 0;
+  font-weight: 600;
+}
+
+.billPromptRight {
+  display: flex;
+  align-items: center;
+  gap: 1.35rem;
+  flex-wrap: wrap;
+}
+
+.billPromptAmountBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.15rem;
+}
+
+.billPromptAmountLabel {
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.billPromptAmountValue {
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: #059669;
+  line-height: 1.1;
+}
+
+.billPromptPayMethod {
+  font-size: 0.72rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.viewBillCtaBtn {
+  background: #0f172a;
+  color: #f8bf1d;
+  border: none;
+  border-radius: 10px;
+  padding: 0.65rem 1.15rem;
+  font-size: 0.825rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.12);
+  white-space: nowrap;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.viewBillCtaBtn:hover {
+  background: #1e293b;
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 5px 14px rgba(15, 23, 42, 0.18);
+}
+
+.viewBillCtaBtn:active {
+  transform: scale(0.98);
+}
+
+.billPromptTrustRow {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: #f8fafc;
+  border-top: 1px solid #f1f5f9;
+  margin-top: 0.25rem;
+  padding-top: 0.65rem;
+  font-size: 0.76rem;
+  color: #15803d;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.billPromptTrustIcon {
+  flex-shrink: 0;
+  color: #16a34a;
+}
+
+/* ==========================================================================
+   SEPARATE BILL & PAYMENT RECEIPT MODAL (CLASSIC DESIGN)
+   ========================================================================== */
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(4px);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  box-sizing: border-box;
+  overscroll-behavior: contain;
+  touch-action: none;
+}
+
+.modalContent {
+  background: #ffffff;
+  width: 100%;
+  max-width: 540px;
+  max-height: calc(100dvh - 2.5rem);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  margin: auto;
+  position: relative;
+  border: 1px solid #e2e8f0;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.15rem 1.35rem;
+  border-bottom: 1px solid #f1f5f9;
+  flex-shrink: 0;
+  background: #ffffff;
+}
+
+.modalTitleGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.modalOrderBadge {
+  font-size: 0.72rem;
+  font-weight: 850;
+  color: #d97706;
+  letter-spacing: 0.02em;
+}
+
+.modalTitle {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #0f172a;
+  margin: 0;
+}
+
+.modalCloseBtn {
+  background: #f1f5f9;
+  border: none;
+  color: #64748b;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+
+.modalCloseBtn:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.modalBody {
+  padding: 1.15rem 1.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+  flex: 1 1 auto;
+}
+
+.modalSuccessBanner {
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #065f46;
+  font-size: 0.775rem;
+  font-weight: 600;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.modalCancelledBanner {
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
+  color: #991b1b;
+  font-size: 0.775rem;
+  font-weight: 600;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.bannerIconGreen {
+  color: #059669;
+  flex-shrink: 0;
+}
+
+.bannerIconRed {
+  color: #dc2626;
+  flex-shrink: 0;
+}
+
+.modalMetaGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.85rem;
+  background: #f8fafc;
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  border: 1px solid #f1f5f9;
+}
+
+.metaLabel {
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.metaValue {
+  color: #0f172a;
+  font-weight: 750;
+  margin-top: 0.15rem;
+  display: block;
+  font-size: 0.8rem;
+  line-height: 1.3;
+}
+
+.itemsTableWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.breakdownHeadingRow {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.scaleIconWrap {
+  color: #64748b;
+  display: flex;
+  align-items: center;
+}
+
+.breakdownHeading {
+  font-size: 0.825rem;
+  font-weight: 850;
+  color: #0f172a;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.breakdownSub {
+  font-size: 0.75rem;
+  color: #64748b;
+  font-weight: 600;
+  margin-left: auto;
+}
+
+.tableResponsiveWrapper {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+.receiptTable {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+
+.receiptTable th {
+  text-align: left;
+  padding: 0.5rem 0.25rem;
+  color: #64748b;
+  font-weight: 800;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  border-bottom: 1.5px solid #e2e8f0;
+  box-sizing: border-box;
+}
+
+.receiptTable td {
+  padding: 0.65rem 0.25rem;
+  border-bottom: 1px solid #f1f5f9;
+  color: #0f172a;
+  vertical-align: middle;
+  box-sizing: border-box;
+}
+
+.materialCell {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding-right: 0.25rem;
+}
+
+.modalItemNameMobile {
+  display: block;
+  font-weight: 750;
+  color: #0f172a;
+  font-size: 0.82rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.modalItemNameDesktop {
+  display: none;
+  font-weight: 750;
+  color: #0f172a;
+  font-size: 0.82rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (min-width: 640px) {
+  .modalItemNameMobile {
+    display: none;
+  }
+  .modalItemNameDesktop {
+    display: block;
+  }
+}
+
+.modalWeightCol {
+  font-weight: 700;
+  color: #334155;
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+
+.modalRateCol {
+  color: #64748b;
+  font-weight: 600;
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+
+.modalSubtotalCol {
+  font-weight: 850;
+  color: #059669;
+  text-align: right;
+  font-size: 0.825rem;
+  white-space: nowrap;
+}
+
+.modalTotalBox {
+  background: #0f172a;
+  color: #ffffff;
+  border-radius: 12px;
+  padding: 0.95rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.totalBoxLabel {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 850;
+  color: #f8bf1d;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.totalBoxSubtext {
+  display: block;
+  font-size: 0.7rem;
+  color: #94a3b8;
+  font-weight: 500;
+  margin-top: 0.1rem;
+}
+
+.totalBoxAmount {
+  font-size: 1.45rem;
+  font-weight: 900;
+  color: #f8bf1d;
+}
+
+.modalScaleTrust {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.75rem;
+  color: #15803d;
+  font-weight: 600;
+  background: #f0fdf4;
+  padding: 0.6rem 0.85rem;
+  border-radius: 8px;
+  border: 1px solid #dcfce7;
+}
+
+.modalTrustIcon {
+  color: #16a34a;
+  flex-shrink: 0;
+}
+
+.modalFooter {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 0.85rem 1.35rem;
+  border-top: 1px solid #f1f5f9;
+  background: #ffffff;
+  flex-shrink: 0;
+}
+
+.printReceiptBtnModal {
+  background: #0f172a;
+  color: #f8bf1d;
+  border: none;
+  border-radius: 9px;
+  padding: 0.55rem 1.15rem;
+  font-size: 0.8rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.printReceiptBtnModal:hover {
+  background: #1e293b;
+  color: #ffffff;
+}
+
+.closeBtnModal {
+  background: #f1f5f9;
+  color: #475569;
+  border: none;
+  border-radius: 9px;
+  padding: 0.55rem 1.15rem;
+  font-size: 0.8rem;
+  font-weight: 750;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.closeBtnModal:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+/* 4. Meta Cards (Executive & Location) */
+.metaCardsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.metaCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 1rem 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.03);
+}
+
+.metaCardHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #64748b;
+}
+
+.metaCardIcon {
+  color: #94a3b8;
+}
+
+.metaCardHeading {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #475569;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.metaCardBody {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.metaPrimaryText {
+  font-size: 0.88rem;
+  font-weight: 750;
+  color: #0f172a;
+  margin: 0;
+  line-height: 1.35;
+}
+
+.metaSubText {
+  font-size: 0.78rem;
+  color: #64748b;
+  margin: 0;
+  font-weight: 600;
+}
+
+/* 5. Help Strip */
+.detailsHelpStrip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fffdf2;
+  border: 1px solid #ffde7a;
+  padding: 0.85rem 1.15rem;
+  border-radius: 12px;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.helpStripLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.825rem;
+  font-weight: 600;
+  color: #1e3a20;
+}
+
+.helpStripIcon {
+  color: #b45309;
+  flex-shrink: 0;
+}
+
+.helpStripBtn {
+  background: #0f172a;
+  color: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 800;
+  padding: 0.45rem 0.85rem;
+  border-radius: 8px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.helpStripBtn:hover {
+  background: #1e293b;
+  color: #f8bf1d;
+}
+
+/* ==========================================================================
+   RESPONSIVE ADJUSTMENTS (MOBILE-FIRST)
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  .pageContainer {
+    padding: 1rem 1rem 2rem 1rem;
+    max-width: 100%;
+  }
+
+  .controlsBar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.65rem;
+  }
+
+  .filterPillsRow {
+    width: 100%;
+  }
+
+  .filterPillBtn {
+    flex: 1;
+    text-align: center;
+    padding: 0 0.5rem;
+  }
+
+  .searchBoxWrap {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .compactOrderCard {
+    padding: 0.75rem 0.85rem;
+    gap: 0.55rem;
+  }
+
+  .cardThumbImg {
+    width: 40px;
+    height: 40px;
+  }
+
+  .cardProductTitle {
+    font-size: 0.85rem;
+  }
+
+  .metaCardsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .billPromptCard {
+    padding: 1rem;
+    gap: 0.75rem;
+  }
+
+  .billPromptContent {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.85rem;
+  }
+
+  .billPromptRight {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .billPromptAmountBlock {
+    align-items: flex-start;
+  }
+
+  .viewBillCtaBtn {
+    width: 100%;
+    justify-content: center;
+    padding: 0.75rem 1rem;
+  }
+
+  .modalOverlay {
+    padding: 0.75rem;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modalContent {
+    max-height: calc(100dvh - 1.5rem);
+    border-radius: 16px;
+  }
+
+  .modalHeader {
+    padding: 0.95rem 1rem 0.85rem 1rem;
+  }
+
+  .modalBody {
+    padding: 0.85rem 1rem;
+    gap: 0.85rem;
+  }
+
+  .modalMetaGrid {
+    grid-template-columns: 1fr;
+    gap: 0.55rem;
+  }
+
+  .modalFooter {
+    padding: 0.75rem 1rem;
+    gap: 0.5rem;
+  }
+
+  .printReceiptBtnModal,
+  .closeBtnModal {
+    flex: 1;
+    min-height: 40px;
+    justify-content: center;
+  }
+}
+

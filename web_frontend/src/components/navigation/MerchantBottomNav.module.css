@@ -1,0 +1,127 @@
+/* Merchant Mobile Bottom Navigation Bar (Hidden on Desktop) */
+.mobileBottomNav {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobileBottomNav {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    background: #20242D; /* Exact Graphite #20242D matching Household footer */
+    border-top: 1px solid #2d323e;
+    z-index: 1000;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.35);
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+
+  .navInner {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    height: 100%;
+    max-width: 540px;
+    margin: 0 auto;
+    padding: 0 0.5rem;
+  }
+
+  .navItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    color: #94a3b8;
+    text-decoration: none;
+    font-size: 0.65rem;
+    font-weight: 700;
+    flex: 1;
+    height: 100%;
+    transition: all 0.15s ease;
+    position: relative;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .navItemActive {
+    color: #fbc21a !important; /* Bill Scrap Yellow */
+  }
+
+  .navItemActive .iconWrap {
+    color: #fbc21a !important;
+    transform: scale(1.1);
+  }
+
+  .iconWrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #94a3b8;
+    transition: transform 0.15s ease, color 0.15s ease;
+  }
+
+  .navLabel {
+    line-height: 1;
+    letter-spacing: 0.01em;
+  }
+
+  .badgePill {
+    position: absolute;
+    top: -4px;
+    right: -8px;
+    background-color: #ef4444;
+    color: #ffffff;
+    font-size: 0.55rem;
+    font-weight: 900;
+    padding: 1px 4px;
+    border-radius: 9999px;
+    border: 1.5px solid #20242D;
+    line-height: 1.1;
+  }
+
+  /* Elevated Center Action Item (Orders) */
+  .centerActionItem {
+    position: relative;
+    top: -10px;
+  }
+
+  .centerIconWrap {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-color: #fbc21a;
+    color: #0f172a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 14px rgba(251, 194, 26, 0.4), 0 0 0 3px #20242D;
+    transition: transform 0.15s ease, background-color 0.15s ease;
+    position: relative;
+  }
+
+  .centerActionItem:active .centerIconWrap {
+    transform: scale(0.92);
+  }
+
+  .centerActionItem.navItemActive .centerIconWrap {
+    background-color: #f59e0b;
+    box-shadow: 0 4px 16px rgba(245, 158, 11, 0.5), 0 0 0 3px #20242D;
+  }
+
+  .centerBadge {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    background-color: #ef4444;
+    color: #ffffff;
+    font-size: 0.55rem;
+    font-weight: 900;
+    padding: 1px 4px;
+    border-radius: 9999px;
+    border: 1.5px solid #20242D;
+    line-height: 1.1;
+  }
+}

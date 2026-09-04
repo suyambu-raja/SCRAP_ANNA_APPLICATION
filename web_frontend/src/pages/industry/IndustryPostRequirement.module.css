@@ -1,0 +1,1457 @@
+/* ==========================================================================
+   INDUSTRY POST REQUIREMENT (STRONG BILL SCRAP YELLOW + GRAPHITE THEME)
+   Brand Rules:
+   - Primary Yellow: #FFC107 (Hover: #FFB300)
+   - Dark Graphite: #1F2328
+   - Graphite: #2B3137
+   - White: #FFFFFF
+   - Light Background: #F7F8FA
+   - Border: #E2E8F0
+   ========================================================================== */
+
+.pageContainer {
+  width: 100%;
+  max-width: 1520px;
+  margin: 0 auto;
+  padding: 1.5rem 1.75rem 6rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  box-sizing: border-box;
+  background-color: #ffffff;
+  color: #18202a;
+}
+
+/* ==========================================================================
+   1. PAGE HEADER SECTION
+   ========================================================================== */
+.pageHeaderSection {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  border-bottom: 1.5px solid #e2e8f0;
+  padding-bottom: 1.25rem;
+}
+
+.pageHeaderLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.eyebrowBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #1f2328;
+  color: #ffc107;
+  border: 1px solid #1f2328;
+  font-size: 0.685rem;
+  font-weight: 900;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  letter-spacing: 0.06em;
+  width: fit-content;
+}
+
+.sparkleIcon {
+  color: #ffc107;
+}
+
+.pageMainTitle {
+  font-size: 1.85rem;
+  font-weight: 900;
+  color: #1f2328;
+  margin: 0;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.pageSubtitle {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin: 0;
+}
+
+/* Header Action Button: Graphite + Yellow directly */
+.secondaryViewBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: #1f2328;
+  border: 1.5px solid #1f2328;
+  color: #ffc107;
+  font-size: 0.825rem;
+  font-weight: 800;
+  padding: 0.65rem 1.25rem;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(31, 35, 40, 0.2);
+}
+
+.secondaryViewBtn:hover {
+  background: #2b3137;
+  border-color: #ffc107;
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   2. IMPORTANT GUIDELINES BANNER (CLEAN WHITE + YELLOW ACCENTS)
+   ========================================================================== */
+.guidelinesBanner {
+  background: #fffdf5;
+  border: 1.5px solid #ffc107;
+  border-left: 5px solid #ffc107;
+  border-radius: 12px;
+  padding: 1.15rem 1.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.guidelinesHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  border-bottom: 1px solid rgba(255, 193, 7, 0.4);
+  padding-bottom: 0.6rem;
+}
+
+.guidelinesTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.guidelinesIconYellow {
+  color: #1f2328;
+}
+
+.guidelinesHeading {
+  font-size: 0.775rem;
+  font-weight: 900;
+  color: #1f2328;
+  letter-spacing: 0.04em;
+  margin: 0;
+}
+
+.guidelinesTagline {
+  font-size: 0.75rem;
+  color: #495057;
+  font-weight: 600;
+}
+
+.guidelinesGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+
+.guidelineCard {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+}
+
+.guidelineNumberCircle {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #ffc107;
+  color: #1f2328;
+  font-size: 0.725rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.guidelineContent {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.guidelineTitle {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #1f2328;
+}
+
+.guidelineText {
+  font-size: 0.735rem;
+  color: #495057;
+  margin: 0;
+  line-height: 1.35;
+}
+
+/* ==========================================================================
+   3. TWO-COLUMN DESKTOP SPLIT LAYOUT (70% FORM + 30% STICKY SUMMARY)
+   ========================================================================== */
+.formSplitLayout {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 1.75rem;
+  align-items: start;
+}
+
+.formLeftCol {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  min-width: 0;
+}
+
+/* White Section Card with Yellow Step Indicator */
+.sectionCard {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+}
+
+.sectionHeaderRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 0.85rem;
+}
+
+.sectionTitleBlock {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+/* SOLID BILL SCRAP YELLOW CIRCLE BADGES */
+.sectionYellowNumberCircle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #ffc107;
+  color: #1f2328;
+  font-size: 0.875rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(255, 193, 7, 0.35);
+  border: 1px solid #ffb300;
+}
+
+.sectionMainTitle {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #1f2328;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.sectionSubtitle {
+  font-size: 0.785rem;
+  color: #64748b;
+  margin: 2px 0 0 0;
+}
+
+/* Primary Add Item Button: Yellow + Graphite */
+.primaryAddScrapItemBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #ffc107;
+  border: 1.5px solid #1f2328;
+  color: #1f2328;
+  font-size: 0.775rem;
+  font-weight: 900;
+  padding: 0.45rem 0.85rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 2px 6px rgba(255, 193, 7, 0.25);
+  white-space: nowrap;
+}
+
+.primaryAddScrapItemBtn:hover {
+  background: #1f2328;
+  color: #ffc107;
+  transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   MATERIAL ITEM CARD
+   ========================================================================== */
+.itemsListContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.materialItemCard {
+  background: #fcfdfe;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transition: all 0.15s ease;
+}
+
+.materialItemCard:hover {
+  border-color: #cbd5e1;
+}
+
+.materialItemHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 0.65rem;
+}
+
+.materialItemTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.itemIndexGraphiteBadge {
+  background: #1f2328;
+  color: #ffc107;
+  font-size: 0.65rem;
+  font-weight: 900;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  letter-spacing: 0.04em;
+}
+
+.itemHeadingName {
+  font-size: 0.95rem;
+  color: #1f2328;
+}
+
+.removeItemTextBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: transparent;
+  border: none;
+  color: #dc3545;
+  font-size: 0.75rem;
+  font-weight: 800;
+  cursor: pointer;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+}
+
+.removeItemTextBtn:hover {
+  background: #fef2f2;
+}
+
+/* Material Fields Grid */
+.materialFieldsGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.inputGroupFull {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  width: 100%;
+}
+
+.inputGroupHalf {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  flex: 1;
+}
+
+.fieldLabel {
+  font-size: 0.775rem;
+  font-weight: 800;
+  color: #2b3137;
+}
+
+.reqStar {
+  color: #dc3545;
+}
+
+.formTextInput {
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.825rem;
+  color: #18202a;
+  outline: none;
+  background: #ffffff;
+  box-sizing: border-box;
+  transition: all 0.15s ease;
+}
+
+.formTextInput:focus {
+  border-color: #ffc107;
+  box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.2);
+}
+
+.qtyUnitRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.qtyInput {
+  flex: 1;
+  min-width: 0;
+  padding: 0.65rem 0.85rem;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.825rem;
+  color: #18202a;
+  outline: none;
+  background: #ffffff;
+  box-sizing: border-box;
+  transition: all 0.15s ease;
+}
+
+.qtyInput:focus {
+  border-color: #ffc107;
+  box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.2);
+}
+
+.unitSelect {
+  width: 85px;
+  flex-shrink: 0;
+  padding: 0.65rem 0.5rem;
+  border: 1.5px solid #1f2328;
+  border-radius: 8px;
+  font-size: 0.825rem;
+  font-weight: 800;
+  color: #1f2328;
+  background: #ffc107;
+  outline: none;
+  cursor: pointer;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.conditionLabelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.conditionHelperNote {
+  font-size: 0.685rem;
+  color: #b45309;
+  font-weight: 600;
+}
+
+.formSelectInput {
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.825rem;
+  font-weight: 700;
+  color: #18202a;
+  background: #ffffff;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.formSelectInput:focus {
+  border-color: #ffc107;
+  box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.2);
+}
+
+.descLabelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.descSubNote {
+  font-size: 0.685rem;
+  color: #64748b;
+}
+
+.formTextarea {
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.825rem;
+  color: #18202a;
+  outline: none;
+  background: #ffffff;
+  font-family: inherit;
+  box-sizing: border-box;
+  resize: vertical;
+  transition: all 0.15s ease;
+}
+
+.formTextarea:focus {
+  border-color: #ffc107;
+  box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.2);
+}
+
+/* Quick Add Notes Chips */
+.quickChipsTrack {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.15rem;
+}
+
+.quickChipsLabel {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.chipsWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.quickChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #ffffff;
+  border: 1.5px solid #1f2328;
+  color: #1f2328;
+  font-size: 0.725rem;
+  font-weight: 800;
+  padding: 0.25rem 0.65rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.quickChip:hover {
+  background: #1f2328;
+  color: #ffc107;
+}
+
+.quickChipSelected {
+  background: #ffc107 !important;
+  border-color: #1f2328 !important;
+  color: #1f2328 !important;
+  font-weight: 900;
+  box-shadow: 0 2px 6px rgba(255, 193, 7, 0.3);
+}
+
+/* Scrap Photos Upload */
+.photoHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.photoHelperNote {
+  font-size: 0.685rem;
+  color: #64748b;
+}
+
+.uploadDropzone {
+  border: 1.5px dashed #1f2328;
+  border-radius: 10px;
+  background: #f8fafc;
+  padding: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: all 0.15s ease;
+}
+
+.uploadDropzone:hover {
+  border-color: #ffc107;
+  background: #fffdf5;
+}
+
+.thumbnailsList {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.photoThumbWrap {
+  width: 76px;
+  height: 64px;
+  border-radius: 8px;
+  border: 1.5px solid #1f2328;
+  position: relative;
+  overflow: hidden;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.photoThumbImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.coverBadge {
+  position: absolute;
+  bottom: 2px;
+  left: 2px;
+  background: #1f2328;
+  color: #ffc107;
+  font-size: 0.55rem;
+  font-weight: 900;
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+.setCoverBtn {
+  position: absolute;
+  bottom: 2px;
+  left: 2px;
+  background: rgba(31, 35, 40, 0.85);
+  color: #ffc107;
+  font-size: 0.55rem;
+  font-weight: 800;
+  padding: 1px 4px;
+  border-radius: 3px;
+  border: none;
+  cursor: pointer;
+}
+
+.removePhotoBtn {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background: rgba(220, 53, 69, 0.9);
+  color: #ffffff;
+  border: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.uploadActionsRow {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+/* Upload Buttons: Graphite Background + Yellow Text Directly */
+.uploadActionSecondaryBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #1f2328;
+  border: 1.5px solid #1f2328;
+  color: #ffc107;
+  font-size: 0.775rem;
+  font-weight: 800;
+  padding: 0.5rem 0.95rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 2px 6px rgba(31, 35, 40, 0.18);
+}
+
+.uploadActionSecondaryBtn:hover {
+  background: #2b3137;
+  border-color: #ffc107;
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+/* Full Width Add Another Material Button: Graphite + Yellow Directly */
+.addAnotherItemDashedBtn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: #1f2328;
+  border: 2px dashed #ffc107;
+  color: #ffc107;
+  font-size: 0.85rem;
+  font-weight: 900;
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 2px 8px rgba(31, 35, 40, 0.15);
+}
+
+.addAnotherItemDashedBtn:hover {
+  background: #2b3137;
+  border-color: #ffb300;
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.yellowPlusIcon {
+  color: #ffc107;
+}
+
+.orDropText {
+  font-size: 0.725rem;
+  color: #64748b;
+}
+
+/* ==========================================================================
+   SECTIONS 2, 3, 4: LOCATION, SCHEDULE & CONTACT
+   ========================================================================== */
+.sectionFieldsGrid {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.inputWithLeftIcon {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.leftInputIcon {
+  position: absolute;
+  left: 0.75rem;
+  color: #1f2328;
+  pointer-events: none;
+}
+
+.formInputPadded {
+  width: 100%;
+  padding: 0.65rem 0.85rem 0.65rem 2.25rem;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.825rem;
+  color: #18202a;
+  outline: none;
+  background: #ffffff;
+  box-sizing: border-box;
+  transition: all 0.15s ease;
+}
+
+.formInputPadded:focus {
+  border-color: #ffc107;
+  box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.2);
+}
+
+.formSelectInputPadded {
+  width: 100%;
+  padding: 0.65rem 0.85rem 0.65rem 2.25rem;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.825rem;
+  font-weight: 700;
+  color: #18202a;
+  background: #ffffff;
+  outline: none;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.formSelectInputPadded:focus {
+  border-color: #ffc107;
+  box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.2);
+}
+
+.weighbridgeSuccessTag {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #16a34a;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 0.65rem 0.85rem;
+  border-radius: 8px;
+}
+
+.checkGreenIcon {
+  color: #16a34a;
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   4. RIGHT COLUMN: STICKY PICKUP REQUEST SUMMARY (GRAPHITE HEADER + YELLOW CTA)
+   ========================================================================== */
+.formRightCol {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.stickySummaryCard {
+  position: sticky;
+  top: 1.5rem;
+  background: #ffffff;
+  border: 1.5px solid #1f2328;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+}
+
+.summaryDarkHeader {
+  background: #1f2328;
+  padding: 1.1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.summaryHeaderIconYellow {
+  color: #ffc107;
+}
+
+.summaryHeaderTitle {
+  font-size: 0.95rem;
+  font-weight: 900;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: 0.03em;
+}
+
+.summaryBody {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.summarySectionBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.summaryCountRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.summaryLabelUppercase {
+  font-size: 0.65rem;
+  font-weight: 900;
+  color: #64748b;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.summaryCountBadge {
+  background: #1f2328;
+  color: #ffc107;
+  font-size: 0.7rem;
+  font-weight: 900;
+  padding: 0.15rem 0.55rem;
+  border-radius: 6px;
+}
+
+.summaryItemsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.summaryItemCard {
+  background: #f7f8fa;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.55rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.summaryItemTop {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.summaryItemIndexYellow {
+  font-size: 0.685rem;
+  font-weight: 900;
+  color: #1f2328;
+  background: #ffc107;
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+.summaryItemName {
+  font-size: 0.8rem;
+  color: #1f2328;
+}
+
+.summaryItemMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.685rem;
+  color: #64748b;
+}
+
+.summaryItemQty {
+  color: #16a34a;
+  font-weight: 800;
+}
+
+.logisticsDetailsBox {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.75rem 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.logisticsDetailRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.75rem;
+}
+
+.detailLabel {
+  color: #64748b;
+}
+
+.detailValue {
+  color: #1f2328;
+  font-weight: 800;
+  text-align: right;
+}
+
+.transparentOffersBox {
+  background: #fffdf5;
+  border: 1.5px solid #ffc107;
+  border-radius: 8px;
+  padding: 0.75rem 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.transparentBoxHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.infoIconYellow {
+  color: #1f2328;
+  flex-shrink: 0;
+}
+
+.transparentTitle {
+  font-size: 0.75rem;
+  font-weight: 900;
+  color: #1f2328;
+}
+
+.transparentText {
+  font-size: 0.7rem;
+  color: #495057;
+  margin: 0;
+  line-height: 1.35;
+}
+
+/* Primary Yellow Submit Button: Bold Yellow Background + Dark Graphite Text */
+.primarySubmitBtnYellow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  width: 100%;
+  background: #ffc107;
+  border: 1.5px solid #1f2328;
+  color: #1f2328;
+  font-size: 0.875rem;
+  font-weight: 900;
+  padding: 0.85rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 3px 12px rgba(255, 193, 7, 0.35);
+}
+
+.primarySubmitBtnYellow:hover {
+  background: #1f2328;
+  color: #ffc107;
+  transform: translateY(-1px);
+}
+
+.zeroFeesReassurance {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.7rem;
+  color: #495057;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.checkIconGreen {
+  color: #16a34a;
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   5. INTERACTIVE MODALS
+   ========================================================================== */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(31, 35, 40, 0.75);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 1.5rem;
+  animation: fadeIn 0.15s ease-out;
+}
+
+.successModalCard {
+  background: #ffffff;
+  border-radius: 16px;
+  max-width: 500px;
+  width: 100%;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
+  border: 1.5px solid #1f2328;
+}
+
+.successIconCircle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.successCheckIcon {
+  color: #16a34a;
+}
+
+.successTitle {
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: #1f2328;
+  margin: 0;
+}
+
+.successDesc {
+  font-size: 0.85rem;
+  color: #495057;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.requestIdBox {
+  width: 100%;
+  background: #f7f8fa;
+  border: 1.5px solid #1f2328;
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  box-sizing: border-box;
+}
+
+.reqIdLabel {
+  font-size: 0.65rem;
+  font-weight: 900;
+  color: #64748b;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.reqIdRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.reqIdValue {
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: #1f2328;
+  font-family: monospace;
+}
+
+.copyIdBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: #1f2328;
+  border: 1.5px solid #1f2328;
+  color: #ffc107;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 0.35rem 0.65rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.copyIdBtn:hover {
+  background: #2b3137;
+  color: #ffffff;
+}
+
+.successNextStepsBox {
+  width: 100%;
+  background: #fffdf5;
+  border: 1.5px solid #ffc107;
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 0.4rem;
+  box-sizing: border-box;
+}
+
+.nextStepsTitle {
+  font-size: 0.775rem;
+  font-weight: 900;
+  color: #1f2328;
+}
+
+.nextStepsList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  color: #495057;
+  line-height: 1.35;
+}
+
+.successActionButtons {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.viewRequestsPrimaryBtnYellow {
+  flex: 1.2;
+  background: #ffc107;
+  border: 1.5px solid #1f2328;
+  color: #1f2328;
+  font-size: 0.825rem;
+  font-weight: 900;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(255, 193, 7, 0.3);
+}
+
+.viewRequestsPrimaryBtnYellow:hover {
+  background: #1f2328;
+  color: #ffc107;
+}
+
+.postAnotherModalBtn {
+  flex: 1;
+  background: #1f2328;
+  border: 1.5px solid #1f2328;
+  color: #ffc107;
+  font-size: 0.825rem;
+  font-weight: 800;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.postAnotherModalBtn:hover {
+  background: #2b3137;
+  color: #ffffff;
+}
+
+/* Camera Modal */
+.cameraModalCard {
+  background: #ffffff;
+  border-radius: 16px;
+  max-width: 520px;
+  width: 100%;
+  overflow: hidden;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
+  border: 1.5px solid #1f2328;
+  display: flex;
+  flex-direction: column;
+}
+
+.cameraModalHeader {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cameraTitleBlock {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.goldCameraIcon {
+  color: #ffc107;
+}
+
+.cameraModalHeading {
+  font-size: 1rem;
+  font-weight: 900;
+  color: #1f2328;
+  margin: 0;
+}
+
+.modalCloseBtn {
+  background: #f7f8fa;
+  border: 1px solid #e2e8f0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  cursor: pointer;
+}
+
+.cameraModalBody {
+  background: #1f2328;
+  min-height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.videoStream,
+.capturedImg {
+  width: 100%;
+  max-height: 45vh;
+  object-fit: contain;
+  display: block;
+}
+
+.cameraModalFooter {
+  padding: 1rem 1.25rem;
+  border-top: 1px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.captureSnapshotBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: #ffc107;
+  border: 1.5px solid #1f2328;
+  color: #1f2328;
+  font-size: 0.85rem;
+  font-weight: 900;
+  padding: 0.65rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.retakeBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #1f2328;
+  border: 1.5px solid #1f2328;
+  color: #ffc107;
+  font-size: 0.825rem;
+  font-weight: 800;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.saveCapturedBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #16a34a;
+  border: 1px solid #15803d;
+  color: #ffffff;
+  font-size: 0.825rem;
+  font-weight: 900;
+  padding: 0.6rem 1.25rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.imagePreviewModal {
+  position: relative;
+  max-width: 80vw;
+  max-height: 80vh;
+}
+
+.enlargedImg {
+  max-width: 100%;
+  max-height: 80vh;
+  object-fit: contain;
+  border-radius: 12px;
+}
+
+.previewCloseBtn {
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  background: #1f2328;
+  color: #ffffff;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ==========================================================================
+   RESPONSIVE ADJUSTMENTS
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .formSplitLayout {
+    grid-template-columns: 1fr;
+  }
+  .guidelinesGrid {
+    grid-template-columns: 1fr;
+  }
+  .stickySummaryCard {
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .pageContainer {
+    padding: 0.85rem 0.85rem 6rem 0.85rem;
+    gap: 1rem;
+    width: 100%;
+    max-width: 100vw;
+    box-sizing: border-box;
+    overflow-x: hidden;
+  }
+  .sectionCard {
+    padding: 1.25rem 1rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .materialItemCard {
+    padding: 1rem 0.85rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .sectionFieldsGrid {
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+  .inputGroupHalf {
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .photoActionRow {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .uploadFileInputBtn,
+  .openLiveCameraBtn {
+    width: 100%;
+    justify-content: center;
+  }
+  .modalCard,
+  .cameraModalCard {
+    width: 95%;
+    max-height: 90vh;
+    padding: 1.25rem 1rem;
+  }
+  .cameraButtonsRow {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .captureSnapshotBtn,
+  .retakeBtn,
+  .saveCapturedBtn {
+    width: 100%;
+    justify-content: center;
+  }
+  .stickySummaryCard {
+    padding: 1.25rem 1rem;
+  }
+  .primarySubmitBtnYellow {
+    width: 100%;
+  }
+}

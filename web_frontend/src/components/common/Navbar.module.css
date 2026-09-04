@@ -1,0 +1,316 @@
+.navbarWrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: var(--color-white);
+  border-bottom: 1px solid #F3F4F6;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  width: 100%;
+  height: 74px;
+  display: flex;
+  align-items: center;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+  transform: translateY(0);
+  box-sizing: border-box;
+}
+
+.navbarHidden {
+  transform: translateY(-100%) !important;
+  box-shadow: none !important;
+}
+
+.navbarScrolled {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.navbarContainer {
+  width: 100%;
+  max-width: 100%;
+  padding-left: clamp(1rem, 2.5vw, 3rem);
+  padding-right: clamp(1rem, 2.5vw, 3rem);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  box-sizing: border-box;
+}
+
+/* Brand Link — Exact Match from Company Site */
+.brandLink {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.logoEmblem {
+  height: 46px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+  flex-shrink: 0;
+}
+
+.brandTextCol {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.logoTextImg {
+  height: 21px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.brandTitleText {
+  font-size: 1.25rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  color: #111827;
+  line-height: 1;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.brandTitleYellow {
+  color: #FBC21A;
+}
+
+.brandTaglineExact {
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #6B7280;
+  margin-top: 2px;
+  white-space: nowrap;
+  text-align: center;
+  line-height: 1;
+  width: 100%;
+}
+
+/* Nav Links */
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: 2.25rem;
+}
+
+.navLink {
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: #4B5563;
+  text-decoration: none;
+  padding: 0.4rem 0.1rem;
+  position: relative;
+  transition: color var(--transition-fast);
+  cursor: pointer;
+}
+.navLink:hover {
+  color: var(--color-primary-hover);
+}
+
+.activeLink {
+  color: var(--color-graphite-dark);
+  font-weight: 700;
+}
+.activeLink::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--color-primary);
+  border-radius: 2px;
+}
+
+/* Right Controls */
+.rightControls {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.loginNavBtn {
+  background: var(--color-primary) !important;
+  color: var(--color-graphite-dark) !important;
+  font-weight: 700 !important;
+  border-radius: var(--radius-pill) !important;
+  padding: 0.55rem 1.35rem !important;
+  box-shadow: 0 2px 8px rgba(251, 194, 26, 0.3) !important;
+  border: 1.5px solid var(--color-primary) !important;
+  transition: all var(--transition-fast) !important;
+}
+.getStartedBtn:hover {
+  background: var(--color-primary-hover) !important;
+  transform: translateY(-1px);
+}
+
+.authGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.iconBtn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+  transition: all var(--transition-fast);
+  background: var(--color-white);
+}
+.iconBtn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-graphite);
+}
+
+.userPill {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.85rem 0.35rem 0.4rem;
+  background: var(--color-offwhite);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+.userPill:hover {
+  border-color: var(--color-primary-border);
+  background: var(--color-primary-light);
+}
+
+.avatarMini {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--color-graphite);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.userInfoMini {
+  display: flex;
+  flex-direction: column;
+}
+
+.userNameMini {
+  font-size: 0.8rem;
+  color: var(--color-text-primary);
+  line-height: 1.1;
+}
+
+.userRoleMini {
+  font-size: 0.65rem;
+  color: var(--color-text-muted);
+  text-transform: capitalize;
+}
+
+.mobileToggleBtn {
+  display: none;
+  color: var(--color-graphite);
+  padding: 0.25rem;
+}
+
+/* Mobile Drawer */
+.mobileDrawer {
+  display: none;
+  flex-direction: column;
+  padding: 1rem 1.5rem 1.5rem;
+  background: var(--color-white);
+  border-top: 1px solid var(--color-border);
+  gap: 0.75rem;
+}
+
+.mobileDrawerLink {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  padding: 0.5rem 0;
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+
+.mobileActiveLink {
+  color: var(--color-graphite-dark);
+  font-weight: 700;
+  border-left: 3px solid var(--color-primary);
+  padding-left: 0.65rem;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 960px) {
+  .navLinks {
+    display: none;
+  }
+  .mobileToggleBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .mobileDrawer {
+    display: flex;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbarWrapper {
+    height: 62px;
+    padding: 0;
+  }
+
+  .navbarContainer {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    gap: 0.5rem;
+  }
+
+  .brandLink {
+    gap: 0.4rem;
+  }
+
+  .logoEmblem {
+    height: 36px;
+  }
+
+  .logoTextImg {
+    height: 17px;
+  }
+
+  .brandTitleText {
+    font-size: 1.05rem;
+  }
+
+  .brandTaglineExact {
+    font-size: 0.44rem;
+    letter-spacing: 0.01em;
+  }
+
+  .rightControls {
+    gap: 0.35rem;
+    flex-shrink: 0;
+  }
+
+  .loginNavBtn {
+    padding: 0.4rem 0.85rem !important;
+    font-size: 0.825rem !important;
+    border-radius: 9999px !important;
+  }
+}

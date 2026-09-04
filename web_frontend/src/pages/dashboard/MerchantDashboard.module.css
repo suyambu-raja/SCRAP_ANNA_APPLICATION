@@ -1,0 +1,1754 @@
+/* ==========================================================================
+   MERCHANT HOMEPAGE DASHBOARD STYLING
+   Exact visual parity with Household Dashboard (Image 2 reference UI):
+   - Single clean header row with addressPillBtn style
+   - Dark marquee news ticker
+   - Hero promo carousel with aspect ratio 1024/560 perfectly fitting images
+   - All performance cards use the exact same warm yellow/cream color scheme
+   - Today's pickup card with perfectly aligned content, ETA & navigation
+   - Actionable new scrap requests banner
+   - Live scrap market prices with "Your Buying Price"
+   ========================================================================== */
+
+:root {
+  --scrap-yellow: #F8BF1D;
+  --scrap-yellow-hover: #E5AA00;
+  --scrap-yellow-light: #FFF8DC;
+  --scrap-graphite: #20242D;
+  --scrap-card-bg: #20242D;
+  --scrap-card-inner: #272C36;
+  --scrap-border: #3A404C;
+  --scrap-border-hover: #505869;
+  --scrap-text-muted: #A8B0BC;
+  --scrap-text-dim: #8B94A2;
+  --scrap-emerald: #10B981;
+}
+
+.pageContainer {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1rem 1.25rem 2.5rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  font-family: inherit;
+  color: #1E293B;
+}
+
+/* --------------------------------------------------------------------------
+   1. GREETING & SERVICE AREA ROW (EXACT MATCH HOUSEHOLD HEADER)
+   -------------------------------------------------------------------------- */
+.greetingAddressRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.15rem 0.15rem;
+  box-sizing: border-box;
+}
+
+.greetingCol {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.greetingName {
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: #15171B;
+  margin: 0;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.greetingSubtext {
+  font-size: 0.85rem;
+  color: #64748B;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.addressPillBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.35rem;
+  background: var(--scrap-graphite);
+  color: #ffffff;
+  padding: 0.32rem 0.55rem;
+  border-radius: 9px;
+  border: 1px solid var(--scrap-border);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  flex-shrink: 0;
+  max-width: 135px;
+  margin-left: auto;
+}
+
+.addressPillBtn:hover {
+  background: var(--scrap-card-inner);
+  border-color: var(--scrap-yellow);
+  transform: translateY(-1px);
+}
+
+.addressPillLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-width: 0;
+  overflow: hidden;
+  flex: 1;
+}
+
+.addressPillIcon {
+  color: var(--scrap-yellow);
+  flex-shrink: 0;
+}
+
+.addressPillTextGroup {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  gap: 1px;
+  min-width: 0;
+  overflow: hidden;
+  flex: 1;
+}
+
+.addressPillArea {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.1;
+}
+
+.addressPillStatus {
+  font-size: 0.65rem;
+  color: #34D399;
+  font-weight: 800;
+  white-space: nowrap;
+  line-height: 1.1;
+}
+
+.addressPillStatusPaused {
+  font-size: 0.65rem;
+  color: #F87171;
+  font-weight: 800;
+  white-space: nowrap;
+  line-height: 1.1;
+}
+
+.addressPillChevron {
+  color: #ffffff;
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+/* --------------------------------------------------------------------------
+   2. MOVING NEWS TICKER (MATCHING HOUSEHOLD TICKER MARQUEE)
+   -------------------------------------------------------------------------- */
+.promoTickerStrip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 42px;
+  background: #15171B;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 0 0.85rem;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.24);
+  box-sizing: border-box;
+  text-decoration: none;
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+  transition: all 0.18s ease;
+  flex-shrink: 0;
+  outline: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+  user-select: none;
+}
+
+.promoTickerStrip:hover {
+  border-color: var(--scrap-yellow);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.32);
+}
+
+.promoTickerStrip:focus,
+.promoTickerStrip:active,
+.promoTickerStrip:focus-visible {
+  outline: none !important;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.bannerLeftSection {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+  z-index: 2;
+  background: #15171B;
+  padding-right: 0.35rem;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.bannerLeftSection:focus,
+.bannerLeftSection:active {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.bannerMegaphoneIcon {
+  color: var(--scrap-yellow);
+  flex-shrink: 0;
+}
+
+.bannerBadgePill {
+  background: var(--scrap-yellow);
+  color: #0f172a;
+  font-size: 0.62rem;
+  font-weight: 850;
+  letter-spacing: 0.03em;
+  padding: 0.18rem 0.45rem;
+  border-radius: 4px;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  white-space: nowrap;
+  line-height: 1.2;
+}
+
+.bannerBadgePill:focus,
+.bannerBadgePill:active {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.bannerVerticalDivider {
+  display: block;
+  width: 1px;
+  height: 14px;
+  background: rgba(255, 255, 255, 0.25);
+  margin-left: 0.1rem;
+  flex-shrink: 0;
+}
+
+.bannerMarqueeWindow {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  mask-image: linear-gradient(
+    to right,
+    transparent 0px,
+    black 12px,
+    black calc(100% - 16px),
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0px,
+    black 12px,
+    black calc(100% - 16px),
+    transparent 100%
+  );
+}
+
+.bannerMarqueeTrack {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  height: 100%;
+  animation: merchantMarquee 38s linear infinite;
+  will-change: transform;
+}
+
+.bannerMarqueeTrack:hover {
+  animation-play-state: paused;
+}
+
+.bannerItemsGroup {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.bannerMessageItem {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 0.85rem;
+  color: #ffffff;
+  font-size: 0.84rem;
+  font-weight: 700;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+
+.bannerMessageText {
+  color: #ffffff;
+}
+
+.bannerItemDivider {
+  margin-left: 0.85rem;
+  color: var(--scrap-yellow);
+  font-weight: 800;
+  user-select: none;
+}
+
+@keyframes merchantMarquee {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-50%, 0, 0); }
+}
+
+/* --------------------------------------------------------------------------
+   3. HERO PROMOTIONAL SLIDER (EXACT MATCH HOUSEHOLD DASHBOARD CONTAINER SIZING)
+   -------------------------------------------------------------------------- */
+.heroSliderWrapper {
+  position: relative;
+  width: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  touch-action: pan-y;
+  user-select: none;
+  cursor: grab;
+  box-sizing: border-box;
+  background: #111215;
+}
+
+.heroSliderWrapper:active {
+  cursor: grabbing;
+}
+
+.sliderTrack {
+  display: flex;
+  width: 100%;
+  will-change: transform;
+}
+
+.slideItem {
+  min-width: 100%;
+  width: 100%;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  display: flex;
+  align-items: stretch;
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+}
+
+.imagePromoSlide {
+  position: relative;
+  width: 100%;
+  min-height: 180px;
+  max-height: 230px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #111215;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.promoImageFull {
+  width: 100%;
+  height: 100%;
+  max-height: 230px;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+  border-radius: 20px;
+  pointer-events: none;
+}
+
+.imageSlideClickOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  cursor: pointer;
+}
+
+.goldValueBannerSlide {
+  background: var(--scrap-yellow) url('/turn-scrap-banner-bg.png') no-repeat right center / cover;
+  border-radius: 20px;
+  padding: 1.75rem 2.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  min-height: 180px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.goldBannerLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  z-index: 2;
+  max-width: 65%;
+}
+
+.goldBannerTag {
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  color: #78350F;
+  text-transform: uppercase;
+}
+
+.goldBannerTitle {
+  font-size: 1.85rem;
+  font-weight: 900;
+  color: #15171B;
+  margin: 0;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.goldBannerSubtitle {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #2D3038;
+  margin: 0;
+  line-height: 1.45;
+}
+
+.goldBannerBtnRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.65rem;
+  flex-wrap: nowrap;
+}
+
+.goldPostBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: var(--scrap-graphite, #20242D);
+  color: #ffffff;
+  font-size: 0.825rem;
+  font-weight: 800;
+  padding: 0.6rem 1.15rem;
+  border-radius: 10px;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.goldPostBtn:hover {
+  background: #24262C;
+  transform: translateY(-1px);
+}
+
+.goldRatesBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: #ffffff;
+  color: #15171B;
+  font-size: 0.825rem;
+  font-weight: 800;
+  padding: 0.6rem 1.15rem;
+  border-radius: 10px;
+  text-decoration: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.goldRatesBtn:hover {
+  background: #f8fafc;
+  transform: translateY(-1px);
+}
+
+.sliderDotsContainer {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  z-index: 10;
+  padding: 4px 10px;
+  background: rgba(15, 18, 24, 0.45);
+  backdrop-filter: blur(6px);
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.sliderDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.4);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sliderDotActive {
+  width: 24px;
+  background: var(--scrap-yellow);
+  box-shadow: 0 0 8px rgba(248, 191, 29, 0.6);
+}
+
+/* --------------------------------------------------------------------------
+   4. KPI STATS CARDS CAROUSEL (ALL CARDS USE THE SAME WARM YELLOW/CREAM COLOR)
+   -------------------------------------------------------------------------- */
+.statsSectionWrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  box-sizing: border-box;
+}
+
+.statsHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0.2rem;
+}
+
+.statsSectionTitle {
+  font-size: 1.15rem;
+  font-weight: 850;
+  color: #0F172A;
+  margin: 0;
+}
+
+.statsSwipeHint {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #64748B;
+}
+
+.statsCarouselTrack {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.15rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Consistent warm yellow/cream color scheme for ALL performance cards */
+.statInteractiveCard {
+  background: linear-gradient(180deg, #FFF8DC 0%, #FFEEBA 100%);
+  border: 1.5px solid #FFDE7A;
+  border-radius: 18px;
+  padding: 0.95rem 1.15rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 112px;
+  box-shadow: 0 8px 20px -4px rgba(248, 191, 29, 0.2), 0 3px 8px -2px rgba(0, 0, 0, 0.04);
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.statInteractiveCard:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 24px -4px rgba(248, 191, 29, 0.32), 0 4px 10px -2px rgba(0, 0, 0, 0.08);
+  border-color: var(--scrap-yellow);
+}
+
+.statInteractiveCard:active {
+  transform: translateY(-1px) scale(0.99);
+}
+
+.statCardTopRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  width: 100%;
+}
+
+.statSquircleIcon {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: #FFDF6D;
+  color: #1E3A20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(248, 191, 29, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  flex-shrink: 0;
+}
+
+.statTopRightBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: rgba(255, 223, 109, 0.6);
+  border: 1px solid rgba(200, 160, 40, 0.35);
+  color: #1E3A20;
+  font-size: 0.7rem;
+  font-weight: 750;
+  padding: 0.2rem 0.55rem;
+  border-radius: 9999px;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+}
+
+.statCardValueGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.statBigValue {
+  font-size: 1.55rem;
+  font-weight: 900;
+  color: #1A381C;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+}
+
+.statUnitText {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #234A28;
+}
+
+.statCardTitle {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #234A28;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+/* Dots Row for Mobile Stats */
+.statsIndicatorDotsRow {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0.25rem 0;
+}
+
+.statIndicatorDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: #CBD5E1;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.statIndicatorDotActive {
+  width: 22px;
+  background: #20242D;
+  border-radius: 9999px;
+  box-shadow: 0 2px 6px rgba(32, 36, 45, 0.3);
+}
+
+/* --------------------------------------------------------------------------
+   5. NEXT / TODAY'S PICKUP CARD (EXACT ALIGNMENT & PROPORTIONS)
+   -------------------------------------------------------------------------- */
+@keyframes yellowBorderPulse {
+  0%, 100% {
+    border-color: rgba(248, 191, 29, 0.4);
+    box-shadow: 0 0 0 1px rgba(248, 191, 29, 0.15), 0 10px 30px -4px rgba(0, 0, 0, 0.08), 0 4px 12px -2px rgba(0, 0, 0, 0.04);
+  }
+  50% {
+    border-color: #F8BF1D;
+    box-shadow: 0 0 14px 2px rgba(248, 191, 29, 0.45), 0 10px 30px -4px rgba(0, 0, 0, 0.1), 0 4px 12px -2px rgba(0, 0, 0, 0.06);
+  }
+}
+
+.nextPickupUnifiedCard {
+  background: #ffffff;
+  border: 1.5px solid #F8BF1D;
+  border-radius: 18px;
+  padding: 1.25rem 1.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+  animation: yellowBorderPulse 2s ease-in-out infinite;
+}
+
+.pickupUnifiedHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid #F1F5F9;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.pickupUnifiedTitle {
+  font-size: 1.2rem;
+  font-weight: 900;
+  color: #0F172A;
+  margin: 0;
+  white-space: nowrap !important;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  flex-shrink: 0;
+  padding-top: 1px;
+}
+
+.pickupHeaderRightCol {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-start;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.scheduledPillBadge {
+  background: #DCFCE7;
+  color: #15803D;
+  border: 1px solid #BBF7D0;
+  font-size: 0.65rem;
+  font-weight: 850;
+  padding: 0.18rem 0.55rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap !important;
+  line-height: 1.2;
+  margin-top: 4px;
+}
+
+.pickupTimeSlotPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 6px;
+  padding: 0.18rem 0.5rem;
+  font-size: 0.7rem;
+  font-weight: 750;
+  color: #475569;
+  white-space: nowrap !important;
+  line-height: 1.2;
+}
+
+.pickupClockIcon {
+  color: #64748B;
+  flex-shrink: 0;
+}
+
+.pickupUnifiedBody {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.pickupPartnerLeftCol {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100%;
+}
+
+.pickupCustomerHeaderRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  width: 100%;
+}
+
+.partnerAvatarCircle {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #FEF3C7;
+  border: 1.5px solid #FDE68A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  color: #92400E;
+  margin-top: 2px;
+}
+
+.pickupCardInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+  flex: 1 1 auto;
+  width: 100%;
+  overflow: hidden;
+}
+
+.execArrivingLabel {
+  font-size: 0.72rem;
+  color: #64748B;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.pickupTitle {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #0F172A;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.25;
+}
+
+.pickupScheduleText {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  color: #475569;
+  font-weight: 600;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pickupDetailsPill {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  background: #F1F5F9;
+  border: 1px solid #E2E8F0;
+  border-radius: 9px;
+  padding: 0.45rem 0.85rem;
+  font-size: 0.82rem;
+  color: #334155;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 0.15rem;
+  white-space: nowrap !important;
+}
+
+.pickupMaterialName {
+  font-weight: 750;
+  color: #1E293B;
+  white-space: nowrap !important;
+}
+
+.pickupPillDot {
+  color: #94A3B8;
+  font-size: 0.65rem;
+  flex-shrink: 0;
+}
+
+.pickupWeightText {
+  font-weight: 850;
+  color: #0F172A;
+  white-space: nowrap !important;
+}
+
+.pickupAmountStrong {
+  font-weight: 900;
+  color: #047857;
+  white-space: nowrap !important;
+}
+
+.pickupEtaRightCol {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  border-left: 1.5px solid #E2E8F0;
+  padding-left: 1.25rem;
+  flex-shrink: 0;
+  min-width: 145px;
+}
+
+.etaTextGroup {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+}
+
+.etaLabel {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #64748B;
+  letter-spacing: 0.05em;
+}
+
+.etaNumber {
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: #0F172A;
+  line-height: 1;
+}
+
+.etaMinsText {
+  font-size: 0.74rem;
+  color: #64748B;
+  font-weight: 700;
+}
+
+.trackPickupMiniBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  background: var(--scrap-yellow);
+  color: #0F172A;
+  font-size: 0.825rem;
+  font-weight: 850;
+  padding: 0.55rem 1rem;
+  border-radius: 9px;
+  text-decoration: none;
+  border: 1px solid #E5AA00;
+  box-shadow: 0 2px 8px rgba(248, 191, 29, 0.32);
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.trackPickupMiniBtn:hover {
+  background: #F59E0B;
+  transform: translateY(-1px);
+}
+
+/* 3-Step Pickup Stage Tracker */
+.miniStageTracker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding-top: 0.65rem;
+  border-top: 1px dashed #E2E8F0;
+  box-sizing: border-box;
+}
+
+.miniStep {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #94A3B8;
+}
+
+.miniStepActive {
+  color: #0F172A;
+}
+
+.miniStepDone {
+  color: #15803D;
+}
+
+.miniCircle {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #F1F5F9;
+  border: 1.5px solid #CBD5E1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #64748B;
+}
+
+.miniStepActive .miniCircle {
+  background: var(--scrap-yellow);
+  border-color: #E5AA00;
+  color: #0F172A;
+  box-shadow: 0 0 0 3px rgba(248, 191, 29, 0.25);
+}
+
+.miniStepDone .miniCircle {
+  background: #DCFCE7;
+  border-color: #86EFAC;
+  color: #15803D;
+}
+
+.miniLine {
+  flex: 1;
+  height: 2px;
+  background: #E2E8F0;
+  margin: 0 0.5rem;
+}
+
+.miniLineActive {
+  background: #86EFAC;
+}
+
+/* --------------------------------------------------------------------------
+   6. NEW SCRAP REQUESTS BANNER (ACTIONABLE GOLDEN CARD)
+   -------------------------------------------------------------------------- */
+.newRequestsCard {
+  background: var(--color-primary, #FBC21A);
+  border: none;
+  border-radius: 18px;
+  padding: 1.35rem 1.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  box-shadow: 0 10px 28px -4px rgba(251, 194, 26, 0.38);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.newRequestsCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 34px -4px rgba(251, 194, 26, 0.48);
+}
+
+.newRequestsLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  flex: 1;
+}
+
+.newRequestsHeaderRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.newRequestsTag {
+  background: var(--color-graphite-dark, #1D222A);
+  color: #FFFFFF;
+  font-size: 0.68rem;
+  font-weight: 850;
+  padding: 0.22rem 0.55rem;
+  border-radius: 6px;
+  letter-spacing: 0.04em;
+}
+
+.newRequestsLivePulse {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #1E242B;
+}
+
+.pulseDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #15803D;
+  box-shadow: 0 0 0 2px rgba(21, 128, 61, 0.3);
+  animation: pulseDotLive 1.8s infinite;
+  flex-shrink: 0;
+}
+
+@keyframes pulseDotLive {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(21, 128, 61, 0.6); }
+  70% { transform: scale(1.1); box-shadow: 0 0 0 5px rgba(21, 128, 61, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(21, 128, 61, 0); }
+}
+
+.newRequestsTitle {
+  font-size: 1.45rem;
+  font-weight: 900;
+  color: var(--color-graphite-dark, #1D222A);
+  margin: 0;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.newRequestsDesc {
+  font-size: 0.9rem;
+  color: var(--color-graphite, #252A33);
+  margin: 0;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.newRequestsCtaBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--color-graphite-dark, #1D222A);
+  color: #FFFFFF;
+  font-size: 0.88rem;
+  font-weight: 800;
+  padding: 0.75rem 1.35rem;
+  border-radius: 12px;
+  text-decoration: none;
+  box-shadow: 0 6px 18px rgba(29, 34, 42, 0.28);
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.newRequestsCtaBtn:hover {
+  background: var(--color-graphite, #252A33);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 22px rgba(29, 34, 42, 0.38);
+}
+
+/* --------------------------------------------------------------------------
+   7. LIVE SCRAP MARKET PRICES (RESTORED ORIGINAL BOARD)
+   -------------------------------------------------------------------------- */
+.scrapPricesSection {
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  padding: 1.25rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.03);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.mobileMarketHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 0.65rem;
+  width: 100%;
+}
+
+.mobileMarketTitleWrap {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.marketIconYellow {
+  color: #f59e0b;
+  flex-shrink: 0;
+}
+
+.mobileMarketTitle {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.mobileMarketSub {
+  font-size: 0.685rem;
+  color: #64748b;
+  display: block;
+  margin-top: 2px;
+}
+
+.headerActionBtnsRow {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.mobileEditRatesBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #fbc21a;
+  border: 1px solid #e5aa00;
+  color: #0f172a;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 0.35rem 0.65rem;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  text-decoration: none;
+  box-shadow: 0 2px 8px rgba(251, 194, 26, 0.25);
+  transition: all 0.15s ease;
+}
+
+.mobileEditRatesBtn:hover {
+  background: #f59e0b;
+  transform: translateY(-1px);
+}
+
+.viewAllLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #2563eb;
+  text-decoration: none;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.viewAllLink:hover {
+  color: #1d4ed8;
+}
+
+/* Desktop 4-Column Grid */
+.desktopPriceGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.priceCardItem {
+  background: #ffffff;
+  border: 1px solid #edf2f7;
+  border-bottom: 3.5px solid #fbc21a;
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+  text-decoration: none;
+}
+
+.priceCardItem:hover {
+  transform: translateY(-3px);
+  border-color: #cbd5e1;
+  border-bottom-color: #fbc21a;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+}
+
+.priceCardImgWrapper {
+  width: 100%;
+  height: 110px;
+  background-color: #f8fafc;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.priceItemImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.25s ease;
+}
+
+.priceCardItem:hover .priceItemImg {
+  transform: scale(1.05);
+}
+
+.priceItemDetails {
+  padding: 0.95rem 1rem 1.1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  flex: 1;
+}
+
+.priceItemHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.priceItemName {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #0f172a;
+  text-transform: capitalize;
+}
+
+.trendGreenBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background-color: #f0fdf4;
+  color: #16a34a;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+}
+
+.trendRedBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background-color: #fef2f2;
+  color: #dc2626;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+}
+
+.priceItemMarketRate {
+  font-size: 0.785rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.priceItemYourRate {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background-color: #fffbeb;
+  border: 1px solid #fde68a;
+  color: #92400e;
+  font-size: 0.785rem;
+  font-weight: 800;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  margin-top: 2px;
+  width: fit-content;
+}
+
+.yourRateDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #f59e0b;
+  flex-shrink: 0;
+}
+
+/* Mobile Vertical List */
+.mobileMarketPricesList {
+  display: none;
+  flex-direction: column;
+  gap: 0.55rem;
+  width: 100%;
+}
+
+.mobilePriceRowCard {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: #f8fafc;
+  border: 1px solid #edf2f7;
+  border-radius: 10px;
+  padding: 0.65rem 0.85rem;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.15s ease;
+}
+
+.mobilePriceRowCard:hover {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.mobilePriceThumb {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  object-fit: cover;
+  background: #e2e8f0;
+  flex-shrink: 0;
+}
+
+.mobilePriceInfoCol {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.mobilePriceNameRow {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.mobilePriceName {
+  font-size: 0.875rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.mobileTrendUp {
+  font-size: 0.685rem;
+  font-weight: 800;
+  color: #16a34a;
+  background: #dcfce7;
+  padding: 1px 4px;
+  border-radius: 3px;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1.2;
+}
+
+.mobileTrendDown {
+  font-size: 0.685rem;
+  font-weight: 800;
+  color: #dc2626;
+  background: #fee2e2;
+  padding: 1px 4px;
+  border-radius: 3px;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1.2;
+}
+
+.mobileMandiRange {
+  font-size: 0.72rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.mobileMyRateCol {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
+  flex-shrink: 0;
+}
+
+.mobileMyRateLabel {
+  font-size: 0.65rem;
+  color: #64748b;
+  font-weight: 600;
+  text-transform: none;
+}
+
+.mobileMyRateVal {
+  font-size: 1.05rem;
+  font-weight: 900;
+  color: #15803d;
+  line-height: 1.1;
+}
+
+.mobileMyRateVal small {
+  font-size: 0.685rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.footnoteText {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  color: #94a3b8;
+  margin: 0;
+}
+
+/* --------------------------------------------------------------------------
+   RESPONSIVE DESIGN (TABLET & MOBILE BREAKPOINTS - MIRRORING HOUSEHOLD)
+   -------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  .desktopPriceGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .statsCarouselTrack {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .pageContainer {
+    padding: 0.75rem 0.75rem 5rem 0.75rem;
+    gap: 1rem;
+  }
+
+  .greetingAddressRow {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .greetingName {
+    font-size: 1.15rem;
+  }
+
+  .greetingSubtext {
+    font-size: 0.75rem;
+  }
+
+  .promoTickerStrip {
+    height: 38px;
+    padding: 0 0.65rem;
+    border-radius: 10px;
+  }
+
+  .bannerLeftSection {
+    gap: 0.4rem;
+    padding-right: 0.2rem;
+  }
+
+  .bannerBadgePill {
+    font-size: 0.56rem;
+    padding: 0.14rem 0.38rem;
+    border-radius: 4px;
+  }
+
+  .bannerVerticalDivider {
+    height: 12px;
+    margin-left: 0.05rem;
+  }
+
+  .addressPillBtn {
+    min-width: unset;
+    max-width: 120px;
+    padding: 0.28rem 0.45rem;
+    gap: 0.25rem;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  .addressPillArea {
+    font-size: 0.68rem;
+    max-width: 75px;
+  }
+
+  .addressPillStatus,
+  .addressPillStatusPaused {
+    font-size: 0.6rem;
+  }
+
+  .heroSliderWrapper,
+  .slideItem,
+  .imagePromoSlide,
+  .goldValueBannerSlide {
+    border-radius: 16px;
+    min-height: 140px;
+    max-height: 168px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  .promoImageFull {
+    width: 100% !important;
+    height: 100% !important;
+    max-height: 168px;
+    object-fit: cover !important;
+    object-position: center top !important;
+    border-radius: 16px !important;
+  }
+
+  .goldValueBannerSlide {
+    padding: 1.15rem 1rem;
+    background: var(--scrap-yellow) url('/turn-scrap-banner-bg.png') no-repeat right -15px center;
+    background-size: auto 100%;
+  }
+
+  .sliderDotsContainer {
+    bottom: 8px;
+    padding: 3px 8px;
+  }
+
+  .goldBannerLeft {
+    max-width: 68%;
+    gap: 0.35rem;
+  }
+
+  .goldBannerTag {
+    font-size: 0.65rem;
+    line-height: 1;
+  }
+
+  .goldBannerTitle {
+    font-size: 1.3rem;
+    line-height: 1.15;
+  }
+
+  .goldBannerSubtitle {
+    font-size: 0.74rem;
+    line-height: 1.35;
+  }
+
+  .goldBannerBtnRow {
+    gap: 0.5rem;
+    margin-top: 0.45rem;
+  }
+
+  .goldPostBtn,
+  .goldRatesBtn {
+    padding: 0.45rem 0.85rem;
+    font-size: 0.75rem;
+  }
+
+  /* Swipeable Horizontal Stats Carousel on Mobile */
+  .statsSectionWrapper {
+    overflow: hidden;
+  }
+
+  .statsCarouselTrack {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 0.85rem;
+    padding: 0.25rem 0.15rem 0.5rem 0.15rem;
+    width: 100%;
+    box-sizing: border-box;
+    scroll-padding: 0.15rem;
+  }
+
+  .statsCarouselTrack::-webkit-scrollbar {
+    display: none;
+  }
+
+  .statInteractiveCard {
+    flex: 0 0 100%;
+    min-width: 100%;
+    max-width: 100%;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+    border-radius: 16px;
+    padding: 0.95rem 1.15rem;
+    min-height: 105px;
+    box-sizing: border-box;
+  }
+
+  .statsIndicatorDotsRow {
+    display: flex;
+  }
+
+  /* Pickup Card Mobile Layout */
+  .pickupUnifiedHeader {
+    padding-bottom: 0.5rem;
+  }
+
+  .pickupUnifiedTitle {
+    font-size: 1.12rem;
+    white-space: nowrap !important;
+  }
+
+  .pickupUnifiedBody {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.85rem;
+  }
+
+  .pickupPartnerLeftCol {
+    width: 100%;
+    align-items: flex-start;
+    gap: 0.65rem;
+  }
+
+  .pickupCustomerHeaderRow {
+    width: 100%;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .pickupDetailsPill {
+    width: 100%;
+    padding: 0.42rem 0.75rem;
+  }
+
+  .pickupEtaRightCol {
+    width: 100%;
+    border-left: none;
+    border-top: 1px solid #E2E8F0;
+    padding-left: 0;
+    padding-top: 0.75rem;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    min-width: unset;
+  }
+
+  .trackPickupMiniBtn {
+    width: auto;
+    padding: 0.5rem 1.15rem;
+  }
+
+  /* New Requests Mobile Layout */
+  .newRequestsCard {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.85rem;
+    padding: 1.15rem 1.25rem;
+  }
+
+  .newRequestsCtaBtn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .scrapPricesSection {
+    padding: 1.15rem;
+    border-radius: 16px;
+    gap: 0.85rem;
+  }
+
+  .desktopPriceGrid {
+    display: none;
+  }
+
+  .mobileMarketPricesList {
+    display: flex;
+  }
+
+  .mobileMarketTitle {
+    font-size: 0.95rem;
+  }
+
+  .viewAllLink {
+    display: none;
+  }
+}

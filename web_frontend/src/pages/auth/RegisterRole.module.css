@@ -1,0 +1,609 @@
+.page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: #F9FAFB;
+  padding: 2.5rem 1.5rem;
+  box-sizing: border-box;
+}
+
+.card {
+  width: 100%;
+  max-width: 680px;
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 20px;
+  padding: 2.5rem 2.75rem;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+  box-sizing: border-box;
+  transition: max-width 0.25s ease;
+}
+
+.cardWide {
+  max-width: 760px;
+}
+
+/* Verified Mobile Banner */
+.verifiedMobileBanner {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #15803D;
+  background: #F0FDF4;
+  border: 1px solid #BBF7D0;
+  padding: 0.35rem 0.85rem;
+  border-radius: 9999px;
+  margin-bottom: 1.25rem;
+}
+
+/* Header */
+.headerCentered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.4rem;
+  margin-bottom: 2rem;
+}
+
+.headerLeft {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
+  margin-bottom: 1.75rem;
+}
+
+.logoImg {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  margin-bottom: 0.25rem;
+}
+
+.title {
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: #111827;
+  letter-spacing: -0.02em;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.subtitle {
+  font-size: 0.92rem;
+  color: #4B5563;
+  margin: 0;
+  line-height: 1.45;
+}
+
+/* Back Link */
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #6B7280;
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  padding: 0;
+  transition: color 0.18s ease;
+}
+
+.backBtn:hover {
+  color: #111827;
+}
+
+/* Step 1: Role Grid */
+.roleGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.roleCard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.85rem;
+  padding: 1.35rem 1.25rem;
+  background: #FFFFFF;
+  border: 2px solid #E5E7EB;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: left;
+  position: relative;
+}
+
+.roleCard:hover {
+  border-color: #F59E0B;
+  background: #FFFDF5;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(251, 194, 26, 0.12);
+}
+
+.roleCardActive {
+  border-color: #FBC21A !important;
+  background: #FFFBEB !important;
+  box-shadow: 0 4px 16px rgba(251, 194, 26, 0.18) !important;
+}
+
+.roleIconWrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: #1F2937;
+  color: #FBC21A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.roleCardActive .roleIconWrap {
+  background: #111827;
+  color: #FBC21A;
+}
+
+.roleText {
+  flex: 1;
+}
+
+.roleTitle {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #111827;
+  margin: 0 0 0.25rem 0;
+}
+
+.roleDesc {
+  font-size: 0.8rem;
+  color: #4B5563;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.roleCheckIcon {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #FBC21A;
+  color: #111827;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Stepper Bar for Merchant */
+.stepperTrack {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid #E5E7EB;
+  overflow-x: auto;
+}
+
+.stepItem {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #9CA3AF;
+  white-space: nowrap;
+}
+
+.stepBadge {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #F3F4F6;
+  color: #6B7280;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.stepActive {
+  color: #111827 !important;
+  font-weight: 700 !important;
+}
+
+.stepActive .stepBadge {
+  background: #FBC21A;
+  color: #111827;
+}
+
+.stepDone {
+  color: #047857;
+}
+
+.stepDone .stepBadge {
+  background: #D1FAE5;
+  color: #047857;
+}
+
+.stepConnector {
+  flex: 1;
+  height: 2px;
+  background: #E5E7EB;
+  min-width: 16px;
+}
+
+.stepConnectorDone {
+  background: #10B981;
+}
+
+/* Form Structure */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.fieldLabel {
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: #374151;
+}
+
+.fieldHint {
+  font-size: 0.74rem;
+  color: #6B7280;
+  font-weight: 500;
+}
+
+.textInput {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #D1D5DB;
+  border-radius: 10px;
+  font-size: 0.92rem;
+  color: #111827;
+  background: #FFFFFF;
+  box-sizing: border-box;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.textInput:focus {
+  outline: none;
+  border-color: #F59E0B;
+  box-shadow: 0 0 0 3px rgba(251, 194, 26, 0.2);
+}
+
+.readOnlyInput {
+  background: #F9FAFB;
+  color: #6B7280;
+  cursor: not-allowed;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border: 1px solid #E5E7EB;
+  border-radius: 10px;
+  font-size: 0.92rem;
+}
+
+.verifiedPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #15803D;
+  background: #DCFCE7;
+  padding: 0.15rem 0.5rem;
+  border-radius: 9999px;
+}
+
+/* 2-Column Row for City + PIN */
+.twoColRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+/* Upload Cards Grid */
+.uploadCardsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.uploadCard {
+  border: 1px solid #E5E7EB;
+  border-radius: 12px;
+  padding: 1rem;
+  background: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition: all 0.18s ease;
+}
+
+.uploadCard:hover {
+  border-color: #CBD5E1;
+}
+
+.uploadCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.35rem;
+}
+
+.docTitle {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.requiredBadge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #B91C1C;
+  background: #FEE2E2;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.optionalBadge {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #6B7280;
+  background: #F3F4F6;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.uploadTriggerBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #374151;
+  background: #F9FAFB;
+  border: 1px dashed #D1D5DB;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.uploadTriggerBtn:hover {
+  background: #F3F4F6;
+  border-color: #9CA3AF;
+  color: #111827;
+}
+
+.uploadedStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #15803D;
+  background: #F0FDF4;
+  border: 1px solid #BBF7D0;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+}
+
+/* Radio / Segmented Toggle Buttons */
+.segmentedGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.segmentBtn {
+  flex: 1;
+  padding: 0.65rem 1rem;
+  font-size: 0.88rem;
+  font-weight: 700;
+  border-radius: 10px;
+  border: 1.5px solid #E5E7EB;
+  background: #FFFFFF;
+  color: #4B5563;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  text-align: center;
+}
+
+.segmentBtn:hover {
+  border-color: #D1D5DB;
+}
+
+.segmentBtnActive {
+  background: #111827 !important;
+  border-color: #111827 !important;
+  color: #FBC21A !important;
+}
+
+/* Pills Selection */
+.pillsWrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.selectPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.95rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 9999px;
+  border: 1px solid #E5E7EB;
+  background: #F9FAFB;
+  color: #4B5563;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.selectPill:hover {
+  border-color: #D1D5DB;
+  color: #111827;
+}
+
+.selectPillActive {
+  background: #FFFBEB !important;
+  border-color: #F59E0B !important;
+  color: #92400E !important;
+  font-weight: 700 !important;
+}
+
+/* Checkboxes Grid */
+.checkboxesGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.65rem;
+}
+
+.checkItem {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.6rem 0.85rem;
+  border: 1px solid #E5E7EB;
+  border-radius: 10px;
+  background: #FFFFFF;
+  cursor: pointer;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #374151;
+  transition: all 0.18s ease;
+}
+
+.checkItem:hover {
+  border-color: #D1D5DB;
+}
+
+.checkItemActive {
+  border-color: #F59E0B;
+  background: #FFFDF5;
+  color: #111827;
+}
+
+.customCheckbox {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 1.5px solid #D1D5DB;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: transparent;
+  flex-shrink: 0;
+  transition: all 0.18s ease;
+}
+
+.checkItemActive .customCheckbox {
+  background: #F59E0B;
+  border-color: #F59E0B;
+  color: #FFFFFF;
+}
+
+/* Information Notice Box */
+.noticeBox {
+  background: #FFFBEB;
+  border: 1px solid #FDE68A;
+  border-radius: 10px;
+  padding: 0.85rem 1.15rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  color: #92400E;
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
+.noticeBox svg {
+  color: #D97706;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* Actions Row */
+.actionsRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.secondaryBackBtn {
+  padding: 0.75rem 1.5rem;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #4B5563;
+  background: #F3F4F6;
+  border: 1px solid #E5E7EB;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.secondaryBackBtn:hover {
+  background: #E5E7EB;
+  color: #111827;
+}
+
+.errorBanner {
+  background: #FEE2E2;
+  border: 1px solid #FCA5A5;
+  color: #B91C1C;
+  font-size: 0.84rem;
+  font-weight: 600;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  text-align: center;
+}
+
+@media (max-width: 640px) {
+  .card {
+    padding: 1.75rem 1.25rem;
+    border-radius: 16px;
+  }
+  .roleGrid {
+    grid-template-columns: 1fr;
+  }
+  .twoColRow {
+    grid-template-columns: 1fr;
+  }
+  .uploadCardsGrid {
+    grid-template-columns: 1fr;
+  }
+  .checkboxesGrid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,1198 @@
+/* ==========================================================================
+   HOUSEHOLD PROFILE PAGE STYLING (MODERN GRAPHITE & CLEAN CARD THEME)
+   ========================================================================== */
+
+.pageContainer {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem 2rem 1.25rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  box-sizing: border-box;
+  font-family: inherit;
+  color: #0f172a;
+}
+
+/* --------------------------------------------------------------------------
+   HERO PROFILE CARD
+   -------------------------------------------------------------------------- */
+.profileHeroCard {
+  background: linear-gradient(135deg, #fffdf2 0%, #ffffff 100%);
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 2rem 2.25rem;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05);
+  flex-wrap: wrap;
+}
+
+.profileUserGroup {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.avatarLarge {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: #f8bf1d;
+  color: #0f172a;
+  font-size: 2rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 10px rgba(248, 191, 29, 0.3);
+  flex-shrink: 0;
+}
+
+.userMetaCol {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.badgeRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.verifiedBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #ecfdf5;
+  color: #059669;
+  border: 1px solid #a7f3d0;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  letter-spacing: 0.04em;
+}
+
+.locationTag {
+  font-size: 0.76rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.userNameTitle {
+  font-size: 1.6rem;
+  font-weight: 900;
+  margin: 0;
+  letter-spacing: -0.01em;
+  color: #0f172a;
+}
+
+.userEmailPhone {
+  font-size: 0.84rem;
+  color: #475569;
+  margin: 0;
+}
+
+/* Right Metrics in Hero */
+.heroStatsStrip {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 1rem 1.5rem;
+  border-radius: 14px;
+}
+
+.statCol {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.statLabel {
+  font-size: 0.68rem;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+}
+
+.statValGold {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.statValGreen {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: #059669;
+}
+
+.statDivider {
+  width: 1px;
+  height: 36px;
+  background: #e2e8f0;
+}
+
+/* --------------------------------------------------------------------------
+   NAV TABS
+   -------------------------------------------------------------------------- */
+.tabsContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.tabBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.75rem 1.25rem;
+  border: none;
+  background: none;
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #64748b;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.tabBtn:hover {
+  color: #0f172a;
+}
+
+.tabActive {
+  color: #0f172a !important;
+  border-bottom-color: #f8bf1d !important;
+  font-weight: 900 !important;
+}
+
+/* --------------------------------------------------------------------------
+   TAB CONTENT CARDS & GRIDS
+   -------------------------------------------------------------------------- */
+.tabContentGrid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.contentCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 1.75rem 2rem;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.cardHeaderGroup {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 0.85rem;
+}
+
+.cardTitle {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+.cardSubtitle {
+  font-size: 0.8rem;
+  color: #64748b;
+  margin: 0;
+}
+
+/* Form Styles */
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+.formFieldFull {
+  grid-column: span 2;
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.fieldLabel {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #334155;
+  margin: 0;
+}
+
+.inputWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.inputIcon {
+  position: absolute;
+  left: 12px;
+  color: #94a3b8;
+  pointer-events: none;
+}
+
+.textInput,
+.textareaInput,
+.selectInput {
+  width: 100%;
+  padding: 0.65rem 0.85rem 0.65rem 2.45rem;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  background: #f8fafc;
+  font-family: inherit;
+  font-size: 0.86rem;
+  color: #0f172a;
+  box-sizing: border-box;
+  outline: none;
+  transition: all 0.15s ease;
+}
+
+.textareaInput {
+  padding: 0.75rem 1rem;
+  min-height: 80px;
+  resize: vertical;
+}
+
+.textInput:focus,
+.textareaInput:focus,
+.selectInput:focus {
+  background: #ffffff;
+  border-color: #f59e0b;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+}
+
+.saveBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  background: #f8bf1d;
+  color: #0f172a;
+  font-size: 0.86rem;
+  font-weight: 900;
+  padding: 0.65rem 1.5rem;
+  border-radius: 8px;
+  border: 1.5px solid #e5aa00;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  width: fit-content;
+  box-shadow: 0 2px 8px rgba(248, 191, 29, 0.25);
+}
+
+.saveBtn:hover {
+  background: #eab308;
+  transform: translateY(-1px);
+}
+
+/* --------------------------------------------------------------------------
+   SAVED ADDRESSES LIST
+   -------------------------------------------------------------------------- */
+.addressCardList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.addressItemCard {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.15rem 1.25rem;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  transition: all 0.15s ease;
+}
+
+.addressItemCard:hover {
+  border-color: #cbd5e1;
+  background: #ffffff;
+}
+
+.addressItemActive {
+  border-color: #f8bf1d !important;
+  background: #fffdf5 !important;
+  box-shadow: 0 0 0 2px rgba(248, 191, 29, 0.25);
+}
+
+.addressLeftCol {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.addressTagRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.addressTagPill {
+  background: #0f172a;
+  color: #fbc21a;
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.defaultBadge {
+  background: #ecfdf5;
+  color: #059669;
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #a7f3d0;
+}
+
+.addressText {
+  font-size: 0.85rem;
+  color: #334155;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.addressActions {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.addressActionBtn {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #64748b;
+  border-radius: 6px;
+  padding: 0.35rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.addressActionBtn:hover {
+  color: #0f172a;
+  border-color: #94a3b8;
+}
+
+.deleteBtn:hover {
+  color: #ef4444 !important;
+  border-color: #fca5a5 !important;
+}
+
+/* --------------------------------------------------------------------------
+   PAYMENT PREFERENCES CARDS
+   -------------------------------------------------------------------------- */
+.payoutMethodCard {
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.15rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.payoutMethodActive {
+  border-color: #10b981;
+  background: #ecfdf5;
+}
+
+/* --------------------------------------------------------------------------
+   ORDER HISTORY QUICK ACTION CARD
+   -------------------------------------------------------------------------- */
+.historyActionCard {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+  transition: all 0.2s ease;
+}
+
+.historyActionCard:hover {
+  border-color: #f8bf1d;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.07);
+}
+
+.historyActionLeft {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.historyIconWrap {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #059669;
+  flex-shrink: 0;
+}
+
+.historyClockIcon {
+  color: #059669;
+}
+
+.historyTextGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.historyTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.historyCardTitle {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+.historyCountBadge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #059669;
+  background: #d1fae5;
+  border: 1px solid #a7f3d0;
+  padding: 0.15rem 0.6rem;
+  border-radius: 20px;
+}
+
+.historyCardSubtitle {
+  font-size: 0.825rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.viewHistoryBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background: #0f172a;
+  color: #ffffff;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.viewHistoryBtn:hover {
+  background: #1e293b;
+  transform: translateX(2px);
+}
+
+/* --------------------------------------------------------------------------
+   VIEW CONTAINERS
+   -------------------------------------------------------------------------- */
+.desktopProfileView {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  width: 100%;
+}
+
+.mobileProfileView {
+  display: none;
+}
+
+/* --------------------------------------------------------------------------
+   RESPONSIVE
+   -------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  .tabContentGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .pageContainer {
+    padding: 0.85rem 0.85rem 1.25rem 0.85rem;
+    gap: 0.85rem;
+    width: 100% !important;
+    max-width: 100vw !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
+  }
+
+  .desktopProfileView {
+    display: none !important;
+  }
+
+  .mobileProfileView {
+    display: flex !important;
+    flex-direction: column;
+    gap: 0.85rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* 1. Mobile Profile Header Card */
+  .mobileHeroHeader {
+    background: linear-gradient(180deg, #fffef9 0%, #ffffff 100%);
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 1.15rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+    box-sizing: border-box;
+  }
+
+  .mobileAvatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: #f8bf1d;
+    color: #111827;
+    font-size: 1.85rem;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(248, 191, 29, 0.25);
+  }
+
+  .mobileUserInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .mobileVerifiedBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    background: #e8f5e9;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+    font-size: 0.68rem;
+    font-weight: 750;
+    padding: 0.12rem 0.5rem;
+    border-radius: 9999px;
+    width: fit-content;
+    margin-bottom: 1px;
+  }
+
+  .mobileVerifiedIcon {
+    color: #166534;
+    flex-shrink: 0;
+  }
+
+  .mobileUserName {
+    font-size: 1.3rem;
+    font-weight: 900;
+    color: #111827;
+    margin: 0;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  .mobileLocationRow,
+  .mobilePhoneRow {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.76rem;
+    color: #4b5563;
+    font-weight: 600;
+    margin-top: 1px;
+  }
+
+  .mobileLocationIcon,
+  .mobilePhoneIcon {
+    color: #d97706;
+    flex-shrink: 0;
+  }
+
+  /* 2. Mobile Quick Stats (3 Columns with numbers on top) */
+  .mobileQuickStats {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 0.85rem 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    box-sizing: border-box;
+  }
+
+  .mobileStatItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 2px;
+    flex: 1;
+  }
+
+  .mobileStatValue {
+    font-size: 1.15rem;
+    font-weight: 900;
+    color: #111827;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+  }
+
+  .mobileStatLabel {
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: #6b7280;
+    white-space: nowrap;
+  }
+
+  .mobileStatDivider {
+    width: 1px;
+    height: 32px;
+    background: #e5e7eb;
+    flex-shrink: 0;
+  }
+
+  /* 3. Mobile Order History Card */
+  .mobileHistoryCard {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 0.85rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-decoration: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    box-sizing: border-box;
+    transition: all 0.15s ease;
+  }
+
+  .mobileHistoryLeft {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    min-width: 0;
+  }
+
+  .mobileHistoryIconBox {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: #059669;
+  }
+
+  .mobileHistoryClockIcon {
+    color: #059669;
+  }
+
+  .mobileHistoryTextCol {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 0;
+  }
+
+  .mobileHistoryTitle {
+    font-size: 0.92rem;
+    font-weight: 800;
+    color: #111827;
+    margin: 0;
+  }
+
+  .mobileHistoryCountBadge {
+    background: #ecfdf5;
+    color: #059669;
+    font-size: 0.68rem;
+    font-weight: 700;
+    border-radius: 9999px;
+    padding: 0.08rem 0.45rem;
+    width: fit-content;
+  }
+
+  .mobileChevron {
+    color: #9ca3af;
+    flex-shrink: 0;
+  }
+
+  /* 4. Mobile Section & List Cards */
+  .mobileSection {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    width: 100%;
+  }
+
+  .mobileSectionTitle {
+    font-size: 1rem;
+    font-weight: 850;
+    color: #111827;
+    margin: 0.25rem 0 0.05rem 0;
+    letter-spacing: -0.01em;
+  }
+
+  .mobileListCard {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    box-sizing: border-box;
+  }
+
+  .mobileListRow {
+    padding: 0.85rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+
+  .mobileListRow:active {
+    background: #f9fafb;
+  }
+
+  .mobileListRowLeft {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .mobileRowIcon {
+    color: #4b5563;
+    flex-shrink: 0;
+  }
+
+  .mobileRowTextGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    min-width: 0;
+  }
+
+  .mobileRowLabel {
+    font-size: 0.7rem;
+    color: #6b7280;
+    font-weight: 600;
+  }
+
+  .mobileRowValue {
+    font-size: 0.86rem;
+    font-weight: 700;
+    color: #111827;
+    word-break: break-word;
+  }
+
+  .mobileRowDivider {
+    height: 1px;
+    background: #f3f4f6;
+    margin: 0 1rem;
+  }
+
+  .mobileEditContactBtn {
+    background: #f8bf1d;
+    color: #111827;
+    font-weight: 800;
+    font-size: 0.88rem;
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    border: none;
+    width: 100%;
+    cursor: pointer;
+    transition: opacity 0.15s ease;
+    box-shadow: 0 2px 6px rgba(248, 191, 29, 0.2);
+    text-align: center;
+    margin-top: 0.15rem;
+  }
+
+  .mobileEditContactBtn:active {
+    opacity: 0.9;
+  }
+
+  /* 5. Mobile Saved Addresses Row */
+  .mobileAddressesCard {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 0.9rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    box-sizing: border-box;
+    transition: all 0.15s ease;
+  }
+
+  .mobileAddressesCard:active {
+    background: #f9fafb;
+  }
+
+  .mobileAddressesLeft {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .mobileAddressesIcon {
+    color: #111827;
+    flex-shrink: 0;
+  }
+
+  .mobileAddressesLabel {
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: #111827;
+  }
+
+  .mobileAddressesRight {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .mobileAddressesCountBadge {
+    background: #f8bf1d;
+    color: #111827;
+    font-weight: 850;
+    font-size: 0.72rem;
+    padding: 0.12rem 0.5rem;
+    border-radius: 9999px;
+  }
+
+  /* 6. Mobile Account & Security */
+  .mobileRoleIconBox {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    background: #ecfdf5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .mobileRoleTitle {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #111827;
+  }
+
+  .mobileRoleSubtitle {
+    font-size: 0.72rem;
+    color: #6b7280;
+  }
+
+  .mobileRoleRight {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .mobileRoleActivePill {
+    color: #16a34a;
+    font-weight: 700;
+    font-size: 0.72rem;
+  }
+
+  .mobileLogoutBoxWrap {
+    padding: 0.85rem 1rem;
+    background: #fef2f2;
+    border: 1px solid #fee2e2;
+    border-radius: 14px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    transition: background 0.15s ease;
+  }
+
+  .mobileLogoutBoxWrap:active {
+    background: #fee2e2;
+  }
+
+  .mobileLogoutBtn {
+    width: 100%;
+    border: none;
+    background: transparent;
+    color: #dc2626;
+    font-size: 0.88rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.75rem;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  /* 7. Mobile Need Help Card */
+  .mobileNeedHelpCard {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 0.9rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-decoration: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    box-sizing: border-box;
+    margin-top: 0.15rem;
+  }
+
+  .mobileNeedHelpLeft {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+  }
+
+  .mobileNeedHelpIcon {
+    color: #111827;
+    flex-shrink: 0;
+  }
+
+  .mobileNeedHelpTitle {
+    font-size: 0.86rem;
+    font-weight: 800;
+    color: #111827;
+  }
+
+  .mobileNeedHelpSubtitle {
+    font-size: 0.72rem;
+    color: #6b7280;
+  }
+
+  .mobileModalBox {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 1.5rem 1.25rem;
+    width: 92%;
+    max-width: 440px;
+    margin: auto;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10000;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   MODAL OVERLAY & ADDRESS CARD BOXES (FOR MOBILE & DESKTOP MODALS)
+   -------------------------------------------------------------------------- */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.addressCard {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 1rem 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.addressCard:hover {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+}
+
+.addressCardDefault {
+  border-color: #f8bf1d !important;
+  background: #fffdf5 !important;
+  box-shadow: 0 4px 12px rgba(248, 191, 29, 0.18) !important;
+}
+
+.addressCardTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.addressCardTopLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.addressCardIcon {
+  color: #d97706;
+  flex-shrink: 0;
+}
+
+.addressTagBadge {
+  background: #0f172a;
+  color: #f8bf1d;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  letter-spacing: 0.02em;
+}
+
+.defaultPill {
+  background: #ecfdf5;
+  color: #059669;
+  border: 1px solid #a7f3d0;
+  font-size: 0.68rem;
+  font-weight: 750;
+  padding: 0.15rem 0.5rem;
+  border-radius: 9999px;
+}
+
+.defaultActiveBadge {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #059669;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.setAsDefaultBtn {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #64748b;
+  text-decoration: underline;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.setAsDefaultBtn:hover {
+  color: #0f172a;
+}
+
+.addressText {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #1e293b;
+  line-height: 1.45;
+  margin: 0.15rem 0;
+}
+
+.landmarkBox {
+  background: #f8fafc;
+  border-radius: 8px;
+  padding: 0.45rem 0.7rem;
+  border: 1px solid #f1f5f9;
+}
+
+.addressCardDefault .landmarkBox {
+  background: #fffbf0;
+  border-color: #fef3c7;
+}
+
+.landmarkText {
+  font-size: 0.75rem;
+  color: #64748b;
+  line-height: 1.4;
+}
+
+.addAddressBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: #f8bf1d;
+  color: #0f172a;
+  border: none;
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  font-size: 0.88rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  box-shadow: 0 2px 8px rgba(248, 191, 29, 0.25);
+  margin-top: 0.4rem;
+}
+
+.addAddressBtn:hover {
+  background: #eab308;
+  transform: translateY(-1px);
+}

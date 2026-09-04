@@ -1,0 +1,312 @@
+.merchantHeader {
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  background-color: #ffffff;
+  border-bottom: 1px solid #edf2f7;
+  z-index: 100;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.navContainer {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0 1.75rem;
+  height: 74px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  box-sizing: border-box;
+}
+
+/* Left Brand */
+.brandGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+}
+
+.brandLogo {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.logoIcon {
+  height: 38px;
+  width: auto;
+  object-fit: contain;
+}
+
+.brandTextCol {
+  display: flex;
+  flex-direction: column;
+}
+
+.brandTitle {
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: #1e293b;
+  line-height: 1.1;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.brandSubtitle {
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #94a3b8;
+  margin-top: 2px;
+  text-transform: uppercase;
+}
+
+/* Center Tabs */
+.centerNav {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.navTab {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.55rem 0.95rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #475569;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.15s ease;
+  position: relative;
+}
+
+.navTab:hover {
+  color: #0f172a;
+  background-color: #f8fafc;
+}
+
+.navTabActive {
+  color: #0f172a;
+  font-weight: 700;
+  background-color: transparent;
+}
+
+.navTabActive::after {
+  content: '';
+  position: absolute;
+  bottom: -15px;
+  left: 0.75rem;
+  right: 0.75rem;
+  height: 3px;
+  background-color: #fbc21a;
+  border-radius: 3px 3px 0 0;
+}
+
+.tabIcon {
+  display: flex;
+  align-items: center;
+  opacity: 0.85;
+}
+
+.navTabActive .tabIcon {
+  opacity: 1;
+  color: #0f172a;
+}
+
+/* Right Controls */
+.rightActions {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.notificationBtn {
+  position: relative;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.4rem;
+  border-radius: 50%;
+  color: #475569;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.15s ease;
+  text-decoration: none;
+}
+
+.notificationBtn:hover {
+  background-color: #f1f5f9;
+  color: #0f172a;
+}
+
+.badgeCount {
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  background-color: #fbc21a;
+  color: #1e293b;
+  font-size: 0.65rem;
+  font-weight: 800;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #ffffff;
+}
+
+/* User Menu */
+.userMenuWrapper {
+  position: relative;
+}
+
+.userMenuBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.35rem 0.6rem;
+  border-radius: 8px;
+  transition: background-color 0.15s ease;
+}
+
+.userMenuBtn:hover {
+  background-color: #f8fafc;
+}
+
+.userAvatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #fef3c7;
+  color: #d97706;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #fde68a;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.userName {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.2;
+}
+
+.userRole {
+  font-size: 0.72rem;
+  color: #64748b;
+  line-height: 1;
+}
+
+.chevron {
+  color: #94a3b8;
+  transition: transform 0.2s ease;
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 220px;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  padding: 0.5rem;
+  z-index: 101;
+  animation: fadeIn 0.15s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdownHeader {
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid #f1f5f9;
+  margin-bottom: 0.35rem;
+}
+
+.dropdownHeaderTitle {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.dropdownHeaderSub {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.825rem;
+  color: #334155;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: background-color 0.15s ease;
+  width: 100%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+
+.dropdownItem:hover {
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+
+.dropdownItemDanger {
+  color: #dc2626;
+}
+
+.dropdownItemDanger:hover {
+  background-color: #fef2f2;
+  color: #b91c1c;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 900px) {
+  .centerNav {
+    display: none;
+  }
+  .brandSubtitle {
+    display: none;
+  }
+}

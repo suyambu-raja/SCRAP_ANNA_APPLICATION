@@ -1,0 +1,257 @@
+{
+  "app": {
+    "name": "Bill Scrap",
+    "tagline": "Connect • Collect • Recycle"
+  },
+  "common": {
+    "login": "Sign In",
+    "signup": "Create Account",
+    "logout": "Logout",
+    "getStarted": "Get Started",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "save": "Save",
+    "back": "Back",
+    "next": "Next",
+    "retry": "Retry",
+    "loading": "Loading...",
+    "search": "Search",
+    "filter": "Filter",
+    "all": "All",
+    "viewAll": "View All",
+    "noData": "No data available",
+    "lastUpdated": "Last updated",
+    "perKg": "₹/kg",
+    "kg": "kg",
+    "indicativePrice": "Indicative market price",
+    "or": "or"
+  },
+  "splash": {
+    "loading": "Loading..."
+  },
+  "language": {
+    "title": "Choose Your Language",
+    "subtitle": "You can change this later in Settings",
+    "english": "English",
+    "tamil": "தமிழ்",
+    "continue": "Continue"
+  },
+  "home": {
+    "welcome": {
+      "title": "Your Scrap, Your Value",
+      "subtitle": "Sell scrap at fair prices. Connect with verified merchants and industries across Chennai.",
+      "cta": "Get Started"
+    },
+    "prices": {
+      "title": "Live Scrap Prices",
+      "subtitle": "Current indicative market prices in Chennai",
+      "viewAll": "View All Prices"
+    },
+    "features": {
+      "title": "What Can You Do?",
+      "sell": "Sell Household Scrap",
+      "sellDesc": "Get fair prices for your old items",
+      "merchants": "Find Verified Merchants",
+      "merchantsDesc": "Connect with trusted local scrap dealers",
+      "industry": "Post Industrial Requirements",
+      "industryDesc": "Get competitive offers from merchants",
+      "products": "Discover Reusable Products",
+      "productsDesc": "Browse second-hand items from merchants"
+    },
+    "howItWorks": {
+      "title": "How It Works",
+      "step1": "Post or Request",
+      "step1Desc": "List your scrap or post what you need",
+      "step2": "Get Connected",
+      "step2Desc": "We match you with the right people",
+      "step3": "Compare Options",
+      "step3Desc": "Review offers and choose the best one",
+      "step4": "Complete Transaction",
+      "step4Desc": "Schedule pickup and get paid"
+    },
+    "loginCta": {
+      "title": "Unlock personalized features",
+      "subtitle": "Sign in to sell scrap, track orders, and manage your transactions."
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome Back",
+      "subtitle": "Sign in to your Bill Scrap account",
+      "emailOrPhone": "Email or Phone Number",
+      "password": "Password",
+      "forgotPassword": "Forgot Password?",
+      "noAccount": "Don't have an account?",
+      "googleSignIn": "Sign in with Google",
+      "signingIn": "Signing in..."
+    },
+    "signup": {
+      "title": "Create Your Account",
+      "subtitle": "Join Bill Scrap today",
+      "fullName": "Full Name",
+      "phone": "Phone Number",
+      "email": "Email Address",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "role": "I am a",
+      "roles": {
+        "household": "Household",
+        "merchant": "Scrap Merchant",
+        "industry": "Industry / Company",
+        "aggregator": "Aggregator"
+      },
+      "terms": "I agree to the",
+      "termsLink": "Terms & Conditions",
+      "privacyLink": "Privacy Policy",
+      "and": "and",
+      "hasAccount": "Already have an account?",
+      "creating": "Creating account..."
+    },
+    "otp": {
+      "title": "Verify Your Phone",
+      "subtitle": "Enter the 6-digit code sent to",
+      "resend": "Resend Code",
+      "resendIn": "Resend in",
+      "verifying": "Verifying...",
+      "verify": "Verify",
+      "didntReceive": "Didn't receive the code?"
+    }
+  },
+  "nav": {
+    "home": "Home",
+    "market": "Market",
+    "orders": "Orders",
+    "sell": "Sell",
+    "notifications": "Notifications",
+    "profile": "Profile",
+    "settings": "Settings",
+    "messages": "Messages",
+    "requests": "Requests",
+    "post": "Post",
+    "opportunities": "Opportunities",
+    "dashboard": "Dashboard"
+  },
+  "dashboard": {
+    "welcome": "Welcome back",
+    "household": {
+      "quickActions": "Quick Actions",
+      "sellScrap": "Sell Scrap",
+      "bookPickup": "Book Pickup",
+      "viewPrices": "View Prices",
+      "activeOrders": "Active Orders",
+      "recentTransactions": "Recent Transactions"
+    },
+    "merchant": {
+      "nearbyRequests": "Nearby Requests",
+      "myResponses": "My Responses",
+      "reusableProducts": "Reusable Products",
+      "addProduct": "Add Product"
+    },
+    "industry": {
+      "postRequirement": "Post Requirement",
+      "activeRequests": "Active Requests",
+      "merchantOffers": "Merchant Offers",
+      "orderStatus": "Order Status"
+    },
+    "aggregator": {
+      "networkActivity": "Network Activity",
+      "opportunities": "Available Opportunities",
+      "partnerActivity": "Partner Activity"
+    }
+  },
+  "prices": {
+    "title": "Market Prices",
+    "subtitle": "Current indicative scrap prices in Chennai",
+    "search": "Search scrap categories...",
+    "noResults": "No categories match your search",
+    "trend": {
+      "up": "Trending up",
+      "down": "Trending down",
+      "stable": "Stable"
+    }
+  },
+  "orders": {
+    "title": "My Orders",
+    "empty": "No orders yet",
+    "emptyDesc": "Your orders will appear here"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "empty": "No notifications",
+    "emptyDesc": "You're all caught up!",
+    "markAllRead": "Mark all read"
+  },
+  "profile": {
+    "title": "Profile",
+    "editProfile": "Edit Profile",
+    "language": "Language",
+    "notifications": "Notifications",
+    "help": "Help & Support",
+    "about": "About Bill Scrap",
+    "version": "Version"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "notifications": "Push Notifications",
+    "theme": "Theme",
+    "account": "Account",
+    "deleteAccount": "Delete Account"
+  },
+  "features": {
+    "sellScrap": {
+      "title": "Sell Scrap",
+      "category": "Scrap Category",
+      "weight": "Estimated Weight",
+      "photos": "Add Photos",
+      "location": "Pickup Location",
+      "notes": "Additional Notes",
+      "estimatedPrice": "Estimated Price",
+      "submit": "Submit for Pickup"
+    },
+    "bookPickup": {
+      "title": "Book Pickup",
+      "date": "Preferred Date",
+      "timeSlot": "Time Slot",
+      "address": "Pickup Address",
+      "notes": "Notes for Pickup Agent",
+      "confirm": "Confirm Booking"
+    },
+    "postRequirement": {
+      "title": "Post Scrap Requirement",
+      "scrapType": "Scrap Type",
+      "quantity": "Required Quantity",
+      "pricing": "Expected Pricing",
+      "deadline": "Response Deadline",
+      "description": "Description",
+      "post": "Post Requirement"
+    },
+    "merchantOffers": {
+      "title": "Merchant Offers",
+      "received": "Offers Received",
+      "accept": "Accept Offer",
+      "reject": "Decline",
+      "private": "Offers are private — merchants cannot see each other's prices"
+    },
+    "reusableProducts": {
+      "title": "Reusable Products",
+      "addNew": "Add Product",
+      "condition": "Condition",
+      "new": "New",
+      "likeNew": "Like New",
+      "good": "Good",
+      "fair": "Fair"
+    }
+  },
+  "errors": {
+    "generic": "Something went wrong",
+    "network": "Network error. Please check your connection.",
+    "unauthorized": "Please sign in to continue",
+    "notFound": "Page not found",
+    "required": "This field is required",
+    "invalidEmail": "Please enter a valid email",
+    "invalidPhone": "Please enter a valid phone number",
+    "passwordMinLength": "Password must be at least 8 characters",
+    "passwordMismatch": "Passwords do not match"
+  }
+}
