@@ -20,12 +20,51 @@ import {
   ShieldCheck,
   Clock,
   Search,
+  Edit3,
+  X,
 } from 'lucide-react';
 import { SkeletonCard } from '@/components/common';
 import { PriceCard } from '@/components/cards/PriceCard';
 import { getMarketPrices, getScrapCategories } from '@/services';
 import type { MarketPrice, ScrapCategory } from '@/types';
 import styles from './MerchantMarketPrices.module.css';
+
+interface MerchantCustomPriceRecord {
+  rate: number;
+  updatedAt: string;
+}
+
+const STORAGE_KEY = 'billscrap_merchant_custom_prices';
+
+function formatUpdatedTime(dateInput: string | Date | undefined): string {
+  if (!dateInput) return 'Today, 9:30 AM';
+  const d = typeof dateInput === 'string' ? new Date(dateInput) : dateInput;
+  if (isNaN(d.getTime())) {
+    return String(dateInput);
+  }
+  const now = new Date();
+  const diffMs = now.getTime() - d.getTime();
+  const diffSec = Math.floor(diffMs / 1000);
+  const diffMin = Math.floor(diffSec / 60);
+
+  if (diffSec < 60) {
+    return 'Just now';
+  }
+  if (diffMin < 60) {
+    return `${diffMin}m ago`;
+  }
+
+  const isToday =
+    d.getDate() === now.getDate() &&
+    d.getMonth() === now.getMonth() &&
+    d.getFullYear() === now.getFullYear();
+
+  const timeStr = d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true });
+  if (isToday) {
+    return `Today, ${timeStr}`;
+  }
+  return `${d.toLocaleDateString([], { month: 'short', day: 'numeric' })}, ${timeStr}`;
+}
 
 export default function MerchantMarketPrices() {
   const { i18n } = useTranslation();
@@ -38,9 +77,12 @@ export default function MerchantMarketPrices() {
   const [selectedMaterialId, setSelectedMaterialId] = useState<string>('IRON_001');
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Merchant Custom Rates State (allows string for fluid backspacing/typing)
-  const [merchantRates, setMerchantRates] = useState<Record<string, number | string>>({});
+  // Merchant Custom Rates State (persisted with rate and updatedAt timestamp)
+  const [merchantRates, setMerchantRates] = useState<Record<string, MerchantCustomPriceRecord>>({});
+  const [inputRate, setInputRate] = useState<string>('0');
+  const [mobileRates, setMobileRates] = useState<Record<string, string>>({});
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [openUpdaterId, setOpenUpdaterId] = useState<string | null>(null);
 
   useEffect(() => {
     Promise.all([getMarketPrices(), getScrapCategories()]).then(([priceData, catData]) => {
@@ -87,12 +129,36 @@ export default function MerchantMarketPrices() {
       setSelectedCatId(initialCat);
       setSelectedMaterialId(initialMat);
 
-      // Initialize default merchant custom rates to 0
-      const initialRates: Record<string, number | string> = {};
+      // Initialize merchant custom rates from localStorage or default to market benchmark
+      let storedRates: Record<string, MerchantCustomPriceRecord> = {};
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          storedRates = JSON.parse(saved);
+        }
+      } catch (e) {
+        console.warn('Failed to parse saved merchant custom prices', e);
+      }
+
+      const initialRates: Record<string, MerchantCustomPriceRecord> = {};
       priceData.forEach((p) => {
-        initialRates[p.id] = 0;
+        if (storedRates[p.id]) {
+          initialRates[p.id] = storedRates[p.id];
+        } else {
+          initialRates[p.id] = {
+            rate: p.price,
+            updatedAt: 'Today, 9:30 AM',
+          };
+        }
       });
       setMerchantRates(initialRates);
+
+      // Set input rate for initial active material
+      const initialActive = initialRates[initialMat];
+      if (initialActive) {
+        setInputRate(String(initialActive.rate));
+      }
+
       setLoading(false);
     });
   }, [searchParams]);
@@ -130,22 +196,19 @@ export default function MerchantMarketPrices() {
       if (found) {
         setSelectedCatId(found.categoryId);
         setSelectedMaterialId(found.id);
-        window.scrollTo({
-          top: 0,
-          behavior: 'smooth',
-        });
       }
     }
   }, [searchParams, prices]);
 
-  const handleSelectMaterial = (matId: string, scrollToTop = true) => {
-    setSelectedMaterialId(matId);
-    if (scrollToTop) {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth',
-      });
+  // Sync inputRate when switching selected material
+  useEffect(() => {
+    if (selectedMaterialId && merchantRates[selectedMaterialId] !== undefined) {
+      setInputRate(String(merchantRates[selectedMaterialId].rate));
     }
+  }, [selectedMaterialId, merchantRates]);
+
+  const handleSelectMaterial = (matId: string) => {
+    setSelectedMaterialId(matId);
   };
 
   const showToast = (msg: string) => {
@@ -187,50 +250,188 @@ export default function MerchantMarketPrices() {
     ? activePrice.priceMax ?? Math.round(activePrice.price * 1.1)
     : 0;
 
-  const currentMerchantRate =
-    activePrice && merchantRates[activePrice.id] !== undefined
-      ? merchantRates[activePrice.id]
-      : 0;
+  const activeRecord = activePrice ? merchantRates[activePrice.id] : undefined;
+  const savedRate = activeRecord !== undefined ? activeRecord.rate : (activePrice?.price ?? 0);
+  const savedUpdatedAt = activeRecord !== undefined ? activeRecord.updatedAt : 'Today, 9:30 AM';
+  const formattedTime = formatUpdatedTime(savedUpdatedAt);
+  const benchmarkAvg = Math.round((minPrice + maxPrice) / 2);
+
+  const diffVsAvg = savedRate - benchmarkAvg;
+  let comparisonText = 'Matches Chennai average';
+  if (diffVsAvg > 0) {
+    comparisonText = `+₹${diffVsAvg}/${activePrice?.unit || 'kg'} above market avg`;
+  } else if (diffVsAvg < 0) {
+    comparisonText = `₹${Math.abs(diffVsAvg)}/${activePrice?.unit || 'kg'} below market avg`;
+  }
 
   // Rate change handlers (supports fluid typing & complete deletion of 0)
-  const handleRateChange = (materialId: string, val: string) => {
+  const handleInputRateChange = (val: string) => {
     if (val === '') {
-      setMerchantRates((prev) => ({
-        ...prev,
-        [materialId]: '',
-      }));
+      setInputRate('');
       return;
     }
     const num = Math.max(0, Math.min(10000, Number(val)));
-    setMerchantRates((prev) => ({
-      ...prev,
-      [materialId]: isNaN(num) ? '' : num,
-    }));
+    setInputRate(isNaN(num) ? '' : String(Math.round(num)));
   };
 
-  const handleStepRate = (materialId: string, step: number) => {
-    const raw = merchantRates[materialId];
-    const current = raw === '' || raw === undefined ? 0 : Number(raw);
-    const nextVal = Math.min(10000, Math.max(0, current + step));
-    setMerchantRates((prev) => ({
-      ...prev,
-      [materialId]: nextVal,
-    }));
+  const handleStepRate = (step: number) => {
+    const current = inputRate === '' ? 0 : Number(inputRate);
+    const nextVal = Math.min(10000, Math.max(0, Math.round(current + step)));
+    setInputRate(String(nextVal));
+  };
+
+  const handleQuickPreset = (preset: number | 'match-avg') => {
+    if (!activePrice) return;
+    if (preset === 'match-avg') {
+      setInputRate(String(benchmarkAvg));
+      return;
+    }
+    const current = inputRate === '' ? 0 : Number(inputRate);
+    const nextVal = Math.min(10000, Math.max(0, Math.round(current + preset)));
+    setInputRate(String(nextVal));
   };
 
   const handleSaveActiveRate = () => {
     if (!activePrice) return;
-    const savedRate = Number(merchantRates[activePrice.id]) || 0;
-    showToast(`✓ Saved YOUR Price for ${activePrice.name || activePrice.category}: ₹${savedRate}/${activePrice.unit}`);
+    const newRate = Math.max(0, Math.round(Number(inputRate) || 0));
+    const nowIso = new Date().toISOString();
+    const updatedRecord: MerchantCustomPriceRecord = {
+      rate: newRate,
+      updatedAt: nowIso,
+    };
+    const nextRates = {
+      ...merchantRates,
+      [activePrice.id]: updatedRecord,
+    };
+    setMerchantRates(nextRates);
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(nextRates));
+    } catch (e) {
+      console.warn('Failed to save merchant custom price', e);
+    }
+    showToast(
+      `✓ Published YOUR Price for ${activePrice.name || activePrice.category}: ₹${newRate}/${activePrice.unit} (Updated just now)`
+    );
   };
 
   const handleResetToBenchmark = () => {
     if (!activePrice) return;
-    setMerchantRates((prev) => ({
+    const benchmarkRate = activePrice.price;
+    setInputRate(String(benchmarkRate));
+    const nowIso = new Date().toISOString();
+    const updatedRecord: MerchantCustomPriceRecord = {
+      rate: benchmarkRate,
+      updatedAt: nowIso,
+    };
+    const nextRates = {
+      ...merchantRates,
+      [activePrice.id]: updatedRecord,
+    };
+    setMerchantRates(nextRates);
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(nextRates));
+    } catch (e) {
+      console.warn('Failed to save merchant custom price', e);
+    }
+    showToast(
+      `Reset YOUR Price for ${activePrice.name || activePrice.category} to benchmark ₹${benchmarkRate}/${activePrice.unit}`
+    );
+  };
+
+  // Mobile in-card rate change handlers (for mobile screens only)
+  const handleMobileRateChange = (matId: string, val: string) => {
+    if (val === '') {
+      setMobileRates((prev) => ({ ...prev, [matId]: '' }));
+      return;
+    }
+    const num = Math.max(0, Math.min(10000, Number(val)));
+    setMobileRates((prev) => ({
       ...prev,
-      [activePrice.id]: 0,
+      [matId]: isNaN(num) ? '' : String(Math.round(num)),
     }));
-    showToast(`Reset YOUR Price for ${activePrice.name || activePrice.category} to ₹0/${activePrice.unit}`);
+  };
+
+  const handleMobileStepRate = (mat: MarketPrice, step: number) => {
+    const raw =
+      mobileRates[mat.id] !== undefined
+        ? mobileRates[mat.id]
+        : String(merchantRates[mat.id]?.rate ?? mat.price);
+    const current = raw === '' ? 0 : Number(raw);
+    const nextVal = Math.max(0, Math.min(10000, Math.round(current + step)));
+    setMobileRates((prev) => ({ ...prev, [mat.id]: String(nextVal) }));
+  };
+
+  const handleMobileQuickPreset = (mat: MarketPrice, delta: number | 'match-avg') => {
+    const matMin = mat.priceMin ?? Math.round(mat.price * 0.9);
+    const matMax = mat.priceMax ?? Math.round(mat.price * 1.1);
+    const avg = Math.round((matMin + matMax) / 2);
+    if (delta === 'match-avg') {
+      setMobileRates((prev) => ({ ...prev, [mat.id]: String(avg) }));
+      return;
+    }
+    const raw =
+      mobileRates[mat.id] !== undefined
+        ? mobileRates[mat.id]
+        : String(merchantRates[mat.id]?.rate ?? mat.price);
+    const current = raw === '' ? 0 : Number(raw);
+    const nextVal = Math.max(0, Math.min(10000, Math.round(current + delta)));
+    setMobileRates((prev) => ({ ...prev, [mat.id]: String(nextVal) }));
+  };
+
+  const handleMobileSaveRate = (mat: MarketPrice) => {
+    const raw =
+      mobileRates[mat.id] !== undefined
+        ? mobileRates[mat.id]
+        : String(merchantRates[mat.id]?.rate ?? mat.price);
+    const newRate = Math.max(0, Math.round(Number(raw) || 0));
+    const nowIso = new Date().toISOString();
+    const updatedRecord: MerchantCustomPriceRecord = {
+      rate: newRate,
+      updatedAt: nowIso,
+    };
+    const nextRates = {
+      ...merchantRates,
+      [mat.id]: updatedRecord,
+    };
+    setMerchantRates(nextRates);
+    setMobileRates((prev) => ({ ...prev, [mat.id]: String(newRate) }));
+    if (activePrice?.id === mat.id) {
+      setInputRate(String(newRate));
+    }
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(nextRates));
+    } catch (e) {
+      console.warn('Failed to save merchant custom price', e);
+    }
+    showToast(
+      `✓ Saved YOUR Price for ${mat.name || mat.category}: ₹${newRate}/${mat.unit} (Updated just now)`
+    );
+  };
+
+  const handleMobileResetRate = (mat: MarketPrice) => {
+    const benchmarkRate = mat.price;
+    const nowIso = new Date().toISOString();
+    const updatedRecord: MerchantCustomPriceRecord = {
+      rate: benchmarkRate,
+      updatedAt: nowIso,
+    };
+    const nextRates = {
+      ...merchantRates,
+      [mat.id]: updatedRecord,
+    };
+    setMerchantRates(nextRates);
+    setMobileRates((prev) => ({ ...prev, [mat.id]: String(benchmarkRate) }));
+    if (activePrice?.id === mat.id) {
+      setInputRate(String(benchmarkRate));
+    }
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(nextRates));
+    } catch (e) {
+      console.warn('Failed to save merchant custom price', e);
+    }
+    showToast(
+      `Reset YOUR Price for ${mat.name || mat.category} to benchmark ₹${benchmarkRate}/${mat.unit}`
+    );
   };
 
   return (
@@ -268,7 +469,7 @@ export default function MerchantMarketPrices() {
                       (p.category && p.category.toLowerCase().includes(q.toLowerCase()))
                   );
                   if (match) {
-                    handleSelectMaterial(match.id, true);
+                    handleSelectMaterial(match.id);
                   }
                 }
               }}
@@ -298,7 +499,7 @@ export default function MerchantMarketPrices() {
               ].join(' ')}
               onClick={() => {
                 setSelectedCatId('all');
-                if (prices.length > 0) handleSelectMaterial(prices[0].id, true);
+                if (prices.length > 0) handleSelectMaterial(prices[0].id);
               }}
             >
               All Categories ({prices.length})
@@ -314,7 +515,7 @@ export default function MerchantMarketPrices() {
                 onClick={() => {
                   setSelectedCatId(cat.id);
                   const firstInCat = prices.find((p) => p.categoryId === cat.id);
-                  if (firstInCat) handleSelectMaterial(firstInCat.id, true);
+                  if (firstInCat) handleSelectMaterial(firstInCat.id);
                 }}
               >
                 {isTamil ? cat.name_ta : cat.name}
@@ -338,7 +539,7 @@ export default function MerchantMarketPrices() {
                   styles.subMaterialPill,
                   activePrice?.id === mat.id ? styles.subMaterialPillActive : '',
                 ].join(' ')}
-                onClick={() => handleSelectMaterial(mat.id, true)}
+                onClick={() => handleSelectMaterial(mat.id)}
               >
                 {mat.name || mat.category}
               </button>
@@ -437,66 +638,137 @@ export default function MerchantMarketPrices() {
               <div className={styles.merchantRateUpdaterCard}>
                 <div className={styles.updaterHeaderRow}>
                   <div>
-                    <span className={styles.updaterLabel}>YOUR PRICE</span>
-                    <h3 className={styles.updaterSub}>Set YOUR Price to win more customer pickup orders</h3>
+                    <span className={styles.updaterLabel}>YOUR PRICE CONTROL</span>
+                    <h3 className={styles.updaterSub}>Set & publish YOUR buying price to customers</h3>
                   </div>
                   <span
                     className={
-                      Number(currentMerchantRate) >= Math.round((minPrice + maxPrice) / 2) && Number(currentMerchantRate) > 0
+                      savedRate >= benchmarkAvg && savedRate > 0
                         ? styles.rateCompetitiveTag
                         : styles.rateStandardTag
                     }
                   >
-                    {Number(currentMerchantRate) >= Math.round((minPrice + maxPrice) / 2) && Number(currentMerchantRate) > 0
+                    {savedRate >= benchmarkAvg && savedRate > 0
                       ? '🔥 Competitive Rate'
                       : 'Standard Rate'}
                   </span>
                 </div>
 
-                <div className={styles.stepperControlRow}>
-                  <button
-                    type="button"
-                    className={styles.stepperBtn}
-                    onClick={() =>
-                      handleStepRate(
-                        activePrice.id,
-                        activePrice.unit.toLowerCase().includes('piece') ? -50 : -1
-                      )
-                    }
-                    aria-label="Decrease price"
-                  >
-                    <Minus size={18} />
-                  </button>
-
-                  <div className={styles.inputPriceWrap}>
-                    <span className={styles.inputCurrency}>₹</span>
-                    <input
-                      type="number"
-                      min="0"
-                      max="10000"
-                      value={currentMerchantRate}
-                      placeholder="0"
-                      onChange={(e) =>
-                        handleRateChange(activePrice.id, e.target.value)
-                      }
-                      className={styles.priceNumberInput}
-                    />
-                    <span className={styles.inputUnit}>/{activePrice.unit}</span>
+                {/* Prominent Active Published Price Display Card */}
+                <div className={styles.activePriceDisplayCard}>
+                  <div className={styles.activePriceTopRow}>
+                    <div className={styles.activePriceAmountBlock}>
+                      <span className={styles.activePriceLabel}>Current Published Rate</span>
+                      <div className={styles.activePriceNumberRow}>
+                        <span className={styles.activePriceValue}>₹{savedRate.toLocaleString('en-IN')}</span>
+                        <span className={styles.activePriceUnit}>/{activePrice.unit}</span>
+                      </div>
+                    </div>
+                    <div className={styles.activePriceStatusPill}>
+                      <span className={styles.pulseLiveDot} />
+                      <span>Live for Customers</span>
+                    </div>
                   </div>
 
-                  <button
-                    type="button"
-                    className={styles.stepperBtn}
-                    onClick={() =>
-                      handleStepRate(
-                        activePrice.id,
-                        activePrice.unit.toLowerCase().includes('piece') ? 50 : 1
-                      )
-                    }
-                    aria-label="Increase price"
-                  >
-                    <Plus size={18} />
-                  </button>
+                  <div className={styles.activePriceUpdatedRow}>
+                    <Clock size={14} className={styles.activePriceClockIcon} />
+                    <span className={styles.activePriceUpdatedText}>
+                      Updated: <strong>{formattedTime}</strong>
+                    </span>
+                    <span className={styles.activePriceComparisonText}>
+                      {comparisonText}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Price Editor Controls */}
+                <div className={styles.priceEditorWrap}>
+                  <div className={styles.editorLabelRow}>
+                    <span className={styles.editorSectionLabel}>Adjust Buying Price</span>
+                    <span className={styles.editorTip}>Whole ₹ integers only</span>
+                  </div>
+
+                  <div className={styles.stepperControlRow}>
+                    <button
+                      type="button"
+                      className={styles.stepperBtn}
+                      onClick={() =>
+                        handleStepRate(
+                          activePrice.unit.toLowerCase().includes('piece') ? -50 : -1
+                        )
+                      }
+                      aria-label="Decrease price"
+                    >
+                      <Minus size={18} />
+                    </button>
+
+                    <div className={styles.inputPriceWrap}>
+                      <span className={styles.inputCurrency}>₹</span>
+                      <input
+                        type="number"
+                        min="0"
+                        max="10000"
+                        value={inputRate}
+                        placeholder="0"
+                        onChange={(e) => handleInputRateChange(e.target.value)}
+                        className={styles.priceNumberInput}
+                      />
+                      <span className={styles.inputUnit}>/{activePrice.unit}</span>
+                    </div>
+
+                    <button
+                      type="button"
+                      className={styles.stepperBtn}
+                      onClick={() =>
+                        handleStepRate(
+                          activePrice.unit.toLowerCase().includes('piece') ? 50 : 1
+                        )
+                      }
+                      aria-label="Increase price"
+                    >
+                      <Plus size={18} />
+                    </button>
+                  </div>
+
+                  {/* Quick Preset Buttons */}
+                  <div className={styles.quickPresetsRow}>
+                    <span className={styles.quickPresetLabel}>Quick Adjust:</span>
+                    <button
+                      type="button"
+                      className={styles.quickPresetBtn}
+                      onClick={() => handleQuickPreset(2)}
+                    >
+                      +₹2
+                    </button>
+                    <button
+                      type="button"
+                      className={styles.quickPresetBtn}
+                      onClick={() => handleQuickPreset(5)}
+                    >
+                      +₹5
+                    </button>
+                    <button
+                      type="button"
+                      className={styles.quickPresetBtn}
+                      onClick={() => handleQuickPreset(10)}
+                    >
+                      +₹10
+                    </button>
+                    <button
+                      type="button"
+                      className={styles.quickPresetBtn}
+                      onClick={() => handleQuickPreset(-2)}
+                    >
+                      -₹2
+                    </button>
+                    <button
+                      type="button"
+                      className={styles.quickPresetBtn}
+                      onClick={() => handleQuickPreset('match-avg')}
+                    >
+                      Match Avg (₹{benchmarkAvg})
+                    </button>
+                  </div>
                 </div>
 
                 <div className={styles.updaterActionsRow}>
@@ -515,7 +787,7 @@ export default function MerchantMarketPrices() {
                     onClick={handleSaveActiveRate}
                   >
                     <Save size={15} />
-                    <span>Save YOUR Price</span>
+                    <span>Save & Publish YOUR Price</span>
                   </button>
                 </div>
               </div>
@@ -545,14 +817,22 @@ export default function MerchantMarketPrices() {
 
             <div className={styles.relatedGrid}>
               {categoryMaterials.map((mat) => {
+                const matRecord = merchantRates[mat.id];
+                const matRate = matRecord !== undefined ? matRecord.rate : mat.price;
+                const matUpdatedAt = matRecord !== undefined ? matRecord.updatedAt : 'Today, 9:30 AM';
                 const matMin = mat.priceMin ?? Math.round(mat.price * 0.9);
                 const matMax = mat.priceMax ?? Math.round(mat.price * 1.1);
-                const rawMatRate = merchantRates[mat.id];
-                const matRate = rawMatRate === '' || rawMatRate === undefined ? 0 : Number(rawMatRate);
+                const matAvg = Math.round((matMin + matMax) / 2);
+
+                const currentMobileInput =
+                  mobileRates[mat.id] !== undefined
+                    ? mobileRates[mat.id]
+                    : String(matRate);
+
                 return (
                   <div
                     key={mat.id}
-                    onClick={() => handleSelectMaterial(mat.id, true)}
+                    onClick={() => handleSelectMaterial(mat.id)}
                     className={[
                       styles.relatedCardWrapper,
                       activePrice?.id === mat.id ? styles.relatedCardActive : '',
@@ -561,9 +841,126 @@ export default function MerchantMarketPrices() {
                     <PriceCard
                       price={mat}
                       yourPrice={matRate}
+                      yourPriceUpdatedAt={formatUpdatedTime(matUpdatedAt)}
                       isActive={activePrice?.id === mat.id}
-                      onClick={() => handleSelectMaterial(mat.id, true)}
-                    />
+                      onClick={() => handleSelectMaterial(mat.id)}
+                    >
+                      {openUpdaterId === mat.id ? (
+                        /* In-Card Price Updater - Signature Note Theme (Warm Butter Yellow) */
+                        <div
+                          className={styles.mobileCardUpdater}
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <div className={styles.mobileUpdaterHeader}>
+                            <span className={styles.mobileUpdaterLabel}>UPDATE YOUR PRICE</span>
+                            <div className={styles.mobileUpdaterHeaderRight}>
+                              <span className={styles.mobileBenchmarkHint}>
+                                Avg: ₹{matAvg}/{mat.unit}
+                              </span>
+                              <button
+                                type="button"
+                                className={styles.mobileCloseUpdaterBtn}
+                                onClick={() => setOpenUpdaterId(null)}
+                                aria-label="Close updater"
+                              >
+                                <X size={15} />
+                              </button>
+                            </div>
+                          </div>
+
+                          <div className={styles.mobileStepperRow}>
+                            <button
+                              type="button"
+                              className={styles.mobileStepperBtn}
+                              onClick={() =>
+                                handleMobileStepRate(
+                                  mat,
+                                  mat.unit.toLowerCase().includes('piece') ? -50 : -1
+                                )
+                              }
+                              aria-label="Decrease price"
+                            >
+                              <Minus size={16} />
+                            </button>
+
+                            <div className={styles.mobileInputWrap}>
+                              <span className={styles.mobileInputCurrency}>₹</span>
+                              <input
+                                type="number"
+                                min="0"
+                                max="10000"
+                                value={currentMobileInput}
+                                placeholder="0"
+                                onChange={(e) =>
+                                  handleMobileRateChange(mat.id, e.target.value)
+                                }
+                                className={styles.mobilePriceInput}
+                              />
+                              <span className={styles.mobileInputUnit}>/{mat.unit}</span>
+                            </div>
+
+                            <button
+                              type="button"
+                              className={styles.mobileStepperBtn}
+                              onClick={() =>
+                                handleMobileStepRate(
+                                  mat,
+                                  mat.unit.toLowerCase().includes('piece') ? 50 : 1
+                                )
+                              }
+                              aria-label="Increase price"
+                            >
+                              <Plus size={16} />
+                            </button>
+                          </div>
+
+                          {/* Actions: Reset, Cancel & Save */}
+                          <div className={styles.mobileUpdaterActions}>
+                            <button
+                              type="button"
+                              className={styles.mobileResetBtn}
+                              onClick={() => handleMobileResetRate(mat)}
+                              title="Reset to market benchmark"
+                            >
+                              <RotateCcw size={13} />
+                              <span>Reset</span>
+                            </button>
+
+                            <button
+                              type="button"
+                              className={styles.mobileCancelBtn}
+                              onClick={() => setOpenUpdaterId(null)}
+                            >
+                              <span>Cancel</span>
+                            </button>
+
+                            <button
+                              type="button"
+                              className={styles.mobileSaveBtn}
+                              onClick={() => {
+                                handleMobileSaveRate(mat);
+                                setOpenUpdaterId(null);
+                              }}
+                            >
+                              <Save size={14} />
+                              <span>Save</span>
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <button
+                          type="button"
+                          className={styles.openUpdaterBtn}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setOpenUpdaterId(mat.id);
+                          }}
+                        >
+                          <Edit3 size={13} />
+                          <span>Update your price</span>
+                        </button>
+                      )}
+                    </PriceCard>
                   </div>
                 );
               })}

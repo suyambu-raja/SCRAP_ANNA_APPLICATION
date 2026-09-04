@@ -1,859 +1,1251 @@
-/* Merchant Dashboard Styling */
-.pageWrapper {
-  min-height: 100vh;
-  width: 100%;
-  background-color: #ffffff;
-  display: flex;
-  flex-direction: column;
-  color: #1e293b;
-  font-family: var(--font-family, 'Inter', -apple-system, BlinkMacSystemFont, sans-serif);
-}
-
-.mainContainer {
-  width: 100%;
-  max-width: 100%;
-  margin: 0;
-  padding: 1.5rem 1.75rem 3rem 1.75rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.75rem;
-  box-sizing: border-box;
-}
-
 /* ==========================================================================
-   TOP CELEBRATION / ACTION NEEDED ALERT BANNER
+   MERCHANT HOMEPAGE DASHBOARD STYLING
+   Exact visual parity with Household Dashboard (Image 2 reference UI):
+   - Single clean header row with addressPillBtn style
+   - Dark marquee news ticker
+   - Hero promo carousel with aspect ratio 1024/560 perfectly fitting images
+   - All performance cards use the exact same warm yellow/cream color scheme
+   - Today's pickup card with perfectly aligned content, ETA & navigation
+   - Actionable new scrap requests banner
+   - Live scrap market prices with "Your Buying Price"
    ========================================================================== */
-.topAcceptedBanner {
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-  border: 1.5px solid rgba(251, 194, 26, 0.4);
-  border-radius: 16px;
-  padding: 1rem 1.4rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.5rem;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(251, 194, 26, 0.15);
-  animation: slideInDown 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+
+:root {
+  --scrap-yellow: #F8BF1D;
+  --scrap-yellow-hover: #E5AA00;
+  --scrap-yellow-light: #FFF8DC;
+  --scrap-graphite: #20242D;
+  --scrap-card-bg: #20242D;
+  --scrap-card-inner: #272C36;
+  --scrap-border: #3A404C;
+  --scrap-border-hover: #505869;
+  --scrap-text-muted: #A8B0BC;
+  --scrap-text-dim: #8B94A2;
+  --scrap-emerald: #10B981;
 }
 
-@keyframes slideInDown {
-  from {
-    transform: translateY(-12px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-.topBannerLeft {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.celebrationIconBox {
-  font-size: 1.8rem;
-  width: 46px;
-  height: 46px;
-  border-radius: 12px;
-  background: rgba(251, 194, 26, 0.15);
-  border: 1px solid rgba(251, 194, 26, 0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.topBannerTextGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.topBannerHeading {
-  font-size: 1rem;
-  font-weight: 700;
-  color: #ffffff;
-}
-
-.topBannerHeading strong {
-  color: #fbc21a;
-  font-weight: 900;
-}
-
-.topBannerSubtext {
-  font-size: 0.825rem;
-  color: #94a3b8;
-}
-
-.topBannerSubtext strong {
-  color: #ffffff;
-}
-
-.topBannerActionGroup {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  flex-shrink: 0;
-}
-
-.topBannerBtnPrimary {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  background: #fbc21a;
-  color: #0f172a;
-  font-size: 0.825rem;
-  font-weight: 800;
-  padding: 0.55rem 1.15rem;
-  border-radius: 8px;
-  text-decoration: none;
-  transition: all 0.15s ease;
-  white-space: nowrap;
-}
-
-.topBannerBtnPrimary:hover {
-  background: #f59e0b;
-  transform: translateY(-1px);
-}
-
-.topBannerBtnSecondary {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #ffffff;
-  font-size: 0.825rem;
-  font-weight: 700;
-  padding: 0.55rem 1rem;
-  border-radius: 8px;
-  text-decoration: none;
-  transition: all 0.15s ease;
-  white-space: nowrap;
-}
-
-.topBannerBtnSecondary:hover {
-  background: rgba(255, 255, 255, 0.18);
-  border-color: rgba(255, 255, 255, 0.35);
-}
-
-.topBannerCloseBtn {
-  background: transparent;
-  border: none;
-  color: #64748b;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.topBannerCloseBtn:hover {
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.1);
-}
-
-/* ==========================================================================
-   1. HERO WELCOME SECTION (DIRECT ON PAGE BACKGROUND)
-   ========================================================================== */
-.heroSection {
-  background: transparent;
-  border-radius: 0;
-  border: none;
-  box-shadow: none;
-  padding: 0.5rem 0 0 0;
-  margin-right: -1.75rem;
-  width: calc(100% + 1.75rem);
-  display: grid;
-  grid-template-columns: 1.05fr 0.95fr;
-  align-items: flex-end;
-  position: relative;
-  overflow: hidden;
-}
-
-.heroLeft {
+.pageContainer {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1rem 1.25rem 2.5rem 1.25rem;
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
-  z-index: 2;
-  padding-bottom: 2rem;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  font-family: inherit;
+  color: #1E293B;
 }
 
-.welcomeSubtitle {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--color-graphite-light, #374151);
-  margin: 0;
-  line-height: 1.2;
-}
-
-.welcomeTitle {
-  color: var(--color-graphite-dark, #1D222A);
-  font-size: clamp(2.2rem, 3.8vw, 3.4rem);
-  line-height: 1.12;
-  margin: 0;
-  letter-spacing: -0.02em;
-  font-weight: 800;
-}
-
-.heroDescription {
-  font-size: 0.95rem;
-  color: var(--color-text-secondary, #374151);
-  line-height: 1.6;
-  margin: 0;
-  max-width: 520px;
-}
-
-.heroFeaturesRow {
-  display: flex;
-  align-items: center;
-  gap: 1.75rem;
-  flex-wrap: wrap;
-  margin: 0.25rem 0 0.5rem 0;
-}
-
-.heroFeatureItem {
-  display: flex;
-  align-items: center;
-  gap: 0.65rem;
-}
-
-.featureIconCircle {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background-color: var(--color-primary-light, #FFFBEB);
-  color: #D97706;
-  border: 1px solid var(--color-primary-border, #FDE68A);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.featureTextCol {
-  display: flex;
-  flex-direction: column;
-}
-
-.featureTextTitle {
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: var(--color-graphite-dark, #1D222A);
-  line-height: 1.2;
-}
-
-.featureTextSub {
-  font-size: 0.75rem;
-  color: var(--color-text-muted, #667085);
-  line-height: 1.2;
-}
-
-.heroCtaBtn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.65rem;
-  background-color: var(--color-primary, #FBC21A);
-  color: var(--color-graphite-dark, #1D222A);
-  font-weight: 700;
-  font-size: 0.95rem;
-  padding: 0.8rem 1.75rem;
-  border-radius: var(--radius-lg, 12px);
-  text-decoration: none;
-  border: 1.5px solid var(--color-primary, #FBC21A);
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(251, 194, 26, 0.3);
-  transition: all var(--transition-fast, 150ms ease);
-  align-self: flex-start;
-}
-
-.heroCtaBtn:hover {
-  background-color: var(--color-primary-hover, #E5AA00);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(251, 194, 26, 0.4);
-}
-
-.heroCtaBtn svg {
-  transition: transform 0.2s ease;
-}
-
-.heroCtaBtn:hover svg {
-  transform: translateX(4px);
-}
-
-/* Hero Compact Recent Request Card */
-.heroRecentCard {
-  background: #ffffff;
-  border: 1px solid #edf2f7;
-  border-left: 4.5px solid #fbc21a;
-  border-radius: 14px;
-  padding: 0.95rem 1.15rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.65rem;
-  max-width: 490px;
-  width: 100%;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
-  margin-top: 0.35rem;
-  animation: fadeIn 0.25s ease;
-}
-
-.recentHeaderRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.recentTitleGroup {
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-}
-
-.livePulseDot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background-color: #22c55e;
-  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.25);
-  animation: pulseGreen 1.8s infinite;
-}
-
-@keyframes pulseGreen {
-  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
-  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
-  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
-}
-
-.recentHeaderTitle {
-  font-size: 0.8rem;
-  font-weight: 800;
-  color: #0f172a;
-}
-
-.recentBadge {
-  font-size: 0.625rem;
-  font-weight: 800;
-  color: #16a34a;
-  background-color: #dcfce7;
-  border: 1px solid #bbf7d0;
-  padding: 0.1rem 0.4rem;
-  border-radius: 4px;
-}
-
-.recentTimestamp {
-  font-size: 0.72rem;
-  color: #94a3b8;
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  font-weight: 500;
-}
-
-.recentDetailsRow {
+/* --------------------------------------------------------------------------
+   1. GREETING & SERVICE AREA ROW (EXACT MATCH HOUSEHOLD HEADER)
+   -------------------------------------------------------------------------- */
+.greetingAddressRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
-  background: #f8fafc;
-  border: 1px solid #f1f5f9;
-  border-radius: 10px;
-  padding: 0.55rem 0.75rem;
+  width: 100%;
+  padding: 0.15rem 0.15rem;
+  box-sizing: border-box;
 }
 
-.recentMaterialInfo {
+.greetingCol {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.greetingName {
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: #15171B;
+  margin: 0;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.greetingSubtext {
+  font-size: 0.85rem;
+  color: #64748B;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.addressPillBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.35rem;
+  background: var(--scrap-graphite);
+  color: #ffffff;
+  padding: 0.32rem 0.55rem;
+  border-radius: 9px;
+  border: 1px solid var(--scrap-border);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  flex-shrink: 0;
+  max-width: 135px;
+  margin-left: auto;
+}
+
+.addressPillBtn:hover {
+  background: var(--scrap-card-inner);
+  border-color: var(--scrap-yellow);
+  transform: translateY(-1px);
+}
+
+.addressPillLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-width: 0;
+  overflow: hidden;
+  flex: 1;
+}
+
+.addressPillIcon {
+  color: var(--scrap-yellow);
+  flex-shrink: 0;
+}
+
+.addressPillTextGroup {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  gap: 1px;
+  min-width: 0;
+  overflow: hidden;
+  flex: 1;
+}
+
+.addressPillArea {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.1;
+}
+
+.addressPillStatus {
+  font-size: 0.65rem;
+  color: #34D399;
+  font-weight: 800;
+  white-space: nowrap;
+  line-height: 1.1;
+}
+
+.addressPillStatusPaused {
+  font-size: 0.65rem;
+  color: #F87171;
+  font-weight: 800;
+  white-space: nowrap;
+  line-height: 1.1;
+}
+
+.addressPillChevron {
+  color: #ffffff;
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+/* --------------------------------------------------------------------------
+   2. MOVING NEWS TICKER (MATCHING HOUSEHOLD TICKER MARQUEE)
+   -------------------------------------------------------------------------- */
+.promoTickerStrip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 42px;
+  background: #15171B;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 0 0.85rem;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.24);
+  box-sizing: border-box;
+  text-decoration: none;
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+  transition: all 0.18s ease;
+  flex-shrink: 0;
+  outline: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+  user-select: none;
+}
+
+.promoTickerStrip:hover {
+  border-color: var(--scrap-yellow);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.32);
+}
+
+.promoTickerStrip:focus,
+.promoTickerStrip:active,
+.promoTickerStrip:focus-visible {
+  outline: none !important;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.bannerLeftSection {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+  z-index: 2;
+  background: #15171B;
+  padding-right: 0.35rem;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.bannerLeftSection:focus,
+.bannerLeftSection:active {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.bannerMegaphoneIcon {
+  color: var(--scrap-yellow);
+  flex-shrink: 0;
+}
+
+.bannerBadgePill {
+  background: var(--scrap-yellow);
+  color: #0f172a;
+  font-size: 0.62rem;
+  font-weight: 850;
+  letter-spacing: 0.03em;
+  padding: 0.18rem 0.45rem;
+  border-radius: 4px;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  white-space: nowrap;
+  line-height: 1.2;
+}
+
+.bannerBadgePill:focus,
+.bannerBadgePill:active {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.bannerVerticalDivider {
+  display: block;
+  width: 1px;
+  height: 14px;
+  background: rgba(255, 255, 255, 0.25);
+  margin-left: 0.1rem;
+  flex-shrink: 0;
+}
+
+.bannerMarqueeWindow {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  mask-image: linear-gradient(
+    to right,
+    transparent 0px,
+    black 12px,
+    black calc(100% - 16px),
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0px,
+    black 12px,
+    black calc(100% - 16px),
+    transparent 100%
+  );
+}
+
+.bannerMarqueeTrack {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  height: 100%;
+  animation: merchantMarquee 38s linear infinite;
+  will-change: transform;
+}
+
+.bannerMarqueeTrack:hover {
+  animation-play-state: paused;
+}
+
+.bannerItemsGroup {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.bannerMessageItem {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 0.85rem;
+  color: #ffffff;
+  font-size: 0.84rem;
+  font-weight: 700;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+
+.bannerMessageText {
+  color: #ffffff;
+}
+
+.bannerItemDivider {
+  margin-left: 0.85rem;
+  color: var(--scrap-yellow);
+  font-weight: 800;
+  user-select: none;
+}
+
+@keyframes merchantMarquee {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-50%, 0, 0); }
+}
+
+/* --------------------------------------------------------------------------
+   3. HERO PROMOTIONAL SLIDER (EXACT MATCH HOUSEHOLD DASHBOARD CONTAINER SIZING)
+   -------------------------------------------------------------------------- */
+.heroSliderWrapper {
+  position: relative;
+  width: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  touch-action: pan-y;
+  user-select: none;
+  cursor: grab;
+  box-sizing: border-box;
+  background: #111215;
+}
+
+.heroSliderWrapper:active {
+  cursor: grabbing;
+}
+
+.sliderTrack {
+  display: flex;
+  width: 100%;
+  will-change: transform;
+}
+
+.slideItem {
+  min-width: 100%;
+  width: 100%;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  display: flex;
+  align-items: stretch;
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+}
+
+.imagePromoSlide {
+  position: relative;
+  width: 100%;
+  min-height: 180px;
+  max-height: 230px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #111215;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.promoImageFull {
+  width: 100%;
+  height: 100%;
+  max-height: 230px;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+  border-radius: 20px;
+  pointer-events: none;
+}
+
+.imageSlideClickOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  cursor: pointer;
+}
+
+.goldValueBannerSlide {
+  background: var(--scrap-yellow) url('/turn-scrap-banner-bg.png') no-repeat right center / cover;
+  border-radius: 20px;
+  padding: 1.75rem 2.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  min-height: 180px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.goldBannerLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  z-index: 2;
+  max-width: 65%;
+}
+
+.goldBannerTag {
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  color: #78350F;
+  text-transform: uppercase;
+}
+
+.goldBannerTitle {
+  font-size: 1.85rem;
+  font-weight: 900;
+  color: #15171B;
+  margin: 0;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.goldBannerSubtitle {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #2D3038;
+  margin: 0;
+  line-height: 1.45;
+}
+
+.goldBannerBtnRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.65rem;
+  flex-wrap: nowrap;
+}
+
+.goldPostBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: var(--scrap-graphite, #20242D);
+  color: #ffffff;
+  font-size: 0.825rem;
+  font-weight: 800;
+  padding: 0.6rem 1.15rem;
+  border-radius: 10px;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.goldPostBtn:hover {
+  background: #24262C;
+  transform: translateY(-1px);
+}
+
+.goldRatesBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: #ffffff;
+  color: #15171B;
+  font-size: 0.825rem;
+  font-weight: 800;
+  padding: 0.6rem 1.15rem;
+  border-radius: 10px;
+  text-decoration: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.goldRatesBtn:hover {
+  background: #f8fafc;
+  transform: translateY(-1px);
+}
+
+.sliderDotsContainer {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  z-index: 10;
+  padding: 4px 10px;
+  background: rgba(15, 18, 24, 0.45);
+  backdrop-filter: blur(6px);
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.sliderDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.4);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sliderDotActive {
+  width: 24px;
+  background: var(--scrap-yellow);
+  box-shadow: 0 0 8px rgba(248, 191, 29, 0.6);
+}
+
+/* --------------------------------------------------------------------------
+   4. KPI STATS CARDS CAROUSEL (ALL CARDS USE THE SAME WARM YELLOW/CREAM COLOR)
+   -------------------------------------------------------------------------- */
+.statsSectionWrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  box-sizing: border-box;
+}
+
+.statsHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0.2rem;
+}
+
+.statsSectionTitle {
+  font-size: 1.15rem;
+  font-weight: 850;
+  color: #0F172A;
+  margin: 0;
+}
+
+.statsSwipeHint {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #64748B;
+}
+
+.statsCarouselTrack {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.15rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Consistent warm yellow/cream color scheme for ALL performance cards */
+.statInteractiveCard {
+  background: linear-gradient(180deg, #FFF8DC 0%, #FFEEBA 100%);
+  border: 1.5px solid #FFDE7A;
+  border-radius: 18px;
+  padding: 0.95rem 1.15rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 112px;
+  box-shadow: 0 8px 20px -4px rgba(248, 191, 29, 0.2), 0 3px 8px -2px rgba(0, 0, 0, 0.04);
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.statInteractiveCard:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 24px -4px rgba(248, 191, 29, 0.32), 0 4px 10px -2px rgba(0, 0, 0, 0.08);
+  border-color: var(--scrap-yellow);
+}
+
+.statInteractiveCard:active {
+  transform: translateY(-1px) scale(0.99);
+}
+
+.statCardTopRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  width: 100%;
+}
+
+.statSquircleIcon {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: #FFDF6D;
+  color: #1E3A20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(248, 191, 29, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  flex-shrink: 0;
+}
+
+.statTopRightBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: rgba(255, 223, 109, 0.6);
+  border: 1px solid rgba(200, 160, 40, 0.35);
+  color: #1E3A20;
+  font-size: 0.7rem;
+  font-weight: 750;
+  padding: 0.2rem 0.55rem;
+  border-radius: 9999px;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+}
+
+.statCardValueGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.statBigValue {
+  font-size: 1.55rem;
+  font-weight: 900;
+  color: #1A381C;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+}
+
+.statUnitText {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #234A28;
+}
+
+.statCardTitle {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #234A28;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+/* Dots Row for Mobile Stats */
+.statsIndicatorDotsRow {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0.25rem 0;
+}
+
+.statIndicatorDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: #CBD5E1;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.statIndicatorDotActive {
+  width: 22px;
+  background: #20242D;
+  border-radius: 9999px;
+  box-shadow: 0 2px 6px rgba(32, 36, 45, 0.3);
+}
+
+/* --------------------------------------------------------------------------
+   5. NEXT / TODAY'S PICKUP CARD (EXACT ALIGNMENT & PROPORTIONS)
+   -------------------------------------------------------------------------- */
+@keyframes yellowBorderPulse {
+  0%, 100% {
+    border-color: rgba(248, 191, 29, 0.4);
+    box-shadow: 0 0 0 1px rgba(248, 191, 29, 0.15), 0 10px 30px -4px rgba(0, 0, 0, 0.08), 0 4px 12px -2px rgba(0, 0, 0, 0.04);
+  }
+  50% {
+    border-color: #F8BF1D;
+    box-shadow: 0 0 14px 2px rgba(248, 191, 29, 0.45), 0 10px 30px -4px rgba(0, 0, 0, 0.1), 0 4px 12px -2px rgba(0, 0, 0, 0.06);
+  }
+}
+
+.nextPickupUnifiedCard {
+  background: #ffffff;
+  border: 1.5px solid #F8BF1D;
+  border-radius: 18px;
+  padding: 1.25rem 1.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+  animation: yellowBorderPulse 2s ease-in-out infinite;
+}
+
+.pickupUnifiedHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid #F1F5F9;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.pickupUnifiedTitle {
+  font-size: 1.2rem;
+  font-weight: 900;
+  color: #0F172A;
+  margin: 0;
+  white-space: nowrap !important;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  flex-shrink: 0;
+  padding-top: 1px;
+}
+
+.pickupHeaderRightCol {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-start;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.scheduledPillBadge {
+  background: #DCFCE7;
+  color: #15803D;
+  border: 1px solid #BBF7D0;
+  font-size: 0.65rem;
+  font-weight: 850;
+  padding: 0.18rem 0.55rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap !important;
+  line-height: 1.2;
+  margin-top: 4px;
+}
+
+.pickupTimeSlotPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 6px;
+  padding: 0.18rem 0.5rem;
+  font-size: 0.7rem;
+  font-weight: 750;
+  color: #475569;
+  white-space: nowrap !important;
+  line-height: 1.2;
+}
+
+.pickupClockIcon {
+  color: #64748B;
+  flex-shrink: 0;
+}
+
+.pickupUnifiedBody {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.pickupPartnerLeftCol {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100%;
+}
+
+.pickupCustomerHeaderRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  width: 100%;
+}
+
+.partnerAvatarCircle {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #FEF3C7;
+  border: 1.5px solid #FDE68A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  color: #92400E;
+  margin-top: 2px;
+}
+
+.pickupCardInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+  flex: 1 1 auto;
+  width: 100%;
+  overflow: hidden;
+}
+
+.execArrivingLabel {
+  font-size: 0.72rem;
+  color: #64748B;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.pickupTitle {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #0F172A;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.25;
+}
+
+.pickupScheduleText {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  color: #475569;
+  font-weight: 600;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pickupDetailsPill {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  background: #F1F5F9;
+  border: 1px solid #E2E8F0;
+  border-radius: 9px;
+  padding: 0.45rem 0.85rem;
+  font-size: 0.82rem;
+  color: #334155;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 0.15rem;
+  white-space: nowrap !important;
+}
+
+.pickupMaterialName {
+  font-weight: 750;
+  color: #1E293B;
+  white-space: nowrap !important;
+}
+
+.pickupPillDot {
+  color: #94A3B8;
+  font-size: 0.65rem;
+  flex-shrink: 0;
+}
+
+.pickupWeightText {
+  font-weight: 850;
+  color: #0F172A;
+  white-space: nowrap !important;
+}
+
+.pickupAmountStrong {
+  font-weight: 900;
+  color: #047857;
+  white-space: nowrap !important;
+}
+
+.pickupEtaRightCol {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  border-left: 1.5px solid #E2E8F0;
+  padding-left: 1.25rem;
+  flex-shrink: 0;
+  min-width: 145px;
+}
+
+.etaTextGroup {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+}
+
+.etaLabel {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #64748B;
+  letter-spacing: 0.05em;
+}
+
+.etaNumber {
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: #0F172A;
+  line-height: 1;
+}
+
+.etaMinsText {
+  font-size: 0.74rem;
+  color: #64748B;
+  font-weight: 700;
+}
+
+.trackPickupMiniBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  background: var(--scrap-yellow);
+  color: #0F172A;
+  font-size: 0.825rem;
+  font-weight: 850;
+  padding: 0.55rem 1rem;
+  border-radius: 9px;
+  text-decoration: none;
+  border: 1px solid #E5AA00;
+  box-shadow: 0 2px 8px rgba(248, 191, 29, 0.32);
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.trackPickupMiniBtn:hover {
+  background: #F59E0B;
+  transform: translateY(-1px);
+}
+
+/* 3-Step Pickup Stage Tracker */
+.miniStageTracker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding-top: 0.65rem;
+  border-top: 1px dashed #E2E8F0;
+  box-sizing: border-box;
+}
+
+.miniStep {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #94A3B8;
+}
+
+.miniStepActive {
+  color: #0F172A;
+}
+
+.miniStepDone {
+  color: #15803D;
+}
+
+.miniCircle {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #F1F5F9;
+  border: 1.5px solid #CBD5E1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #64748B;
+}
+
+.miniStepActive .miniCircle {
+  background: var(--scrap-yellow);
+  border-color: #E5AA00;
+  color: #0F172A;
+  box-shadow: 0 0 0 3px rgba(248, 191, 29, 0.25);
+}
+
+.miniStepDone .miniCircle {
+  background: #DCFCE7;
+  border-color: #86EFAC;
+  color: #15803D;
+}
+
+.miniLine {
+  flex: 1;
+  height: 2px;
+  background: #E2E8F0;
+  margin: 0 0.5rem;
+}
+
+.miniLineActive {
+  background: #86EFAC;
+}
+
+/* --------------------------------------------------------------------------
+   6. NEW SCRAP REQUESTS BANNER (ACTIONABLE GOLDEN CARD)
+   -------------------------------------------------------------------------- */
+.newRequestsCard {
+  background: var(--color-primary, #FBC21A);
+  border: none;
+  border-radius: 18px;
+  padding: 1.35rem 1.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  box-shadow: 0 10px 28px -4px rgba(251, 194, 26, 0.38);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.newRequestsCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 34px -4px rgba(251, 194, 26, 0.48);
+}
+
+.newRequestsLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  flex: 1;
+}
+
+.newRequestsHeaderRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.newRequestsTag {
+  background: var(--color-graphite-dark, #1D222A);
+  color: #FFFFFF;
+  font-size: 0.68rem;
+  font-weight: 850;
+  padding: 0.22rem 0.55rem;
+  border-radius: 6px;
+  letter-spacing: 0.04em;
+}
+
+.newRequestsLivePulse {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #1E242B;
+}
+
+.pulseDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #15803D;
+  box-shadow: 0 0 0 2px rgba(21, 128, 61, 0.3);
+  animation: pulseDotLive 1.8s infinite;
+  flex-shrink: 0;
+}
+
+@keyframes pulseDotLive {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(21, 128, 61, 0.6); }
+  70% { transform: scale(1.1); box-shadow: 0 0 0 5px rgba(21, 128, 61, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(21, 128, 61, 0); }
+}
+
+.newRequestsTitle {
+  font-size: 1.45rem;
+  font-weight: 900;
+  color: var(--color-graphite-dark, #1D222A);
+  margin: 0;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.newRequestsDesc {
+  font-size: 0.9rem;
+  color: var(--color-graphite, #252A33);
+  margin: 0;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.newRequestsCtaBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--color-graphite-dark, #1D222A);
+  color: #FFFFFF;
+  font-size: 0.88rem;
+  font-weight: 800;
+  padding: 0.75rem 1.35rem;
+  border-radius: 12px;
+  text-decoration: none;
+  box-shadow: 0 6px 18px rgba(29, 34, 42, 0.28);
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.newRequestsCtaBtn:hover {
+  background: var(--color-graphite, #252A33);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 22px rgba(29, 34, 42, 0.38);
+}
+
+/* --------------------------------------------------------------------------
+   7. LIVE SCRAP MARKET PRICES (RESTORED ORIGINAL BOARD)
+   -------------------------------------------------------------------------- */
+.scrapPricesSection {
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  padding: 1.25rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.03);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.mobileMarketHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 0.65rem;
+  width: 100%;
+}
+
+.mobileMarketTitleWrap {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.marketIconYellow {
+  color: #f59e0b;
+  flex-shrink: 0;
+}
+
+.mobileMarketTitle {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.mobileMarketSub {
+  font-size: 0.685rem;
+  color: #64748b;
+  display: block;
+  margin-top: 2px;
+}
+
+.headerActionBtnsRow {
   display: flex;
   align-items: center;
   gap: 0.65rem;
 }
 
-.recentMaterialImg {
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  object-fit: cover;
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  flex-shrink: 0;
-}
-
-.recentMaterialText {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.recentMaterialName {
-  font-size: 0.825rem;
-  font-weight: 800;
+.mobileEditRatesBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #fbc21a;
+  border: 1px solid #e5aa00;
   color: #0f172a;
-}
-
-.recentMaterialLocation {
-  font-size: 0.72rem;
-  color: #64748b;
-}
-
-.recentDeadlineContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 1px;
-}
-
-.recentDeadlineLabel {
-  font-size: 0.65rem;
-  color: #64748b;
-  font-weight: 600;
-}
-
-.recentDeadlineTime {
-  font-size: 0.85rem;
-  font-weight: 900;
-  color: #ea580c;
-}
-
-.recentActionsRow {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.recentAcceptBtn {
-  flex: 1;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.35rem;
-  background-color: #16a34a;
-  color: #ffffff;
-  font-size: 0.785rem;
-  font-weight: 700;
-  padding: 0.45rem 0.85rem;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.recentAcceptBtn:hover {
-  background-color: #15803d;
-  transform: translateY(-1px);
-}
-
-.recentDenyBtn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.35rem;
-  background-color: #fef2f2;
-  color: #dc2626;
-  border: 1px solid #fecaca;
-  font-size: 0.785rem;
-  font-weight: 700;
-  padding: 0.45rem 0.85rem;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.recentDenyBtn:hover {
-  background-color: #fee2e2;
-  color: #b91c1c;
-}
-
-.recentFooterLink {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
   font-size: 0.75rem;
-  font-weight: 700;
-  color: #2563eb;
+  font-weight: 800;
+  padding: 0.35rem 0.65rem;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
   text-decoration: none;
-  align-self: flex-start;
-  transition: color 0.15s ease;
+  box-shadow: 0 2px 8px rgba(251, 194, 26, 0.25);
+  transition: all 0.15s ease;
 }
 
-.recentFooterLink:hover {
-  color: #1d4ed8;
-  text-decoration: underline;
-}
-
-.recentAcceptedState,
-.recentCalmState {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
-  padding: 0.35rem 0;
-}
-
-.recentCalmState {
-  color: #64748b;
-  font-size: 0.825rem;
-  font-weight: 600;
-}
-
-.heroRight {
-  position: relative;
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-end;
-  align-self: flex-end;
-  width: 100%;
-  height: 100%;
-  padding: 0;
-  margin: 0;
-  min-width: 0;
-}
-
-.heroTruckImg {
-  width: 100%;
-  max-width: 750px;
-  height: auto;
-  display: block;
-  object-fit: contain;
-  object-position: right bottom;
-  transition: transform 0.3s ease;
-  position: relative;
-  z-index: 1;
-  padding: 0;
-  margin: 0;
-}
-
-.heroTruckImg:hover {
-  transform: scale(1.01);
-}
-
-/* ==========================================================================
-   2. KEY STATS CARDS (5 Horizontal Cards)
-   ========================================================================== */
-.statsGrid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 1.15rem;
-}
-
-.statCard {
-  background: #ffffff;
-  border: 1px solid #edf2f7;
-  border-radius: 16px;
-  padding: 1.25rem 1.15rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
-  transition: all 0.2s ease;
-}
-
-.statCard:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
-  border-color: #e2e8f0;
-}
-
-.statIconWrap {
-  width: 46px;
-  height: 46px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.statIconOrange {
-  background-color: #fff8eb;
-  color: #ea580c;
-  border: 1px solid #fed7aa;
-}
-
-.statIconGreen {
-  background-color: #f0fdf4;
-  color: #16a34a;
-  border: 1px solid #bbf7d0;
-}
-
-.statIconBlue {
-  background-color: #eff6ff;
-  color: #2563eb;
-  border: 1px solid #bfdbfe;
-}
-
-.statIconPurple {
-  background-color: #faf5ff;
-  color: #9333ea;
-  border: 1px solid #e9d5ff;
-}
-
-.statContent {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-  flex: 1;
-}
-
-.statLabel {
-  font-size: 0.785rem;
-  font-weight: 600;
-  color: #64748b;
-  line-height: 1.2;
-}
-
-.statValue {
-  font-size: 1.45rem;
-  font-weight: 800;
-  color: #0f172a;
-  line-height: 1.15;
-}
-
-.statFooter {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-size: 0.72rem;
-  color: #94a3b8;
-  margin-top: 0.15rem;
-}
-
-.trendGreen {
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-  color: #16a34a;
-  font-weight: 700;
-}
-
-.trendRed {
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-  color: #dc2626;
-  font-weight: 700;
-}
-
-/* ==========================================================================
-   3. MAIN TWO-COLUMN DASHBOARD GRID
-   ========================================================================== */
-.twoColGrid {
-  display: grid;
-  grid-template-columns: 1.95fr 1.05fr;
-  gap: 1.5rem;
-  align-items: start;
-}
-
-.leftColumn {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.rightColumn {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-/* ==========================================================================
-   4. LEFT COLUMN WIDGETS
-   ========================================================================== */
-
-.cardHeaderRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.cardHeaderTitle {
-  font-size: 1.1rem;
-  font-weight: 800;
-  color: #0f172a;
-  margin: 0;
+.mobileEditRatesBtn:hover {
+  background: #f59e0b;
+  transform: translateY(-1px);
 }
 
 .viewAllLink {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  font-size: 0.825rem;
+  gap: 0.35rem;
+  font-size: 0.78rem;
   font-weight: 700;
-  color: #d97706;
+  color: #2563eb;
   text-decoration: none;
   transition: all 0.15s ease;
+  white-space: nowrap;
 }
 
 .viewAllLink:hover {
-  color: #b45309;
-  transform: translateX(2px);
-}
-
-.viewAllLinkBlue {
-  color: #2563eb;
-}
-
-.viewAllLinkBlue:hover {
   color: #1d4ed8;
 }
 
-.highestOrderBody {
-  display: grid;
-  grid-template-columns: auto 1.4fr 1fr 1fr 1.2fr;
-  gap: 1rem;
-  align-items: center;
-  background: #ffffff;
-  border-radius: 14px;
-  padding: 1.15rem 1.25rem;
-  border: 1px solid #fef3c7;
-}
-
-.trophyBadge {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  padding-right: 0.75rem;
-  border-right: 1px solid #fef3c7;
-}
-
-.trophyIconCircle {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: #fef3c7;
-  color: #d97706;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid #fde68a;
-}
-
-.trophySubtext {
-  font-size: 0.65rem;
-  font-weight: 700;
-  color: #92400e;
-  text-align: center;
-}
-
-.orderDetailCol {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.companyRow {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-}
-
-.companyIcon {
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  background: #f1f5f9;
-  color: #475569;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.companyName {
-  font-size: 0.95rem;
-  font-weight: 800;
-  color: #0f172a;
-}
-
-.companyLocation {
-  font-size: 0.75rem;
-  color: #64748b;
-}
-
-.orderDetailLabel {
-  font-size: 0.72rem;
-  color: #64748b;
-}
-
-.orderDetailValue {
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: #0f172a;
-}
-
-.orderDetailValueGreen {
-  font-size: 1.15rem;
-  font-weight: 800;
-  color: #16a34a;
-}
-
-.orderedDateText {
-  font-size: 0.75rem;
-  color: #64748b;
-  margin-top: -0.5rem;
-  padding-left: 0.25rem;
-}
-
-.orderedDateText strong {
-  color: #1e293b;
-}
-
-.greatJobLeft {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.greatJobTitle {
-  font-size: 0.875rem;
-  font-weight: 800;
-  color: #0f172a;
-}
-
-.greatJobSub {
-  font-size: 0.75rem;
-  color: #64748b;
-}
-
-.greatJobRight {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.greatJobEncourage {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #d97706;
-}
-
-.trendChartIcon {
-  color: #f59e0b;
-  display: flex;
-  align-items: center;
-}
-
-/* Today's Scrap Prices Grid */
-.scrapPricesSection {
-  background: #ffffff;
-  border-radius: 18px;
-  border: 1px solid #edf2f7;
-  padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.15rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
-}
-
-.priceGrid {
+/* Desktop 4-Column Grid */
+.desktopPriceGrid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1.1rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .priceCardItem {
@@ -866,6 +1258,7 @@
   flex-direction: column;
   transition: all 0.2s ease;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+  text-decoration: none;
 }
 
 .priceCardItem:hover {
@@ -919,27 +1312,28 @@
   text-transform: capitalize;
 }
 
-.updateRatesBtn {
+.trendGreenBadge {
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
-  background-color: #fbc21a;
-  border: 1px solid #e5aa00;
-  color: #0f172a;
-  font-size: 0.825rem;
-  font-weight: 800;
-  padding: 0.45rem 0.95rem;
-  border-radius: 8px;
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(251, 194, 26, 0.35);
-  transition: all 0.15s ease;
+  gap: 3px;
+  background-color: #f0fdf4;
+  color: #16a34a;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
 }
 
-.updateRatesBtn:hover {
-  background-color: #f59e0b;
-  color: #0f172a;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(251, 194, 26, 0.45);
+.trendRedBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background-color: #fef2f2;
+  color: #dc2626;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
 }
 
 .priceItemMarketRate {
@@ -960,6 +1354,7 @@
   padding: 0.2rem 0.5rem;
   border-radius: 6px;
   margin-top: 2px;
+  width: fit-content;
 }
 
 .yourRateDot {
@@ -970,1985 +1365,390 @@
   flex-shrink: 0;
 }
 
-.footnoteText {
-  font-size: 0.72rem;
-  color: #94a3b8;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  margin: 0;
-}
-
-/* ==========================================================================
-   UPDATE MY BUYING RATES MODAL
-   ========================================================================== */
-.modalOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(15, 23, 42, 0.65);
-  backdrop-filter: blur(4px);
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-  animation: fadeIn 0.2s ease;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-.modalContainer {
-  background: #ffffff;
-  border-radius: 20px;
+/* Mobile Vertical List */
+.mobileMarketPricesList {
+  display: none;
+  flex-direction: column;
+  gap: 0.55rem;
   width: 100%;
-  max-width: 650px;
-  max-height: 85vh;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
-  overflow: hidden;
-  animation: slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@keyframes slideUp {
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-
-.modalHeader {
-  padding: 1.35rem 1.5rem 1rem 1.5rem;
-  border-bottom: 1px solid #f1f5f9;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  position: relative;
-  flex-shrink: 0;
-}
-
-.modalHeaderTop {
+.mobilePriceRowCard {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-}
-
-.modalTitle {
-  font-size: 1.25rem;
-  font-weight: 800;
-  color: #0f172a;
-  margin: 0;
-}
-
-.modalCloseBtn {
-  background: transparent;
-  border: none;
-  color: #64748b;
-  cursor: pointer;
-  padding: 4px;
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.15s ease;
-}
-
-.modalCloseBtn:hover {
-  background-color: #f1f5f9;
-  color: #0f172a;
-}
-
-.modalSubtitleNote {
-  font-size: 0.8rem;
-  color: #475569;
-  background-color: #fffdf5;
-  border: 1px solid #fde68a;
-  border-radius: 8px;
-  padding: 0.6rem 0.85rem;
-  line-height: 1.4;
-  margin: 0;
-}
-
-.modalForm {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-height: 0;
-  overflow: hidden;
-}
-
-.modalBody {
-  padding: 1.25rem 1.5rem;
-  overflow-y: auto;
-  flex: 1;
-  min-height: 0;
-  max-height: calc(85vh - 180px);
-  display: flex;
-  flex-direction: column;
-  gap: 0.85rem;
-}
-
-.modalBody::-webkit-scrollbar {
-  width: 6px;
-}
-
-.modalBody::-webkit-scrollbar-track {
-  background: #f1f5f9;
-  border-radius: 4px;
-}
-
-.modalBody::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 4px;
-}
-
-.modalBody::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
-}
-
-.rateEditRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0.85rem 1rem;
+  gap: 0.75rem;
   background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 14px;
+  border: 1px solid #edf2f7;
+  border-radius: 10px;
+  padding: 0.65rem 0.85rem;
+  text-decoration: none;
+  color: inherit;
   transition: all 0.15s ease;
 }
 
-.rateEditRow:hover {
+.mobilePriceRowCard:hover {
+  background: #ffffff;
   border-color: #cbd5e1;
-  background-color: #ffffff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
-.rateEditLeft {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  flex: 1;
-}
-
-.rateEditImg {
-  width: 64px;
-  height: 64px;
-  border-radius: 10px;
+.mobilePriceThumb {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
   object-fit: cover;
-  background: #ffffff;
-  border: 1.5px solid #e2e8f0;
-  flex-shrink: 0;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
-}
-
-.rateEditTextCol {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-
-.rateEditName {
-  font-size: 0.98rem;
-  font-weight: 800;
-  color: #0f172a;
-}
-
-.rateEditMarketRef {
-  font-size: 0.8rem;
-  color: #64748b;
-  font-weight: 600;
-}
-
-.rateEditLastUpdated {
-  font-size: 0.72rem;
-  color: #94a3b8;
-}
-
-.rateInputGroup {
-  display: flex;
-  align-items: center;
-  background: #ffffff;
-  border: 1.5px solid #cbd5e1;
-  border-radius: 8px;
-  padding: 0.45rem 0.75rem;
-  gap: 0.35rem;
-  width: 145px;
-  flex-shrink: 0;
-  transition: border-color 0.15s ease;
-}
-
-.rateInputGroup:focus-within {
-  border-color: #fbc21a;
-  box-shadow: 0 0 0 3px rgba(251, 194, 26, 0.2);
-}
-
-.rateInputCurrency {
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: #0f172a;
-}
-
-.rateInputField {
-  width: 100%;
-  border: none;
-  outline: none;
-  font-size: 0.95rem;
-  font-weight: 800;
-  color: #0f172a;
-  background: transparent;
-}
-
-.rateInputUnit {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #64748b;
-  white-space: nowrap;
-}
-
-.modalFooter {
-  padding: 1rem 1.5rem;
-  border-top: 1px solid #f1f5f9;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 0.75rem;
-  background-color: #ffffff;
+  background: #e2e8f0;
   flex-shrink: 0;
 }
 
-.modalCancelBtn {
-  background: #ffffff;
-  border: 1px solid #cbd5e1;
-  color: #475569;
-  font-size: 0.85rem;
-  font-weight: 700;
-  padding: 0.6rem 1.15rem;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.modalCancelBtn:hover {
-  background: #f8fafc;
-  color: #0f172a;
-}
-
-.modalSaveBtn {
-  background: #fbc21a;
-  border: none;
-  color: #1e293b;
-  font-size: 0.85rem;
-  font-weight: 800;
-  padding: 0.6rem 1.35rem;
-  border-radius: 8px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  box-shadow: 0 2px 8px rgba(251, 194, 26, 0.3);
-  transition: all 0.15s ease;
-}
-
-.modalSaveBtn:hover {
-  background: #e5aa00;
-  transform: translateY(-1px);
-}
-
-.modalCancelBtn:hover {
-  background: #f8fafc;
-  color: #0f172a;
-}
-
-.modalSaveBtn {
-  background: #fbc21a;
-  border: none;
-  color: #1e293b;
-  font-size: 0.85rem;
-  font-weight: 800;
-  padding: 0.6rem 1.35rem;
-  border-radius: 8px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  box-shadow: 0 2px 8px rgba(251, 194, 26, 0.3);
-  transition: all 0.15s ease;
-}
-
-.modalSaveBtn:hover {
-  background: #e5aa00;
-  transform: translateY(-1px);
-}
-
-/* Accept More Earn More Promo Card */
-.promoCard {
-  background: linear-gradient(135deg, #fffdf8 0%, #fff6ea 100%);
-  border: 1px solid #fed7aa;
-  border-radius: 18px;
-  padding: 1.75rem 2rem;
-  display: grid;
-  grid-template-columns: 1.1fr 1.15fr 0.9fr;
-  gap: 1.5rem;
-  align-items: center;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 4px 16px rgba(234, 88, 12, 0.06);
-}
-
-.promoLeft {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  z-index: 2;
-}
-
-.promoTitle {
-  font-size: 1.45rem;
-  font-weight: 800;
-  color: #0f172a;
-  margin: 0;
-  line-height: 1.2;
-}
-
-.promoSub {
-  font-size: 0.85rem;
-  color: #475569;
-  line-height: 1.45;
-  margin: 0;
-}
-
-.promoIncentiveNote {
-  font-size: 0.785rem;
-  color: #64748b;
-  font-weight: 600;
-  line-height: 1.35;
-  margin: 0;
-}
-
-.promoBtn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  background-color: #0f172a;
-  color: #ffffff;
-  font-weight: 700;
-  font-size: 0.85rem;
-  padding: 0.75rem 1.35rem;
-  border-radius: 8px;
-  text-decoration: none;
-  border: none;
-  cursor: pointer;
-  align-self: flex-start;
-  transition: all 0.2s ease;
-}
-
-.promoBtn:hover {
-  background-color: #1e293b;
-  transform: translateY(-2px);
-}
-
-/* Phone Mockup */
-.phoneMockup {
-  background: #ffffff;
-  border: 3px solid #1e293b;
-  border-radius: 20px;
-  padding: 0.85rem;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-  max-width: 200px;
-  margin: 0 auto;
-}
-
-.phoneHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid #f1f5f9;
-  padding-bottom: 0.35rem;
-}
-
-.phoneHeaderTitle {
-  font-size: 0.72rem;
-  font-weight: 800;
-  color: #0f172a;
-}
-
-.phoneBadge {
-  background: #ef4444;
-  color: #ffffff;
-  font-size: 0.6rem;
-  font-weight: 800;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.phoneRequestCard {
-  background: #f8fafc;
-  border-radius: 10px;
-  padding: 0.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-}
-
-.phoneReqRow {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.phoneReqImg {
-  width: 28px;
-  height: 28px;
-  border-radius: 6px;
-  object-fit: cover;
-}
-
-.phoneReqText {
-  display: flex;
-  flex-direction: column;
-}
-
-.phoneReqItemName {
-  font-size: 0.7rem;
-  font-weight: 700;
-  color: #0f172a;
-}
-
-.phoneReqItemQty {
-  font-size: 0.6rem;
-  color: #64748b;
-}
-
-.phoneReqPickup {
-  font-size: 0.58rem;
-  color: #059669;
-  font-weight: 600;
-}
-
-.reqTrustLine {
-  margin-top: 0.1rem;
-  display: flex;
-  align-items: center;
-}
-
-.trustPriorityBadge {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  font-size: 0.6rem;
-  font-weight: 800;
-  color: #16a34a;
-  background-color: #dcfce7;
-  padding: 0.12rem 0.4rem;
-  border-radius: 4px;
-  border: 1px solid #bbf7d0;
-}
-
-.trustStandardBadge {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  font-size: 0.58rem;
-  font-weight: 600;
-  color: #64748b;
-  background-color: #f1f5f9;
-  padding: 0.12rem 0.35rem;
-  border-radius: 4px;
-  border: 1px solid #e2e8f0;
-}
-
-.phoneBtnRow {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.35rem;
-}
-
-.phoneAcceptBtn {
-  background: #16a34a;
-  color: #ffffff;
-  border: none;
-  border-radius: 5px;
-  padding: 0.3rem;
-  font-size: 0.65rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background-color 0.15s ease;
-}
-
-.phoneAcceptBtn:hover {
-  background: #15803d;
-}
-
-.phoneIgnoreBtn {
-  background: transparent;
-  color: #64748b;
-  border: 1px solid #cbd5e1;
-  border-radius: 5px;
-  padding: 0.3rem;
-  font-size: 0.65rem;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-/* Trust & Priority Score Widget */
-.trustScoreCard {
-  background: #ffffff;
-  border: 1px solid #edf2f7;
-  border-radius: 16px;
-  padding: 1.25rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.85rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
-}
-
-.trustScoreHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.trustTierBadgePriority {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  background-color: #dcfce7;
-  color: #16a34a;
-  font-size: 0.72rem;
-  font-weight: 800;
-  padding: 0.2rem 0.55rem;
-  border-radius: 6px;
-  border: 1px solid #bbf7d0;
-}
-
-.trustTierBadgeStandard {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  background-color: #fef3c7;
-  color: #d97706;
-  font-size: 0.72rem;
-  font-weight: 800;
-  padding: 0.2rem 0.55rem;
-  border-radius: 6px;
-  border: 1px solid #fde68a;
-}
-
-.trustScoreBody {
-  display: flex;
-  align-items: center;
-  gap: 0.95rem;
-  background: #f8fafc;
-  border: 1px solid #f1f5f9;
-  border-radius: 12px;
-  padding: 0.85rem;
-}
-
-.trustProgressRingBox {
-  position: relative;
-  width: 52px;
-  height: 52px;
-  flex-shrink: 0;
-}
-
-.trustScoreNumber {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 0.85rem;
-  font-weight: 900;
-  color: #0f172a;
-  text-align: center;
-}
-
-.trustScoreFactorGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.4rem;
+.mobilePriceInfoCol {
   flex: 1;
-}
-
-.trustFactorItem {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-}
-
-.trustFactorLabel {
-  font-size: 0.65rem;
-  color: #64748b;
-  font-weight: 500;
-}
-
-.trustFactorValue {
-  font-size: 0.8rem;
-  font-weight: 800;
-  color: #16a34a;
-}
-
-.trustExplanationText {
-  font-size: 0.785rem;
-  color: #475569;
-  line-height: 1.4;
-  margin: 0;
-}
-
-.trustLearnMoreLink {
-  font-size: 0.785rem;
-  font-weight: 700;
-  color: #2563eb;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-  transition: color 0.15s ease;
-}
-
-.trustLearnMoreLink:hover {
-  color: #1d4ed8;
-  text-decoration: underline;
-}
-
-.promoRightMoney {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.moneyBagImg {
-  max-width: 155px;
-  height: auto;
-  object-fit: contain;
-  mix-blend-mode: multiply;
-  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.08));
-}
-
-/* Top Achievements */
-.achievementsSection {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.achievementsTitle {
-  font-size: 1.1rem;
-  font-weight: 800;
-  color: #0f172a;
-  margin: 0;
-}
-
-.achievementsGrid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
-}
-
-.achievementCard {
-  background: #ffffff;
-  border: 1px solid #edf2f7;
-  border-radius: 16px;
-  padding: 1.25rem 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 0.65rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
-  transition: all 0.2s ease;
-}
-
-.achievementCard:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
-}
-
-.achieveIconCircle {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 0.15rem;
-}
-
-.achieveIconOrange {
-  background: #fff8eb;
-  color: #d97706;
-  border: 2px solid #fde68a;
-}
-
-.achieveIconGreen {
-  background: #f0fdf4;
-  color: #16a34a;
-  border: 2px solid #bbf7d0;
-}
-
-.achieveIconBlue {
-  background: #eff6ff;
-  color: #2563eb;
-  border: 2px solid #bfdbfe;
-}
-
-.achieveIconPurple {
-  background: #faf5ff;
-  color: #9333ea;
-  border: 2px solid #e9d5ff;
-}
-
-.achieveLabel {
-  font-size: 0.72rem;
-  color: #64748b;
-  font-weight: 600;
-  line-height: 1.2;
-}
-
-.achieveValue {
-  font-size: 1.25rem;
-  font-weight: 800;
-  color: #0f172a;
-  line-height: 1.1;
-}
-
-.achieveSub {
-  font-size: 0.685rem;
-  color: #94a3b8;
-  line-height: 1.2;
-}
-
-/* ==========================================================================
-   5. RIGHT COLUMN WIDGETS
-   ========================================================================== */
-.rightWidgetCard {
-  background: #ffffff;
-  border: 1px solid #edf2f7;
-  border-radius: 18px;
-  padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.15rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
-}
-
-/* Profile Card */
-.profileHero {
-  display: flex;
-  align-items: center;
-  gap: 0.85rem;
-}
-
-.profileAvatarLarge {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: #eff6ff;
-  color: #2563eb;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid #bfdbfe;
-  flex-shrink: 0;
-}
-
-.profileHeroText {
-  display: flex;
-  flex-direction: column;
-}
-
-.profileHeroName {
-  font-size: 1.05rem;
-  font-weight: 800;
-  color: #0f172a;
-}
-
-.verifiedBadgeRow {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: #16a34a;
-}
-
-.profileStatsGrid {
-  display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: 0.75rem;
-  padding: 0.85rem 1rem;
-  background: #f8fafc;
-  border-radius: 12px;
-  border: 1px solid #f1f5f9;
-}
-
-.profileStatCol {
   display: flex;
   flex-direction: column;
   gap: 2px;
+  min-width: 0;
 }
 
-.profileStatLabel {
-  font-size: 0.72rem;
-  color: #64748b;
-}
-
-.profileRatingRow {
+.mobilePriceNameRow {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 0.45rem;
+}
+
+.mobilePriceName {
   font-size: 0.875rem;
   font-weight: 800;
   color: #0f172a;
 }
 
-.starRating {
-  color: #f59e0b;
-  letter-spacing: 1px;
+.mobileTrendUp {
+  font-size: 0.685rem;
+  font-weight: 800;
+  color: #16a34a;
+  background: #dcfce7;
+  padding: 1px 4px;
+  border-radius: 3px;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1.2;
 }
 
-.reviewsCountText {
-  font-size: 0.7rem;
-  color: #94a3b8;
+.mobileTrendDown {
+  font-size: 0.685rem;
+  font-weight: 800;
+  color: #dc2626;
+  background: #fee2e2;
+  padding: 1px 4px;
+  border-radius: 3px;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1.2;
+}
+
+.mobileMandiRange {
+  font-size: 0.72rem;
+  color: #64748b;
   font-weight: 500;
 }
 
-.profileStatValueNum {
-  font-size: 1.15rem;
-  font-weight: 800;
-  color: #0f172a;
-}
-
-.profileSettingsBtn {
-  width: 100%;
-  padding: 0.75rem;
-  border-radius: 10px;
-  border: 1px solid #fde68a;
-  background: #fffdf5;
-  color: #b45309;
-  font-size: 0.85rem;
-  font-weight: 700;
-  cursor: pointer;
-  text-decoration: none;
-  text-align: center;
-  transition: all 0.15s ease;
-  display: block;
-}
-
-.profileSettingsBtn:hover {
-  background: #fef3c7;
-  border-color: #fcd34d;
-}
-
-/* Performance Overview */
-.selectDropdown {
-  padding: 0.35rem 0.65rem;
-  border-radius: 8px;
-  border: 1px solid #cbd5e1;
-  background: #ffffff;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #334155;
-  cursor: pointer;
-}
-
-.perfMetricsList {
+.mobileMyRateCol {
   display: flex;
   flex-direction: column;
-  gap: 0.85rem;
-}
-
-.perfMetricRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 0.85rem;
-  padding-bottom: 0.65rem;
-  border-bottom: 1px solid #f1f5f9;
-}
-
-.perfMetricRow:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
-}
-
-.perfLabel {
-  color: #475569;
-}
-
-.perfRight {
-  display: flex;
-  align-items: center;
-  gap: 0.85rem;
-}
-
-.perfValue {
-  font-weight: 800;
-  color: #0f172a;
-}
-
-.centeredLink {
-  text-align: center;
-  font-size: 0.825rem;
-  font-weight: 700;
-  color: #2563eb;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  margin-top: 0.25rem;
-}
-
-.centeredLink:hover {
-  color: #1d4ed8;
-  text-decoration: underline;
-}
-
-/* Quick Actions */
-.quickActionsGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.75rem;
-}
-
-.quickActionTile {
-  background: #f8fafc;
-  border: 1px solid #f1f5f9;
-  border-radius: 12px;
-  padding: 0.85rem;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  text-decoration: none;
-  transition: all 0.15s ease;
-}
-
-.quickActionTile:hover {
-  background: #ffffff;
-  border-color: #e2e8f0;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
-}
-
-.qaIconCircle {
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-end;
+  gap: 1px;
   flex-shrink: 0;
 }
 
-.qaTileText {
-  display: flex;
-  flex-direction: column;
+.mobileMyRateLabel {
+  font-size: 0.65rem;
+  color: #64748b;
+  font-weight: 600;
+  text-transform: none;
 }
 
-.qaTileTitle {
-  font-size: 0.825rem;
-  font-weight: 700;
-  color: #0f172a;
+.mobileMyRateVal {
+  font-size: 1.05rem;
+  font-weight: 900;
+  color: #15803d;
+  line-height: 1.1;
 }
 
-.qaTileSub {
+.mobileMyRateVal small {
   font-size: 0.685rem;
   color: #64748b;
+  font-weight: 600;
 }
 
-/* Tips for More Business */
-.tipsList {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.tipItem {
+.footnoteText {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
-  font-size: 0.825rem;
-  color: #334155;
-  line-height: 1.35;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  color: #94a3b8;
+  margin: 0;
 }
 
-.tipIconGreen {
-  color: #16a34a;
-  flex-shrink: 0;
-}
-
-.tipIconYellow {
-  color: #f59e0b;
-  flex-shrink: 0;
-}
-
-/* ==========================================================================
-   6. BOTTOM NOTIFICATION ALERT BANNER & FOOTER
-   ========================================================================== */
-.alertBanner {
-  background: #fffdf5;
-  border: 1px solid #fde68a;
-  border-radius: 16px;
-  padding: 1.25rem 1.75rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.5rem;
-  box-shadow: 0 4px 14px rgba(251, 194, 26, 0.08);
-}
-
-.alertLeft {
-  display: flex;
-  align-items: center;
-  gap: 1.15rem;
-}
-
-.alertBellCircle {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: #fef3c7;
-  color: #d97706;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  border: 2px solid #fde68a;
-}
-
-.alertTextCol {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.alertTitle {
-  font-size: 0.95rem;
-  font-weight: 800;
-  color: #0f172a;
-}
-
-.alertSub {
-  font-size: 0.825rem;
-  color: #64748b;
-}
-
-.alertEnableBtn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  background-color: #fbc21a;
-  color: #1e293b;
-  font-weight: 700;
-  font-size: 0.85rem;
-  padding: 0.75rem 1.45rem;
-  border-radius: 10px;
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 3px 10px rgba(251, 194, 26, 0.35);
-  transition: all 0.15s ease;
-  white-space: nowrap;
-}
-
-.alertEnableBtn:hover {
-  background-color: #e5aa00;
-  transform: translateY(-1px);
-}
-
-.trustFooter {
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.45rem;
-  font-size: 0.785rem;
-  color: #64748b;
-  padding: 1rem 0;
-}
-
-.trustIcon {
-  color: #059669;
-}
-
-.mobileOperationsSection {
-  display: none;
-}
-
-/* ==========================================================================
-   7. RESPONSIVE BREAKPOINTS
-   ========================================================================== */
-@media (max-width: 1200px) {
-  .heroSection {
-    grid-template-columns: 1fr;
-    padding: 2rem;
+/* --------------------------------------------------------------------------
+   RESPONSIVE DESIGN (TABLET & MOBILE BREAKPOINTS - MIRRORING HOUSEHOLD)
+   -------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  .desktopPriceGrid {
+    grid-template-columns: repeat(2, 1fr);
   }
-  .heroRight {
-    order: -1;
-  }
-  .twoColGrid {
-    grid-template-columns: 1fr;
-  }
-  .statsGrid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-  .promoCard {
-    grid-template-columns: 1fr 1fr;
-  }
-  .promoRightMoney {
-    display: none;
+
+  .statsCarouselTrack {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 768px) {
-  .mainContainer {
-    padding: 0.85rem 0.85rem 2rem 0.85rem;
-    gap: 0.85rem;
-  }
-
-  .topAcceptedBanner {
-    display: none; /* Replaced by unified mobile operational card */
-  }
-
-  .heroSection,
-  .statsGrid,
-  .twoColGrid,
-  .highestOrderCard,
-  .promoCard,
-  .alertBanner,
-  .trustFooter {
-    display: none !important;
-  }
-
-  .mobileOperationsSection {
-    display: flex;
-    flex-direction: column;
-    gap: 0.85rem;
-    width: 100%;
-  }
-
-  .mobileWelcomeCard {
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-    border-radius: 20px;
-    padding: 1.35rem;
-    color: #ffffff;
-    border: 1.5px solid #334155;
-    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.16);
-    display: flex;
-    flex-direction: column;
+  .pageContainer {
+    padding: 0.75rem 0.75rem 5rem 0.75rem;
     gap: 1rem;
   }
 
-  .mobileWelcomeHeaderRow {
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-  }
-
-  .enterpriseBadgeRow {
-    display: flex;
-    align-items: center;
-    gap: 0.65rem;
-    flex-wrap: wrap;
-    margin-bottom: 0.25rem;
-  }
-
-  .enterpriseBadge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    background: rgba(251, 194, 26, 0.15);
-    color: #fbc21a;
-    border: 1px solid rgba(251, 194, 26, 0.35);
-    font-size: 0.685rem;
-    font-weight: 900;
-    padding: 0.2rem 0.6rem;
-    border-radius: 6px;
-    letter-spacing: 0.04em;
-  }
-
-  .shieldIcon {
-    color: #fbc21a;
-  }
-
-  .gstinTag {
-    font-size: 0.7rem;
-    color: #cbd5e1;
-    font-family: monospace;
-    background: rgba(255, 255, 255, 0.08);
-    padding: 0.15rem 0.5rem;
-    border-radius: 4px;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    display: inline-flex;
-    align-items: center;
-  }
-
-  .mobileGreeting {
-    font-size: 0.8rem;
-    color: #94a3b8;
-    font-weight: 600;
-    margin-top: 0.15rem;
-  }
-
-  .mobileMerchantName {
-    font-size: 1.5rem;
-    font-weight: 900;
-    color: #ffffff;
-    margin: 0;
-    line-height: 1.2;
-    letter-spacing: -0.01em;
-  }
-
-  .mobileMerchantSub {
-    font-size: 0.785rem;
-    color: #cbd5e1;
-    margin: 0;
-    line-height: 1.4;
-  }
-
-  .mobileHeroActionRow {
-    margin-top: 0.65rem;
-    display: flex;
-    align-items: center;
-    gap: 0.65rem;
-    width: 100%;
-  }
-
-  .mobileViewNewReqBtn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.45rem;
-    background: #fbc21a;
-    color: #0f172a;
-    font-size: 0.85rem;
-    font-weight: 900;
-    padding: 0.7rem 1.25rem;
-    border-radius: 12px;
-    text-decoration: none;
-    border: 1.5px solid #eab308;
-    box-shadow: 0 4px 14px rgba(251, 194, 26, 0.35);
-    transition: all 0.15s ease;
-    width: 100%;
-  }
-
-  .mobileViewNewReqBtn:hover,
-  .mobileViewNewReqBtn:active {
-    background: #f59e0b;
-    transform: translateY(-1px);
-  }
-
-  .mobileStatsGrid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.65rem;
-    width: 100%;
-  }
-
-  .mobileStatCard {
-    background: #111827;
-    border: 1.5px solid #1f2937;
-    border-radius: 14px;
-    padding: 0.85rem 0.95rem;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
-    transition: all 0.15s ease;
-  }
-
-  .mobileStatCard:hover,
-  .mobileStatCard:active {
-    border-color: #fbc21a;
-    box-shadow: 0 4px 14px rgba(251, 194, 26, 0.18);
-  }
-
-  .mobileStatIconCircle {
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1.5px solid #374151;
-    color: #fbc21a;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-
-  .mobileStatInfoCol {
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
-    min-width: 0;
-  }
-
-  .mobileStatLabel {
-    font-size: 0.685rem;
-    font-weight: 800;
-    color: #9ca3af;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-  }
-
-  .mobileStatVal {
-    font-size: 1.3rem;
-    font-weight: 900;
-    color: #ffffff;
-    line-height: 1.1;
-  }
-
-  .mobileStatTrendRow {
-    display: flex;
-    align-items: center;
-    gap: 0.35rem;
-    font-size: 0.685rem;
-    color: #9ca3af;
-    margin-top: 2px;
-  }
-
-  .mobileStatPeriod {
-    color: #6b7280;
-  }
-
-  .mobileStatTrendUp {
-    color: #4ade80;
-    font-weight: 800;
-    display: inline-flex;
-    align-items: center;
-    gap: 1px;
-  }
-
-  .mobileStatCardHighlight {
-    grid-column: span 2;
-    background: #111827;
-    border: 1.5px solid #d97706;
-    box-shadow: 0 4px 16px rgba(217, 119, 6, 0.12);
-  }
-
-  .mobileStatIconGold {
-    background: rgba(251, 194, 26, 0.2);
-    border-color: #d97706;
-    color: #fbc21a;
-  }
-
-  .mobileStatValGold {
-    font-size: 1.45rem;
-    font-weight: 900;
-    color: #fbc21a;
-    line-height: 1.1;
-  }
-
-  /* 1. Primary Action: Today's Pickup */
-  .mobileActionCardPrimary {
-    background: #ffffff;
-    border: 1.5px solid #22c55e;
-    border-radius: 16px;
-    padding: 1.15rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    box-shadow: 0 4px 16px rgba(34, 197, 94, 0.08);
-  }
-
-  .mobileCardHeader {
-    display: flex;
+  .greetingAddressRow {
+    flex-direction: row;
     align-items: center;
     justify-content: space-between;
     gap: 0.5rem;
+    width: 100%;
+    box-sizing: border-box;
   }
 
-  .mobileCardTagPickup {
-    font-size: 0.7rem;
-    font-weight: 900;
-    color: #15803d;
-    background: #dcfce7;
-    padding: 2px 7px;
-    border-radius: 4px;
-    letter-spacing: 0.03em;
+  .greetingName {
+    font-size: 1.15rem;
   }
 
-  .mobilePickupTime {
+  .greetingSubtext {
     font-size: 0.75rem;
-    color: #0f172a;
-    font-weight: 800;
   }
 
-  .mobileCardBody {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
+  .promoTickerStrip {
+    height: 38px;
+    padding: 0 0.65rem;
+    border-radius: 10px;
   }
 
-  .mobileOrderCompany {
-    font-size: 1.05rem;
-    font-weight: 800;
-    color: #0f172a;
-    margin: 0;
-  }
-
-  .mobileOrderLoc {
-    font-size: 0.775rem;
-    color: #64748b;
-    margin: 0;
-  }
-
-  .mobileOrderDetailsPill {
-    margin-top: 4px;
-    font-size: 0.8rem;
-    color: #334155;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    padding: 0.35rem 0.65rem;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
+  .bannerLeftSection {
     gap: 0.4rem;
+    padding-right: 0.2rem;
   }
 
-  .mobilePriceText {
-    color: #16a34a;
-    font-weight: 900;
+  .bannerBadgePill {
+    font-size: 0.56rem;
+    padding: 0.14rem 0.38rem;
+    border-radius: 4px;
+  }
+
+  .bannerVerticalDivider {
+    height: 12px;
+    margin-left: 0.05rem;
+  }
+
+  .addressPillBtn {
+    min-width: unset;
+    max-width: 120px;
+    padding: 0.28rem 0.45rem;
+    gap: 0.25rem;
     margin-left: auto;
-  }
-
-  .mobileCtaPrimary {
-    width: 100%;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.45rem;
-    background: #16a34a;
-    color: #ffffff;
-    font-size: 0.85rem;
-    font-weight: 800;
-    padding: 0.65rem 1rem;
-    border-radius: 10px;
-    text-decoration: none;
-    transition: all 0.15s ease;
-    box-shadow: 0 2px 8px rgba(22, 163, 74, 0.25);
-  }
-
-  .mobileCtaPrimary:hover {
-    background: #15803d;
-  }
-
-  /* 2. Urgent Requests Card */
-  .mobileActionCardRequests {
-    background: #ffffff;
-    border: 1.5px solid #fbc21a;
-    border-radius: 16px;
-    padding: 1.15rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.65rem;
-    box-shadow: 0 4px 16px rgba(251, 194, 26, 0.1);
-  }
-
-  .mobileCardTagRequests {
-    font-size: 0.7rem;
-    font-weight: 900;
-    color: #0f172a;
-    background: #fbc21a;
-    padding: 2px 7px;
-    border-radius: 4px;
-    letter-spacing: 0.03em;
-  }
-
-  .mobilePulseTag {
-    font-size: 0.72rem;
-    color: #64748b;
-    font-weight: 600;
-  }
-
-  .mobileCardDesc {
-    font-size: 0.8rem;
-    color: #475569;
-    margin: 0;
-    line-height: 1.35;
-  }
-
-  .mobileCtaSecondaryYellow {
-    width: 100%;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.45rem;
-    background: #fbc21a;
-    color: #0f172a;
-    font-size: 0.85rem;
-    font-weight: 800;
-    padding: 0.65rem 1rem;
-    border-radius: 10px;
-    border: 1px solid #e5aa00;
-    text-decoration: none;
-    transition: all 0.15s ease;
-  }
-
-  .mobileCtaSecondaryYellow:hover {
-    background: #f59e0b;
-  }
-
-  /* 3. Accepted Quotes Card */
-  .mobileActionCardAccepted {
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 16px;
-    padding: 1.15rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.65rem;
-  }
-
-  .mobileCardTagAccepted {
-    font-size: 0.7rem;
-    font-weight: 900;
-    color: #15803d;
-    background: #dcfce7;
-    padding: 2px 7px;
-    border-radius: 4px;
-  }
-
-  .mobileTimeAgo {
-    font-size: 0.72rem;
-    color: #94a3b8;
-    font-weight: 600;
-  }
-
-  .mobileAcceptedBody {
-    font-size: 0.825rem;
-    color: #0f172a;
-    line-height: 1.35;
-  }
-
-  .mobileCtaOutlineGreen {
-    width: 100%;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.45rem;
-    background: #ffffff;
-    border: 1.5px solid #16a34a;
-    color: #16a34a;
-    font-size: 0.825rem;
-    font-weight: 800;
-    padding: 0.6rem 1rem;
-    border-radius: 10px;
-    text-decoration: none;
-    transition: all 0.15s ease;
-  }
-
-  .mobileCtaOutlineGreen:hover {
-    background: #f0fdf4;
-  }
-
-  /* 4. Full Market Prices Board */
-  .mobileMarketBoardCard {
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 16px;
-    padding: 1.15rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.85rem;
-    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.03);
-  }
-
-  .mobileMarketHeaderRow {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.5rem;
-    border-bottom: 1px solid #f1f5f9;
-    padding-bottom: 0.65rem;
-  }
-
-  .mobileMarketTitleWrap {
-    display: flex;
-    align-items: center;
-    gap: 0.55rem;
-  }
-
-  .marketIconYellow {
-    color: #f59e0b;
     flex-shrink: 0;
   }
 
-  .mobileMarketTitle {
-    font-size: 0.95rem;
-    font-weight: 800;
-    color: #0f172a;
-    margin: 0;
+  .addressPillArea {
+    font-size: 0.68rem;
+    max-width: 75px;
   }
 
-  .mobileMarketSub {
-    font-size: 0.685rem;
-    color: #64748b;
-    display: block;
+  .addressPillStatus,
+  .addressPillStatusPaused {
+    font-size: 0.6rem;
   }
 
-  .mobileEditRatesBtn {
-    display: inline-flex;
-    align-items: center;
+  .heroSliderWrapper,
+  .slideItem,
+  .imagePromoSlide,
+  .goldValueBannerSlide {
+    border-radius: 16px;
+    min-height: 140px;
+    max-height: 168px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  .promoImageFull {
+    width: 100% !important;
+    height: 100% !important;
+    max-height: 168px;
+    object-fit: cover !important;
+    object-position: center top !important;
+    border-radius: 16px !important;
+  }
+
+  .goldValueBannerSlide {
+    padding: 1.15rem 1rem;
+    background: var(--scrap-yellow) url('/turn-scrap-banner-bg.png') no-repeat right -15px center;
+    background-size: auto 100%;
+  }
+
+  .sliderDotsContainer {
+    bottom: 8px;
+    padding: 3px 8px;
+  }
+
+  .goldBannerLeft {
+    max-width: 68%;
     gap: 0.35rem;
-    background: #fbc21a;
-    border: 1px solid #e5aa00;
-    color: #0f172a;
-    font-size: 0.75rem;
-    font-weight: 800;
-    padding: 0.35rem 0.65rem;
-    border-radius: 6px;
-    cursor: pointer;
-    white-space: nowrap;
-    text-decoration: none;
-    transition: all 0.15s ease;
   }
 
-  .mobileEditRatesBtn:hover {
-    background: #f59e0b;
+  .goldBannerTag {
+    font-size: 0.65rem;
+    line-height: 1;
+  }
+
+  .goldBannerTitle {
+    font-size: 1.3rem;
+    line-height: 1.15;
+  }
+
+  .goldBannerSubtitle {
+    font-size: 0.74rem;
+    line-height: 1.35;
+  }
+
+  .goldBannerBtnRow {
+    gap: 0.5rem;
+    margin-top: 0.45rem;
+  }
+
+  .goldPostBtn,
+  .goldRatesBtn {
+    padding: 0.45rem 0.85rem;
+    font-size: 0.75rem;
+  }
+
+  /* Swipeable Horizontal Stats Carousel on Mobile */
+  .statsSectionWrapper {
+    overflow: hidden;
+  }
+
+  .statsCarouselTrack {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 0.85rem;
+    padding: 0.25rem 0.15rem 0.5rem 0.15rem;
+    width: 100%;
+    box-sizing: border-box;
+    scroll-padding: 0.15rem;
+  }
+
+  .statsCarouselTrack::-webkit-scrollbar {
+    display: none;
+  }
+
+  .statInteractiveCard {
+    flex: 0 0 100%;
+    min-width: 100%;
+    max-width: 100%;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+    border-radius: 16px;
+    padding: 0.95rem 1.15rem;
+    min-height: 105px;
+    box-sizing: border-box;
+  }
+
+  .statsIndicatorDotsRow {
+    display: flex;
+  }
+
+  /* Pickup Card Mobile Layout */
+  .pickupUnifiedHeader {
+    padding-bottom: 0.5rem;
+  }
+
+  .pickupUnifiedTitle {
+    font-size: 1.12rem;
+    white-space: nowrap !important;
+  }
+
+  .pickupUnifiedBody {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.85rem;
+  }
+
+  .pickupPartnerLeftCol {
+    width: 100%;
+    align-items: flex-start;
+    gap: 0.65rem;
+  }
+
+  .pickupCustomerHeaderRow {
+    width: 100%;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .pickupDetailsPill {
+    width: 100%;
+    padding: 0.42rem 0.75rem;
+  }
+
+  .pickupEtaRightCol {
+    width: 100%;
+    border-left: none;
+    border-top: 1px solid #E2E8F0;
+    padding-left: 0;
+    padding-top: 0.75rem;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    min-width: unset;
+  }
+
+  .trackPickupMiniBtn {
+    width: auto;
+    padding: 0.5rem 1.15rem;
+  }
+
+  /* New Requests Mobile Layout */
+  .newRequestsCard {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.85rem;
+    padding: 1.15rem 1.25rem;
+  }
+
+  .newRequestsCtaBtn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .scrapPricesSection {
+    padding: 1.15rem;
+    border-radius: 16px;
+    gap: 0.85rem;
+  }
+
+  .desktopPriceGrid {
+    display: none;
   }
 
   .mobileMarketPricesList {
     display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
   }
 
-  .mobilePriceRowCard {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    background: #f8fafc;
-    border: 1px solid #edf2f7;
-    border-radius: 10px;
-    padding: 0.65rem 0.85rem;
-    text-decoration: none;
-    color: inherit;
-    transition: all 0.15s ease;
-  }
-
-  .mobilePriceRowCard:hover {
-    background: #ffffff;
-    border-color: #cbd5e1;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-  }
-
-  .mobilePriceThumb {
-    width: 38px;
-    height: 38px;
-    border-radius: 8px;
-    object-fit: cover;
-    border: 1px solid #e2e8f0;
-    flex-shrink: 0;
-  }
-
-  .mobilePriceInfoCol {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-
-  .mobilePriceNameRow {
-    display: flex;
-    align-items: center;
-    gap: 0.45rem;
-  }
-
-  .mobilePriceName {
-    font-size: 0.875rem;
-    font-weight: 800;
-    color: #0f172a;
-  }
-
-  .mobileTrendUp {
-    font-size: 0.685rem;
-    font-weight: 800;
-    color: #16a34a;
-    background: #dcfce7;
-    padding: 1px 4px;
-    border-radius: 3px;
-  }
-
-  .mobileTrendDown {
-    font-size: 0.685rem;
-    font-weight: 800;
-    color: #dc2626;
-    background: #fee2e2;
-    padding: 1px 4px;
-    border-radius: 3px;
-  }
-
-  .mobileMandiRange {
-    font-size: 0.72rem;
-    color: #64748b;
-  }
-
-  .mobileMyRateCol {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 1px;
-    flex-shrink: 0;
-  }
-
-  .mobileMyRateLabel {
-    font-size: 0.65rem;
-    color: #64748b;
-    font-weight: 600;
-  }
-
-  .mobileMyRateVal {
-    font-size: 1.05rem;
-    font-weight: 900;
-    color: #15803d;
-  }
-
-  .mobileMyRateVal small {
-    font-size: 0.685rem;
-    color: #64748b;
-    font-weight: 600;
-  }
-
-  /* 4. Mobile Key Performance Stats Grid (Yellow + Graphite Theme) */
-  .mobileStatsSection {
-    display: flex;
-    flex-direction: column;
-    gap: 0.65rem;
-  }
-
-  .mobileStatsGrid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.65rem;
-  }
-
-  .mobileStatCard {
-    background: linear-gradient(145deg, #0f172a 0%, #1e293b 100%);
-    border: 1px solid #334155;
-    border-radius: 12px;
-    padding: 0.85rem 0.75rem;
-    display: flex;
-    align-items: flex-start;
-    gap: 0.65rem;
-    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.15);
-    transition: transform 0.15s ease, border-color 0.15s ease;
-  }
-
-  .mobileStatCard:hover {
-    border-color: #fbc21a;
-    transform: translateY(-1px);
-  }
-
-  .mobileStatCardHighlight {
-    grid-column: span 2;
-    background: linear-gradient(145deg, #0f172a 0%, #182235 100%);
-    border: 1px solid rgba(251, 194, 26, 0.35);
-    box-shadow: 0 4px 12px rgba(251, 194, 26, 0.12);
-  }
-
-  .mobileStatIconCircle {
-    width: 34px;
-    height: 34px;
-    border-radius: 8px;
-    background: rgba(251, 194, 26, 0.12);
-    color: #fbc21a;
-    border: 1px solid rgba(251, 194, 26, 0.25);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-
-  .mobileStatIconGold {
-    background: #fbc21a;
-    color: #0f172a;
-    border-color: #fbc21a;
-    box-shadow: 0 2px 8px rgba(251, 194, 26, 0.3);
-  }
-
-  .mobileStatInfoCol {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    flex: 1;
-    min-width: 0;
-  }
-
-  .mobileStatLabel {
-    font-size: 0.685rem;
-    font-weight: 700;
-    color: #94a3b8;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .mobileStatVal {
-    font-size: 1.25rem;
-    font-weight: 900;
-    color: #ffffff;
-    line-height: 1.15;
-  }
-
-  .mobileStatValGold {
-    font-size: 1.35rem;
-    font-weight: 900;
-    color: #fbc21a;
-    line-height: 1.15;
-  }
-
-  .mobileStatTrendRow {
-    display: flex;
-    align-items: center;
-    gap: 0.35rem;
-    margin-top: 2px;
-  }
-
-  .mobileStatPeriod {
-    font-size: 0.625rem;
-    color: #64748b;
-    font-weight: 600;
-  }
-
-  .mobileStatTrendUp {
-    display: inline-flex;
-    align-items: center;
-    gap: 2px;
-    font-size: 0.625rem;
-    font-weight: 800;
-    color: #4ade80;
-  }
-
-  /* 5. Mobile Trust & Priority Score Card (Yellow + Graphite Theme) */
-  .mobileTrustScoreCard {
-    background: linear-gradient(145deg, #0f172a 0%, #1e293b 100%);
-    border: 1px solid rgba(251, 194, 26, 0.3);
-    border-radius: 14px;
-    padding: 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.2);
-  }
-
-  .mobileTrustHeader {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    padding-bottom: 0.5rem;
-  }
-
-  .mobileTrustTitleWrap {
-    display: flex;
-    align-items: center;
-    gap: 0.45rem;
-  }
-
-  .mobileTrustTitle {
+  .mobileMarketTitle {
     font-size: 0.95rem;
-    font-weight: 800;
-    color: #ffffff;
-    margin: 0;
   }
 
-  .mobileTrustBadgePriority {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    background: rgba(251, 194, 26, 0.15);
-    color: #fbc21a;
-    border: 1px solid rgba(251, 194, 26, 0.4);
-    font-size: 0.685rem;
-    font-weight: 800;
-    padding: 2px 7px;
-    border-radius: 6px;
-  }
-
-  .mobileTrustBody {
-    display: flex;
-    align-items: center;
-    gap: 0.85rem;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 10px;
-    padding: 0.65rem 0.75rem;
-  }
-
-  .mobileTrustRingWrap {
-    position: relative;
-    width: 56px;
-    height: 56px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-
-  .mobileTrustRingNumber {
-    position: absolute;
-    font-size: 0.85rem;
-    font-weight: 900;
-    color: #fbc21a;
-  }
-
-  .mobileTrustFactorsGrid {
-    flex: 1;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.35rem;
-    text-align: center;
-  }
-
-  .mobileTrustFactorItem {
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
-  }
-
-  .mobileTrustFactorLabel {
-    font-size: 0.58rem;
-    color: #94a3b8;
-    font-weight: 700;
-    line-height: 1.1;
-  }
-
-  .mobileTrustFactorVal {
-    font-size: 0.85rem;
-    font-weight: 900;
-    color: #ffffff;
-  }
-
-  .mobileTrustExplanation {
-    font-size: 0.72rem;
-    color: #cbd5e1;
-    line-height: 1.35;
-    margin: 0;
-  }
-
-  .mobileTrustLearnMoreLink {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    font-size: 0.785rem;
-    font-weight: 800;
-    color: #fbc21a;
-    text-decoration: none;
-    transition: color 0.15s ease;
-  }
-
-  .mobileTrustLearnMoreLink:hover {
-    color: #f59e0b;
+  .viewAllLink {
+    display: none;
   }
 }

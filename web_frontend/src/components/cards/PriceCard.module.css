@@ -233,6 +233,15 @@
   padding-top: 0.15rem;
 }
 
+.timestampRowActive {
+  color: #059669;
+  font-weight: 650;
+}
+
+.timestampRowActive .clockIcon {
+  color: #059669;
+}
+
 .clockIcon {
   color: #9CA3AF;
 }

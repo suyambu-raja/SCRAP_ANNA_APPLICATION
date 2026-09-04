@@ -18,8 +18,10 @@ export interface PriceCardProps {
   onClick?: () => void;
   compact?: boolean;
   yourPrice?: number;
+  yourPriceUpdatedAt?: string;
   isActive?: boolean;
   className?: string;
+  children?: React.ReactNode;
 }
 
 export function PriceCard({
@@ -32,10 +34,13 @@ export function PriceCard({
   location,
   imageUrl,
   imagePlaceholder,
+  updatedAt,
   onClick,
   yourPrice,
+  yourPriceUpdatedAt,
   isActive,
   className,
+  children,
 }: PriceCardProps) {
   const name = materialName || price?.name || price?.category || 'Scrap Material';
   const priceUnit = unit || price?.unit || 'kg';
@@ -132,10 +137,23 @@ export function PriceCard({
         </div>
 
         {/* Timestamp Row */}
-        <div className={styles.timestampRow}>
+        <div
+          className={[
+            styles.timestampRow,
+            yourPriceUpdatedAt ? styles.timestampRowActive : '',
+          ]
+            .filter(Boolean)
+            .join(' ')}
+        >
           <Clock size={12} className={styles.clockIcon} />
-          <span>Updated today, 9:30 AM</span>
+          <span>
+            {yourPriceUpdatedAt
+              ? `YOUR Price: Updated ${yourPriceUpdatedAt}`
+              : (updatedAt || 'Updated today, 9:30 AM')}
+          </span>
         </div>
+
+        {children}
       </div>
     </div>
   );

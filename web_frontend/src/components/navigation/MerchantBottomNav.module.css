@@ -10,11 +10,11 @@
     bottom: 0;
     left: 0;
     right: 0;
-    height: 62px;
-    background-color: #0f172a; /* Dark Graphite */
-    border-top: 1px solid #1e293b;
+    height: 64px;
+    background: #20242D; /* Exact Graphite #20242D matching Household footer */
+    border-top: 1px solid #2d323e;
     z-index: 1000;
-    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.35);
     padding-bottom: env(safe-area-inset-bottom, 0);
   }
 
@@ -78,7 +78,7 @@
     font-weight: 900;
     padding: 1px 4px;
     border-radius: 9999px;
-    border: 1.5px solid #0f172a;
+    border: 1.5px solid #20242D;
     line-height: 1.1;
   }
 
@@ -97,7 +97,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 14px rgba(251, 194, 26, 0.4), 0 0 0 3px #0f172a;
+    box-shadow: 0 4px 14px rgba(251, 194, 26, 0.4), 0 0 0 3px #20242D;
     transition: transform 0.15s ease, background-color 0.15s ease;
     position: relative;
   }
@@ -108,7 +108,7 @@
 
   .centerActionItem.navItemActive .centerIconWrap {
     background-color: #f59e0b;
-    box-shadow: 0 4px 16px rgba(245, 158, 11, 0.5), 0 0 0 3px #0f172a;
+    box-shadow: 0 4px 16px rgba(245, 158, 11, 0.5), 0 0 0 3px #20242D;
   }
 
   .centerBadge {
@@ -121,7 +121,7 @@
     font-weight: 900;
     padding: 1px 4px;
     border-radius: 9999px;
-    border: 1.5px solid #0f172a;
+    border: 1.5px solid #20242D;
     line-height: 1.1;
   }
 }

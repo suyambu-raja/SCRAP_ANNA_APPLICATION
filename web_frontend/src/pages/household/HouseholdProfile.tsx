@@ -21,7 +21,6 @@ import {
   Sparkles,
   CheckCircle2,
   X,
-  Store,
   Clock,
   ArrowRight,
   ChevronRight,
@@ -29,7 +28,6 @@ import {
   MessageSquare,
 } from 'lucide-react';
 import { useAuthStore } from '@/store/useAuthStore';
-import { RequestAdditionalRoleModal } from '@/components/common';
 import styles from './HouseholdProfile.module.css';
 
 interface SavedAddress {
@@ -66,7 +64,6 @@ export function HouseholdProfile() {
 
   // Tab State
   const [activeTab, setActiveTab] = useState<'personal' | 'addresses' | 'payment' | 'notifications'>('personal');
-  const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
   const [isMobileEditContactOpen, setIsMobileEditContactOpen] = useState(false);
   const [isMobileAddressesOpen, setIsMobileAddressesOpen] = useState(false);
 
@@ -351,41 +348,6 @@ export function HouseholdProfile() {
                     <span style={{ fontSize: '0.74rem', color: '#059669', fontWeight: 600 }}>✓ Verified & Active</span>
                   </div>
                 </div>
-              </div>
-
-              {/* Request Additional Role button */}
-              <div style={{ padding: '0.85rem', background: 'linear-gradient(180deg, #FFF8DC 0%, #FFEEBA 100%)', borderRadius: '12px', border: '1.5px solid #FFDE7A', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
-                  <Store size={16} color="#1E3A20" />
-                  <span style={{ fontSize: '0.84rem', fontWeight: 800, color: '#1A381C' }}>
-                    Need Merchant or Industry Profile?
-                  </span>
-                </div>
-                <p style={{ fontSize: '0.75rem', color: '#234A28', margin: 0, lineHeight: 1.4 }}>
-                  Apply for a verified Merchant or Industry account under your mobile number.
-                </p>
-                <button
-                  type="button"
-                  onClick={() => setIsRoleModalOpen(true)}
-                  style={{
-                    background: '#0F172A',
-                    color: '#FBC21A',
-                    border: 'none',
-                    borderRadius: '8px',
-                    padding: '0.5rem',
-                    fontSize: '0.78rem',
-                    fontWeight: 800,
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '0.35rem',
-                    marginTop: '0.25rem',
-                  }}
-                >
-                  <span>Request Additional Role</span>
-                  <Plus size={14} />
-                </button>
               </div>
 
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.85rem', background: '#f8fafc', borderRadius: '10px', border: '1px solid #e2e8f0' }}>
@@ -882,24 +844,6 @@ export function HouseholdProfile() {
 
             <div className={styles.mobileRowDivider} />
 
-            <div
-              className={styles.mobileListRow}
-              onClick={() => setIsRoleModalOpen(true)}
-              role="button"
-              tabIndex={0}
-            >
-              <div className={styles.mobileListRowLeft}>
-                <User size={18} className={styles.mobileRowIcon} />
-                <div className={styles.mobileRowTextGroup}>
-                  <span className={styles.mobileRoleTitle}>Request Additional Role</span>
-                  <span className={styles.mobileRoleSubtitle}>Merchant or Industry Profile</span>
-                </div>
-              </div>
-              <ChevronRight size={18} className={styles.mobileChevron} />
-            </div>
-
-            <div className={styles.mobileRowDivider} />
-
             <div className={styles.mobileListRow}>
               <div className={styles.mobileListRowLeft}>
                 <Lock size={18} className={styles.mobileRowIcon} />
@@ -1139,12 +1083,6 @@ export function HouseholdProfile() {
           </div>
         </div>
       )}
-
-      {/* Request Additional Role Verification Modal */}
-      <RequestAdditionalRoleModal
-        isOpen={isRoleModalOpen}
-        onClose={() => setIsRoleModalOpen(false)}
-      />
     </div>
   );
 }
