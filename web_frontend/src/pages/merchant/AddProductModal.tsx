@@ -1,7 +1,8 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import {
   X,
   UploadCloud,
+  Camera,
   Image as ImageIcon,
   Check,
   Star,
@@ -71,6 +72,7 @@ export default function AddProductModal({
   merchantPhone = '+91 98401 23456',
 }: AddProductModalProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const cameraInputRef = useRef<HTMLInputElement>(null);
 
   // Form State
   const [photos, setPhotos] = useState<string[]>([
@@ -94,6 +96,15 @@ export default function AddProductModal({
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [showDiscardConfirm, setShowDiscardConfirm] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
+
+  const animateClose = useCallback(() => {
+    setIsClosing(true);
+    setTimeout(() => {
+      setIsClosing(false);
+      onClose();
+    }, 300);
+  }, [onClose]);
 
   if (!isOpen) return null;
 
@@ -164,6 +175,21 @@ export default function AddProductModal({
       });
   };
 
+  const handleCameraCapture = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+    const file = files[0];
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      if (event.target?.result) {
+        setPhotos((prev) => [...prev, event.target!.result as string].slice(0, 5));
+      }
+    };
+    reader.readAsDataURL(file);
+    // Reset so the same file can be re-selected
+    e.target.value = '';
+  };
+
   const handleAddSamplePhoto = () => {
     if (photos.length >= 5) return;
     const unusedSample = SAMPLE_PHOTOS.find((s) => !photos.includes(s)) || SAMPLE_PHOTOS[photos.length % SAMPLE_PHOTOS.length];
@@ -194,7 +220,7 @@ export default function AddProductModal({
     if (isFormDirty) {
       setShowDiscardConfirm(true);
     } else {
-      onClose();
+      animateClose();
     }
   };
 
@@ -254,7 +280,7 @@ export default function AddProductModal({
     };
 
     onPublish(newProduct);
-    onClose();
+    animateClose();
   };
 
   const handleSaveDraft = () => {
@@ -279,22 +305,23 @@ export default function AddProductModal({
     };
 
     onPublish(draftProduct);
-    onClose();
+    animateClose();
   };
 
   return (
-    <div className={styles.modalOverlay} onClick={handleAttemptClose}>
-      <div className={styles.modalCard} onClick={(e) => e.stopPropagation()}>
+    <div className={`${styles.modalOverlay} ${isClosing ? styles.overlayClosing : ''}`} onClick={handleAttemptClose}>
+      <div className={`${styles.modalCard} ${isClosing ? styles.modalCardClosing : ''}`} onClick={(e) => e.stopPropagation()}>
+        {/* Mobile Drag Handle */}
+        <div className={styles.dragHandleRow}>
+          <div className={styles.dragHandleBar} />
+        </div>
+
         {/* Modal Header */}
         <div className={styles.modalHeader}>
           <div className={styles.headerTitleCol}>
-            <div className={styles.headerBadge}>
-              <Sparkles size={13} fill="#0f172a" />
-              <span>MARKETPLACE LISTING</span>
-            </div>
             <h2 className={styles.modalTitle}>Add New Product</h2>
             <p className={styles.modalSubtitle}>
-              List reusable components, industrial parts, or refurbished machinery for buyer inquiries.
+              List reusable items or parts for buyer inquiries
             </p>
           </div>
           <button
@@ -308,56 +335,19 @@ export default function AddProductModal({
         </div>
 
         {/* Scrollable Form Body */}
-        <form onSubmit={handlePublishSubmit} className={styles.formContent}>
+        <form id="addProductForm" onSubmit={handlePublishSubmit} className={styles.formContent}>
           {/* ================================================================
               SECTION 1: PHOTOS
              ================================================================ */}
           <section className={styles.formSection}>
             <div className={styles.sectionHeadingRow}>
               <span className={styles.sectionNumber}>1</span>
-              <div>
-                <h3 className={styles.sectionTitle}>Product Photos</h3>
-                <p className={styles.sectionDesc}>
-                  Add clear, well-lit photos — listings with photos get more inquiries (up to 5 photos).
-                </p>
-              </div>
+              <h3 className={styles.sectionTitle}>Product Photos</h3>
             </div>
 
-            {/* Photos Preview Strip */}
-            <div className={styles.photosGrid}>
-              {photos.map((photoUrl, idx) => {
-                const isCover = idx === coverPhotoIndex;
-                return (
-                  <div key={idx} className={`${styles.photoThumbCard} ${isCover ? styles.photoThumbCover : ''}`}>
-                    <img src={photoUrl} alt={`Upload preview ${idx + 1}`} className={styles.thumbImg} />
-                    {isCover ? (
-                      <span className={styles.coverBadge}>
-                        <Star size={11} fill="#ffffff" /> Cover
-                      </span>
-                    ) : (
-                      <button
-                        type="button"
-                        className={styles.makeCoverBtn}
-                        onClick={() => setCoverPhotoIndex(idx)}
-                        title="Set as Cover Photo"
-                      >
-                        Set as Cover
-                      </button>
-                    )}
-                    <button
-                      type="button"
-                      className={styles.removePhotoBtn}
-                      onClick={() => handleRemovePhoto(idx)}
-                      title="Remove Photo"
-                    >
-                      <X size={12} />
-                    </button>
-                  </div>
-                );
-              })}
-
-              {/* Upload Dropzone Box */}
-              {photos.length < 5 && (
+            {/* Upload & Camera Action Buttons */}
+            {photos.length < 5 && (
+              <div className={styles.photoActionsRow}>
                 <div
                   className={styles.uploadDropzone}
                   onClick={() => fileInputRef.current?.click()}
@@ -371,23 +361,63 @@ export default function AddProductModal({
                     multiple
                     style={{ display: 'none' }}
                   />
-                  <UploadCloud size={24} className={styles.uploadIcon} />
+                  <UploadCloud size={20} className={styles.uploadIcon} />
                   <span className={styles.uploadText}>+ Add Photo</span>
-                  <span className={styles.uploadSubtext}>({photos.length}/5 photos)</span>
+                  <span className={styles.uploadSubtext}>({photos.length}/5)</span>
                 </div>
-              )}
-            </div>
 
-            {photos.length < 5 && (
-              <div className={styles.samplePhotoRow}>
-                <span className={styles.samplePhotoLabel}>Need a quick photo?</span>
-                <button
-                  type="button"
-                  className={styles.samplePhotoBtn}
-                  onClick={handleAddSamplePhoto}
+                <div
+                  className={styles.cameraDropzone}
+                  onClick={() => cameraInputRef.current?.click()}
+                  title="Take a photo with camera"
                 >
-                  + Add Sample Scrap Image
-                </button>
+                  <input
+                    type="file"
+                    ref={cameraInputRef}
+                    onChange={handleCameraCapture}
+                    accept="image/*"
+                    capture="environment"
+                    style={{ display: 'none' }}
+                  />
+                  <Camera size={20} className={styles.cameraIcon} />
+                  <span className={styles.cameraText}>📸 Camera</span>
+                </div>
+              </div>
+            )}
+
+            {/* Photos Preview Grid */}
+            {photos.length > 0 && (
+              <div className={styles.photosGrid}>
+                {photos.map((photoUrl, idx) => {
+                  const isCover = idx === coverPhotoIndex;
+                  return (
+                    <div key={idx} className={`${styles.photoThumbCard} ${isCover ? styles.photoThumbCover : ''}`}>
+                      <img src={photoUrl} alt={`Upload preview ${idx + 1}`} className={styles.thumbImg} />
+                      {isCover ? (
+                        <span className={styles.coverBadge}>
+                          <Star size={10} fill="#0f172a" color="#0f172a" /> Cover
+                        </span>
+                      ) : (
+                        <button
+                          type="button"
+                          className={styles.makeCoverBtn}
+                          onClick={() => setCoverPhotoIndex(idx)}
+                          title="Set as Cover Photo"
+                        >
+                          Cover
+                        </button>
+                      )}
+                      <button
+                        type="button"
+                        className={styles.removePhotoBtn}
+                        onClick={() => handleRemovePhoto(idx)}
+                        title="Remove Photo"
+                      >
+                        <X size={12} />
+                      </button>
+                    </div>
+                  );
+                })}
               </div>
             )}
           </section>
@@ -398,10 +428,7 @@ export default function AddProductModal({
           <section className={styles.formSection}>
             <div className={styles.sectionHeadingRow}>
               <span className={styles.sectionNumber}>2</span>
-              <div>
-                <h3 className={styles.sectionTitle}>Product Details</h3>
-                <p className={styles.sectionDesc}>Basic specifications and category classification.</p>
-              </div>
+              <h3 className={styles.sectionTitle}>Product Details</h3>
             </div>
 
             <div className={styles.fieldsGrid}>
@@ -478,7 +505,7 @@ export default function AddProductModal({
                 </label>
                 <textarea
                   rows={3}
-                  placeholder="Describe condition, age, working status, and key features (e.g. Fully tested, copper wound, minor cosmetic scratches on outer frame)..."
+                  placeholder="Describe this product"
                   value={description}
                   onChange={(e) => {
                     setDescription(e.target.value);
@@ -487,9 +514,6 @@ export default function AddProductModal({
                   onBlur={(e) => handleBlur('description', e.target.value)}
                   className={`${styles.textAreaInput} ${errors.description && touched.description ? styles.inputError : ''}`}
                 />
-                <span className={styles.fieldHelper}>
-                  Describe condition, age, working status, and any relevant specs for interested buyers.
-                </span>
                 {errors.description && touched.description && (
                   <span className={styles.errorText}>
                     <AlertCircle size={12} /> {errors.description}
@@ -505,10 +529,7 @@ export default function AddProductModal({
           <section className={styles.formSection}>
             <div className={styles.sectionHeadingRow}>
               <span className={styles.sectionNumber}>3</span>
-              <div>
-                <h3 className={styles.sectionTitle}>Pricing &amp; Availability</h3>
-                <p className={styles.sectionDesc}>Set asking price and stock visibility.</p>
-              </div>
+              <h3 className={styles.sectionTitle}>Pricing &amp; Availability</h3>
             </div>
 
             <div className={styles.formRowTwo}>
@@ -579,10 +600,7 @@ export default function AddProductModal({
           <section className={styles.formSection}>
             <div className={styles.sectionHeadingRow}>
               <span className={styles.sectionNumber}>4</span>
-              <div>
-                <h3 className={styles.sectionTitle}>Pickup / Viewing Location</h3>
-                <p className={styles.sectionDesc}>Where buyers can inspect or collect the item.</p>
-              </div>
+              <h3 className={styles.sectionTitle}>Pickup / Viewing Location</h3>
             </div>
 
             <div className={styles.fieldsGrid}>
@@ -650,10 +668,7 @@ export default function AddProductModal({
           <section className={styles.formSection}>
             <div className={styles.sectionHeadingRow}>
               <span className={styles.sectionNumber}>5</span>
-              <div>
-                <h3 className={styles.sectionTitle}>Contact for Inquiries</h3>
-                <p className={styles.sectionDesc}>How interested buyers can reach you.</p>
-              </div>
+              <h3 className={styles.sectionTitle}>Contact for Inquiries</h3>
             </div>
 
             <div className={styles.fieldsGrid}>
@@ -697,36 +712,37 @@ export default function AddProductModal({
               </div>
             </div>
           </section>
+        </form>
 
-          {/* Modal Actions Footer */}
-          <div className={styles.modalFooterRow}>
+        {/* Modal Actions Footer (Pinned at Bottom) */}
+        <div className={styles.modalFooterRow}>
+          <button
+            type="button"
+            className={styles.cancelLinkBtn}
+            onClick={handleAttemptClose}
+          >
+            Cancel
+          </button>
+
+          <div className={styles.footerRightBtns}>
             <button
               type="button"
-              className={styles.cancelLinkBtn}
-              onClick={handleAttemptClose}
+              className={styles.draftBtn}
+              onClick={handleSaveDraft}
             >
-              Cancel
+              Save Draft
             </button>
 
-            <div className={styles.footerRightBtns}>
-              <button
-                type="button"
-                className={styles.draftBtn}
-                onClick={handleSaveDraft}
-              >
-                Save as Draft
-              </button>
-
-              <button
-                type="submit"
-                className={styles.publishBtn}
-              >
-                <span>Publish Listing</span>
-                <Sparkles size={15} />
-              </button>
-            </div>
+            <button
+              type="submit"
+              form="addProductForm"
+              className={styles.publishBtn}
+            >
+              <span>Publish Listing</span>
+              <Sparkles size={15} />
+            </button>
           </div>
-        </form>
+        </div>
 
         {/* Unsaved Changes Discard Confirmation Dialog */}
         {showDiscardConfirm && (
@@ -758,7 +774,7 @@ export default function AddProductModal({
                   className={styles.confirmDiscardBtn}
                   onClick={() => {
                     setShowDiscardConfirm(false);
-                    onClose();
+                    animateClose();
                   }}
                 >
                   Discard Changes

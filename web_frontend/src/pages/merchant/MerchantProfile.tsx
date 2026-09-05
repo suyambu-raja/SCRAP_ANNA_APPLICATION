@@ -23,6 +23,7 @@ import {
   ShieldCheck,
   Plus,
   LogOut,
+  History,
 } from 'lucide-react';
 import { useAuthStore } from '@/store/useAuthStore';
 import { RequestAdditionalRoleModal } from '@/components/common';
@@ -51,7 +52,7 @@ export default function MerchantProfile() {
       <div className={styles.headerRow}>
         <h1 className={styles.pageTitle}>Merchant Profile</h1>
         <p className={styles.pageSubtitle}>
-          Manage your business profile, documents, bank details, and transactions ledger.
+          Manage your business profile, documents, bank details, and past order history.
         </p>
       </div>
 
@@ -86,10 +87,10 @@ export default function MerchantProfile() {
           Bank &amp; Payments
         </button>
         <Link
-          to="/transactions"
+          to="/history"
           className={styles.tabItem}
         >
-          Transactions Ledger
+          Past Orders &amp; History
         </Link>
         <button
           type="button"
@@ -347,18 +348,18 @@ export default function MerchantProfile() {
             </div>
           </article>
 
-          {/* Card 4: Direct Transactions & Settlement Access */}
+          {/* Card 4: Direct History & Past Orders Access */}
           <article className={styles.contentCard}>
             <div className={styles.transactionsCardHeader}>
               <div>
-                <h3 className={styles.cardSectionTitle}>Transactions &amp; Settlement Ledger</h3>
+                <h3 className={styles.cardSectionTitle}>Past Orders &amp; History</h3>
                 <p className={styles.transactionsSubtext}>
-                  Access your full digital payouts history, bank settlements, and GST tax invoice slips.
+                  Access your full records of completed scrap pickups, verified scale weights, and receipts.
                 </p>
               </div>
-              <Link to="/transactions" className={styles.viewTransactionsBtn}>
-                <CreditCard size={15} />
-                <span>View Full Ledger →</span>
+              <Link to="/history" className={styles.viewTransactionsBtn}>
+                <History size={15} />
+                <span>View Order History →</span>
               </Link>
             </div>
           </article>
@@ -457,9 +458,9 @@ export default function MerchantProfile() {
           <div className={styles.sidebarCard}>
             <h3 className={styles.sidebarCardTitle}>Quick Actions</h3>
             <div className={styles.quickActionsList}>
-              <Link to="/transactions" className={styles.quickActionItem}>
-                <Receipt size={15} color="#16a34a" />
-                <span>Transactions &amp; Settlement Ledger</span>
+              <Link to="/history" className={styles.quickActionItem}>
+                <History size={15} color="#d97706" />
+                <span>Past Orders &amp; History</span>
               </Link>
               <a href="#edit" className={styles.quickActionItem} onClick={(e) => e.preventDefault()}>
                 <Edit size={15} color="#d97706" />

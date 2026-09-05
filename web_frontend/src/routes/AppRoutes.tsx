@@ -6,8 +6,7 @@ import { IndustryLayout } from '@/layouts/IndustryLayout';
 import { HouseholdLayout } from '@/layouts/HouseholdLayout';
 import { ProtectedRoute } from './ProtectedRoute';
 
-/* Lazy-loaded pages */
-const Splash = lazy(() => import('@/pages/Splash'));
+import Splash from '@/pages/Splash';
 const LanguageSelection = lazy(() => import('@/pages/LanguageSelection'));
 const Home = lazy(() => import('@/pages/Home'));
 const MarketPrices = lazy(() => import('@/pages/MarketPrices'));
@@ -77,6 +76,7 @@ const MerchantRide = lazy(() => import('@/pages/merchant/MerchantRide'));
 const MerchantRequests = lazy(() => import('@/pages/merchant/MerchantRequests'));
 const MerchantOrders = lazy(() => import('@/pages/merchant/MerchantOrders'));
 const MerchantQuotes = lazy(() => import('@/pages/merchant/MerchantQuotes'));
+const MerchantHistory = lazy(() => import('@/pages/merchant/MerchantHistory'));
 const MerchantTransactions = lazy(() => import('@/pages/merchant/MerchantTransactions'));
 const MerchantReusableProducts = lazy(() => import('@/pages/merchant/MerchantReusableProducts'));
 const MerchantProfile = lazy(() => import('@/pages/merchant/MerchantProfile'));
@@ -107,7 +107,12 @@ function RootRedirect() {
     return <Navigate to={`/dashboard/${user.role}`} replace />;
   }
 
-  return <Splash />;
+  const storedLanguage = localStorage.getItem('sa_language');
+  if (!storedLanguage) {
+    return <Navigate to="/language" replace />;
+  }
+
+  return <Navigate to="/home" replace />;
 }
 
 function FallbackRedirect() {
@@ -134,6 +139,8 @@ export function AppRoutes() {
       <Routes>
         {/* Public Marketing & Informational Routes */}
         <Route path="/" element={<RootRedirect />} />
+        <Route path="/splash" element={<Splash />} />
+        <Route path="/loading" element={<Splash />} />
         <Route path="/language" element={<LanguageSelection />} />
         <Route path="/home" element={<Home />} />
         <Route path="/market-prices" element={<MarketPrices />} />
@@ -208,10 +215,15 @@ export function AppRoutes() {
           <Route path="/dashboard/merchant/quotes" element={<MerchantQuotes />} />
           <Route path="/app/quotes" element={<MerchantQuotes />} />
 
-          {/* Transactions */}
-          <Route path="/transactions" element={<MerchantTransactions />} />
-          <Route path="/dashboard/merchant/transactions" element={<MerchantTransactions />} />
-          <Route path="/app/transactions" element={<MerchantTransactions />} />
+          {/* History (Past & Completed Orders) */}
+          <Route path="/history" element={<MerchantHistory />} />
+          <Route path="/dashboard/merchant/history" element={<MerchantHistory />} />
+          <Route path="/app/history" element={<MerchantHistory />} />
+
+          {/* Transactions Route & Legacy Redirects */}
+          <Route path="/transactions" element={<Navigate to="/history" replace />} />
+          <Route path="/dashboard/merchant/transactions" element={<Navigate to="/history" replace />} />
+          <Route path="/app/transactions" element={<Navigate to="/history" replace />} />
 
           {/* Reusable Products / Marketplace */}
           <Route path="/reusable-products" element={<MerchantReusableProducts />} />
@@ -227,9 +239,29 @@ export function AppRoutes() {
           <Route path="/app/profile" element={<MerchantProfile />} />
 
           {/* Notifications */}
-          <Route path="/notifications" element={<Notifications />} />
-          <Route path="/dashboard/merchant/notifications" element={<Notifications />} />
-          <Route path="/app/notifications" element={<Notifications />} />
+          <Route path="/notifications" element={<HouseholdNotifications />} />
+          <Route path="/dashboard/merchant/notifications" element={<HouseholdNotifications />} />
+          <Route path="/app/notifications" element={<HouseholdNotifications />} />
+
+          {/* Support */}
+          <Route path="/support" element={<HouseholdSupport />} />
+          <Route path="/help" element={<HouseholdSupport />} />
+          <Route path="/dashboard/merchant/support" element={<HouseholdSupport />} />
+          <Route path="/dashboard/merchant/help" element={<HouseholdSupport />} />
+          <Route path="/app/support" element={<HouseholdSupport />} />
+          <Route path="/app/help" element={<HouseholdSupport />} />
+          <Route path="/support/bot" element={<HouseholdSupportBot />} />
+          <Route path="/help/bot" element={<HouseholdSupportBot />} />
+          <Route path="/dashboard/merchant/support/bot" element={<HouseholdSupportBot />} />
+          <Route path="/app/support/bot" element={<HouseholdSupportBot />} />
+
+          {/* Refer & Earn */}
+          <Route path="/refer-earn" element={<HouseholdReferEarn />} />
+          <Route path="/refer" element={<HouseholdReferEarn />} />
+          <Route path="/dashboard/merchant/refer-earn" element={<HouseholdReferEarn />} />
+          <Route path="/dashboard/merchant/refer" element={<HouseholdReferEarn />} />
+          <Route path="/app/refer-earn" element={<HouseholdReferEarn />} />
+          <Route path="/app/refer" element={<HouseholdReferEarn />} />
 
           {/* Settings */}
           <Route path="/settings" element={<Settings />} />

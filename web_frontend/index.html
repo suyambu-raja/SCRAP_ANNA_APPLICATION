@@ -7,7 +7,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="shortcut icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#FBC21A" />
+    <meta name="theme-color" content="#ffd600" />
     <meta name="description" content="Bill Scrap — Connect, Collect and Recycle. India's trusted scrap marketplace PWA." />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -18,9 +18,66 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+      body {
+        margin: 0;
+        background-color: #ffd600;
+      }
+      @keyframes preloaderPulse {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(260%); }
+      }
+      @keyframes preloaderSpin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Instant preloader visible before JS loads on slow network or PWA cold start -->
+      <div id="app-preloader" style="position: fixed; inset: 0; width: 100vw; height: 100vh; height: 100dvh; background-color: #ffd600; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; user-select: none; z-index: 999999; font-family: 'Inter', system-ui, sans-serif;">
+        <main style="flex: 1; display: flex; align-items: center; justify-content: center; padding: 2rem 1rem;">
+          <div style="width: 280px; max-width: 80vw; display: flex; flex-direction: column; align-items: center;">
+            <svg viewBox="0 0 380 230" style="width: 100%; height: auto; filter: drop-shadow(0 14px 24px rgba(0,0,0,0.18));">
+              <!-- Body -->
+              <path d="M 12,106 L 208,106 L 208,48 L 272,48 Q 294,50 312,74 L 354,128 L 354,144 L 344,144 L 344,148 L 366,148 Q 368,148 368,154 L 368,168 Q 368,172 360,172 L 330,172 L 330,158 L 248,158 L 248,176 L 226,176 L 226,158 L 12,158 Z" fill="#181e29" />
+              <rect x="344" y="142" width="14" height="6" fill="#ffd600" />
+              <rect x="12" y="152" width="196" height="7" fill="#ffd600" />
+              <!-- Cab Window -->
+              <path d="M 230,64 L 270,64 Q 286,66 298,82 L 328,118 L 230,118 Z" fill="#ffd600" />
+              <!-- Driver -->
+              <path d="M 234,118 L 238,98 Q 244,92 250,92 L 250,86 Q 246,86 246,78 Q 246,70 256,70 Q 266,70 266,78 L 274,80 L 266,84 L 262,88 L 262,94 Q 270,96 272,106 L 272,118 Z" fill="#181e29" />
+              <!-- Steering column -->
+              <line x1="312" y1="118" x2="295" y2="107" stroke="#181e29" stroke-width="3.2" stroke-linecap="round" />
+              <ellipse cx="294" cy="106" rx="3" ry="9" transform="rotate(-20 294 106)" fill="none" stroke="#181e29" stroke-width="2.8" />
+              <path d="M 258,98 L 278,106 L 294,106" fill="none" stroke="#181e29" stroke-width="3.8" stroke-linecap="round" />
+              <!-- Rear Wheel -->
+              <g transform="translate(78, 178)">
+                <circle cx="0" cy="0" r="32" fill="#ffd600" />
+                <circle cx="0" cy="0" r="26" fill="#181e29" />
+                <circle cx="0" cy="0" r="6" fill="#181e29" />
+                <circle cx="0" cy="0" r="2.5" fill="#ffd600" />
+              </g>
+              <!-- Front Wheel -->
+              <g transform="translate(288, 178)">
+                <circle cx="0" cy="0" r="32" fill="#ffd600" />
+                <circle cx="0" cy="0" r="26" fill="#181e29" />
+                <circle cx="0" cy="0" r="6" fill="#181e29" />
+                <circle cx="0" cy="0" r="2.5" fill="#ffd600" />
+              </g>
+            </svg>
+          </div>
+        </main>
+
+        <footer style="padding: 1.5rem; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+          <p style="margin: 0; font-size: 1.05rem; font-weight: 800; color: #1e293b; text-align: center;">Collecting Recyclable Items...</p>
+          <div style="width: 160px; height: 4px; background: rgba(30,41,59,0.15); border-radius: 999px; margin-top: 0.75rem; overflow: hidden;">
+            <div style="width: 40%; height: 100%; background: #1e293b; border-radius: 999px; animation: preloaderPulse 1.2s infinite ease-in-out;"></div>
+          </div>
+        </footer>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

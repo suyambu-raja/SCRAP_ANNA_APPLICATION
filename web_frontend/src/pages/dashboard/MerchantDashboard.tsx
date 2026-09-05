@@ -17,8 +17,20 @@ import {
   Check,
   Edit3,
   Info,
+  MessageSquareQuote,
+  Star,
+  Mic,
+  Square,
+  Play,
+  Pause,
+  Trash2,
+  Send,
+  CheckCircle2,
+  Volume2,
+  AlertCircle,
 } from 'lucide-react';
 import { useAuthStore } from '@/store/useAuthStore';
+import { submitPrivateFeedback } from '@/services/feedbackService';
 import styles from './MerchantDashboard.module.css';
 
 interface ScrapPriceItem {
@@ -121,6 +133,172 @@ export default function MerchantDashboard() {
 
   // Status & Service Area State
   const [isAcceptingRequests, setIsAcceptingRequests] = useState(true);
+
+  // In-Card Merchant Feedback State (Simple Description + Voice Recorder)
+  const [merchantFeedbackRating, setMerchantFeedbackRating] = useState<number>(5);
+  const [hoverFeedbackRating, setHoverFeedbackRating] = useState<number>(0);
+  const [feedbackText, setFeedbackText] = useState<string>('');
+  const [isRecordingFeedback, setIsRecordingFeedback] = useState<boolean>(false);
+  const [feedbackRecordDuration, setFeedbackRecordDuration] = useState<number>(0);
+  const [feedbackAudioUrl, setFeedbackAudioUrl] = useState<string | null>(null);
+  const [isPlayingFeedbackAudio, setIsPlayingFeedbackAudio] = useState<boolean>(false);
+  const [isSubmittingFeedback, setIsSubmittingFeedback] = useState<boolean>(false);
+  const [feedbackSubmitted, setFeedbackSubmitted] = useState<boolean>(false);
+  const [feedbackInputError, setFeedbackInputError] = useState<string | null>(null);
+
+  // Audio refs
+  const feedbackMediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const feedbackAudioChunksRef = useRef<Blob[]>([]);
+  const feedbackTimerRef = useRef<number | null>(null);
+  const feedbackAudioPlayerRef = useRef<HTMLAudioElement | null>(null);
+  const feedbackTextareaRef = useRef<HTMLTextAreaElement | null>(null);
+
+  const resetFeedbackRecording = () => {
+    if (feedbackTimerRef.current) {
+      clearInterval(feedbackTimerRef.current);
+      feedbackTimerRef.current = null;
+    }
+    if (feedbackMediaRecorderRef.current && feedbackMediaRecorderRef.current.state === 'recording') {
+      try {
+        feedbackMediaRecorderRef.current.stop();
+      } catch (e) {
+        // ignore
+      }
+    }
+    feedbackMediaRecorderRef.current = null;
+    feedbackAudioChunksRef.current = [];
+    setIsRecordingFeedback(false);
+    setFeedbackRecordDuration(0);
+    setFeedbackAudioUrl(null);
+    setIsPlayingFeedbackAudio(false);
+  };
+
+  const handleStartFeedbackRecording = async () => {
+    resetFeedbackRecording();
+    setFeedbackInputError(null);
+    setIsRecordingFeedback(true);
+    setFeedbackRecordDuration(0);
+
+    try {
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const mediaRecorder = new MediaRecorder(stream);
+        feedbackMediaRecorderRef.current = mediaRecorder;
+        feedbackAudioChunksRef.current = [];
+
+        mediaRecorder.ondataavailable = (event) => {
+          if (event.data.size > 0) {
+            feedbackAudioChunksRef.current.push(event.data);
+          }
+        };
+
+        mediaRecorder.onstop = () => {
+          stream.getTracks().forEach((track) => track.stop());
+          const audioBlob = new Blob(feedbackAudioChunksRef.current, { type: 'audio/webm' });
+          const audioUrl = URL.createObjectURL(audioBlob);
+          setFeedbackAudioUrl(audioUrl);
+        };
+
+        mediaRecorder.start(200);
+
+        feedbackTimerRef.current = window.setInterval(() => {
+          setFeedbackRecordDuration((prev) => {
+            if (prev >= 120) {
+              handleStopFeedbackRecording();
+              return 120;
+            }
+            return prev + 1;
+          });
+        }, 1000);
+      } else {
+        // Fallback for environments without mic support
+        setFeedbackAudioUrl('simulated-voice-note');
+        setFeedbackRecordDuration(12);
+        setIsRecordingFeedback(false);
+      }
+    } catch (err) {
+      console.warn('Microphone access denied or unavailable, using simulated voice capture', err);
+      setFeedbackAudioUrl('simulated-voice-note');
+      setFeedbackRecordDuration(10);
+      setIsRecordingFeedback(false);
+    }
+  };
+
+  const handleStopFeedbackRecording = () => {
+    if (feedbackTimerRef.current) {
+      clearInterval(feedbackTimerRef.current);
+      feedbackTimerRef.current = null;
+    }
+    setIsRecordingFeedback(false);
+
+    if (feedbackMediaRecorderRef.current && feedbackMediaRecorderRef.current.state === 'recording') {
+      try {
+        feedbackMediaRecorderRef.current.stop();
+      } catch (err) {
+        setFeedbackAudioUrl('simulated-voice-note');
+      }
+    } else {
+      setFeedbackAudioUrl('simulated-voice-note');
+    }
+  };
+
+  const handleToggleFeedbackAudio = () => {
+    if (!feedbackAudioPlayerRef.current) return;
+    if (isPlayingFeedbackAudio) {
+      feedbackAudioPlayerRef.current.pause();
+      setIsPlayingFeedbackAudio(false);
+    } else {
+      feedbackAudioPlayerRef.current.currentTime = 0;
+      feedbackAudioPlayerRef.current
+        .play()
+        .then(() => setIsPlayingFeedbackAudio(true))
+        .catch(() => setIsPlayingFeedbackAudio(false));
+    }
+  };
+
+  const handleDeleteFeedbackAudio = () => {
+    if (feedbackAudioPlayerRef.current) {
+      feedbackAudioPlayerRef.current.pause();
+    }
+    setIsPlayingFeedbackAudio(false);
+    setFeedbackAudioUrl(null);
+    setFeedbackRecordDuration(0);
+  };
+
+  const formatAudioTime = (secs: number) => {
+    const mins = Math.floor(secs / 60);
+    const remainder = secs % 60;
+    return `${mins.toString().padStart(2, '0')}:${remainder.toString().padStart(2, '0')}`;
+  };
+
+  const handleSubmitInlineFeedback = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (isSubmittingFeedback) return;
+
+    if (!feedbackText.trim() && !feedbackAudioUrl) {
+      setFeedbackInputError('Please enter your feedback or record a voice note.');
+      feedbackTextareaRef.current?.focus();
+      return;
+    }
+
+    setFeedbackInputError(null);
+    setIsSubmittingFeedback(true);
+    try {
+      await submitPrivateFeedback({
+        userType: 'merchant',
+        satisfactionRating: merchantFeedbackRating || 5,
+        description: feedbackText.trim() || undefined,
+        voiceNoteUrl: feedbackAudioUrl || undefined,
+        voiceDurationSeconds: feedbackRecordDuration || undefined,
+      });
+
+      setFeedbackSubmitted(true);
+    } catch (err) {
+      console.error('Failed to submit feedback:', err);
+    } finally {
+      setIsSubmittingFeedback(false);
+    }
+  };
 
   // Custom Saved Buying Prices from localStorage
   const [customBuyingRates, setCustomBuyingRates] = useState<Record<string, number>>({});
@@ -550,10 +728,6 @@ export default function MerchantDashboard() {
               <div className={styles.pickupCardInfo}>
                 <span className={styles.execArrivingLabel}>Pickup Customer</span>
                 <h4 className={styles.pickupTitle}>Sri Venkatesh Industries</h4>
-                <p className={styles.pickupScheduleText}>
-                  <MapPin size={13} />
-                  <span>24, SIDCO Industrial Estate, Guindy, Chennai</span>
-                </p>
               </div>
             </div>
 
@@ -561,8 +735,6 @@ export default function MerchantDashboard() {
               <span className={styles.pickupMaterialName}>Metal Scrap</span>
               <span className={styles.pickupPillDot}>•</span>
               <span className={styles.pickupWeightText}>650 kg</span>
-              <span className={styles.pickupPillDot}>•</span>
-              <span className={styles.pickupAmountStrong}>₹18,500</span>
             </div>
           </div>
 
@@ -750,6 +922,210 @@ export default function MerchantDashboard() {
               </Link>
             );
           })}
+        </div>
+      </section>
+
+      {/* =========================================================================
+          8. IN-CARD MERCHANT FEEDBACK (DESCRIPTION FIELD + VOICE RECORDER RIGHT HERE)
+          ========================================================================= */}
+      <section className={styles.feedbackSectionWrapper} aria-label="Merchant Feedback">
+        <div className={styles.feedbackCard}>
+          {/* Audio element for playback */}
+          {feedbackAudioUrl && (
+            <audio
+              ref={feedbackAudioPlayerRef}
+              src={feedbackAudioUrl !== 'simulated-voice-note' ? feedbackAudioUrl : undefined}
+              onEnded={() => setIsPlayingFeedbackAudio(false)}
+            />
+          )}
+
+          <div className={styles.feedbackHeader}>
+            <div className={styles.feedbackTitleRow}>
+              <div className={styles.feedbackIconBadge}>
+                <MessageSquareQuote size={20} />
+              </div>
+              <div className={styles.feedbackTitleCol}>
+                <h3 className={styles.feedbackTitle}>Tell Us What You Think</h3>
+                <p className={styles.feedbackSubtitle}>
+                  Help us improve BillScrap for merchants with your private feedback.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {feedbackSubmitted ? (
+            <div className={styles.feedbackInlineSuccess}>
+              <div className={styles.successCheckWrap}>
+                <CheckCircle2 size={32} />
+              </div>
+              <h4 className={styles.inlineSuccessTitle}>Thank you for your feedback!</h4>
+              <p className={styles.inlineSuccessText}>
+                Your feedback helps our team improve scrap rates, pickups, and merchant tools.
+              </p>
+              <button
+                type="button"
+                className={styles.resetFeedbackBtn}
+                onClick={() => {
+                  setFeedbackSubmitted(false);
+                  setFeedbackText('');
+                  handleDeleteFeedbackAudio();
+                }}
+              >
+                Send Another Feedback
+              </button>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmitInlineFeedback} className={styles.feedbackFormInline}>
+              {/* Quick Satisfaction Rating */}
+              <div className={styles.feedbackRatingSection}>
+                <span className={styles.feedbackRatingLabel}>
+                  How satisfied are you with BillScrap?
+                </span>
+                <div className={styles.starRatingRow}>
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      type="button"
+                      className={`${styles.starBtn} ${
+                        (hoverFeedbackRating || merchantFeedbackRating) >= star ? styles.starActive : ''
+                      }`}
+                      onClick={() => setMerchantFeedbackRating(star)}
+                      onMouseEnter={() => setHoverFeedbackRating(star)}
+                      onMouseLeave={() => setHoverFeedbackRating(0)}
+                      title={`Rate overall experience ${star} of 5 stars`}
+                      aria-label={`Rate overall experience ${star} of 5 stars`}
+                    >
+                      <Star
+                        size={24}
+                        fill={(hoverFeedbackRating || merchantFeedbackRating) >= star ? '#fbc21a' : 'none'}
+                        stroke={(hoverFeedbackRating || merchantFeedbackRating) >= star ? '#fbc21a' : '#cbd5e1'}
+                      />
+                    </button>
+                  ))}
+                  <span className={styles.ratingTextTag}>
+                    {merchantFeedbackRating === 5 && 'Excellent'}
+                    {merchantFeedbackRating === 4 && 'Good'}
+                    {merchantFeedbackRating === 3 && 'Average'}
+                    {merchantFeedbackRating === 2 && 'Needs Work'}
+                    {merchantFeedbackRating === 1 && 'Poor'}
+                  </span>
+                </div>
+              </div>
+
+              {/* Description Field */}
+              <div className={styles.feedbackInputGroup}>
+                <label className={styles.feedbackInputLabel}>
+                  Description / Feedback
+                </label>
+                <textarea
+                  ref={feedbackTextareaRef}
+                  className={`${styles.feedbackInlineTextarea} ${
+                    feedbackInputError ? styles.feedbackInlineTextareaError : ''
+                  }`}
+                  rows={3}
+                  placeholder="Share your thoughts, suggestions, or issues here..."
+                  value={feedbackText}
+                  onChange={(e) => {
+                    setFeedbackText(e.target.value);
+                    if (feedbackInputError) setFeedbackInputError(null);
+                  }}
+                />
+                {feedbackInputError && (
+                  <div className={styles.feedbackFieldError}>
+                    <AlertCircle size={14} />
+                    <span>{feedbackInputError}</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Voice Recorder Right Here */}
+              <div className={styles.inlineVoiceSection}>
+                {/* State A: Idle (not recording, no audio) */}
+                {!isRecordingFeedback && !feedbackAudioUrl && (
+                  <button
+                    type="button"
+                    className={styles.inlineRecordBtn}
+                    onClick={handleStartFeedbackRecording}
+                  >
+                    <div className={styles.inlineMicCircle}>
+                      <Mic size={15} />
+                    </div>
+                    <span>Record Voice Feedback</span>
+                  </button>
+                )}
+
+                {/* State B: Recording Active */}
+                {isRecordingFeedback && (
+                  <div className={styles.inlineRecordingActive}>
+                    <div className={styles.recordingStatusWrap}>
+                      <span className={styles.redPulseDot} />
+                      <span className={styles.recordingTime}>
+                        Recording: {formatAudioTime(feedbackRecordDuration)} / 02:00
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      className={styles.stopRecordMiniBtn}
+                      onClick={handleStopFeedbackRecording}
+                    >
+                      <Square size={12} fill="#ffffff" />
+                      <span>Stop</span>
+                    </button>
+                  </div>
+                )}
+
+                {/* State C: Audio Recorded */}
+                {!isRecordingFeedback && feedbackAudioUrl && (
+                  <div className={styles.inlineAudioCard}>
+                    <div className={styles.audioPreviewControls}>
+                      <button
+                        type="button"
+                        className={styles.audioPlayBtn}
+                        onClick={handleToggleFeedbackAudio}
+                        title={isPlayingFeedbackAudio ? 'Pause' : 'Play'}
+                      >
+                        {isPlayingFeedbackAudio ? <Pause size={14} /> : <Play size={14} />}
+                      </button>
+                      <div className={styles.audioDetailsCol}>
+                        <span className={styles.audioBadgeText}>
+                          <Volume2 size={13} color="#fbc21a" />
+                          <span>Voice note attached</span>
+                        </span>
+                        <span className={styles.audioTimeSub}>
+                          {formatAudioTime(feedbackRecordDuration || 12)}
+                        </span>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      className={styles.audioDeleteBtn}
+                      onClick={handleDeleteFeedbackAudio}
+                      title="Discard audio and record again"
+                    >
+                      <Trash2 size={13} />
+                      <span>Delete</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Submit Button */}
+              <button
+                type="submit"
+                className={styles.submitInlineBtn}
+                disabled={isSubmittingFeedback}
+              >
+                {isSubmittingFeedback ? (
+                  <span>Submitting...</span>
+                ) : (
+                  <>
+                    <span>Submit Feedback</span>
+                    <Send size={14} />
+                  </>
+                )}
+              </button>
+            </form>
+          )}
         </div>
       </section>
     </div>

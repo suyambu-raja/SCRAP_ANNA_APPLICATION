@@ -7,6 +7,7 @@ import {
   Clock,
   XCircle,
   ChevronDown,
+  ChevronRight,
   MapPin,
   Calendar,
   Filter,
@@ -18,6 +19,7 @@ import {
   TrendingUp,
   Download,
   Building,
+  Building2,
   User,
   Eye,
   X,
@@ -37,8 +39,29 @@ import {
   Percent,
   Printer,
   Search,
+  PlayCircle,
+  CornerUpLeft,
+  Crosshair,
+  ExternalLink,
+  Car,
+  Minus,
 } from 'lucide-react';
 import { CardImageGallery } from '@/components/cards/CardImageGallery';
+import { openMerchantCommissionModal } from '@/services/commissionReminderService';
+import { FiClock, FiCheckCircle, FiAlertCircle, FiCopy, FiCheck } from 'react-icons/fi';
+import { MdOutlinePayment } from 'react-icons/md';
+import { LuIndianRupee, LuWallet, LuShieldCheck } from 'react-icons/lu';
+import {
+  getOrCreateOrderPayment,
+  setOrderPaymentMethod,
+  createOrderUpiPaymentIntent,
+  markOrderPaymentInitiated,
+  submitOrderPaymentUtr,
+  confirmOrderCashPayment,
+  DEFAULT_MERCHANT_PAYEE_NAME,
+  DEFAULT_MERCHANT_UPI_ID,
+  type OrderPaymentRecord,
+} from '@/services/merchantOrderPaymentService';
 import styles from './MerchantOrders.module.css';
 
 export type OrderStatus = 'Pending' | 'Scheduled' | 'Completed' | 'Cancelled';
@@ -167,7 +190,7 @@ export interface BillLineItem {
 
 export interface OrderWorkflow {
   order: OrderItem;
-  stage: 'navigation' | 'pickup_otp' | 'weighing' | 'bill_generated' | 'billing_otp' | 'settled';
+  stage: 'navigation' | 'pickup_otp' | 'weighing' | 'bill_generated' | 'payment' | 'billing_otp' | 'settled';
   pickupOtpInput: string;
   items: BillLineItem[];
   gstPercent: number;
@@ -176,7 +199,21 @@ export interface OrderWorkflow {
   billNumber: string;
   agreedRate?: number | string;
   actualWeight?: number | string;
+  paymentRecord?: OrderPaymentRecord;
 }
+
+export const getStageNumber = (stage: OrderWorkflow['stage']): number => {
+  switch (stage) {
+    case 'navigation': return 1;
+    case 'pickup_otp': return 2;
+    case 'weighing': return 3;
+    case 'bill_generated': return 4;
+    case 'payment': return 5;
+    case 'billing_otp': return 6;
+    case 'settled': return 7;
+    default: return 1;
+  }
+};
 
 interface OrderItem {
   id: string;
@@ -188,12 +225,20 @@ interface OrderItem {
   image: string;
   images?: string[];
   quantity: string;
-  address: string;
-  orderConfirmed: string;
+  quantityRange?: string;
+  dayTag?: string;
+  tagType?: 'today' | 'tomorrow' | 'date' | 'on_the_way';
   pickupDate: string;
   pickupTime: string;
+  statusLabel?: string;
   statusText: OrderStatus;
   statusType: 'pending' | 'scheduled' | 'completed' | 'cancelled';
+  section?: 'upcoming' | 'active' | 'completed' | 'cancelled';
+  buttonLabel?: string;
+  hasNavIcon?: boolean;
+  address: string;
+  addressShort?: string;
+  orderConfirmed: string;
   statusMeta: {
     heading: string;
     sub: string;
@@ -213,12 +258,20 @@ const ORDERS_DATA: OrderItem[] = [
     image: '/industry-steel-scrap.jpg',
     images: ['/industry-steel-scrap.jpg', '/scrap-quality-steel.jpg', '/scrap-iron.jpg'],
     quantity: '650 KG',
-    address: '24, 5th Main Road, SIDCO Industrial Estate, Guindy, Chennai – 600032, Tamil Nadu',
-    orderConfirmed: '13 May 2025, 10:15 AM',
-    pickupDate: '16 May 2025',
+    quantityRange: '500 – 800 KG (Approx.)',
+    dayTag: 'Today',
+    tagType: 'today',
+    pickupDate: 'Today',
     pickupTime: '10:00 AM – 12:00 PM',
+    statusLabel: 'Order Confirmed',
     statusText: 'Scheduled',
     statusType: 'scheduled',
+    section: 'upcoming',
+    buttonLabel: 'View Order →',
+    hasNavIcon: false,
+    address: '24, 5th Main Road, SIDCO Industrial Estate, Guindy, Chennai – 600032, Tamil Nadu',
+    addressShort: 'SIDCO Industrial Estate, Guindy, Chennai',
+    orderConfirmed: '13 May 2025, 10:15 AM',
     statusMeta: {
       heading: 'Pickup in 2 Days',
       sub: '16 May 2025',
@@ -235,12 +288,20 @@ const ORDERS_DATA: OrderItem[] = [
     image: '/industry-copper-scrap.jpg',
     images: ['/industry-copper-scrap.jpg', '/scrap-copper-wire.jpg', '/scrap-copper.jpg'],
     quantity: '180 KG',
-    address: '12/1, Ambattur Industrial Estate, Ambattur, Chennai – 600058, Tamil Nadu',
-    orderConfirmed: '13 May 2025, 02:05 PM',
-    pickupDate: '13 May 2025',
+    quantityRange: '100 – 200 KG (Approx.)',
+    dayTag: 'Tomorrow',
+    tagType: 'tomorrow',
+    pickupDate: 'Tomorrow',
     pickupTime: '02:00 PM – 04:00 PM',
+    statusLabel: 'Order Confirmed',
     statusText: 'Pending',
     statusType: 'pending',
+    section: 'upcoming',
+    buttonLabel: 'View Order →',
+    hasNavIcon: false,
+    address: '12/1, Ambattur Industrial Estate, Ambattur, Chennai – 600058, Tamil Nadu',
+    addressShort: 'Ambattur Industrial Estate, Ambattur, Chennai',
+    orderConfirmed: '13 May 2025, 02:05 PM',
     statusMeta: {
       heading: 'Driver on the way to factory',
       sub: '13 May 2025, 01:45 PM',
@@ -252,20 +313,58 @@ const ORDERS_DATA: OrderItem[] = [
     customerName: 'Precision Tools & Castings Pvt Ltd',
     customerType: 'Industry',
     badge: 'Pending',
-    materialName: 'Brass Honey & Alloy Turnings Scrap',
+    materialName: 'Brass Scrap',
     materialCondition: 'Mixed',
     image: '/scrap-brass.jpg',
     images: ['/scrap-brass.jpg', '/scrap-ma-solid-alloy.jpg', '/scrap-tin.jpg'],
-    quantity: '90 KG',
-    address: '16, Porur Industrial Bypass, Porur, Chennai – 600116, Tamil Nadu',
-    orderConfirmed: '12 May 2025, 01:10 PM',
-    pickupDate: 'Today',
-    pickupTime: '01:00 PM – 03:00 PM',
+    quantity: '120 KG',
+    quantityRange: '90 – 150 KG (Approx.)',
+    dayTag: '15 May 2025',
+    tagType: 'date',
+    pickupDate: '15 May 2025',
+    pickupTime: '10:00 AM – 01:00 PM',
+    statusLabel: 'Order Confirmed',
     statusText: 'Pending',
     statusType: 'pending',
+    section: 'upcoming',
+    buttonLabel: 'Continue Pickup →',
+    hasNavIcon: true,
+    address: '16, Porur Industrial Bypass, Porur, Chennai – 600116, Tamil Nadu',
+    addressShort: 'Porur Main Road, Porur, Chennai',
+    orderConfirmed: '12 May 2025, 01:10 PM',
     statusMeta: {
       heading: 'Pickup Ready • Offer Accepted',
       sub: 'Today, 01:00 PM',
+    },
+    actions: ['view-details'],
+  },
+  {
+    id: 'ORD-250513-00080',
+    customerName: 'Chennai Metal Industries',
+    customerType: 'Industry',
+    badge: 'Pending',
+    materialName: 'Mixed Metal Scrap',
+    materialCondition: 'Mixed',
+    image: '/industry-steel-scrap.jpg',
+    images: ['/industry-steel-scrap.jpg', '/scrap-quality-steel.jpg'],
+    quantity: '400 KG',
+    quantityRange: '300 – 500 KG (Approx.)',
+    dayTag: 'On the way',
+    tagType: 'on_the_way',
+    pickupDate: 'Today',
+    pickupTime: 'Expected arrival: 11:45 AM',
+    statusLabel: 'Pickup In Progress',
+    statusText: 'Pending',
+    statusType: 'pending',
+    section: 'active',
+    buttonLabel: 'Continue Pickup →',
+    hasNavIcon: true,
+    address: 'Plot 18, SIDCO Industrial Estate, Guindy, Chennai – 600032',
+    addressShort: 'SIDCO Industrial Estate, Guindy, Chennai',
+    orderConfirmed: '13 May 2025, 09:30 AM',
+    statusMeta: {
+      heading: 'En Route to Factory Bay',
+      sub: 'Arrival in 15 mins',
     },
     actions: ['view-details'],
   },
@@ -410,6 +509,7 @@ export default function MerchantOrders() {
   const [searchParams] = useSearchParams();
   const [orders, setOrders] = useState<OrderItem[]>(ORDERS_DATA);
   const [activeFilterTab, setActiveFilterTab] = useState<'all' | 'pending' | 'scheduled' | 'completed' | 'cancelled'>('all');
+  const [mainActiveTab, setMainActiveTab] = useState<'upcoming' | 'active'>('active');
 
   // Interactive Order Operational Lifecycle Modal State
   const [workflowState, setWorkflowState] = useState<OrderWorkflow | null>(null);
@@ -420,6 +520,11 @@ export default function MerchantOrders() {
   const [selectedLocation, setSelectedLocation] = useState('All Locations');
   const [selectedDateRange, setSelectedDateRange] = useState('This Month');
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  // Payment State for Stage 5
+  const [utrInputValue, setUtrInputValue] = useState('');
+  const [utrInputError, setUtrInputError] = useState('');
+  const [copiedPayeeUpi, setCopiedPayeeUpi] = useState(false);
 
   // Category + Subcategory Explorer & Universal Search State for Billing
   const [scrapSearchQuery, setScrapSearchQuery] = useState('');
@@ -446,6 +551,8 @@ export default function MerchantOrders() {
 
         const targetRate = rateParam || '42';
         const initialAmount = 0;
+        const initialBillNum = `BILL-${targetOrder.id.split('-').pop() || '00075'}`;
+        const initialPayment = getOrCreateOrderPayment(targetOrder.id, initialBillNum, initialAmount);
 
         setWorkflowState({
           order: targetOrder,
@@ -465,7 +572,8 @@ export default function MerchantOrders() {
           gstPercent: 0,
           deductions: 0,
           billingOtpInput: '7104',
-          billNumber: `BILL-${targetOrder.id.split('-').pop() || '00075'}`,
+          billNumber: initialBillNum,
+          paymentRecord: initialPayment,
         });
 
         triggerToast(`📍 Bill preparation opened for ${targetOrder.customerName}!`);
@@ -491,11 +599,12 @@ export default function MerchantOrders() {
   const handleOpenWorkflow = (order: OrderItem) => {
     let initialStage: OrderWorkflow['stage'] = 'navigation';
     if (order.badge === 'Completed') initialStage = 'settled';
-    else if (order.badge === 'Pending') initialStage = 'weighing';
-    else if (order.badge === 'Scheduled') initialStage = 'navigation';
+    else initialStage = 'navigation';
 
     const defaultRate = '42';
     const initialAmount = 0;
+    const billNum = `BILL-${order.id.split('-').pop() || '00075'}`;
+    const initialPayment = getOrCreateOrderPayment(order.id, billNum, initialAmount);
 
     setWorkflowState({
       order,
@@ -515,7 +624,8 @@ export default function MerchantOrders() {
       gstPercent: 0,
       deductions: 0,
       billingOtpInput: '7104',
-      billNumber: `BILL-${order.id.split('-').pop() || '00075'}`,
+      billNumber: billNum,
+      paymentRecord: initialPayment,
     });
   };
 
@@ -675,11 +785,109 @@ export default function MerchantOrders() {
 
   const handleSubmitBill = () => {
     if (!workflowState) return;
+    const finalAmount = calculateGrandTotal();
+    const payment = getOrCreateOrderPayment(
+      workflowState.order.id,
+      workflowState.billNumber,
+      finalAmount
+    );
+    setWorkflowState({
+      ...workflowState,
+      stage: 'payment',
+      paymentRecord: payment,
+    });
+    triggerToast('📄 Bill submitted to customer. Proceed to Stage 5: Payment.');
+  };
+
+  const handleSelectPaymentMethod = (method: 'UPI' | 'CASH') => {
+    if (!workflowState) return;
+    const updated = setOrderPaymentMethod(workflowState.order.id, method);
+    if (updated) {
+      setWorkflowState({
+        ...workflowState,
+        paymentRecord: updated,
+      });
+    }
+  };
+
+  const handlePayByAnyUpi = () => {
+    if (!workflowState) return;
+    const finalAmount = calculateGrandTotal();
+    const payeeUpi = workflowState.paymentRecord?.payeeUpiId || DEFAULT_MERCHANT_UPI_ID;
+    const payeeName = workflowState.paymentRecord?.payeeName || DEFAULT_MERCHANT_PAYEE_NAME;
+    const intentUrl = createOrderUpiPaymentIntent(
+      payeeUpi,
+      payeeName,
+      finalAmount,
+      workflowState.order.id
+    );
+
+    // Trigger generic UPI intent deep link
+    window.location.href = intentUrl;
+
+    const updated = markOrderPaymentInitiated(workflowState.order.id);
+    if (updated) {
+      setWorkflowState({
+        ...workflowState,
+        paymentRecord: updated,
+      });
+    }
+    triggerToast('📱 Opening UPI app... Complete payment and enter UTR below.');
+  };
+
+  const handleCopyPayeeUpi = () => {
+    const upiId = workflowState?.paymentRecord?.payeeUpiId || DEFAULT_MERCHANT_UPI_ID;
+    navigator.clipboard.writeText(upiId);
+    setCopiedPayeeUpi(true);
+    triggerToast('📋 Merchant UPI ID copied to clipboard!');
+    setTimeout(() => setCopiedPayeeUpi(false), 2000);
+  };
+
+  const handleSubmitPaymentUtr = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!workflowState) return;
+    if (!utrInputValue.trim() || utrInputValue.trim().length < 6) {
+      setUtrInputError('Please enter a valid UTR / Transaction ID (min 6 characters).');
+      return;
+    }
+
+    const updated = submitOrderPaymentUtr(workflowState.order.id, utrInputValue.trim());
+    if (updated) {
+      setWorkflowState({
+        ...workflowState,
+        paymentRecord: updated,
+      });
+      setUtrInputValue('');
+      setUtrInputError('');
+      triggerToast('💳 Payment reference submitted! You can now continue to Settlement.');
+    }
+  };
+
+  const handleConfirmCashPayment = () => {
+    if (!workflowState) return;
+    const updated = confirmOrderCashPayment(workflowState.order.id);
+    if (updated) {
+      setWorkflowState({
+        ...workflowState,
+        paymentRecord: updated,
+      });
+      triggerToast('💵 Cash payment confirmed! You can now continue to Settlement.');
+    }
+  };
+
+  const handleProceedToSettlement = () => {
+    if (!workflowState) return;
+    const paymentStatus = workflowState.paymentRecord?.status;
+    if (paymentStatus !== 'SUBMITTED' && paymentStatus !== 'CONFIRMED') {
+      triggerToast('⚠️ Please complete or record payment before proceeding to Settlement.');
+      return;
+    }
+
     setWorkflowState({
       ...workflowState,
       stage: 'billing_otp',
     });
-    triggerToast('📄 Bill submitted to customer. Waiting for industry Billing OTP confirmation.');
+    triggerToast('🔐 Payment recorded. Please confirm Settlement OTP with customer.');
   };
 
   const handleVerifyBillingOtp = (e: React.FormEvent) => {
@@ -713,6 +921,25 @@ export default function MerchantOrders() {
       stage: 'settled',
     });
     triggerToast('🎉 Order successfully settled! Payment confirmed.');
+  };
+
+  const handleCloseSettledDetails = () => {
+    if (!workflowState) return;
+
+    const currentOrder = workflowState.order;
+    const finalAmount = calculateGrandTotal();
+    const billNumber = workflowState.billNumber;
+
+    // Close the operational settlement workflow modal
+    setWorkflowState(null);
+
+    // Open the new Merchant Commission Payment workflow
+    openMerchantCommissionModal({
+      orderId: currentOrder.id,
+      customerName: currentOrder.customerName,
+      finalOrderAmount: finalAmount,
+      billNumber,
+    });
   };
 
   const handleClearFilters = () => {
@@ -771,329 +998,225 @@ export default function MerchantOrders() {
              ================================================================ */}
           <section className={styles.mainCol}>
             {/* 1. Page Header */}
-            <div className={styles.pageHeaderRow}>
-              <div className={styles.headerTitleGroup}>
-                <h1 className={styles.pageTitle}>Scrap Pickup Orders</h1>
-                <p className={styles.pageSubtitle}>
-                  Track pickup schedules, manage pending doorstep collections, and view completed orders.
-                </p>
-              </div>
+            <div className={styles.ordersHeaderSection}>
+              <h1 className={styles.pageMainHeading}>Orders</h1>
+              <p className={styles.pageSubHeading}>
+                Manage your accepted orders and pickups.
+              </p>
             </div>
 
-            {/* 2. 5-Column Stats Strip (4 Standardized Statuses + Total) */}
-            <div className={styles.statsStripGrid}>
-              <div className={styles.statCard}>
-                <div className={`${styles.statIconCircle} ${styles.iconYellow}`}>
-                  <Package size={18} />
-                </div>
-                <div className={styles.statContent}>
-                  <span className={styles.statLabel}>Total Orders</span>
-                  <span className={styles.statValue}>{orders.length}</span>
-                  <span className={styles.statTrend}>
-                    This Month <strong className={styles.trendGreen}>↑ 18%</strong>
-                  </span>
-                </div>
-              </div>
-
-              <div className={styles.statCard}>
-                <div className={`${styles.statIconCircle} ${styles.iconBlue}`}>
-                  <Clock size={18} />
-                </div>
-                <div className={styles.statContent}>
-                  <span className={styles.statLabel}>Pending</span>
-                  <span className={styles.statValue}>{orders.filter((o) => o.statusType === 'pending').length}</span>
-                  <span className={styles.statTrend}>
-                    Active pickups
-                  </span>
-                </div>
-              </div>
-
-              <div className={styles.statCard}>
-                <div className={`${styles.statIconCircle} ${styles.iconOrange}`}>
-                  <Calendar size={18} />
-                </div>
-                <div className={styles.statContent}>
-                  <span className={styles.statLabel}>Scheduled</span>
-                  <span className={styles.statValue}>{orders.filter((o) => o.statusType === 'scheduled').length}</span>
-                  <span className={styles.statTrend}>
-                    Upcoming bookings
-                  </span>
-                </div>
-              </div>
-
-              <div className={styles.statCard}>
-                <div className={`${styles.statIconCircle} ${styles.iconGreen}`}>
-                  <CheckCircle2 size={18} />
-                </div>
-                <div className={styles.statContent}>
-                  <span className={styles.statLabel}>Completed</span>
-                  <span className={styles.statValue}>{orders.filter((o) => o.statusType === 'completed').length}</span>
-                  <span className={styles.statTrend}>
-                    This Month <strong className={styles.trendGreen}>↑ 12%</strong>
-                  </span>
-                </div>
-              </div>
-
-              <div className={styles.statCard}>
-                <div className={`${styles.statIconCircle} ${styles.iconRed}`}>
-                  <XCircle size={18} />
-                </div>
-                <div className={styles.statContent}>
-                  <span className={styles.statLabel}>Cancelled</span>
-                  <span className={styles.statValue}>{orders.filter((o) => o.statusType === 'cancelled').length}</span>
-                  <span className={styles.statTrend}>
-                    This Month <strong className={styles.trendRed}>↓ 5%</strong>
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* MOBILE 4-TAB ORDER SELECTOR (Upcoming, Active, Completed, Cancelled) */}
-            <div className={styles.mobileOrderTopTabs}>
+            {/* 2. 2-Tab Segmented Control: Upcoming (3) | Active (1) */}
+            <div className={styles.segmentedTabsContainer}>
               <button
                 type="button"
-                className={`${styles.mobileOrderTabBtn} ${
-                  activeFilterTab === 'scheduled' ? styles.mobileOrderTabBtnActive : ''
+                className={`${styles.segmentedTab} ${
+                  mainActiveTab === 'upcoming' ? styles.segmentedTabActive : ''
                 }`}
-                onClick={() => setActiveFilterTab('scheduled')}
+                onClick={() => setMainActiveTab('upcoming')}
               >
-                <span>Upcoming ({orders.filter((o) => o.statusType === 'scheduled').length})</span>
+                <Calendar size={18} />
+                <span>Upcoming ({orders.filter((o) => o.section === 'upcoming' || o.badge === 'Scheduled' || (o.badge === 'Pending' && o.section !== 'active')).length})</span>
               </button>
+
               <button
                 type="button"
-                className={`${styles.mobileOrderTabBtn} ${
-                  activeFilterTab === 'pending' || activeFilterTab === 'all' ? styles.mobileOrderTabBtnActive : ''
+                className={`${styles.segmentedTab} ${
+                  mainActiveTab === 'active' ? styles.segmentedTabActive : ''
                 }`}
-                onClick={() => setActiveFilterTab('pending')}
+                onClick={() => setMainActiveTab('active')}
               >
-                <span>Active ({orders.filter((o) => o.statusType === 'pending').length})</span>
-              </button>
-              <button
-                type="button"
-                className={`${styles.mobileOrderTabBtn} ${
-                  activeFilterTab === 'completed' ? styles.mobileOrderTabBtnActive : ''
-                }`}
-                onClick={() => setActiveFilterTab('completed')}
-              >
-                <span>Completed ({orders.filter((o) => o.statusType === 'completed').length})</span>
-              </button>
-              <button
-                type="button"
-                className={`${styles.mobileOrderTabBtn} ${
-                  activeFilterTab === 'cancelled' ? styles.mobileOrderTabBtnActive : ''
-                }`}
-                onClick={() => setActiveFilterTab('cancelled')}
-              >
-                <span>Cancelled ({orders.filter((o) => o.statusType === 'cancelled').length})</span>
+                <PlayCircle size={18} />
+                <span>Active ({orders.filter((o) => o.section === 'active' || o.dayTag === 'On the way').length})</span>
               </button>
             </div>
 
-            {/* 3. Standardized 4-Status Tabs & Sort Bar (Desktop Only) */}
-            <div className={styles.tabsBar}>
-              <div className={styles.tabsList}>
-                <button
-                  type="button"
-                  className={`${styles.tabItem} ${activeFilterTab === 'all' ? styles.tabActive : ''}`}
-                  onClick={() => setActiveFilterTab('all')}
-                >
-                  <span>All Orders</span>
-                  <span className={styles.tabBadge}>{orders.length}</span>
-                </button>
-                <button
-                  type="button"
-                  className={`${styles.tabItem} ${activeFilterTab === 'pending' ? styles.tabActive : ''}`}
-                  onClick={() => setActiveFilterTab('pending')}
-                >
-                  <span>Pending</span>
-                  <span className={styles.tabBadge}>{orders.filter((o) => o.statusType === 'pending').length}</span>
-                </button>
-                <button
-                  type="button"
-                  className={`${styles.tabItem} ${activeFilterTab === 'scheduled' ? styles.tabActive : ''}`}
-                  onClick={() => setActiveFilterTab('scheduled')}
-                >
-                  <span>Scheduled</span>
-                  <span className={styles.tabBadge}>{orders.filter((o) => o.statusType === 'scheduled').length}</span>
-                </button>
-                <button
-                  type="button"
-                  className={`${styles.tabItem} ${activeFilterTab === 'completed' ? styles.tabActive : ''}`}
-                  onClick={() => setActiveFilterTab('completed')}
-                >
-                  <span>Completed</span>
-                  <span className={styles.tabBadge}>{orders.filter((o) => o.statusType === 'completed').length}</span>
-                </button>
-                <button
-                  type="button"
-                  className={`${styles.tabItem} ${activeFilterTab === 'cancelled' ? styles.tabActive : ''}`}
-                  onClick={() => setActiveFilterTab('cancelled')}
-                >
-                  <span>Cancelled</span>
-                  <span className={styles.tabBadge}>{orders.filter((o) => o.statusType === 'cancelled').length}</span>
-                </button>
-              </div>
-
-              <div className={styles.sortSelector}>
-                <span>Sort by: Newest First</span>
-                <ChevronDown size={14} />
-              </div>
-            </div>
-
-            {/* 4. Orders Cards List (Standardized to 4 Flags: Pending, Scheduled, Completed, Cancelled) */}
-            <div className={styles.ordersList}>
-              {filteredOrders.map((order) => (
-                <article key={order.id} className={styles.orderCard}>
-                  {/* Top Customer & Order ID Strip */}
-                  <div className={styles.cardHeaderRow}>
-                    <div className={styles.cardHeaderLeft}>
-                      {/* Standardized 4 Status Badges */}
-                      <span
-                        className={
-                          order.badge === 'Completed'
-                            ? styles.statusPillGreen
-                            : order.badge === 'Pending'
-                            ? styles.statusPillBlue
-                            : order.badge === 'Scheduled'
-                            ? styles.statusPillYellow
-                            : styles.statusPillRed
-                        }
-                      >
-                        {order.badge.toUpperCase()}
-                      </span>
-
-                      <div className={styles.customerGroup}>
-                        <span className={styles.customerLabel}>Customer:</span>
-                        <span className={styles.customerName}>{order.customerName}</span>
-                      </div>
-
-                      <div className={styles.customerTypeBadge}>
-                        {order.customerType === 'Individual' ? <User size={12} /> : <Building size={12} />}
-                        <span>{order.customerType}</span>
-                      </div>
-                    </div>
-
-                    <span className={styles.orderIdMuted}>Order ID: {order.id}</span>
+            {/* 3. UPCOMING ORDERS SECTION */}
+            {mainActiveTab === 'upcoming' && (
+              <div className={styles.sectionBlock}>
+                <div className={styles.sectionHeaderRow}>
+                  <div className={styles.sectionHeaderLeft}>
+                    <h2 className={styles.sectionTitle}>Upcoming Orders</h2>
                   </div>
+                </div>
 
-                  {/* 3-Column Core Card Body (Exact same image showcase as Requests page) */}
-                  <div className={styles.cardBodyGrid}>
-                    {/* 1. Left Column: Scrap Photo Preview with Multi-Image Swipe */}
-                    <div className={styles.imageShowcaseCol}>
-                      <CardImageGallery
-                        images={order.images || [order.image]}
-                        fallbackImage={order.image || '/logo-icon.png'}
-                        materialName={order.materialName}
-                        materialCondition={order.materialCondition}
-                        onOpenPreview={(src) =>
-                          setFloatingImage({
-                            src,
-                            title: order.materialName,
-                            condition: order.materialCondition,
-                            quantity: order.quantity,
-                            customerName: order.customerName,
-                          })
-                        }
-                      />
+                <div className={styles.cleanCardsStack}>
+                  {orders
+                    .filter((o) => o.section === 'upcoming' || o.badge === 'Scheduled' || (o.badge === 'Pending' && o.section !== 'active'))
+                    .map((order) => (
+                      <article
+                        key={order.id}
+                        className={styles.cleanOrderCard}
+                        onClick={() => handleOpenWorkflow(order)}
+                        title={`Click to view pickup workflow for ${order.customerName}`}
+                      >
+                        {/* Top Meta Row */}
+                        <div className={styles.cleanCardTopRow}>
+                          <div className={styles.cleanCardTopLeft}>
+                            <span className={styles.tagYellowPill}>
+                              {order.dayTag || order.pickupDate}
+                            </span>
+                            <span className={styles.cleanTimeSlotText}>{order.pickupTime}</span>
+                          </div>
 
-                      <div className={styles.materialTitleBlock}>
-                        <h3 className={styles.materialTitle}>{order.materialName}</h3>
-                        <div className={styles.quantityTag}>
-                          <span className={styles.quantityHighlight}>{order.quantity}</span>
-                          <span className={styles.confirmedDateTag}>• Confirmed {order.pickupDate}</span>
+                          <div className={styles.statusPillConfirmed}>
+                            <span className={styles.dotYellow}>●</span>
+                            <span>{order.statusLabel || 'Order Confirmed'}</span>
+                          </div>
                         </div>
-                      </div>
-                    </div>
 
-                    {/* 2. Middle Column: Pickup Address & Order Details */}
-                    <div className={styles.detailsCol}>
-                      <div className={styles.detailRow}>
-                        <MapPin size={16} className={styles.detailIcon} />
-                        <div className={styles.addressCol}>
-                          <span className={styles.detailLabel}>PICKUP ADDRESS</span>
-                          <span className={styles.addressValue}>{order.address}</span>
+                        {/* Middle Body */}
+                        <div className={styles.cleanCardBody}>
+                          <img
+                            src={order.image}
+                            alt={order.materialName}
+                            className={styles.cleanCardImg}
+                            onError={(e) => {
+                              (e.currentTarget as HTMLImageElement).src = '/industry-steel-scrap.jpg';
+                            }}
+                          />
+
+                          <div className={styles.cleanCardDetails}>
+                            <div className={styles.cleanCustomerRow}>
+                              <h3 className={styles.cleanCustomerName}>{order.customerName}</h3>
+                              <ChevronRight size={18} className={styles.cleanChevron} />
+                            </div>
+
+                            <div className={styles.cleanMetaRow}>
+                              <Building2 size={13} className={styles.cleanMetaIcon} />
+                              <span>{order.customerType}</span>
+                            </div>
+
+                            <div className={styles.cleanMetaRow}>
+                              <Package size={13} className={styles.cleanMetaIcon} />
+                              <span className={styles.cleanMaterialName}>{order.materialName}</span>
+                              <span className={styles.cleanQuantityText}>
+                                {order.quantityRange || `${order.quantity} (Approx.)`}
+                              </span>
+                            </div>
+
+                            <div className={styles.cleanMetaRow}>
+                              <MapPin size={13} className={styles.cleanMetaIcon} />
+                              <span className={styles.cleanLocationText}>
+                                {order.addressShort || order.address}
+                              </span>
+                            </div>
+                          </div>
                         </div>
-                      </div>
 
-                      <div className={styles.detailRow}>
-                        <Calendar size={16} className={styles.detailIcon} />
-                        <div className={styles.pickupTimeRow}>
-                          <span className={styles.detailLabel}>SCHEDULED PICKUP</span>
-                          <span className={styles.pickupTimeValue}>
-                            {order.pickupDate} &nbsp;•&nbsp; {order.pickupTime}
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className={styles.detailRow}>
-                        <Clock size={16} className={styles.detailIcon} />
-                        <div className={styles.pickupTimeRow}>
-                          <span className={styles.detailLabel}>ORDER CONFIRMED</span>
-                          <span className={styles.confirmedSubtext}>{order.orderConfirmed}</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* 3. Right Column: Standardized Status & Action Buttons */}
-                    <div className={styles.statusActionCol}>
-                      <div className={styles.statusGroup}>
-                        <span className={styles.statusHeader}>STATUS</span>
-                        <span
-                          className={`${styles.statePill} ${
-                            order.statusType === 'completed'
-                              ? styles.stateCompleted
-                              : order.statusType === 'pending'
-                              ? styles.statePending
-                              : order.statusType === 'scheduled'
-                              ? styles.stateScheduled
-                              : styles.stateCancelled
-                          }`}
-                        >
-                          {order.statusText}
-                        </span>
-
-                        <div className={styles.stateSubtext}>
-                          <span>{order.statusMeta.heading}</span>
-                          <strong>{order.statusMeta.sub}</strong>
-                        </div>
-                      </div>
-
-                      <div className={styles.buttonsStack}>
-                        <button
-                          type="button"
-                          className={
-                            order.badge === 'Completed'
-                              ? styles.completedActionBtn
-                              : styles.primaryActionBtn
-                          }
-                          onClick={() => handleOpenWorkflow(order)}
-                        >
-                          <Truck size={14} />
-                          <span>{order.badge === 'Completed' ? 'View Bill & Settlement' : 'Open Order & Start Pickup →'}</span>
-                        </button>
-
-                        {order.actions.includes('download-bill') && (
+                        {/* Bottom Action Row */}
+                        <div className={styles.cleanCardActionRow}>
                           <button
                             type="button"
-                            className={styles.outlineDarkBtn}
-                            onClick={() => triggerToast(`Downloading digital weighing bill for ${order.id}`)}
+                            className={styles.cleanYellowActionBtn}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleOpenWorkflow(order);
+                            }}
                           >
-                            <Download size={14} />
-                            <span>Download Bill</span>
+                            {order.hasNavIcon && (
+                              <Navigation size={13} style={{ transform: 'rotate(45deg)' }} />
+                            )}
+                            <span>{order.buttonLabel || 'View Order →'}</span>
                           </button>
-                        )}
-                      </div>
-                    </div>
-                  </div>
+                        </div>
+                      </article>
+                    ))}
+                </div>
+              </div>
+            )}
 
-                  {/* Card Footer Note */}
-                  {order.bottomNote && (
-                    <div className={styles.cardFooterNote}>
-                      <span>{order.bottomNote}</span>
-                    </div>
-                  )}
-                </article>
-              ))}
-            </div>
+            {/* 4. ACTIVE ORDERS SECTION */}
+            {mainActiveTab === 'active' && (
+              <div className={styles.sectionBlock}>
+                <div className={styles.sectionHeaderRow}>
+                  <div className={styles.sectionHeaderLeft}>
+                    <h2 className={styles.sectionTitle}>Active Orders</h2>
+                  </div>
+                </div>
+
+                <div className={styles.cleanCardsStack}>
+                  {orders
+                    .filter((o) => o.section === 'active' || o.dayTag === 'On the way')
+                    .map((order) => (
+                      <article
+                        key={order.id}
+                        className={styles.cleanOrderCard}
+                        onClick={() => handleOpenWorkflow(order)}
+                        title={`Click to continue pickup for ${order.customerName}`}
+                      >
+                        {/* Top Meta Row: [On the way] Expected arrival ... 🟢 Pickup In Progress */}
+                        <div className={styles.cleanCardTopRow}>
+                          <div className={styles.cleanCardTopLeft}>
+                            <span className={styles.tagOnTheWay}>
+                              {order.dayTag || 'On the way'}
+                            </span>
+                            <span className={styles.cleanTimeSlotText}>{order.pickupTime}</span>
+                          </div>
+
+                          <div className={styles.statusPillGreen}>
+                            <span className={styles.dotGreen}>●</span>
+                            <span>{order.statusLabel || 'Pickup In Progress'}</span>
+                          </div>
+                        </div>
+
+                        {/* Middle Body */}
+                        <div className={styles.cleanCardBody}>
+                          <img
+                            src={order.image}
+                            alt={order.materialName}
+                            className={styles.cleanCardImg}
+                            onError={(e) => {
+                              (e.currentTarget as HTMLImageElement).src = '/industry-steel-scrap.jpg';
+                            }}
+                          />
+
+                          <div className={styles.cleanCardDetails}>
+                            <div className={styles.cleanCustomerRow}>
+                              <h3 className={styles.cleanCustomerName}>{order.customerName}</h3>
+                              <ChevronRight size={18} className={styles.cleanChevron} />
+                            </div>
+
+                            <div className={styles.cleanMetaRow}>
+                              <Building2 size={13} className={styles.cleanMetaIcon} />
+                              <span>{order.customerType}</span>
+                            </div>
+
+                            <div className={styles.cleanMetaRow}>
+                              <Package size={13} className={styles.cleanMetaIcon} />
+                              <span className={styles.cleanMaterialName}>{order.materialName}</span>
+                              <span className={styles.cleanQuantityText}>
+                                {order.quantityRange || `${order.quantity} (Approx.)`}
+                              </span>
+                            </div>
+
+                            <div className={styles.cleanMetaRow}>
+                              <MapPin size={13} className={styles.cleanMetaIcon} />
+                              <span className={styles.cleanLocationText}>
+                                {order.addressShort || order.address}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Bottom Action Row */}
+                        <div className={styles.cleanCardActionRow}>
+                          <button
+                            type="button"
+                            className={styles.cleanYellowActionBtn}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleOpenWorkflow(order);
+                            }}
+                          >
+                            <Navigation size={13} style={{ transform: 'rotate(45deg)' }} />
+                            <span>{order.buttonLabel || 'Continue Pickup →'}</span>
+                          </button>
+                        </div>
+                      </article>
+                    ))}
+                </div>
+              </div>
+            )}
           </section>
 
           {/* ================================================================
@@ -1331,336 +1454,485 @@ export default function MerchantOrders() {
               </button>
             </div>
 
-            {/* Stage Progress Stepper */}
-            <div className={styles.workflowStepper}>
-              <div
-                className={`${styles.stepItem} ${
-                  ['navigation', 'pickup_otp', 'weighing', 'bill_generated', 'billing_otp', 'settled'].includes(
-                    workflowState.stage
-                  )
-                    ? styles.stepItemActive
-                    : ''
-                }`}
-              >
-                <div className={styles.stepNumber}>1</div>
-                <span className={styles.stepLabel}>En Route</span>
-              </div>
-              <div className={styles.stepConnector} />
-              <div
-                className={`${styles.stepItem} ${
-                  ['pickup_otp', 'weighing', 'bill_generated', 'billing_otp', 'settled'].includes(
-                    workflowState.stage
-                  )
-                    ? styles.stepItemActive
-                    : ''
-                }`}
-              >
-                <div className={styles.stepNumber}>2</div>
-                <span className={styles.stepLabel}>Pickup OTP</span>
-              </div>
-              <div className={styles.stepConnector} />
-              <div
-                className={`${styles.stepItem} ${
-                  ['weighing', 'bill_generated', 'billing_otp', 'settled'].includes(
-                    workflowState.stage
-                  )
-                    ? styles.stepItemActive
-                    : ''
-                }`}
-              >
-                <div className={styles.stepNumber}>3</div>
-                <span className={styles.stepLabel}>Weighing</span>
-              </div>
-              <div className={styles.stepConnector} />
-              <div
-                className={`${styles.stepItem} ${
-                  ['bill_generated', 'billing_otp', 'settled'].includes(workflowState.stage)
-                    ? styles.stepItemActive
-                    : ''
-                }`}
-              >
-                <div className={styles.stepNumber}>4</div>
-                <span className={styles.stepLabel}>Bill</span>
-              </div>
-              <div className={styles.stepConnector} />
-              <div
-                className={`${styles.stepItem} ${
-                  ['settled'].includes(workflowState.stage) ? styles.stepItemActive : ''
-                }`}
-              >
-                <div className={styles.stepNumber}>5</div>
-                <span className={styles.stepLabel}>Settled</span>
-              </div>
-            </div>
+            {/* Stage Progress Stepper — 6 Stages */}
+            {(() => {
+              const currStageNum = getStageNumber(workflowState.stage);
+              return (
+                <div className={styles.workflowStepper}>
+                  {/* Step 1: En Route */}
+                  <button
+                    type="button"
+                    className={`${styles.stepItem} ${currStageNum >= 1 ? styles.stepItemActive : ''}`}
+                    onClick={() => setWorkflowState({ ...workflowState, stage: 'navigation' })}
+                  >
+                    <div className={`${styles.stepNumber} ${currStageNum > 1 ? styles.stepNumberDone : ''}`}>
+                      {currStageNum > 1 ? <FiCheck size={11} strokeWidth={3} /> : '1'}
+                    </div>
+                    <span className={styles.stepLabel}>En Route</span>
+                  </button>
+                  <div className={`${styles.stepConnector} ${currStageNum > 1 ? styles.stepConnectorActive : ''}`} />
+
+                  {/* Step 2: Pickup OTP */}
+                  <button
+                    type="button"
+                    className={`${styles.stepItem} ${currStageNum >= 2 ? styles.stepItemActive : ''}`}
+                    onClick={() => currStageNum >= 2 && setWorkflowState({ ...workflowState, stage: 'pickup_otp' })}
+                  >
+                    <div className={`${styles.stepNumber} ${currStageNum > 2 ? styles.stepNumberDone : ''}`}>
+                      {currStageNum > 2 ? <FiCheck size={11} strokeWidth={3} /> : '2'}
+                    </div>
+                    <span className={styles.stepLabel}>Pickup OTP</span>
+                  </button>
+                  <div className={`${styles.stepConnector} ${currStageNum > 2 ? styles.stepConnectorActive : ''}`} />
+
+                  {/* Step 3: Weighing */}
+                  <button
+                    type="button"
+                    className={`${styles.stepItem} ${currStageNum >= 3 ? styles.stepItemActive : ''}`}
+                    onClick={() => currStageNum >= 3 && setWorkflowState({ ...workflowState, stage: 'weighing' })}
+                  >
+                    <div className={`${styles.stepNumber} ${currStageNum > 3 ? styles.stepNumberDone : ''}`}>
+                      {currStageNum > 3 ? <FiCheck size={11} strokeWidth={3} /> : '3'}
+                    </div>
+                    <span className={styles.stepLabel}>Weighing</span>
+                  </button>
+                  <div className={`${styles.stepConnector} ${currStageNum > 3 ? styles.stepConnectorActive : ''}`} />
+
+                  {/* Step 4: Bill */}
+                  <button
+                    type="button"
+                    className={`${styles.stepItem} ${currStageNum >= 4 ? styles.stepItemActive : ''}`}
+                    onClick={() => currStageNum >= 4 && setWorkflowState({ ...workflowState, stage: 'bill_generated' })}
+                  >
+                    <div className={`${styles.stepNumber} ${currStageNum > 4 ? styles.stepNumberDone : ''}`}>
+                      {currStageNum > 4 ? <FiCheck size={11} strokeWidth={3} /> : '4'}
+                    </div>
+                    <span className={styles.stepLabel}>Bill</span>
+                  </button>
+                  <div className={`${styles.stepConnector} ${currStageNum > 4 ? styles.stepConnectorActive : ''}`} />
+
+                  {/* Step 5: Payment */}
+                  <button
+                    type="button"
+                    className={`${styles.stepItem} ${currStageNum >= 5 ? styles.stepItemActive : ''}`}
+                    onClick={() => currStageNum >= 5 && setWorkflowState({ ...workflowState, stage: 'payment' })}
+                  >
+                    <div className={`${styles.stepNumber} ${currStageNum > 5 ? styles.stepNumberDone : ''}`}>
+                      {currStageNum > 5 ? <FiCheck size={11} strokeWidth={3} /> : '5'}
+                    </div>
+                    <span className={styles.stepLabel}>Payment</span>
+                  </button>
+                  <div className={`${styles.stepConnector} ${currStageNum > 5 ? styles.stepConnectorActive : ''}`} />
+
+                  {/* Step 6: Settlement */}
+                  <button
+                    type="button"
+                    className={`${styles.stepItem} ${currStageNum >= 6 ? styles.stepItemActive : ''}`}
+                    onClick={() => {
+                      const isPaymentReady =
+                        workflowState.paymentRecord?.status === 'SUBMITTED' ||
+                        workflowState.paymentRecord?.status === 'CONFIRMED' ||
+                        currStageNum >= 6;
+                      if (isPaymentReady) {
+                        setWorkflowState({ ...workflowState, stage: 'billing_otp' });
+                      } else {
+                        triggerToast('⚠️ Please complete Stage 5 Payment before proceeding.');
+                      }
+                    }}
+                  >
+                    <div className={`${styles.stepNumber} ${currStageNum > 6 ? styles.stepNumberDone : ''}`}>
+                      {currStageNum > 6 ? <FiCheck size={11} strokeWidth={3} /> : '6'}
+                    </div>
+                    <span className={styles.stepLabel}>Settlement</span>
+                  </button>
+                </div>
+              );
+            })()}
 
             {/* Modal Body Based on Stage */}
             <div className={styles.workflowModalBody}>
               {/* STAGE 1: NAVIGATION & EN ROUTE */}
               {workflowState.stage === 'navigation' && (
                 <div className={styles.stageContentBox}>
-                  <div className={styles.stageHeroBadge}>
-                    <Compass size={18} />
-                    <span>Stage 1: Live Pickup GPS Map &amp; Navigation</span>
+                  {/* Yellow Alert Banner */}
+                  <div className={styles.stage1AlertBanner}>
+                    <div className={styles.stage1AlertIconWrap}>
+                      <Compass size={20} />
+                    </div>
+                    <div className={styles.stage1AlertTextCol}>
+                      <strong className={styles.stage1AlertTitle}>
+                        Stage 1: Live Pickup GPS Map &amp; Navigation
+                      </strong>
+                      <span className={styles.stage1AlertSubtitle}>
+                        Reach the customer location using the map.
+                      </span>
+                    </div>
                   </div>
 
-                  {/* EMBEDDED LIVE MAP VIEWPORT */}
-                  <div className={styles.embeddedMapViewport}>
-                    {/* Live Turn-by-Turn Instruction Header */}
-                    <div className={styles.liveNavTurnHeader}>
-                      <div className={styles.turnIconCircle}>
-                        <Navigation size={18} />
+                  {/* UNIFIED NAVIGATION MAP CARD */}
+                  <div className={styles.unifiedNavCard}>
+                    {/* Top Navigation Turn Header */}
+                    <div className={styles.navTurnHeader}>
+                      <div className={styles.turnIconSquare}>
+                        <CornerUpLeft size={22} />
                       </div>
-                      <div className={styles.turnTextCol}>
-                        <strong className={styles.turnTitle}>In 400m, turn left onto Porur Industrial Bypass</strong>
-                        <span className={styles.turnSub}>4.2 KM remaining • Estimated arrival in 14 mins</span>
+                      <div className={styles.turnInfoCol}>
+                        <div className={styles.turnTopMetaRow}>
+                          <span className={styles.turnDistanceBig}>400 m</span>
+                          <div className={styles.gpsLiveBadge}>
+                            <span className={styles.gpsDotGreen}>●</span>
+                            <span>GPS Live</span>
+                          </div>
+                        </div>
+                        <div className={styles.turnInstruction}>
+                          Turn left onto Porur Industrial Bypass
+                        </div>
+                        <div className={styles.turnSubMeta}>
+                          <span>4.2 km remaining</span>
+                          <span className={styles.metaDot}>•</span>
+                          <span>14 min</span>
+                          <span className={styles.metaDot}>•</span>
+                          <span className={styles.metaGreenTraffic}>Light traffic</span>
+                        </div>
                       </div>
-                      <span className={styles.liveGpsDotPulse}>GPS LIVE</span>
                     </div>
 
-                    {/* Live Map Graphic Canvas */}
-                    <div className={styles.liveMapGraphicBox}>
+                    {/* Google-Maps Styled Viewport */}
+                    <div className={styles.googleMapViewBox}>
                       <svg
-                        viewBox="0 0 800 480"
-                        className={styles.embeddedMapSvg}
+                        viewBox="0 0 500 280"
+                        className={styles.googleMapSvg}
                         style={{
                           transform: `scale(${mapZoom})`,
                           transformOrigin: 'center center',
-                          transition: 'transform 0.2s ease',
+                          transition: 'transform 0.25s ease',
                         }}
                       >
                         <defs>
-                          <linearGradient id="mapCoastGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" stopColor="#dbeafe" stopOpacity="0.4" />
-                            <stop offset="100%" stopColor="#93c5fd" stopOpacity="0.8" />
-                          </linearGradient>
-
-                          <linearGradient id="liveActiveRouteGlow" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stopColor="#16a34a" />
-                            <stop offset="60%" stopColor="#22c55e" />
-                            <stop offset="100%" stopColor="#f59e0b" />
-                          </linearGradient>
-
-                          <filter id="embeddedPinShadow" x="-20%" y="-20%" width="140%" height="140%">
-                            <feDropShadow dx="0" dy="3" stdDeviation="3" floodColor="#0f172a" floodOpacity="0.4" />
+                          <filter id="pinShadow" x="-30%" y="-30%" width="160%" height="160%">
+                            <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#0f172a" floodOpacity="0.3" />
                           </filter>
+                          <filter id="calloutShadow" x="-20%" y="-30%" width="140%" height="170%">
+                            <feDropShadow dx="0" dy="2" stdDeviation="4" floodColor="#0f172a" floodOpacity="0.2" />
+                          </filter>
+                          <radialGradient id="puckPulse" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.5" />
+                            <stop offset="100%" stopColor="#3b82f6" stopOpacity="0" />
+                          </radialGradient>
                         </defs>
 
-                        {/* Background Base */}
-                        <rect width="800" height="480" fill="#f1f5f9" />
+                        {/* Map Base Canvas */}
+                        <rect width="500" height="280" fill="#f4f3f0" />
 
-                        {/* Chennai Bay Coastline */}
-                        <path
-                          d="M 680 0 C 700 120, 715 240, 675 360 C 650 420, 665 460, 660 480 L 800 480 L 800 0 Z"
-                          fill="url(#mapCoastGradient)"
-                        />
-                        <text x="730" y="240" fill="#3b82f6" fontSize="13" fontWeight="800" opacity="0.6" transform="rotate(90 730 240)">
-                          BAY OF BENGAL
+                        {/* Light Green Parks / Terrain */}
+                        <path d="M 0 0 L 110 0 L 95 60 L 50 85 L 0 55 Z" fill="#e8f5e9" />
+                        <path d="M 170 120 C 190 110, 220 115, 230 140 C 240 165, 210 185, 180 180 C 160 175, 155 140, 170 120 Z" fill="#e8f5e9" />
+                        <path d="M 390 0 L 480 0 L 450 70 L 370 60 Z" fill="#e8f5e9" />
+                        <path d="M 400 170 C 430 160, 470 170, 500 190 L 500 270 L 450 270 C 420 250, 390 200, 400 170 Z" fill="#e8f5e9" />
+
+                        {/* Secondary Grid Streets */}
+                        <g stroke="#ffffff" strokeWidth="6" strokeLinecap="round" fill="none">
+                          <line x1="0" y1="80" x2="500" y2="80" />
+                          <line x1="80" y1="0" x2="80" y2="280" />
+                          <line x1="260" y1="0" x2="260" y2="280" />
+                          <line x1="360" y1="0" x2="360" y2="280" />
+                          <line x1="0" y1="140" x2="500" y2="140" />
+                          <line x1="0" y1="200" x2="500" y2="200" />
+                          <line x1="300" y1="110" x2="480" y2="110" />
+                        </g>
+
+                        {/* Major Highway Outer Ring / Bypass */}
+                        <path d="M 0 230 Q 90 210 180 135 T 350 35 L 500 10" fill="none" stroke="#ffffff" strokeWidth="11" strokeLinecap="round" />
+                        <path d="M 0 230 Q 90 210 180 135 T 350 35 L 500 10" fill="none" stroke="#fed7aa" strokeWidth="7" strokeLinecap="round" />
+
+                        {/* Mount Poonamallee Road */}
+                        <path d="M 110 0 L 250 140 L 390 280" fill="none" stroke="#ffffff" strokeWidth="9" />
+                        <path d="M 110 0 L 250 140 L 390 280" fill="none" stroke="#fef08a" strokeWidth="5" />
+
+                        {/* Railway line */}
+                        <g stroke="#94a3b8" strokeWidth="2" strokeDasharray="6 4" fill="none">
+                          <path d="M 230 280 L 310 170 L 420 100 L 500 60" />
+                        </g>
+
+                        {/* Map Labels */}
+                        {/* Guindy */}
+                        <text x="35" y="42" fill="#475569" fontSize="13" fontWeight="800" fontFamily="sans-serif">
+                          Guindy
+                        </text>
+                        {/* Mount Poonamallee Rd */}
+                        <text
+                          x="115"
+                          y="85"
+                          fill="#64748b"
+                          fontSize="9.5"
+                          fontWeight="700"
+                          fontFamily="sans-serif"
+                          transform="rotate(45 115 85)"
+                        >
+                          Mount Poonamallee Rd
+                        </text>
+                        {/* Porur */}
+                        <text x="35" y="195" fill="#475569" fontSize="11" fontWeight="700" fontFamily="sans-serif">
+                          Porur
+                        </text>
+                        {/* Mount Bypass Rd */}
+                        <text
+                          x="80"
+                          y="190"
+                          fill="#64748b"
+                          fontSize="9"
+                          fontWeight="700"
+                          fontFamily="sans-serif"
+                          transform="rotate(-15 80 190)"
+                        >
+                          Mount Bypass Rd
+                        </text>
+                        {/* Road 32 Badge */}
+                        <g transform="translate(65, 202)">
+                          <rect x="0" y="0" width="20" height="14" rx="3" fill="#eab308" stroke="#ca8a04" strokeWidth="1" />
+                          <text x="4" y="10.5" fill="#0f172a" fontSize="8.5" fontWeight="900" fontFamily="sans-serif">
+                            32
+                          </text>
+                        </g>
+
+                        {/* Guindy Railway Station */}
+                        <g transform="translate(260, 218)">
+                          <circle cx="6" cy="6" r="4.5" fill="#3b82f6" />
+                          <text x="3" y="9" fill="#ffffff" fontSize="6.5" fontWeight="900">
+                            🚆
+                          </text>
+                          <text x="14" y="9" fill="#1e40af" fontSize="9" fontWeight="700" fontFamily="sans-serif">
+                            Guindy Railway Station
+                          </text>
+                        </g>
+
+                        {/* SIDCO Industrial Estate area label */}
+                        <text x="318" y="115" fill="#475569" fontSize="9.5" fontWeight="700" fontFamily="sans-serif">
+                          SIDCO
+                        </text>
+                        <text x="295" y="127" fill="#475569" fontSize="9.5" fontWeight="700" fontFamily="sans-serif">
+                          Industrial Estate
                         </text>
 
-                        {/* City Arterial Road Grid */}
-                        <g stroke="#cbd5e1" strokeWidth="2.5" fill="none">
-                          {/* NH-45 GST Road */}
-                          <line x1="420" y1="0" x2="420" y2="480" strokeWidth="5" stroke="#94a3b8" />
-                          {/* Inner Ring Road */}
-                          <line x1="0" y1="260" x2="680" y2="260" strokeWidth="4.5" stroke="#94a3b8" />
-                          {/* Secondary avenues */}
-                          <line x1="180" y1="0" x2="180" y2="480" strokeWidth="2" stroke="#e2e8f0" />
-                          <line x1="0" y1="130" x2="700" y2="130" strokeWidth="2" stroke="#e2e8f0" />
-                          <line x1="0" y1="390" x2="660" y2="390" strokeWidth="2" stroke="#e2e8f0" />
-                          {/* Bypass highway */}
-                          <path d="M 120 480 Q 280 280 420 180 T 640 40" strokeWidth="3" stroke="#e2e8f0" />
-                        </g>
-
-                        {/* Highway Badges */}
-                        <g fill="#64748b" fontSize="10" fontWeight="700">
-                          <text x="430" y="40">GST ROAD (NH-45)</text>
-                          <text x="50" y="250">INNER RING ROAD</text>
-                          <text x="140" y="380">PORUR INDUSTRIAL BYPASS</text>
-                        </g>
-
-                        {/* Active Dynamic Route Polyline */}
+                        {/* ACTIVE NAVIGATION ROUTE LINE (Vibrant Blue with highlight) */}
                         <path
-                          d="M 420 310 L 340 310 L 260 260 L 200 170 L 170 120"
-                          stroke="url(#liveActiveRouteGlow)"
+                          d="M 225 235 L 225 190 Q 230 170 270 165 L 280 165 L 280 108"
+                          fill="none"
+                          stroke="#1e3a8a"
+                          strokeWidth="7"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          opacity="0.3"
+                        />
+                        <path
+                          d="M 225 235 L 225 190 Q 230 170 270 165 L 280 165 L 280 108"
+                          fill="none"
+                          stroke="#2563eb"
                           strokeWidth="6"
                           strokeLinecap="round"
                           strokeLinejoin="round"
-                          fill="none"
                         />
                         <path
-                          d="M 420 310 L 340 310 L 260 260 L 200 170 L 170 120"
-                          stroke="#ffffff"
+                          d="M 225 235 L 225 190 Q 230 170 270 165 L 280 165 L 280 108"
+                          fill="none"
+                          stroke="#60a5fa"
                           strokeWidth="2"
                           strokeLinecap="round"
                           strokeLinejoin="round"
-                          strokeDasharray="6 6"
-                          fill="none"
                         />
 
-                        {/* Origin Depot Pin: Bill Scrap Guindy Depot (420, 310) */}
-                        <g transform="translate(420, 310)">
-                          <circle r="18" fill="#22c55e" opacity="0.25" />
-                          <circle r="10" fill="#16a34a" filter="url(#embeddedPinShadow)" />
-                          <circle r="4" fill="#ffffff" />
-                          {/* Label */}
-                          <g transform="translate(16, -14)">
-                            <rect x="0" y="0" width="130" height="22" rx="4" fill="#0f172a" opacity="0.9" />
-                            <text x="8" y="15" fill="#22c55e" fontSize="10" fontWeight="800">
-                              DEPOT (SIDCO Guindy)
+                        {/* CURRENT LOCATION NAVIGATION PUCK (at 225, 235) */}
+                        <g transform="translate(225, 235)">
+                          <circle r="18" fill="url(#puckPulse)" />
+                          <circle r="11" fill="#2563eb" stroke="#ffffff" strokeWidth="2.5" filter="url(#pinShadow)" />
+                          <polygon points="0,-6 5,5 0,3 -5,5" fill="#ffffff" />
+                        </g>
+
+                        {/* DESTINATION PIN & SPEECH BUBBLE CALLOUT (at 280, 108) */}
+                        <g transform="translate(280, 108)">
+                          <ellipse cx="0" cy="0" rx="4" ry="2" fill="#0f172a" opacity="0.3" />
+                          <path
+                            d="M 0 -22 C -6 -22 -10 -17 -10 -11 C -10 -4 0 0 0 0 C 0 0 10 -4 10 -11 C 10 -17 6 -22 0 -22 Z"
+                            fill="#ef4444"
+                            stroke="#dc2626"
+                            strokeWidth="1"
+                            filter="url(#pinShadow)"
+                          />
+                          <circle cx="0" cy="-11" r="3.5" fill="#ffffff" />
+
+                          {/* Floating Speech Bubble Callout */}
+                          <g transform="translate(-20, -54)" filter="url(#calloutShadow)">
+                            <rect
+                              x="0"
+                              y="0"
+                              width={Math.max(160, (workflowState.order.customerName.length * 8) + 20)}
+                              height="26"
+                              rx="6"
+                              fill="#ffffff"
+                              stroke="#FFDE7A"
+                              strokeWidth="1.5"
+                            />
+                            <polygon points="16,26 24,26 20,31" fill="#ffffff" />
+                            <text
+                              x="10"
+                              y="17"
+                              fill="#0f172a"
+                              fontSize="9.5"
+                              fontWeight="800"
+                              fontFamily="sans-serif"
+                            >
+                              {workflowState.order.customerName}
                             </text>
                           </g>
                         </g>
 
-                        {/* Moving Pickup Truck Icon (On Route at 280, 275) */}
-                        <g transform="translate(280, 275)">
-                          <circle r="16" fill="#fbc21a" opacity="0.3" />
-                          <circle r="12" fill="#0f172a" filter="url(#embeddedPinShadow)" />
-                          <text x="-7" y="5" fontSize="13">🚚</text>
-                          <g transform="translate(-30, -18)">
-                            <rect x="0" y="0" width="60" height="15" rx="3" fill="#fbc21a" />
-                            <text x="6" y="11" fill="#0f172a" fontSize="9" fontWeight="900">EN ROUTE</text>
-                          </g>
-                        </g>
-
-                        {/* Destination Factory Pin: (170, 120) */}
-                        <g transform="translate(170, 120)">
-                          <circle r="22" fill="#ef4444" opacity="0.2" />
-                          <circle r="14" fill="#dc2626" filter="url(#embeddedPinShadow)" />
-                          <circle r="6" fill="#ffffff" />
-                          {/* Company Name Badge */}
-                          <g transform="translate(-70, -32)">
-                            <rect x="0" y="0" width="140" height="26" rx="6" fill="#0f172a" filter="url(#embeddedPinShadow)" />
-                            <text x="10" y="17" fill="#ffffff" fontSize="10" fontWeight="800">
-                              {workflowState.order.customerName.length > 18
-                                ? `${workflowState.order.customerName.substring(0, 18)}...`
-                                : workflowState.order.customerName}
-                            </text>
-                          </g>
+                        {/* Google Logo at Bottom Left */}
+                        <g transform="translate(14, 268)">
+                          <text fontSize="14" fontWeight="800" fontFamily="'Product Sans', sans-serif">
+                            <tspan fill="#4285F4">G</tspan>
+                            <tspan fill="#EA4335">o</tspan>
+                            <tspan fill="#FBBC05">o</tspan>
+                            <tspan fill="#4285F4">g</tspan>
+                            <tspan fill="#34A853">l</tspan>
+                            <tspan fill="#EA4335">e</tspan>
+                          </text>
                         </g>
                       </svg>
 
-                      {/* Map Floating Controls (+ / - / Recenter) */}
-                      <div className={styles.mapFloatingControls}>
+                      {/* Map Controls Floating on Right */}
+                      <div className={styles.mapControlsColumn}>
                         <button
                           type="button"
-                          className={styles.mapCtrlBtn}
-                          onClick={() => setMapZoom((prev) => Math.min(prev + 0.25, 2))}
-                          title="Zoom In"
-                        >
-                          +
-                        </button>
-                        <button
-                          type="button"
-                          className={styles.mapCtrlBtn}
-                          onClick={() => setMapZoom((prev) => Math.max(prev - 0.25, 0.75))}
-                          title="Zoom Out"
-                        >
-                          −
-                        </button>
-                        <button
-                          type="button"
-                          className={styles.mapCtrlBtn}
+                          className={styles.mapCompassBtn}
                           onClick={() => setMapZoom(1)}
-                          title="Recenter Map"
+                          title="Recenter / My Location"
                         >
-                          📍
+                          <Crosshair size={18} />
                         </button>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Interactive Visual Route Info Card */}
-                  <div className={styles.mapFlowCard}>
-                    <div className={styles.mapFlowHeader}>
-                      <div className={styles.mapFlowHeaderLeft}>
-                        <span className={styles.mapFlowTag}>DESTINATION DISPATCH</span>
-                        <strong className={styles.mapFlowTitle}>{workflowState.order.customerName}</strong>
-                      </div>
-                      <span className={styles.mapLiveBadge}>Live Map</span>
-                    </div>
-
-                    <div className={styles.routeTimeline}>
-                      {/* Point A */}
-                      <div className={styles.routePoint}>
-                        <span className={styles.routeDotGreen} />
-                        <div className={styles.routeTextCol}>
-                          <span className={styles.routePointLabel}>ORIGIN DEPOT</span>
-                          <span className={styles.routePointAddress}>Bill Scrap Merchant Depot, SIDCO Guindy, Chennai</span>
-                        </div>
-                      </div>
-
-                      <div className={styles.routeLine} />
-
-                      {/* Point B */}
-                      <div className={styles.routePoint}>
-                        <span className={styles.routeDotRed} />
-                        <div className={styles.routeTextCol}>
-                          <span className={styles.routePointLabel}>INDUSTRY DESTINATION</span>
-                          <span className={styles.routePointAddress}>{workflowState.order.address}</span>
+                        <div className={styles.mapZoomStack}>
+                          <button
+                            type="button"
+                            className={styles.mapZoomBtn}
+                            onClick={() => setMapZoom((prev) => Math.min(prev + 0.25, 2))}
+                            title="Zoom In"
+                          >
+                            <Plus size={16} />
+                          </button>
+                          <div className={styles.zoomDivider} />
+                          <button
+                            type="button"
+                            className={styles.mapZoomBtn}
+                            onClick={() => setMapZoom((prev) => Math.max(prev - 0.25, 0.75))}
+                            title="Zoom Out"
+                          >
+                            <Minus size={16} />
+                          </button>
                         </div>
                       </div>
                     </div>
 
-                    <div className={styles.mapMetricsRow}>
-                      <div className={styles.mapMetricItem}>
-                        <span className={styles.mapMetricLabel}>Est. Distance</span>
-                        <strong className={styles.mapMetricVal}>4.2 KM</strong>
+                    {/* Bottom Destination & Trip Metrics Panel */}
+                    <div className={styles.mapBottomPanel}>
+                      {/* Destination Row */}
+                      <div className={styles.destHeaderRow}>
+                        <div className={styles.destLeftCol}>
+                          <div className={styles.destTagRow}>
+                            <MapPin size={14} className={styles.destPinIcon} />
+                            <span className={styles.destTagText}>DESTINATION</span>
+                          </div>
+                          <h4 className={styles.destCustomerName}>
+                            {workflowState.order.customerName}
+                          </h4>
+                          <p className={styles.destAddressText}>
+                            {workflowState.order.address}
+                          </p>
+                        </div>
+                        <a
+                          href={`https://maps.google.com/?q=${encodeURIComponent(workflowState.order.address)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={styles.destViewDetailsBtn}
+                        >
+                          <Navigation size={13} style={{ transform: 'rotate(45deg)' }} />
+                          <span>View Details</span>
+                        </a>
                       </div>
-                      <div className={styles.mapMetricDivider} />
-                      <div className={styles.mapMetricItem}>
-                        <span className={styles.mapMetricLabel}>Travel ETA</span>
-                        <strong className={styles.mapMetricVal}>14 Mins</strong>
-                      </div>
-                      <div className={styles.mapMetricDivider} />
-                      <div className={styles.mapMetricItem}>
-                        <span className={styles.mapMetricLabel}>Live Traffic</span>
-                        <strong className={styles.mapTrafficGreen}>Smooth Route</strong>
+
+                      <div className={styles.panelDivider} />
+
+                      {/* 3 Metrics Row */}
+                      <div className={styles.destMetricsGrid}>
+                        <div className={styles.destMetricBox}>
+                          <div className={styles.destMetricIconCircle}>
+                            <Navigation size={14} style={{ transform: 'rotate(45deg)' }} />
+                          </div>
+                          <strong className={styles.destMetricVal}>4.2 km</strong>
+                          <span className={styles.destMetricLabel}>Distance</span>
+                        </div>
+
+                        <div className={styles.destMetricBox}>
+                          <div className={styles.destMetricIconCircle}>
+                            <Clock size={14} />
+                          </div>
+                          <strong className={styles.destMetricVal}>14 min</strong>
+                          <span className={styles.destMetricLabel}>Est. Arrival</span>
+                        </div>
+
+                        <div className={styles.destMetricBox}>
+                          <div className={styles.destMetricIconCircle}>
+                            <Car size={14} />
+                          </div>
+                          <strong className={styles.destMetricValGreen}>Light Traffic</strong>
+                          <span className={styles.destMetricLabel}>Route Status</span>
+                        </div>
                       </div>
                     </div>
                   </div>
 
-                  {/* Commercial Agreed Rate Box */}
-                  <div className={styles.agreedRateBanner}>
+                  {/* AGREED BUYING RATE CARD */}
+                  <div className={styles.agreedRateCard}>
                     <div className={styles.agreedRateLeft}>
-                      <span className={styles.agreedRateLabel}>AGREED COMMERCIAL RATE</span>
-                      <strong className={styles.agreedRatePrice}>
-                        ₹{workflowState.agreedRate} <small>/ KG</small>
-                      </strong>
-                      <span className={styles.agreedRateMaterial}>
-                        {workflowState.order.materialName} ({workflowState.order.quantity})
-                      </span>
+                      <div className={styles.agreedRateIconWrap}>
+                        <FileText size={18} />
+                      </div>
+                      <div className={styles.agreedRateTextCol}>
+                        <span className={styles.agreedRateTag}>AGREED BUYING RATE</span>
+                        <strong className={styles.agreedRateMaterial}>
+                          {workflowState.order.materialName}
+                        </strong>
+                      </div>
                     </div>
-                    <div className={styles.agreedRateRight}>
-                      <span className={styles.agreedRateEstLabel}>Projected Value</span>
-                      <strong className={styles.agreedRateTotal}>
-                        ₹{(Number(workflowState.actualWeight || 90) * Number(workflowState.agreedRate || 416)).toLocaleString('en-IN')}
-                      </strong>
+                    <div className={styles.agreedRatePriceBig}>
+                      ₹{workflowState.agreedRate || 42} / KG
                     </div>
                   </div>
 
-                  <div className={styles.navigationActionsRow}>
+                  {/* DUAL ACTION BUTTONS */}
+                  <div className={styles.navDualActionsGrid}>
                     <a
                       href={`https://maps.google.com/?q=${encodeURIComponent(workflowState.order.address)}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={styles.mapLinkBtn}
+                      className={styles.btnOpenGoogleMaps}
                     >
-                      <Navigation size={15} />
-                      <span>Start Navigation (Google Maps)</span>
+                      <ExternalLink size={16} />
+                      <span>Open in Google Maps</span>
                     </a>
-                    <a href="tel:+919876543210" className={styles.callCustomerBtn}>
-                      <Phone size={15} />
+                    <a href="tel:+919876543210" className={styles.btnCallFactory}>
+                      <Phone size={16} />
                       <span>Call Factory Desk</span>
                     </a>
                   </div>
 
+                  {/* BIG YELLOW PRIMARY CTA */}
                   <button
                     type="button"
-                    className={styles.primaryActionCta}
+                    className={styles.btnArrivedAtFactory}
                     onClick={handleMarkArrived}
                   >
-                    <span>I Have Arrived at Factory Location 📍</span>
-                    <ArrowRight size={16} />
+                    <CheckCircle2 size={18} />
+                    <span>I Have Arrived at Factory Location</span>
+                    <ArrowRight size={18} />
                   </button>
                 </div>
               )}
@@ -1722,14 +1994,13 @@ export default function MerchantOrders() {
                   </div>
 
                   <p className={styles.billInstructionNotice}>
-                    📝 Search scrap catalog to quickly add items or record digital scale weights and unit prices. System automatically computes individual amounts and the final tax invoice.
+                    Search scrap catalog to quickly add items or record digital scale weights and unit prices. System automatically computes individual amounts and the final tax invoice.
                   </p>
 
                   {/* UNIVERSAL TOP SCRAP SEARCH & CATEGORY/SUBCATEGORY EXPLORER */}
                   <div className={styles.universalScrapSearchBox}>
                     <div className={styles.scrapSearchHeaderRow}>
                       <label className={styles.scrapSearchHeaderLabel}>
-                        <Search size={15} />
                         <span>SCRAP PRICE CATALOG &amp; QUICK ADD</span>
                       </label>
                       <span className={styles.scrapSearchHelpText}>
@@ -1773,7 +2044,7 @@ export default function MerchantOrders() {
                                 c.name.toLowerCase().includes(scrapSearchQuery.toLowerCase()) ||
                                 (item.quality && item.quality.toLowerCase().includes(scrapSearchQuery.toLowerCase()))
                               )
-                              .map((item) => ({ ...item, categoryName: c.name, categoryIcon: c.icon }))
+                              .map((item) => ({ ...item, categoryName: c.name }))
                           ).map((item) => (
                             <div
                               key={item.id}
@@ -1782,7 +2053,7 @@ export default function MerchantOrders() {
                             >
                               <div className={styles.subCategoryCardTop}>
                                 <span className={styles.subCategoryCategoryTag}>
-                                  {item.categoryIcon} {item.categoryName}
+                                  {item.categoryName}
                                 </span>
                                 <span className={styles.subCategoryPriceBadge}>
                                   ₹{item.defaultRate} / {item.unit}
@@ -1793,7 +2064,6 @@ export default function MerchantOrders() {
                                 <span className={styles.subCategoryQuality}>{item.quality}</span>
                               )}
                               <button type="button" className={styles.addSubItemBtn}>
-                                <Plus size={13} />
                                 <span>+ Add to Bill</span>
                               </button>
                             </div>
@@ -1807,7 +2077,6 @@ export default function MerchantOrders() {
                             <strong className={styles.customAddTitle}>+ Add "{scrapSearchQuery.trim()}"</strong>
                             <span className={styles.customAddHint}>Custom rate &amp; weight can be adjusted in bill</span>
                             <button type="button" className={styles.addSubItemBtn}>
-                              <Plus size={13} />
                               <span>+ Add Custom</span>
                             </button>
                           </div>
@@ -1826,7 +2095,6 @@ export default function MerchantOrders() {
                               }`}
                               onClick={() => setSelectedBillingCatId(cat.id)}
                             >
-                              <span className={styles.billingCategoryTabIcon}>{cat.icon}</span>
                               <span className={styles.billingCategoryTabLabel}>{cat.name}</span>
                               <span className={styles.billingCategoryCount}>({cat.items.length})</span>
                             </button>
@@ -1842,11 +2110,10 @@ export default function MerchantOrders() {
                             <div className={styles.subCategoryExplorerSection}>
                               <div className={styles.subCategoryHeaderRow}>
                                 <div className={styles.activeCatBadge}>
-                                  <span>{activeCat.icon}</span>
                                   <strong>{activeCat.name} Subcategories:</strong>
                                 </div>
                                 <span className={styles.clickToAddNotice}>
-                                  💡 Click any scrap item to instantly add to bill
+                                  Click any scrap item to instantly add to bill
                                 </span>
                               </div>
 
@@ -1869,7 +2136,6 @@ export default function MerchantOrders() {
                                     <div className={styles.subCategoryCardBottom}>
                                       <span className={styles.marketStandardTag}>Market Rate</span>
                                       <button type="button" className={styles.addSubItemBtn}>
-                                        <Plus size={13} />
                                         <span>+ Add</span>
                                       </button>
                                     </div>
@@ -2210,26 +2476,293 @@ export default function MerchantOrders() {
                       onClick={handleSubmitBill}
                     >
                       <FileCheck size={16} />
-                      <span>Submit Bill to Customer for Instant Approval (₹{calculateGrandTotal().toLocaleString('en-IN')})</span>
+                      <span>Submit Bill to Customer (₹{calculateGrandTotal().toLocaleString('en-IN')})</span>
                     </button>
                   </div>
                 </div>
               )}
 
-              {/* STAGE 5: INDUSTRY REVIEW & BILLING OTP */}
+              {/* STAGE 5: PAYMENT (CUSTOMER -> MERCHANT) */}
+              {workflowState.stage === 'payment' && (
+                <div className={styles.stageContentBox}>
+                  <div className={styles.stageHeroBadge}>
+                    <MdOutlinePayment size={18} />
+                    <span>Stage 5: Payment</span>
+                  </div>
+
+                  <p className={styles.stageSubtitleText}>
+                    Complete payment for the finalized bill.
+                  </p>
+
+                  {/* Compact Final Bill Summary Card */}
+                  <div className={styles.paymentSummaryCard}>
+                    <div className={styles.paymentSummaryTop}>
+                      <div className={styles.billNumberBlock}>
+                        <span className={styles.summarySmallLabel}>BILL NUMBER</span>
+                        <strong className={styles.summaryBillNum}>{workflowState.billNumber}</strong>
+                      </div>
+
+                      {/* Payment Status Badge */}
+                      {(!workflowState.paymentRecord || workflowState.paymentRecord.status === 'PENDING') && (
+                        <span className={styles.paymentStatusPillPending}>
+                          <FiClock size={11} />
+                          <span>Payment Pending</span>
+                        </span>
+                      )}
+                      {workflowState.paymentRecord?.status === 'INITIATED' && (
+                        <span className={styles.paymentStatusPillInitiated}>
+                          <FiClock size={11} />
+                          <span>Payment Initiated</span>
+                        </span>
+                      )}
+                      {workflowState.paymentRecord?.status === 'SUBMITTED' && (
+                        <span className={styles.paymentStatusPillSubmitted}>
+                          <FiClock size={11} />
+                          <span>Payment Submitted</span>
+                        </span>
+                      )}
+                      {workflowState.paymentRecord?.status === 'CONFIRMED' && (
+                        <span className={styles.paymentStatusPillConfirmed}>
+                          <FiCheckCircle size={11} />
+                          <span>Payment Confirmed</span>
+                        </span>
+                      )}
+                    </div>
+
+                    <div className={styles.summaryAmountRow}>
+                      <div className={styles.summaryAmountCol}>
+                        <span className={styles.summarySmallLabel}>FINAL PAYABLE AMOUNT</span>
+                        <div className={styles.summaryAmountValGroup}>
+                          <LuIndianRupee className={styles.summaryRupeeIcon} />
+                          <strong className={styles.summaryAmountVal}>
+                            {calculateGrandTotal().toLocaleString('en-IN')}
+                          </strong>
+                        </div>
+                      </div>
+                      <div className={styles.summaryWeightCol}>
+                        <span className={styles.summarySmallLabel}>ACTUAL WEIGHT</span>
+                        <strong className={styles.summaryWeightVal}>
+                          {calculateTotalWeight().toLocaleString('en-IN')} KG
+                        </strong>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Payment Method Selector */}
+                  <div className={styles.methodSelectorWrap}>
+                    <span className={styles.methodSelectLabel}>Payment Method</span>
+                    <div className={styles.methodSegmentedControl}>
+                      <button
+                        type="button"
+                        className={`${styles.segmentBtn} ${
+                          (!workflowState.paymentRecord || workflowState.paymentRecord.method === 'UPI')
+                            ? styles.segmentBtnActive
+                            : ''
+                        }`}
+                        onClick={() => handleSelectPaymentMethod('UPI')}
+                      >
+                        <MdOutlinePayment size={16} />
+                        <span>UPI</span>
+                      </button>
+                      <button
+                        type="button"
+                        className={`${styles.segmentBtn} ${
+                          workflowState.paymentRecord?.method === 'CASH' ? styles.segmentBtnActive : ''
+                        }`}
+                        onClick={() => handleSelectPaymentMethod('CASH')}
+                      >
+                        <LuWallet size={16} />
+                        <span>Cash</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* VIEW A: UPI METHOD */}
+                  {(!workflowState.paymentRecord || workflowState.paymentRecord.method === 'UPI') && (
+                    <div className={styles.upiContainerCard}>
+                      <div className={styles.payeeInfoRow}>
+                        <div className={styles.payeeCol}>
+                          <span className={styles.payeeLabel}>Payee Merchant</span>
+                          <strong className={styles.payeeNameText}>
+                            {workflowState.paymentRecord?.payeeName || DEFAULT_MERCHANT_PAYEE_NAME}
+                          </strong>
+                        </div>
+                        <div className={styles.payeeUpiBox}>
+                          <span className={styles.payeeUpiText}>
+                            {workflowState.paymentRecord?.payeeUpiId || DEFAULT_MERCHANT_UPI_ID}
+                          </span>
+                          <button
+                            type="button"
+                            className={`${styles.miniCopyBtn} ${copiedPayeeUpi ? styles.miniCopyBtnCopied : ''}`}
+                            onClick={handleCopyPayeeUpi}
+                            title="Copy Merchant UPI ID"
+                          >
+                            <FiCopy size={12} />
+                            <span>{copiedPayeeUpi ? 'Copied' : 'Copy'}</span>
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Primary Pay by any UPI app CTA */}
+                      <button
+                        type="button"
+                        className={styles.btnPayByUpiApp}
+                        onClick={handlePayByAnyUpi}
+                      >
+                        <MdOutlinePayment size={18} />
+                        <span>Pay by any UPI app (₹{calculateGrandTotal().toLocaleString('en-IN')})</span>
+                      </button>
+
+                      <p className={styles.paymentFlowHint}>
+                        Pay using your preferred UPI app. Return to BillScrap and enter the UTR below.
+                      </p>
+
+                      {/* UTR Input Form */}
+                      <form onSubmit={handleSubmitPaymentUtr} className={styles.utrFormCard}>
+                        <label htmlFor="orderUtrInput" className={styles.utrFormLabel}>
+                          UTR / Transaction ID
+                        </label>
+                        <div className={styles.utrInputRow}>
+                          <input
+                            id="orderUtrInput"
+                            type="text"
+                            value={utrInputValue}
+                            onChange={(e) => {
+                              setUtrInputValue(e.target.value);
+                              if (utrInputError) setUtrInputError('');
+                            }}
+                            placeholder={
+                              workflowState.paymentRecord?.utr
+                                ? `Recorded: ${workflowState.paymentRecord.utr}`
+                                : 'Enter UTR / Transaction ID'
+                            }
+                            className={`${styles.utrInputBox} ${utrInputError ? styles.utrInputError : ''}`}
+                            maxLength={32}
+                          />
+                          <button
+                            type="submit"
+                            className={styles.btnRecordUtr}
+                          >
+                            <LuShieldCheck size={16} />
+                            <span>I've Made the Payment</span>
+                          </button>
+                        </div>
+                        {utrInputError && (
+                          <span className={styles.utrErrorMsg}>
+                            <FiAlertCircle size={12} />
+                            <span>{utrInputError}</span>
+                          </span>
+                        )}
+
+                        {workflowState.paymentRecord?.status === 'SUBMITTED' && workflowState.paymentRecord.utr && (
+                          <div className={styles.submittedNoticeBanner}>
+                            <FiCheckCircle size={14} className={styles.submittedCheckIcon} />
+                            <div className={styles.submittedNoticeText}>
+                              <strong>Payment Submitted</strong>
+                              <span>Reference: {workflowState.paymentRecord.utr}</span>
+                            </div>
+                          </div>
+                        )}
+                      </form>
+                    </div>
+                  )}
+
+                  {/* VIEW B: CASH METHOD */}
+                  {workflowState.paymentRecord?.method === 'CASH' && (
+                    <div className={styles.cashContainerCard}>
+                      <div className={styles.cashNoticeBox}>
+                        <div className={styles.cashIconWrap}>
+                          <LuWallet size={24} />
+                        </div>
+                        <div className={styles.cashTextGroup}>
+                          <h4 className={styles.cashTitle}>Cash Payment</h4>
+                          <p className={styles.cashSub}>
+                            Confirm that the customer has paid the final bill amount in cash.
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className={styles.cashAmountHighlightCard}>
+                        <span className={styles.cashAmountLabel}>Final Amount</span>
+                        <div className={styles.cashAmountValRow}>
+                          <LuIndianRupee size={22} className={styles.cashRupeeIcon} />
+                          <strong className={styles.cashAmountVal}>
+                            {calculateGrandTotal().toLocaleString('en-IN')}
+                          </strong>
+                        </div>
+                      </div>
+
+                      {workflowState.paymentRecord?.status !== 'CONFIRMED' ? (
+                        <button
+                          type="button"
+                          className={styles.btnConfirmCash}
+                          onClick={handleConfirmCashPayment}
+                        >
+                          <FiCheckCircle size={16} />
+                          <span>Confirm Cash Payment</span>
+                        </button>
+                      ) : (
+                        <div className={styles.cashConfirmedBanner}>
+                          <FiCheckCircle size={16} className={styles.cashConfirmedIcon} />
+                          <span>Cash payment confirmed (₹{calculateGrandTotal().toLocaleString('en-IN')})</span>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Bottom Navigation Actions */}
+                  <div className={styles.paymentActionRow}>
+                    <button
+                      type="button"
+                      className={styles.editBillBackBtn}
+                      onClick={() => setWorkflowState({ ...workflowState, stage: 'bill_generated' })}
+                    >
+                      <span>← Back to Bill</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      className={`${styles.primaryActionCta} ${
+                        workflowState.paymentRecord?.status !== 'SUBMITTED' &&
+                        workflowState.paymentRecord?.status !== 'CONFIRMED'
+                          ? styles.primaryActionCtaDisabled
+                          : ''
+                      }`}
+                      onClick={handleProceedToSettlement}
+                      disabled={
+                        workflowState.paymentRecord?.status !== 'SUBMITTED' &&
+                        workflowState.paymentRecord?.status !== 'CONFIRMED'
+                      }
+                    >
+                      <ShieldCheck size={16} />
+                      <span>Continue to Settlement →</span>
+                    </button>
+                  </div>
+
+                  {workflowState.paymentRecord?.status !== 'SUBMITTED' &&
+                    workflowState.paymentRecord?.status !== 'CONFIRMED' && (
+                      <p className={styles.settlementPendingNotice}>
+                        <FiAlertCircle size={13} />
+                        <span>Payment must be submitted or confirmed before continuing to Settlement.</span>
+                      </p>
+                    )}
+                </div>
+              )}
+
+              {/* STAGE 6: SETTLEMENT CONFIRMATION OTP */}
               {workflowState.stage === 'billing_otp' && (
                 <form onSubmit={handleVerifyBillingOtp} className={styles.stageContentBox}>
                   <div className={styles.stageHeroBadge}>
                     <ShieldCheck size={18} />
-                    <span>Stage 5: Industry Billing Confirmation</span>
+                    <span>Stage 6: Settlement Confirmation</span>
                   </div>
 
                   <p className={styles.stageInstructionText}>
-                    The customer representative has reviewed the digital bill on their portal. Ask them for the <strong>4-Digit Settlement Confirmation OTP</strong> to finalize payment of <strong>₹{calculateGrandTotal().toLocaleString('en-IN')}</strong>.
+                    The customer representative has reviewed the digital bill and payment details. Ask them for the <strong>4-Digit Settlement Confirmation OTP</strong> to complete settlement of <strong>₹{calculateGrandTotal().toLocaleString('en-IN')}</strong>.
                   </p>
 
                   <div className={styles.otpInputGroup}>
-                    <label className={styles.otpLabel}>Enter 4-Digit Billing OTP</label>
+                    <label className={styles.otpLabel}>Enter 4-Digit Settlement OTP</label>
                     <input
                       type="text"
                       maxLength={4}
@@ -2242,7 +2775,7 @@ export default function MerchantOrders() {
                       autoFocus
                     />
                     <span className={styles.otpHelperText}>
-                      Sample Demo Billing OTP: <strong>7104</strong> (Auto-filled for instant verification)
+                      Sample Demo Settlement OTP: <strong>7104</strong> (Auto-filled for instant verification)
                     </span>
                   </div>
 
@@ -2250,9 +2783,9 @@ export default function MerchantOrders() {
                     <button
                       type="button"
                       className={styles.editBillBackBtn}
-                      onClick={() => setWorkflowState({ ...workflowState, stage: 'weighing' })}
+                      onClick={() => setWorkflowState({ ...workflowState, stage: 'payment' })}
                     >
-                      <span>← Back to Edit Weights &amp; Items</span>
+                      <span>← Back to Payment</span>
                     </button>
 
                     <button type="submit" className={styles.primaryActionCta}>
@@ -2290,7 +2823,7 @@ export default function MerchantOrders() {
                     <button
                       type="button"
                       className={styles.closeWorkflowBtn}
-                      onClick={() => setWorkflowState(null)}
+                      onClick={handleCloseSettledDetails}
                     >
                       <span>Close Order Details</span>
                     </button>

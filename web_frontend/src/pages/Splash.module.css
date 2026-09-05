@@ -20,6 +20,12 @@
   user-select: none;
   z-index: 999999;
   font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  transition: opacity 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.splashFadingOut {
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 /* --------------------------------------------------------------------------
@@ -410,6 +416,23 @@
   text-align: center;
   letter-spacing: -0.01em;
   transition: all 0.2s ease;
+}
+
+.progressBarTrack {
+  width: 180px;
+  height: 4px;
+  background: rgba(30, 41, 59, 0.14);
+  border-radius: 999px;
+  margin-top: 0.85rem;
+  overflow: hidden;
+  position: relative;
+}
+
+.progressBarFill {
+  height: 100%;
+  background: #1e293b;
+  border-radius: 999px;
+  transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* --------------------------------------------------------------------------

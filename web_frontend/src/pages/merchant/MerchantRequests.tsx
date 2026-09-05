@@ -4,9 +4,10 @@ import {
   Zap,
   Tag,
   ShieldCheck,
-  RotateCw,
   ChevronDown,
   ChevronUp,
+  ChevronLeft,
+  ChevronRight,
   User,
   Building,
   MapPin,
@@ -36,9 +37,9 @@ import {
   Search,
   Plus,
   Layers,
-  Sparkles,
 } from 'lucide-react';
 import { CardImageGallery } from '@/components/cards/CardImageGallery';
+import { getPrivacyArea } from '@/utils/locationPrivacy';
 import { MARKET_SCRAP_CATEGORIES, type MarketScrapSubItem } from './MerchantOrders';
 import styles from './MerchantRequests.module.css';
 
@@ -54,6 +55,13 @@ export interface QuoteProductLine {
   categoryName?: string;
 }
 
+export interface QuotedItemRate {
+  id?: string;
+  name: string;
+  ratePerUnit: number;
+  unit: string;
+}
+
 export interface QuoteOfferItem {
   id: string;
   customerName: string;
@@ -64,7 +72,8 @@ export interface QuoteOfferItem {
   images?: string[];
   quantity: string;
   address: string;
-  quotedPrice: number;
+  quotedPrice?: number;
+  itemsQuoted: QuotedItemRate[];
   pickupSlot: string;
   submittedAgo: string;
   status: 'Waiting' | 'Accepted' | 'Rejected' | 'Expired';
@@ -239,13 +248,216 @@ const INITIAL_HOUSEHOLD_REQUESTS: RequestItem[] = [
   },
 ];
 
+// Helper functions for concise, scannable cards
+function getShortLocation(fullAddress: string, posterName?: string): string {
+  return getPrivacyArea(fullAddress, posterName);
+}
+
+function formatPickupSlot(dateStr: string, timeStr: string): string {
+  const shortDate = dateStr.replace(/\s*\d{4}/, '').trim();
+  const shortTime = timeStr.replace(/:00/g, '').replace(/\s*–\s*/g, '–');
+  return `${shortDate} · ${shortTime}`;
+}
+
+function formatRelativeTime(requestedAgo: string): string {
+  return requestedAgo.replace(/requested\s*/i, '').replace(/mins/i, 'min');
+}
+
+function getShortSlot(slotStr: string): string {
+  if (!slotStr) return '';
+  return slotStr.replace(/\s*\d{4}/, '').replace(/:00/g, '').replace(/\s*–\s*/g, '–');
+}
+
+function CompactCardImageSlider({
+  images,
+  fallbackImage = '/logo-icon.png',
+  alt,
+}: {
+  images?: string[];
+  fallbackImage?: string;
+  alt: string;
+}) {
+  const [currentIdx, setCurrentIdx] = useState(0);
+  const touchStartXRef = useRef<number | null>(null);
+  const list = images && images.length > 0 ? images : [fallbackImage];
+  const total = list.length;
+  const currentSrc = list[currentIdx] || fallbackImage;
+
+  const handlePrev = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (typeof window !== 'undefined' && window.getSelection) {
+      window.getSelection()?.removeAllRanges();
+    }
+    setCurrentIdx((prev) => (prev === 0 ? total - 1 : prev - 1));
+  };
+
+  const handleNext = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (typeof window !== 'undefined' && window.getSelection) {
+      window.getSelection()?.removeAllRanges();
+    }
+    setCurrentIdx((prev) => (prev === total - 1 ? 0 : prev + 1));
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartXRef.current = e.targetTouches[0].clientX;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartXRef.current === null) return;
+    const endX = e.changedTouches[0].clientX;
+    const diff = touchStartXRef.current - endX;
+    if (Math.abs(diff) > 30) {
+      if (diff > 0) {
+        setCurrentIdx((prev) => (prev === total - 1 ? 0 : prev + 1));
+      } else {
+        setCurrentIdx((prev) => (prev === 0 ? total - 1 : prev - 1));
+      }
+    }
+    touchStartXRef.current = null;
+  };
+
+  return (
+    <div
+      className={styles.compactImageFrame}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
+      <img
+        src={currentSrc}
+        alt={`${alt} (${currentIdx + 1} of ${total})`}
+        className={styles.compactImage}
+        onError={(e) => {
+          (e.currentTarget as HTMLImageElement).src = fallbackImage;
+        }}
+      />
+      {total > 1 && (
+        <>
+          <button
+            type="button"
+            className={`${styles.compactImgNavBtn} ${styles.compactImgNavLeft}`}
+            onClick={handlePrev}
+            onMouseDown={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+            onTouchStart={(e) => {
+              e.stopPropagation();
+            }}
+            aria-label="Previous image"
+            title="Previous image"
+          >
+            <ChevronLeft size={16} />
+          </button>
+          <button
+            type="button"
+            className={`${styles.compactImgNavBtn} ${styles.compactImgNavRight}`}
+            onClick={handleNext}
+            onMouseDown={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+            onTouchStart={(e) => {
+              e.stopPropagation();
+            }}
+            aria-label="Next image"
+            title="Next image"
+          >
+            <ChevronRight size={16} />
+          </button>
+          <span className={styles.compactImageCounter}>
+            {currentIdx + 1}/{total}
+          </span>
+        </>
+      )}
+    </div>
+  );
+}
+
+function OfferItemsList({
+  offerId,
+  items,
+  fallbackName = 'Scrap Material',
+  statusType = 'waiting',
+}: {
+  offerId: string;
+  items?: QuotedItemRate[];
+  fallbackName?: string;
+  statusType?: 'accepted' | 'waiting' | 'rejected' | 'expired';
+}) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const resolvedItems: QuotedItemRate[] =
+    items && items.length > 0
+      ? items
+      : [{ name: fallbackName, ratePerUnit: 0, unit: 'KG' }];
+
+  const totalItems = resolvedItems.length;
+  const VISIBLE_COUNT = 3;
+  const hasMoreThan3 = totalItems > VISIBLE_COUNT;
+
+  // Show only 3 items properly when collapsed, and all items when expanded
+  const displayedItems = isExpanded ? resolvedItems : resolvedItems.slice(0, VISIBLE_COUNT);
+
+  return (
+    <div className={styles.offerRatesSection}>
+      <div className={styles.offerRatesSectionHeader}>
+        <span className={styles.offerRatesHeaderTitle}>
+          Offered Prices ({totalItems} {totalItems === 1 ? 'item' : 'items'})
+        </span>
+        <span className={styles.offerRatesWeightNote}>Payable on scale weight</span>
+      </div>
+
+      <div className={styles.offerItemsListContainer}>
+        {displayedItems.map((it, idx) => (
+          <div key={`${offerId}-rate-${idx}`} className={styles.offerItemRow}>
+            <div className={styles.offerItemLeft}>
+              <span className={styles.offerItemDot}>•</span>
+              <span className={styles.offerItemNameText} title={it.name}>
+                {it.name}
+              </span>
+            </div>
+            <div
+              className={`${styles.offerItemPriceBadge} ${
+                statusType === 'rejected' || statusType === 'expired'
+                  ? styles.priceBadgeMuted
+                  : ''
+              }`}
+            >
+              <strong className={styles.offerItemRateText}>₹{it.ratePerUnit || 0}</strong>
+              <span className={styles.offerItemUnitText}>/ {it.unit}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {hasMoreThan3 && (
+        <button
+          type="button"
+          className={styles.viewMoreOfferItemsBtn}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setIsExpanded((prev) => !prev);
+          }}
+          aria-expanded={isExpanded}
+        >
+          <span>{isExpanded ? 'View Less' : `View More (+${totalItems - VISIBLE_COUNT} items)`}</span>
+          {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+        </button>
+      )}
+    </div>
+  );
+}
+
 export default function MerchantRequests() {
+  const [primaryTab, setPrimaryTab] = useState<'available' | 'offers'>('available');
+  const [offerFilter, setOfferFilter] = useState<'all' | 'waiting' | 'accepted' | 'closed'>('all');
   const [activeTab, setActiveTab] = useState<'Industry' | 'Individual'>('Industry');
   const [industryRequests, setIndustryRequests] = useState<RequestItem[]>(INITIAL_INDUSTRY_REQUESTS);
   const [householdRequests, setHouseholdRequests] = useState<RequestItem[]>(INITIAL_HOUSEHOLD_REQUESTS);
-
-  // Mobile Top Tab Switcher (Available Requests vs My Offers)
-  const [mobileActiveTab, setMobileActiveTab] = useState<'available' | 'offers'>('available');
 
   const [submittedOffers, setSubmittedOffers] = useState<QuoteOfferItem[]>([
     {
@@ -257,7 +469,10 @@ export default function MerchantRequests() {
       image: '/scrap-brass.jpg',
       quantity: '50 – 100 KG',
       address: '16, Porur Main Road, Porur, Chennai – 600116, Tamil Nadu',
-      quotedPrice: 31200,
+      itemsQuoted: [
+        { name: 'Brass Scrap', ratePerUnit: 390, unit: 'KG' },
+        { name: 'MA - solid alloy', ratePerUnit: 340, unit: 'KG' },
+      ],
       pickupSlot: '12 May 2025, 01:00 PM – 03:00 PM',
       submittedAgo: 'Submitted 2 hours ago',
       status: 'Accepted',
@@ -268,12 +483,14 @@ export default function MerchantRequests() {
       id: 'QUO-250512-00078',
       customerName: 'Sri Venkatesh Heavy Industries',
       customerType: 'Industry',
-      materialName: 'Heavy Melting Steel Scrap',
+      materialName: 'Scrap Iron',
       materialCondition: 'Clean Segregated',
       image: '/industry-steel-scrap.jpg',
       quantity: '500 – 800 KG',
       address: '24, 5th Main Road, SIDCO Industrial Estate, Guindy, Chennai',
-      quotedPrice: 18500,
+      itemsQuoted: [
+        { name: 'Scrap Iron', ratePerUnit: 42, unit: 'KG' },
+      ],
       pickupSlot: '13 May 2025, 10:00 AM – 12:00 PM',
       submittedAgo: 'Submitted 35 mins ago',
       status: 'Waiting',
@@ -289,7 +506,9 @@ export default function MerchantRequests() {
       image: '/industry-copper-scrap.jpg',
       quantity: '15 – 25 KG',
       address: '7th Avenue, Anna Nagar, Chennai – 600040',
-      quotedPrice: 14200,
+      itemsQuoted: [
+        { name: 'Copper Scrap', ratePerUnit: 720, unit: 'KG' },
+      ],
       pickupSlot: '11 May 2025, 04:00 PM',
       submittedAgo: 'Submitted 1 day ago',
       status: 'Rejected',
@@ -300,12 +519,17 @@ export default function MerchantRequests() {
       id: 'QUO-250510-00054',
       customerName: 'Apex Precision Tools',
       customerType: 'Industry',
-      materialName: 'Aluminium Profile Scrap',
+      materialName: 'commercial aluminium',
       materialCondition: 'Mixed',
       image: '/industry-aluminium-scrap.jpg',
       quantity: '200 – 350 KG',
       address: 'Industrial Estate, Ambattur, Chennai',
-      quotedPrice: 38000,
+      itemsQuoted: [
+        { name: 'commercial aluminium', ratePerUnit: 165, unit: 'KG' },
+        { name: 'household aluminium', ratePerUnit: 135, unit: 'KG' },
+        { name: 'MA - solid alloy', ratePerUnit: 185, unit: 'KG' },
+        { name: 'bus body', ratePerUnit: 150, unit: 'KG' },
+      ],
       pickupSlot: '10 May 2025, 11:00 AM',
       submittedAgo: 'Submitted 2 days ago',
       status: 'Expired',
@@ -314,7 +538,6 @@ export default function MerchantRequests() {
     },
   ]);
 
-  const [countdown, setCountdown] = useState(25);
   const [selectedScrapFilter, setSelectedScrapFilter] = useState('All Types');
   const [selectedAmountFilter, setSelectedAmountFilter] = useState('All Amounts');
   const [selectedLocationFilter, setSelectedLocationFilter] = useState('All Locations');
@@ -348,15 +571,9 @@ export default function MerchantRequests() {
     condition: string;
     quantity: string;
     posterName: string;
+    images?: string[];
+    currentIndex?: number;
   } | null>(null);
-
-  // Auto refresh timer simulation
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCountdown((c) => (c > 1 ? c - 1 : 30));
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
 
   // Voice recording timer
   useEffect(() => {
@@ -405,48 +622,39 @@ export default function MerchantRequests() {
     return { num: 100, unit: 'KG' };
   };
 
-  // Helper to match scrap catalog item
-  const findMatchingMarketItem = (name: string) => {
+  // Helper to match best scrap catalog category for merchant convenience
+  const findMatchingCategoryId = (name: string): string => {
     const lower = name.toLowerCase();
     for (const cat of MARKET_SCRAP_CATEGORIES) {
       for (const item of cat.items) {
         if (lower.includes(item.name.toLowerCase()) || item.name.toLowerCase().includes(lower)) {
-          return { item, cat };
+          return cat.id;
         }
       }
     }
-    if (lower.includes('copper')) return { item: { id: 'COP_001', name: 'Copper Scrap', defaultRate: 720, unit: 'KG' }, cat: MARKET_SCRAP_CATEGORIES[1] };
-    if (lower.includes('steel') || lower.includes('iron')) return { item: { id: 'IRON_001', name: 'Scrap Iron', defaultRate: 42, unit: 'KG' }, cat: MARKET_SCRAP_CATEGORIES[0] };
-    if (lower.includes('brass')) return { item: { id: 'BRS_001', name: 'Brass Scrap (Honey)', defaultRate: 490, unit: 'KG' }, cat: MARKET_SCRAP_CATEGORIES[1] };
-    if (lower.includes('aluminium')) return { item: { id: 'ALU_003', name: 'Commercial Aluminium', defaultRate: 165, unit: 'KG' }, cat: MARKET_SCRAP_CATEGORIES[1] };
-    if (lower.includes('paper') || lower.includes('cardboard') || lower.includes('box')) return { item: { id: 'CRD_001', name: 'Cardboard (Corrugated Box)', defaultRate: 13, unit: 'KG' }, cat: MARKET_SCRAP_CATEGORIES[2] };
-    return { item: { id: 'GEN_001', name, defaultRate: 45, unit: 'KG' }, cat: MARKET_SCRAP_CATEGORIES[0] };
+    if (lower.includes('steel') || lower.includes('iron')) return 'CAT_IRON';
+    if (lower.includes('plastic') || lower.includes('bottle')) return 'CAT_PLASTIC';
+    if (lower.includes('copper') || lower.includes('aluminium') || lower.includes('brass') || lower.includes('metal')) return 'CAT_MATERIAL';
+    if (lower.includes('paper') || lower.includes('cardboard') || lower.includes('box')) return 'CAT_PAPER_CARDBOARD';
+    if (lower.includes('battery')) return 'CAT_BATTERY';
+    if (lower.includes('wire') || lower.includes('cable')) return 'CAT_WIRES';
+    if (lower.includes('computer') || lower.includes('cpu') || lower.includes('ewaste')) return 'CAT_EWASTE';
+    if (lower.includes('ac') || lower.includes('fridge') || lower.includes('appliance')) return 'CAT_HOME_APPLIANCES';
+    return 'CAT_IRON';
   };
 
   const handleOpenQuoteModal = (req: RequestItem) => {
     setActiveQuoteRequest(req);
-    const { num, unit } = parseQtyInfo(req.quantity);
-    const match = findMatchingMarketItem(req.materialName);
+    const catId = findMatchingCategoryId(req.materialName);
 
-    setQuoteProductLines([
-      {
-        id: `PROD-${Date.now()}-1`,
-        name: req.materialName,
-        quantity: req.quantity,
-        unit: match.item.unit || unit,
-        estimatedQtyNumber: num,
-        ratePerUnit: match.item.defaultRate,
-        marketRate: match.item.defaultRate,
-        categoryIcon: match.cat.icon,
-        categoryName: match.cat.name,
-      },
-    ]);
+    // No auto-populated metal price setup - merchant adds permanent catalog items themselves
+    setQuoteProductLines([]);
     setQuoteSearchQuery('');
-    setSelectedQuoteCatId(match.cat.id || 'CAT_IRON');
-    setShowCategoryExplorer(false);
+    setSelectedQuoteCatId(catId);
+    setShowCategoryExplorer(true); // Open catalog directly for merchant to choose items
     setQuotePickupDate('2025-05-13');
     setQuotePickupTime(req.pickupTime || '10:00 AM – 12:00 PM');
-    setQuoteNote('We bring calibrated digital scales and provide instant spot settlement.');
+    setQuoteNote('');
     setIsRecording(false);
     setRecordingSeconds(0);
     setHasRecordedAudio(false);
@@ -545,8 +753,12 @@ export default function MerchantRequests() {
   const handleSubmitQuote = (e: React.FormEvent) => {
     e.preventDefault();
     if (!activeQuoteRequest) return;
-    if (quoteProductLines.length === 0 || quoteProductLines.some((p) => !p.ratePerUnit || p.ratePerUnit <= 0)) {
-      triggerToast('⚠️ Please enter a valid per-unit price for all quoted products.');
+    if (quoteProductLines.length === 0) {
+      triggerToast('⚠️ Please add at least one scrap material from the catalog to submit your quote.');
+      return;
+    }
+    if (quoteProductLines.some((p) => !p.ratePerUnit || p.ratePerUnit <= 0)) {
+      triggerToast('⚠️ Please enter a valid buying rate for all quoted products.');
       return;
     }
 
@@ -580,6 +792,11 @@ export default function MerchantRequests() {
       quantity: activeQuoteRequest.quantity,
       address: activeQuoteRequest.address,
       quotedPrice: totalQuoteEstAmount,
+      itemsQuoted: quoteProductLines.map((p) => ({
+        name: p.name,
+        ratePerUnit: p.ratePerUnit,
+        unit: p.unit,
+      })),
       pickupSlot: `${quotePickupDate}, ${quotePickupTime}`,
       submittedAgo: 'Just now',
       status: 'Waiting',
@@ -669,463 +886,534 @@ export default function MerchantRequests() {
 
   const pendingCount = filteredRequests.filter((r) => r.status === 'pending').length;
 
+  const displayOffers = submittedOffers.filter((offer) => {
+    if (offerFilter === 'waiting') return offer.statusType === 'waiting';
+    if (offerFilter === 'accepted') return offer.statusType === 'accepted';
+    if (offerFilter === 'closed') return offer.statusType === 'rejected' || offer.statusType === 'expired';
+    return true;
+  });
+
   return (
     <div className={styles.pageWrapper}>
       {/* Toast Notification Banner */}
       {toastMessage && (
         <div className={styles.toastBanner}>
-          <CheckCircle2 size={18} />
-          <span>{toastMessage}</span>
+          <CheckCircle2 size={18} className={styles.toastIcon} />
+          <span className={styles.toastText}>{toastMessage.replace(/^✓\s*/, '')}</span>
         </div>
       )}
 
       <main className={styles.mainContainer}>
         <div className={styles.requestsLayoutGrid}>
           {/* ================================================================
-              LEFT COLUMN: MAIN REQUESTS LIST (70%)
+              LEFT COLUMN: MAIN WORKFLOW (AVAILABLE REQUESTS / MY OFFERS)
              ================================================================ */}
           <section className={styles.mainCol}>
             {/* 1. Page Header */}
             <div className={styles.pageHeaderRow}>
               <div className={styles.headerTitleGroup}>
-                <h1 className={styles.pageTitle}>New Scrap Requests</h1>
+                <h1 className={styles.pageTitle}>
+                  {primaryTab === 'available' ? 'New Scrap Requests' : 'My Offers'}
+                </h1>
                 <p className={styles.pageSubtitle}>
-                  Review live scrap inquiries, submit competitive quotes, and lock in direct pickups.
+                  {primaryTab === 'available'
+                    ? 'Review nearby requests and send your quote.'
+                    : "Track quotes you've sent and start pickups."}
                 </p>
               </div>
-
-              <div className={styles.autoRefreshTag}>
-                <RotateCw size={13} />
-                <span>Auto refresh in {countdown}s</span>
-              </div>
             </div>
 
-            {/* 2. 4-Column Highlights Strip */}
-            <div className={styles.highlightsGrid}>
-              <div className={styles.highlightCard}>
-                <div className={styles.highlightIconCircle}>
-                  <Zap size={16} />
-                </div>
-                <div className={styles.highlightTextCol}>
-                  <span className={styles.highlightTitle}>Direct Leads</span>
-                  <span className={styles.highlightSub}>100% verified inquiries</span>
-                </div>
-              </div>
-
-              <div className={styles.highlightCard}>
-                <div className={styles.highlightIconCircle}>
-                  <Tag size={15} />
-                </div>
-                <div className={styles.highlightTextCol}>
-                  <span className={styles.highlightTitle}>Custom Quotes</span>
-                  <span className={styles.highlightSub}>Set your own buying price</span>
-                </div>
-              </div>
-
-              <div className={styles.highlightCard}>
-                <div className={styles.highlightIconCircle}>
-                  <Volume2 size={16} />
-                </div>
-                <div className={styles.highlightTextCol}>
-                  <span className={styles.highlightTitle}>Voice Quotes</span>
-                  <span className={styles.highlightSub}>Record audio instructions</span>
-                </div>
-              </div>
-
-              <div className={styles.highlightCard}>
-                <div className={styles.highlightIconCircle}>
-                  <ShieldCheck size={16} />
-                </div>
-                <div className={styles.highlightTextCol}>
-                  <span className={styles.highlightTitle}>Lead Priority</span>
-                  <span className={styles.highlightSub}>On-time commission boost</span>
-                </div>
-              </div>
-            </div>
-
-            {/* MOBILE TOP TAB SWITCHER (Available Requests vs My Offers) */}
-            <div className={styles.mobileTopTabTrack}>
-              <button
-                type="button"
-                className={`${styles.mobileTabBtn} ${
-                  mobileActiveTab === 'available' ? styles.mobileTabBtnActive : ''
-                }`}
-                onClick={() => setMobileActiveTab('available')}
-              >
-                <span>Available Requests</span>
-                <span className={styles.mobileTabCount}>{industryRequests.length + householdRequests.length}</span>
-              </button>
-              <button
-                type="button"
-                className={`${styles.mobileTabBtn} ${
-                  mobileActiveTab === 'offers' ? styles.mobileTabBtnActive : ''
-                }`}
-                onClick={() => setMobileActiveTab('offers')}
-              >
-                <span>My Offers</span>
-                <span className={styles.mobileTabCountOffers}>{submittedOffers.length}</span>
-              </button>
-            </div>
-
-            {/* 3. Tab Switcher: Industry Requests vs Household Requests (Desktop & Mobile Available Tab) */}
-            <div className={`${styles.tabContainer} ${mobileActiveTab === 'offers' ? styles.tabContainerMobileHidden : ''}`}>
-              <div className={styles.tabTrack}>
+            {/* 2. Primary Two-Mode Tabs: Available Requests vs My Offers */}
+            <div className={styles.primaryTabsContainer}>
+              <div className={styles.primaryTabsTrack}>
                 <button
                   type="button"
-                  className={[
-                    styles.tabButton,
-                    activeTab === 'Industry' ? styles.tabButtonActive : '',
-                  ].join(' ')}
-                  onClick={() => setActiveTab('Industry')}
+                  className={`${styles.primaryTabBtn} ${
+                    primaryTab === 'available' ? styles.primaryTabBtnActive : ''
+                  }`}
+                  onClick={() => setPrimaryTab('available')}
                 >
-                  <Building size={17} />
-                  <span>Industry Requests</span>
-                  <span className={activeTab === 'Industry' ? styles.tabCountBadgeActive : styles.tabCountBadge}>
-                    {industryRequests.filter((r) => r.status === 'pending').length}
-                  </span>
-                </button>
-
-                <button
-                  type="button"
-                  className={[
-                    styles.tabButton,
-                    activeTab === 'Individual' ? styles.tabButtonActive : '',
-                  ].join(' ')}
-                  onClick={() => setActiveTab('Individual')}
-                >
-                  <User size={17} />
-                  <span>Household Requests</span>
-                  <span className={activeTab === 'Individual' ? styles.tabCountBadgeActive : styles.tabCountBadge}>
-                    {householdRequests.filter((r) => r.status === 'pending').length}
-                  </span>
-                </button>
-              </div>
-            </div>
-
-            {/* MOBILE MY OFFERS FEED (Visible on mobile when My Offers tab is selected) */}
-            {mobileActiveTab === 'offers' && (
-              <div className={styles.mobileOffersSection}>
-                <div className={styles.mobileOffersHeaderRow}>
-                  <h2 className={styles.mobileOffersTitle}>My Submitted Offers ({submittedOffers.length})</h2>
-                  <span className={styles.mobileOffersSub}>Track live response &amp; accepted pickups</span>
-                </div>
-
-                <div className={styles.mobileOffersList}>
-                  {submittedOffers.map((offer) => (
-                    <article
-                      key={offer.id}
-                      className={`${styles.mobileOfferCard} ${
-                        offer.statusType === 'accepted' ? styles.mobileOfferCardAccepted : ''
-                      }`}
-                    >
-                      <div className={styles.mobileOfferHeader}>
-                        <span
-                          className={`${styles.mobileOfferStatusBadge} ${
-                            styles[`statusBadge_${offer.statusType}`]
-                          }`}
-                        >
-                          {offer.statusType === 'accepted' && '✓ '}
-                          {offer.statusBadgeText}
-                        </span>
-                        <span className={styles.mobileOfferId}>ID: {offer.id}</span>
-                      </div>
-
-                      <div className={styles.mobileOfferCustomerRow}>
-                        <span className={styles.mobileCustomerLabel}>Customer:</span>
-                        <strong className={styles.mobileCustomerName}>{offer.customerName}</strong>
-                        <span className={styles.mobileCustomerTypePill}>{offer.customerType}</span>
-                      </div>
-
-                      <div className={styles.mobileOfferBodyGrid}>
-                        <img src={offer.image} alt={offer.materialName} className={styles.mobileOfferThumb} />
-                        <div className={styles.mobileOfferInfoCol}>
-                          <h3 className={styles.mobileOfferMat}>{offer.materialName}</h3>
-                          <span className={styles.mobileOfferCondition}>{offer.materialCondition}</span>
-                          <span className={styles.mobileOfferQty}>
-                            Quantity: <strong>{offer.quantity}</strong>
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className={styles.mobileOfferQuoteBox}>
-                        <div className={styles.mobileQuoteLeft}>
-                          <span className={styles.mobileQuoteLabel}>Your Submitted Offer</span>
-                          <strong className={styles.mobileQuotePrice}>
-                            ₹{offer.quotedPrice.toLocaleString('en-IN')} <small>Total</small>
-                          </strong>
-                        </div>
-                        <div className={styles.mobileQuoteRight}>
-                          <span className={styles.mobileSlotLabel}>Offered Slot:</span>
-                          <span className={styles.mobileSlotText}>{offer.pickupSlot}</span>
-                        </div>
-                      </div>
-
-                      <div className={styles.mobileOfferLocRow}>
-                        <MapPin size={13} className={styles.locIconMuted} />
-                        <span>{offer.address}</span>
-                      </div>
-
-                      {offer.statusType === 'accepted' ? (
-                        <div className={styles.mobileAcceptedActionBox}>
-                          <div className={styles.mobileAcceptedNotice}>
-                            🎉 Customer agreed to ₹{offer.quotedPrice.toLocaleString('en-IN')} offer!
-                          </div>
-                          <Link
-                            to={`/orders?orderId=${offer.id.replace('QUO', 'ORD')}&customer=${encodeURIComponent(offer.customerName)}&rate=${offer.quotedPrice}&action=pickup`}
-                            className={styles.mobileGoToOrderBtn}
-                          >
-                            <Truck size={15} />
-                            <span>Go to Order Details &amp; Start Pickup →</span>
-                          </Link>
-                        </div>
-                      ) : (
-                        <div className={styles.mobileOfferFooterRow}>
-                          <span className={styles.mobileSubmittedTime}>{offer.submittedAgo}</span>
-                          <span className={styles.mobileOfferStatusSub}>
-                            {offer.statusType === 'waiting' && '⏳ Waiting for customer review'}
-                            {offer.statusType === 'rejected' && '❌ Offer not selected'}
-                            {offer.statusType === 'expired' && '⏰ Request time limit passed'}
-                          </span>
-                        </div>
-                      )}
-                    </article>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* 4. Requests Counter Bar & Sorting */}
-            <div className={`${styles.requestsBar} ${mobileActiveTab === 'offers' ? styles.requestsBarMobileHidden : ''}`}>
-              <div className={styles.countGroup}>
-                <h2 className={styles.countHeading}>
-                  {pendingCount} {activeTab === 'Industry' ? 'Industry' : 'Household'} Requests
-                </h2>
-                <span className={styles.liveBadge}>Live</span>
-              </div>
-
-              <div className={styles.sortSelector}>
-                <span>Sort by: Newest First</span>
-                <ChevronDown size={14} />
-              </div>
-            </div>
-
-            {/* 5. Requests List (Redesigned Image-First Cards) */}
-            <div className={`${styles.requestsList} ${mobileActiveTab === 'offers' ? styles.requestsListMobileHidden : ''}`}>
-              {filteredRequests.map((item) => (
-                <article key={item.id} className={styles.requestCard}>
-                  {/* Top Poster & Request ID Strip */}
-                  <div className={styles.cardHeaderRow}>
-                    <div className={styles.cardHeaderLeft}>
-                      <span className={styles.newBadge}>NEW</span>
-                      <div className={styles.posterGroup}>
-                        <span className={styles.posterLabel}>Posted by:</span>
-                        <span className={styles.posterName}>{item.posterName}</span>
-                      </div>
-                      <div className={styles.requesterTypeBadge}>
-                        {item.requesterType === 'Individual' ? <User size={12} /> : <Building size={12} />}
-                        <span>{item.requesterType}</span>
-                      </div>
-                    </div>
-
-                    <span className={styles.requestIdMuted}>ID: {item.id}</span>
+                  <div className={styles.primaryTabContent}>
+                    <span className={styles.primaryTabTitle}>AVAILABLE REQUESTS</span>
+                    <span className={styles.primaryTabCountLarge}>
+                      {industryRequests.filter((r) => r.status === 'pending').length +
+                        householdRequests.filter((r) => r.status === 'pending').length}
+                    </span>
                   </div>
+                </button>
 
-                  {/* Redesigned Card Body: Prominent Top/Left Image + Clear Scrap Specs */}
-                  <div className={styles.cardBodyGrid}>
-                    {/* 1. Large Image Showcase Column with Multi-Image Swipe */}
-                    <div className={styles.imageShowcaseCol}>
-                      <CardImageGallery
-                        images={item.images || [item.image]}
+                <button
+                  type="button"
+                  className={`${styles.primaryTabBtn} ${
+                    primaryTab === 'offers' ? styles.primaryTabBtnActive : ''
+                  }`}
+                  onClick={() => setPrimaryTab('offers')}
+                >
+                  <div className={styles.primaryTabContent}>
+                    <span className={styles.primaryTabTitle}>MY OFFERS</span>
+                    <span className={styles.primaryTabCountLarge}>
+                      {submittedOffers.length}
+                    </span>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            {/* ============================================================
+                MODE A: AVAILABLE REQUESTS FEED
+               ============================================================ */}
+            {primaryTab === 'available' && (
+              <>
+                {/* Category Sub-pills: Industry Requests vs Household */}
+                <div className={styles.categorySubTrack}>
+                  <button
+                    type="button"
+                    className={`${styles.categorySubBtn} ${
+                      activeTab === 'Industry' ? styles.categorySubBtnActive : ''
+                    }`}
+                    onClick={() => setActiveTab('Industry')}
+                  >
+                    <Building size={15} />
+                    <span>Industry</span>
+                    <span
+                      className={
+                        activeTab === 'Industry'
+                          ? styles.categorySubBadgeActive
+                          : styles.categorySubBadge
+                      }
+                    >
+                      {industryRequests.filter((r) => r.status === 'pending').length}
+                    </span>
+                  </button>
+
+                  <button
+                    type="button"
+                    className={`${styles.categorySubBtn} ${
+                      activeTab === 'Individual' ? styles.categorySubBtnActive : ''
+                    }`}
+                    onClick={() => setActiveTab('Individual')}
+                  >
+                    <User size={15} />
+                    <span>Household</span>
+                    <span
+                      className={
+                        activeTab === 'Individual'
+                          ? styles.categorySubBadgeActive
+                          : styles.categorySubBadge
+                      }
+                    >
+                      {householdRequests.filter((r) => r.status === 'pending').length}
+                    </span>
+                  </button>
+                </div>
+
+                {/* Counter Bar */}
+                <div className={styles.requestsBar}>
+                  <div className={styles.countGroup}>
+                    <h2 className={styles.countHeading}>
+                      {pendingCount} {activeTab === 'Industry' ? 'Industry' : 'Household'} Requests
+                    </h2>
+                    <span className={styles.liveBadge}>Live</span>
+                  </div>
+                </div>
+
+                {/* 5-Question Scannable Request Cards */}
+                <div className={styles.compactRequestsList}>
+                  {filteredRequests.map((item) => (
+                    <article
+                      key={item.id}
+                      className={styles.compactRequestCard}
+                      onClick={() => setDetailsModalRequest(item)}
+                    >
+                      {/* Card Header: Meta row (NEW + time) and Poster Name below */}
+                      <div className={styles.compactCardHeader}>
+                        <div className={styles.compactCardTopRow}>
+                          <div className={styles.compactCardTopLeft}>
+                            <span className={styles.newBadge}>NEW</span>
+                            <span className={styles.compactTimeAgo}>
+                              {formatRelativeTime(item.requestedAgo)}
+                            </span>
+                          </div>
+                        </div>
+                        <div className={styles.compactPosterRow}>
+                          <span className={styles.compactPosterName}>{item.posterName}</span>
+                          <span className={styles.compactRequesterTypePill}>
+                            {item.requesterType === 'Individual' ? 'Household' : 'Industry'}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Scrap Image Slider with Left/Right Navigation Arrows */}
+                      <CompactCardImageSlider
+                        images={item.images && item.images.length > 0 ? item.images : [item.image]}
                         fallbackImage={item.image || '/logo-icon.png'}
-                        materialName={item.materialName}
-                        materialCondition={item.materialCondition}
-                        onOpenPreview={(src) =>
-                          setFloatingImage({
-                            src,
-                            title: item.materialName,
-                            condition: item.materialCondition,
-                            quantity: item.quantity,
-                            posterName: item.posterName,
-                          })
-                        }
+                        alt={item.materialName}
                       />
 
-                      <div className={styles.materialTitleBlock}>
-                        <h3 className={styles.materialTitle}>{item.materialName}</h3>
-                        <div className={styles.quantityTag}>
-                          <span className={styles.quantityHighlight}>{item.quantity}</span>
-                          <span className={styles.approxText}>(Approx.)</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* 2. Middle Column: Address & Pickup Schedule */}
-                    <div className={styles.detailsCol}>
-                      <div className={styles.detailRow}>
-                        <MapPin size={16} className={styles.detailIcon} />
-                        <div className={styles.addressCol}>
-                          <span className={styles.detailLabel}>PICKUP ADDRESS</span>
-                          <span className={styles.addressValue}>{item.address}</span>
-                        </div>
+                      {/* What? & How much? */}
+                      <div className={styles.compactMaterialBlock}>
+                        <h3 className={styles.compactMaterialTitle}>{item.materialName}</h3>
+                        <div className={styles.compactQuantity}>{item.quantity}</div>
                       </div>
 
-                      <div className={styles.detailRow}>
-                        <Calendar size={16} className={styles.detailIcon} />
-                        <div className={styles.pickupTimeRow}>
-                          <span className={styles.detailLabel}>PICKUP BY</span>
-                          <span className={styles.pickupTimeValue}>
-                            {item.pickupDate} &nbsp;•&nbsp; {item.pickupTime}
-                          </span>
+                      {/* Where? & When? */}
+                      <div className={styles.compactPickupBlock}>
+                        <div className={styles.compactPickupRow}>
+                          <MapPin size={14} className={styles.compactPickupIcon} />
+                          <span>Pickup Area: {getPrivacyArea(item.address, item.posterName)}</span>
+                        </div>
+                        <div className={styles.compactPickupRow}>
+                          <Clock size={14} className={styles.compactPickupIcon} />
+                          <span>{formatPickupSlot(item.pickupDate, item.pickupTime)}</span>
                         </div>
                       </div>
 
-                      {/* If Quote is already submitted (Industry) or Pickup accepted (Household) */}
-                      {item.status === 'accepted' && (
-                        item.requesterType === 'Industry' && item.submittedQuote ? (
-                          <div className={styles.submittedQuoteBanner}>
-                            <CheckCircle2 size={15} />
-                            <span>
-                              Quote Sent: <strong>₹{item.submittedQuote.price.toLocaleString('en-IN')}</strong> for {item.submittedQuote.pickupTime}
-                              {item.submittedQuote.hasVoiceNote && ' • 🎙️ Audio Included'}
-                            </span>
-                          </div>
-                        ) : (
-                          <div className={styles.submittedQuoteBanner}>
-                            <CheckCircle2 size={15} />
-                            <span>
-                              ✓ Doorstep Pickup Accepted • Ready to move to house for weighing &amp; spot payment
-                            </span>
-                          </div>
-                        )
-                      )}
-                    </div>
-
-                    {/* 3. Right Column: Response Deadline & Action Buttons */}
-                    <div className={styles.actionsCol}>
-                      <div className={styles.respondBeforeGroup}>
-                        <span className={styles.respondBeforeLabel}>Respond before</span>
-                        <span className={styles.respondBeforeTime}>{item.respondTime}</span>
-                        <span className={styles.respondBeforeDate}>{item.respondDate}</span>
+                      {/* Trust indicator */}
+                      <div className={styles.compactTrustRow}>
+                        <ShieldCheck size={13} className={styles.compactTrustIcon} />
+                        <span>Verified contact</span>
                       </div>
 
-                      <div className={styles.buttonsStack}>
+                      {/* Single Primary Action Button */}
+                      <div className={styles.compactActionRow}>
                         {item.status === 'accepted' ? (
-                          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem', width: '100%' }}>
-                            <div className={styles.acceptedTagBadge}>
-                              <Check size={14} />
-                              <span>{item.requesterType === 'Individual' ? 'Pickup Accepted' : 'Quote Submitted'}</span>
-                            </div>
-                            {item.requesterType === 'Individual' && (
-                              <Link
-                                to="/ride"
-                                className={styles.navigateHouseBtn}
-                                title="Move to customer house for pickup"
-                              >
-                                <Truck size={13} />
-                                <span>Go to House →</span>
-                              </Link>
-                            )}
+                          <div className={styles.compactAcceptedBadge}>
+                            <CheckCircle2 size={15} />
+                            <span>
+                              {item.requesterType === 'Individual'
+                                ? 'Pickup Accepted'
+                                : 'Quote Submitted'}
+                            </span>
                           </div>
                         ) : item.status === 'denied' ? (
-                          <div className={styles.declinedTagBadge}>
+                          <div className={styles.compactDeclinedBadge}>
                             <X size={14} />
                             <span>Declined</span>
                           </div>
                         ) : (
-                          <>
-                            <button
-                              type="button"
-                              className={styles.acceptBtn}
-                              onClick={() => handleAcceptRequest(item)}
-                              title={
-                                item.requesterType === 'Industry'
-                                  ? 'Submit your custom price quote and pickup slot'
-                                  : "Directly accept and move to customer's house"
-                              }
-                            >
-                              {item.requesterType === 'Industry' ? 'Accept & Quote' : 'Accept Pickup'}
-                            </button>
-                            <button
-                              type="button"
-                              className={styles.denyBtn}
-                              onClick={() => handleDeny(item.id, item.requesterType)}
-                            >
-                              Deny
-                            </button>
-                            <button
-                              type="button"
-                              className={styles.viewDetailsBtn}
-                              onClick={() => setDetailsModalRequest(item)}
-                            >
-                              View Details
-                            </button>
-                          </>
+                          <button
+                            type="button"
+                            className={styles.compactPrimaryCtaBtn}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleAcceptRequest(item);
+                            }}
+                          >
+                            <span>
+                              {item.requesterType === 'Industry'
+                                ? 'Accept & Quote'
+                                : 'Accept Pickup'}
+                            </span>
+                            <ArrowRight size={15} />
+                          </button>
                         )}
                       </div>
-                    </div>
-                  </div>
+                    </article>
+                  ))}
+                </div>
+              </>
+            )}
 
-                  {/* Card Footer */}
-                  <div className={styles.cardFooter}>
-                    <span>{item.requestedAgo}</span>
-                    <span className={styles.verifiedFooterText}>
-                      <ShieldCheck size={13} /> Verified Contact
+            {/* ============================================================
+                MODE B: MY OFFERS (FILTER & STATUS CARDS)
+               ============================================================ */}
+            {primaryTab === 'offers' && (
+              <div className={styles.offersSection}>
+                {/* Status Sub-filter Bar */}
+                <div className={styles.offersFilterTrack}>
+                  <button
+                    type="button"
+                    className={`${styles.offersFilterBtn} ${
+                      offerFilter === 'all' ? styles.offersFilterBtnActive : ''
+                    }`}
+                    onClick={() => setOfferFilter('all')}
+                  >
+                    All <span className={styles.offersFilterCount}>({submittedOffers.length})</span>
+                  </button>
+                  <button
+                    type="button"
+                    className={`${styles.offersFilterBtn} ${
+                      offerFilter === 'waiting' ? styles.offersFilterBtnActive : ''
+                    }`}
+                    onClick={() => setOfferFilter('waiting')}
+                  >
+                    Waiting{' '}
+                    <span className={styles.offersFilterCount}>
+                      ({submittedOffers.filter((o) => o.statusType === 'waiting').length})
                     </span>
-                  </div>
-                </article>
-              ))}
-            </div>
+                  </button>
+                  <button
+                    type="button"
+                    className={`${styles.offersFilterBtn} ${
+                      offerFilter === 'accepted' ? styles.offersFilterBtnActive : ''
+                    }`}
+                    onClick={() => setOfferFilter('accepted')}
+                  >
+                    Accepted{' '}
+                    <span className={styles.offersFilterCount}>
+                      ({submittedOffers.filter((o) => o.statusType === 'accepted').length})
+                    </span>
+                  </button>
+                  <button
+                    type="button"
+                    className={`${styles.offersFilterBtn} ${
+                      offerFilter === 'closed' ? styles.offersFilterBtnActive : ''
+                    }`}
+                    onClick={() => setOfferFilter('closed')}
+                  >
+                    Closed{' '}
+                    <span className={styles.offersFilterCount}>
+                      (
+                      {
+                        submittedOffers.filter(
+                          (o) => o.statusType === 'rejected' || o.statusType === 'expired'
+                        ).length
+                      }
+                      )
+                    </span>
+                  </button>
+                </div>
+
+                {/* Filtered Offers List */}
+                <div className={styles.offersList}>
+                  {displayOffers.map((offer) => {
+                    if (offer.statusType === 'accepted') {
+                      return (
+                        <article
+                          key={offer.id}
+                          className={`${styles.offerCard} ${styles.offerCardAccepted}`}
+                        >
+                          <div className={styles.offerStatusHeaderAccepted}>
+                            <CheckCircle2 size={16} />
+                            <span>✓ CUSTOMER ACCEPTED</span>
+                          </div>
+
+                          <div className={styles.offerCardBody}>
+                            <div className={styles.offerCustomerBlock}>
+                              <h3 className={styles.offerCustomerName}>{offer.customerName}</h3>
+                              <div className={styles.offerMatQty}>
+                                {offer.materialName} · {offer.quantity}
+                              </div>
+                            </div>
+
+                            {/* List out item name and prices given by merchants (no estimate amount) */}
+                            <OfferItemsList
+                              offerId={offer.id}
+                              items={offer.itemsQuoted}
+                              fallbackName={offer.materialName}
+                              statusType="accepted"
+                            />
+
+                            <div className={styles.offerPickupSlotRow}>
+                              <Clock size={14} />
+                              <span>Pickup: {getShortSlot(offer.pickupSlot)}</span>
+                            </div>
+
+                            <Link
+                              to={`/orders?orderId=${offer.id.replace('QUO', 'ORD')}&customer=${encodeURIComponent(offer.customerName)}&action=pickup`}
+                              className={styles.offerStartPickupBtn}
+                            >
+                              <Truck size={16} />
+                              <span>View Order &amp; Start Pickup →</span>
+                            </Link>
+                          </div>
+                        </article>
+                      );
+                    }
+
+                    if (offer.statusType === 'waiting') {
+                      return (
+                        <article
+                          key={offer.id}
+                          className={`${styles.offerCard} ${styles.offerCardWaiting}`}
+                        >
+                          <div className={styles.offerStatusHeaderWaiting}>
+                            <Clock size={15} />
+                            <span>WAITING FOR RESPONSE</span>
+                          </div>
+
+                          <div className={styles.offerCardBody}>
+                            <div className={styles.offerCustomerBlock}>
+                              <h3 className={styles.offerCustomerName}>{offer.customerName}</h3>
+                              <div className={styles.offerMatQty}>
+                                {offer.materialName} · {offer.quantity}
+                              </div>
+                            </div>
+
+                            {/* List out item name and prices given by merchants (no estimate amount) */}
+                            <OfferItemsList
+                              offerId={offer.id}
+                              items={offer.itemsQuoted}
+                              fallbackName={offer.materialName}
+                              statusType="waiting"
+                            />
+
+                            <div className={styles.offerPickupSlotRow}>
+                              <Clock size={14} />
+                              <span>Pickup: {getShortSlot(offer.pickupSlot)}</span>
+                            </div>
+
+                            <div className={styles.offerStatusNoteWaiting}>
+                              Waiting for customer response
+                            </div>
+                          </div>
+                        </article>
+                      );
+                    }
+
+                    if (offer.statusType === 'rejected') {
+                      return (
+                        <article
+                          key={offer.id}
+                          className={`${styles.offerCard} ${styles.offerCardNeutral}`}
+                        >
+                          <div className={styles.offerStatusHeaderNeutral}>
+                            <AlertCircle size={15} />
+                            <span>OFFER NOT SELECTED</span>
+                          </div>
+
+                          <div className={styles.offerCardBody}>
+                            <div className={styles.offerCustomerBlock}>
+                              <h3 className={styles.offerCustomerName}>{offer.customerName}</h3>
+                              <div className={styles.offerMatQty}>
+                                {offer.materialName} · {offer.quantity}
+                              </div>
+                            </div>
+
+                            {/* List out item name and prices given by merchants (no estimate amount) */}
+                            <OfferItemsList
+                              offerId={offer.id}
+                              items={offer.itemsQuoted}
+                              fallbackName={offer.materialName}
+                              statusType="rejected"
+                            />
+
+                            <div className={styles.offerStatusNoteNeutral}>
+                              Another offer was selected.
+                            </div>
+
+                            <button
+                              type="button"
+                              className={styles.offerSecondaryBtn}
+                              onClick={() =>
+                                triggerToast(`Offer ${offer.id}: customer selected another quote.`)
+                              }
+                            >
+                              View Request
+                            </button>
+                          </div>
+                        </article>
+                      );
+                    }
+
+                    // Expired status
+                    return (
+                      <article
+                        key={offer.id}
+                        className={`${styles.offerCard} ${styles.offerCardNeutral}`}
+                      >
+                        <div className={styles.offerStatusHeaderNeutral}>
+                          <Clock size={15} />
+                          <span>DEADLINE EXPIRED</span>
+                        </div>
+
+                        <div className={styles.offerCardBody}>
+                          <div className={styles.offerCustomerBlock}>
+                            <h3 className={styles.offerCustomerName}>{offer.customerName}</h3>
+                            <div className={styles.offerMatQty}>
+                              {offer.materialName} · {offer.quantity}
+                            </div>
+                          </div>
+
+                          {/* List out item name and prices given by merchants (no estimate amount) */}
+                          <OfferItemsList
+                            offerId={offer.id}
+                            items={offer.itemsQuoted}
+                            fallbackName={offer.materialName}
+                            statusType="expired"
+                          />
+
+                          <div className={styles.offerStatusNoteNeutral}>
+                            Response window has ended.
+                          </div>
+                        </div>
+                      </article>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </section>
 
           {/* ================================================================
-              RIGHT SIDEBAR (30%)
+              RIGHT SIDEBAR (30% ON DESKTOP)
              ================================================================ */}
           <aside className={styles.sidebarCol}>
-            {/* Card 1: How It Works */}
-            <div className={styles.sidebarCard}>
-              <h3 className={styles.sidebarCardTitle}>How Quoting Works</h3>
-              <ol className={styles.stepsList}>
-                <li className={styles.stepItem}>
-                  <div className={styles.stepNumber}>1</div>
-                  <div className={styles.stepText}>
-                    <strong>Review specifications:</strong> Inspect photo, volume, and location.
-                  </div>
-                </li>
-                <li className={styles.stepItem}>
-                  <div className={styles.stepNumber}>2</div>
-                  <div className={styles.stepText}>
-                    <strong>Click Accept & Submit Quote:</strong> Set your total price, available slot, and optional voice note.
-                  </div>
-                </li>
-                <li className={styles.stepItem}>
-                  <div className={styles.stepNumber}>3</div>
-                  <div className={styles.stepText}>
-                    <strong>Customer Confirms:</strong> Once accepted, deal moves to Orders with calibrated digital weighing.
-                  </div>
-                </li>
-              </ol>
-            </div>
+            {primaryTab === 'available' ? (
+              <>
+                <div className={styles.sidebarCard}>
+                  <h3 className={styles.sidebarCardTitle}>How Quoting Works</h3>
+                  <ol className={styles.stepsList}>
+                    <li className={styles.stepItem}>
+                      <div className={styles.stepNumber}>1</div>
+                      <div className={styles.stepText}>
+                        <strong>Review request:</strong> Tap card to view photos, volume, and pickup area.
+                      </div>
+                    </li>
+                    <li className={styles.stepItem}>
+                      <div className={styles.stepNumber}>2</div>
+                      <div className={styles.stepText}>
+                        <strong>Accept &amp; Quote:</strong> Enter your buying rate and available pickup time.
+                      </div>
+                    </li>
+                    <li className={styles.stepItem}>
+                      <div className={styles.stepNumber}>3</div>
+                      <div className={styles.stepText}>
+                        <strong>Customer Accepts:</strong> Deal moves to Orders for instant spot weighing &amp; settlement.
+                      </div>
+                    </li>
+                  </ol>
+                </div>
 
-            {/* Card 3: Merchant Benefits */}
-            <div className={styles.sidebarCard}>
-              <h3 className={styles.sidebarCardTitle}>Merchant Benefits</h3>
-              <ul className={styles.benefitsList}>
-                <li className={styles.benefitItem}>
-                  <Check size={16} className={styles.benefitCheckIcon} />
-                  <span>No commission until pickup completion</span>
-                </li>
-                <li className={styles.benefitItem}>
-                  <Check size={16} className={styles.benefitCheckIcon} />
-                  <span>Direct GPS navigation to pickup gates</span>
-                </li>
-                <li className={styles.benefitItem}>
-                  <Check size={16} className={styles.benefitCheckIcon} />
-                  <span>Priority lead distribution for on-time payers</span>
-                </li>
-              </ul>
-            </div>
+                <div className={styles.sidebarCard}>
+                  <h3 className={styles.sidebarCardTitle}>Merchant Benefits</h3>
+                  <ul className={styles.benefitsList}>
+                    <li className={styles.benefitItem}>
+                      <Check size={16} className={styles.benefitCheckIcon} />
+                      <span>No commission until pickup completion</span>
+                    </li>
+                    <li className={styles.benefitItem}>
+                      <Check size={16} className={styles.benefitCheckIcon} />
+                      <span>Direct gate navigation &amp; digital scale sync</span>
+                    </li>
+                    <li className={styles.benefitItem}>
+                      <Check size={16} className={styles.benefitCheckIcon} />
+                      <span>Priority lead access for top rated buyers</span>
+                    </li>
+                  </ul>
+                </div>
+              </>
+            ) : (
+              <div className={styles.sidebarCard}>
+                <h3 className={styles.sidebarCardTitle}>Quote Status Guide</h3>
+                <ul className={styles.benefitsList}>
+                  <li className={styles.benefitItem}>
+                    <CheckCircle2 size={16} style={{ color: '#16a34a' }} />
+                    <span><strong>Customer Accepted:</strong> Tap Start Pickup to navigate and weigh scrap.</span>
+                  </li>
+                  <li className={styles.benefitItem}>
+                    <Clock size={16} style={{ color: '#d97706' }} />
+                    <span><strong>Waiting:</strong> Customer is reviewing your quote against others.</span>
+                  </li>
+                  <li className={styles.benefitItem}>
+                    <AlertCircle size={16} style={{ color: '#64748b' }} />
+                    <span><strong>Closed:</strong> Quoting window expired or another buyer was chosen.</span>
+                  </li>
+                </ul>
+              </div>
+            )}
 
-            {/* Card 4: Need Help? */}
+            {/* Need Help Card */}
             <div className={styles.sidebarCard}>
               <h3 className={styles.sidebarCardTitle}>Need Help?</h3>
               <p className={styles.helpText}>
@@ -1146,6 +1434,11 @@ export default function MerchantRequests() {
       {activeQuoteRequest && (
         <div className={styles.modalOverlay} onClick={handleCloseQuoteModal}>
           <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+            {/* Top Drag Handle for Bottom Sheet */}
+            <div className={styles.sheetDragHandleWrap}>
+              <div className={styles.sheetDragPill} />
+            </div>
+
             {/* Modal Header */}
             <div className={styles.modalHeader}>
               <div>
@@ -1163,116 +1456,115 @@ export default function MerchantRequests() {
             </div>
 
             <form onSubmit={handleSubmitQuote} className={styles.modalForm}>
-              {/* Request Summary Box */}
-              <div className={styles.modalSummaryBox}>
-                <img
-                  src={activeQuoteRequest.image}
-                  alt={activeQuoteRequest.materialName}
-                  className={styles.modalSummaryImg}
-                  onError={(e) => {
-                    (e.currentTarget as HTMLImageElement).src = '/logo-icon.png';
-                  }}
-                />
-                <div className={styles.modalSummaryInfo}>
-                  <div className={styles.modalSummaryTitle}>
-                    {activeQuoteRequest.materialName} ({activeQuoteRequest.quantity})
+              <div className={styles.modalFormBody}>
+                {/* Scrap Images in Order */}
+              {(() => {
+                const quoteImages =
+                  activeQuoteRequest.images && activeQuoteRequest.images.length > 0
+                    ? activeQuoteRequest.images
+                    : [activeQuoteRequest.image || '/logo-icon.png'];
+
+                return (
+                  <div className={styles.modalSummaryBox}>
+                    <div className={styles.modalImagesTrack}>
+                      {quoteImages.map((imgSrc, idx) => (
+                        <div
+                          key={idx}
+                          className={styles.modalImageItem}
+                          onClick={() =>
+                            setFloatingImage({
+                              src: imgSrc,
+                              title: `${activeQuoteRequest.materialName} (Photo ${idx + 1} of ${quoteImages.length})`,
+                              condition: activeQuoteRequest.materialCondition,
+                              quantity: activeQuoteRequest.quantity,
+                              posterName: activeQuoteRequest.posterName,
+                              images: quoteImages,
+                              currentIndex: idx,
+                            })
+                          }
+                          title={`Scrap Photo ${idx + 1} of ${quoteImages.length} (Click to preview)`}
+                        >
+                          <img
+                            src={imgSrc}
+                            alt={`${activeQuoteRequest.materialName} - Photo ${idx + 1}`}
+                            className={styles.modalOrderedImg}
+                            onError={(e) => {
+                              (e.currentTarget as HTMLImageElement).src = '/logo-icon.png';
+                            }}
+                          />
+                          <span className={styles.modalImageOrderBadge}>
+                            {idx + 1}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                  <div className={styles.modalSummarySub}>
-                    Posted by: <strong>{activeQuoteRequest.posterName}</strong> ({activeQuoteRequest.requesterType})
-                  </div>
-                  <div className={styles.modalSummaryLocation}>
-                    📍 {activeQuoteRequest.address}
-                  </div>
-                </div>
-              </div>
+                );
+              })()}
 
               {/* 1. Offered Scrap Rates (Per-Product / Per-KG Pricing) */}
               <div className={styles.quoteProductsSection}>
-                <div className={styles.sectionHeaderBetween}>
-                  <div>
-                    <label className={styles.formLabel}>
-                      <span>1. Quoted Scrap Materials &amp; Offered Rates</span>
-                      <span className={styles.requiredStar}>*</span>
-                    </label>
-                    <span className={styles.formHelperText}>
-                      Specify your committed purchase rate (₹ / KG or unit) for each requested item.
-                    </span>
-                  </div>
+                <div className={styles.sectionHeaderCol}>
+                  <label className={styles.formLabelSingleRow}>
+                    <span>1. Quoted Scrap Materials &amp; Offered Rates</span>
+                    <span className={styles.requiredStar}>*</span>
+                  </label>
+                </div>
+
+                {/* List of Product Lines being Quoted - Clean Minimal Row (Name, Price, Delete only) */}
+                <div className={styles.quoteProductsList}>
+                  {quoteProductLines.length === 0 ? (
+                    <div className={styles.emptyQuoteProductsPrompt}>
+                      <span>Select permanent scrap items from the catalog below to set your purchase rates.</span>
+                    </div>
+                  ) : (
+                    quoteProductLines.map((prod) => (
+                      <div key={prod.id} className={styles.cleanProductRow}>
+                        <div className={styles.cleanProdInfo}>
+                          <strong className={styles.cleanProdName}>{prod.name}</strong>
+                        </div>
+
+                        <div className={styles.cleanProdActions}>
+                          <div className={styles.cleanPriceWrapper}>
+                            <span className={styles.cleanCurrencyPrefix}>₹</span>
+                            <input
+                              type="number"
+                              min="1"
+                              step="any"
+                              placeholder="0"
+                              value={prod.ratePerUnit || ''}
+                              onChange={(e) => handleUpdateProductRate(prod.id, parseFloat(e.target.value) || 0)}
+                              className={styles.cleanPriceInput}
+                              required
+                            />
+                            <span className={styles.cleanUnitSuffix}>/ {prod.unit}</span>
+                          </div>
+
+                          <button
+                            type="button"
+                            className={styles.cleanDeleteBtn}
+                            onClick={() => handleRemoveQuoteProduct(prod.id)}
+                            title={`Remove ${prod.name}`}
+                            aria-label={`Remove ${prod.name}`}
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+
+                {/* Add from Catalog Button - Positioned under the price list for better UX */}
+                <div className={styles.catalogBtnRow}>
                   <button
                     type="button"
                     className={styles.toggleCatalogBtn}
                     onClick={() => setShowCategoryExplorer(!showCategoryExplorer)}
                   >
-                    <Plus size={14} />
-                    <span>{showCategoryExplorer ? 'Hide Scrap Catalog' : '+ Add from Catalog'}</span>
+                    {showCategoryExplorer ? <X size={13} /> : <Plus size={13} />}
+                    <span>{showCategoryExplorer ? 'Hide Scrap Catalog' : 'Add from Catalog'}</span>
                   </button>
-                </div>
-
-                {/* List of Product Lines being Quoted */}
-                <div className={styles.quoteProductsList}>
-                  {quoteProductLines.map((prod) => (
-                    <div key={prod.id} className={styles.quoteProductCard}>
-                      <div className={styles.quoteProductTop}>
-                        <div className={styles.productTitleGroup}>
-                          <span className={styles.productCatIcon}>{prod.categoryIcon || '📦'}</span>
-                          <div>
-                            <strong className={styles.productNameText}>{prod.name}</strong>
-                            <div className={styles.productMetaTags}>
-                              <span className={styles.reqQtyPill}>Req: {prod.quantity}</span>
-                              {prod.categoryName && (
-                                <span className={styles.catNamePill}>{prod.categoryName}</span>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-
-                        {quoteProductLines.length > 1 && (
-                          <button
-                            type="button"
-                            className={styles.removeProdBtn}
-                            onClick={() => handleRemoveQuoteProduct(prod.id)}
-                            title="Remove product"
-                          >
-                            <Trash2 size={14} />
-                          </button>
-                        )}
-                      </div>
-
-                      <div className={styles.quoteRateInputRow}>
-                        <div className={styles.rateInputCol}>
-                          <label className={styles.rateSubLabel}>
-                            Your Offered Rate (₹ / {prod.unit})
-                          </label>
-                          <div className={styles.priceInputWrapper}>
-                            <span className={styles.currencyPrefix}>₹</span>
-                            <input
-                              type="number"
-                              min="1"
-                              step="any"
-                              placeholder={`Enter rate per ${prod.unit}`}
-                              value={prod.ratePerUnit || ''}
-                              onChange={(e) => handleUpdateProductRate(prod.id, parseFloat(e.target.value) || 0)}
-                              className={styles.formInputPrice}
-                              required
-                            />
-                            <span className={styles.unitSuffix}>/ {prod.unit}</span>
-                          </div>
-                        </div>
-
-                        <div className={styles.rateSubtotalCol}>
-                          <span className={styles.rateSubtotalLabel}>Est. Item Total</span>
-                          <strong className={styles.rateSubtotalVal}>
-                            ₹{((prod.estimatedQtyNumber || 100) * (prod.ratePerUnit || 0)).toLocaleString('en-IN')}
-                          </strong>
-                          {prod.marketRate && (
-                            <span className={styles.marketBenchmarkTag}>
-                              Market Rate: ₹{prod.marketRate} / {prod.unit}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
                 </div>
 
                 {/* Category Explorer & Universal Search (Same as Billing) */}
@@ -1280,7 +1572,6 @@ export default function MerchantRequests() {
                   <div className={styles.quoteCategoryExplorerWrapper}>
                     {/* Top Universal Search Input */}
                     <div className={styles.scrapSearchInputWrapper}>
-                      <Search size={16} className={styles.scrapSearchIcon} />
                       <input
                         type="text"
                         value={quoteSearchQuery}
@@ -1307,47 +1598,32 @@ export default function MerchantRequests() {
                           c.items
                             .filter((item) =>
                               item.name.toLowerCase().includes(quoteSearchQuery.toLowerCase()) ||
-                              c.name.toLowerCase().includes(quoteSearchQuery.toLowerCase()) ||
-                              (item.quality && item.quality.toLowerCase().includes(quoteSearchQuery.toLowerCase()))
+                              c.name.toLowerCase().includes(quoteSearchQuery.toLowerCase())
                             )
-                            .map((item) => ({ ...item, categoryName: c.name, categoryIcon: c.icon }))
+                            .map((item) => ({ ...item, categoryName: c.name }))
                         ).map((item) => (
                           <div
                             key={item.id}
                             className={styles.subCategoryCard}
-                            onClick={() => handleAddProductFromCatalog(item, item.categoryIcon, item.categoryName)}
+                            onClick={() => handleAddProductFromCatalog(item, undefined, item.categoryName)}
                           >
                             <div className={styles.subCategoryCardTop}>
-                              <span className={styles.subCategoryCategoryTag}>
-                                {item.categoryIcon} {item.categoryName}
-                              </span>
+                              <strong className={styles.subCategoryName}>{item.name}</strong>
                               <span className={styles.subCategoryPriceBadge}>
                                 ₹{item.defaultRate} / {item.unit}
                               </span>
                             </div>
-                            <strong className={styles.subCategoryName}>{item.name}</strong>
-                            <button type="button" className={styles.addSubItemBtn}>
-                              <Plus size={12} />
-                              <span>+ Add to Quote</span>
-                            </button>
+                            <div className={styles.subCategoryCardBottom}>
+                              <button type="button" className={styles.addSubItemBtn}>
+                                <span>+ Add</span>
+                              </button>
+                            </div>
                           </div>
                         ))}
-
-                        <div
-                          className={styles.customAddSubCard}
-                          onClick={handleAddCustomQuoteProduct}
-                        >
-                          <span className={styles.customAddTag}>Custom Scrap</span>
-                          <strong className={styles.customAddTitle}>+ Add "{quoteSearchQuery.trim()}"</strong>
-                          <button type="button" className={styles.addSubItemBtn}>
-                            <Plus size={12} />
-                            <span>+ Add Custom</span>
-                          </button>
-                        </div>
                       </div>
                     ) : (
                       <div className={styles.categoryExplorerInner}>
-                        {/* Horizontal Category Selector Tabs */}
+                        {/* Horizontal Category Selector Tabs (Text Only, No Emojis) */}
                         <div className={styles.billingCategoryTabsTrack}>
                           {MARKET_SCRAP_CATEGORIES.map((cat) => (
                             <button
@@ -1358,13 +1634,12 @@ export default function MerchantRequests() {
                               }`}
                               onClick={() => setSelectedQuoteCatId(cat.id)}
                             >
-                              <span className={styles.billingCategoryTabIcon}>{cat.icon}</span>
                               <span className={styles.billingCategoryTabLabel}>{cat.name}</span>
                             </button>
                           ))}
                         </div>
 
-                        {/* Subcategories Grid for Selected Category */}
+                        {/* Subcategories Grid for Selected Category (Text Only, No Emojis or Duplicate Plus) */}
                         {(() => {
                           const activeCat =
                             MARKET_SCRAP_CATEGORIES.find((c) => c.id === selectedQuoteCatId) ||
@@ -1375,7 +1650,7 @@ export default function MerchantRequests() {
                                 <div
                                   key={subItem.id}
                                   className={styles.subCategoryCard}
-                                  onClick={() => handleAddProductFromCatalog(subItem, activeCat.icon, activeCat.name)}
+                                  onClick={() => handleAddProductFromCatalog(subItem, undefined, activeCat.name)}
                                 >
                                   <div className={styles.subCategoryCardTop}>
                                     <strong className={styles.subCategoryName}>{subItem.name}</strong>
@@ -1383,11 +1658,8 @@ export default function MerchantRequests() {
                                       ₹{subItem.defaultRate} / {subItem.unit}
                                     </span>
                                   </div>
-                                  <span className={styles.subCategoryQuality}>{subItem.quality}</span>
                                   <div className={styles.subCategoryCardBottom}>
-                                    <span className={styles.marketStandardTag}>Market Standard</span>
                                     <button type="button" className={styles.addSubItemBtn}>
-                                      <Plus size={12} />
                                       <span>+ Add</span>
                                     </button>
                                   </div>
@@ -1401,25 +1673,26 @@ export default function MerchantRequests() {
                   </div>
                 )}
 
-                {/* Total Summary Strip */}
-                <div className={styles.quoteTotalSummaryStrip}>
-                  <div className={styles.quoteTotalRatesPreview}>
-                    <span className={styles.totalSummaryLabel}>COMMITTED RATES:</span>
-                    <div className={styles.ratesPillsRow}>
-                      {quoteProductLines.map((p) => (
-                        <span key={p.id} className={styles.rateSummaryPill}>
-                          {p.name.split(' ')[0]}: <strong>₹{p.ratePerUnit || 0}/{p.unit}</strong>
-                        </span>
-                      ))}
+                {/* Committed Rates Summary Banner - Clean Aligned Price List (Shown once merchant adds items) */}
+                {quoteProductLines.length > 0 && (
+                  <div className={styles.quoteTotalSummaryStrip}>
+                    <div className={styles.quoteTotalRatesPreview}>
+                      <div className={styles.totalRatesHeader}>
+                        <span className={styles.totalSummaryLabel}>COMMITTED PURCHASE RATES</span>
+                      </div>
+                      <div className={styles.committedRatesList}>
+                        {quoteProductLines.map((p) => (
+                          <div key={p.id} className={styles.committedRateRow}>
+                            <span className={styles.committedRateName}>{p.name}</span>
+                            <strong className={styles.committedRatePrice}>
+                              ₹{p.ratePerUnit || 0} / {p.unit}
+                            </strong>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
-                  <div className={styles.quoteTotalAmountBlock}>
-                    <span className={styles.totalAmountSubLabel}>Total Estimated Offer</span>
-                    <strong className={styles.totalAmountBig}>
-                      ₹{totalQuoteEstAmount.toLocaleString('en-IN')}
-                    </strong>
-                  </div>
-                </div>
+                )}
               </div>
 
               {/* 2. Required Field: Available Pickup Time */}
@@ -1552,12 +1825,13 @@ export default function MerchantRequests() {
                   rows={2}
                   value={quoteNote}
                   onChange={(e) => setQuoteNote(e.target.value)}
-                  placeholder="e.g. We bring calibrated digital weighing scale and offer spot UPI transfer."
+                  placeholder="Instructions"
                   className={styles.formTextarea}
                 />
               </div>
+            </div>
 
-              {/* Modal Actions */}
+            {/* Modal Actions */}
               <div className={styles.modalActionsRow}>
                 <button
                   type="button"
@@ -1585,6 +1859,11 @@ export default function MerchantRequests() {
       {detailsModalRequest && (
         <div className={styles.modalOverlay} onClick={() => setDetailsModalRequest(null)}>
           <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+            {/* Top Drag Handle for Bottom Sheet */}
+            <div className={styles.sheetDragHandleWrap}>
+              <div className={styles.sheetDragPill} />
+            </div>
+
             <div className={styles.modalHeader}>
               <div>
                 <span className={styles.modalPretitle}>REQUEST ID: {detailsModalRequest.id}</span>
@@ -1600,13 +1879,16 @@ export default function MerchantRequests() {
             </div>
 
             <div className={styles.detailsModalBody}>
-              <div className={styles.detailsModalImgBox}>
-                <img
-                  src={detailsModalRequest.image}
-                  alt={detailsModalRequest.materialName}
-                  className={styles.detailsModalImg}
-                />
-              </div>
+              {/* Scrap Image Slider with Left/Right Navigation Arrows */}
+              <CompactCardImageSlider
+                images={
+                  detailsModalRequest.images && detailsModalRequest.images.length > 0
+                    ? detailsModalRequest.images
+                    : [detailsModalRequest.image]
+                }
+                fallbackImage={detailsModalRequest.image || '/logo-icon.png'}
+                alt={detailsModalRequest.materialName}
+              />
 
               <div className={styles.specsGrid}>
                 <div className={styles.specItem}>
@@ -1626,20 +1908,14 @@ export default function MerchantRequests() {
                   <span className={styles.specValue}>{detailsModalRequest.pickupDate} • {detailsModalRequest.pickupTime}</span>
                 </div>
                 <div className={styles.specItemFull}>
-                  <span className={styles.specLabel}>Pickup Address</span>
-                  <span className={styles.specValue}>{detailsModalRequest.address}</span>
+                  <span className={styles.specLabel}>Pickup Area</span>
+                  <span className={styles.specValue}>{getPrivacyArea(detailsModalRequest.address, detailsModalRequest.posterName)}</span>
                 </div>
               </div>
+            </div>
 
-              <div className={styles.modalActionsRow}>
-                <button
-                  type="button"
-                  className={styles.modalCancelBtn}
-                  onClick={() => setDetailsModalRequest(null)}
-                >
-                  Close
-                </button>
-                {detailsModalRequest.status === 'pending' && (
+            <div className={styles.modalActionsRow}>
+                {detailsModalRequest.status === 'pending' ? (
                   <button
                     type="button"
                     className={styles.modalSubmitBtn}
@@ -1655,8 +1931,15 @@ export default function MerchantRequests() {
                         : 'Accept Pickup'}
                     </span>
                   </button>
+                ) : (
+                  <button
+                    type="button"
+                    className={styles.modalSubmitBtn}
+                    onClick={() => setDetailsModalRequest(null)}
+                  >
+                    Close
+                  </button>
                 )}
-              </div>
             </div>
           </div>
         </div>
@@ -1748,6 +2031,50 @@ export default function MerchantRequests() {
                   (e.currentTarget as HTMLImageElement).src = '/logo-icon.png';
                 }}
               />
+              {floatingImage.images && floatingImage.images.length > 1 && (
+                <>
+                  <button
+                    type="button"
+                    className={`${styles.floatingNavBtn} ${styles.floatingNavPrev}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      const list = floatingImage.images!;
+                      const total = list.length;
+                      const curr = floatingImage.currentIndex ?? 0;
+                      const nextIdx = curr === 0 ? total - 1 : curr - 1;
+                      setFloatingImage({
+                        ...floatingImage,
+                        src: list[nextIdx],
+                        title: `${floatingImage.title.split(' (Photo')[0]} (Photo ${nextIdx + 1} of ${total})`,
+                        currentIndex: nextIdx,
+                      });
+                    }}
+                    aria-label="Previous photo"
+                  >
+                    <ChevronLeft size={22} />
+                  </button>
+                  <button
+                    type="button"
+                    className={`${styles.floatingNavBtn} ${styles.floatingNavNext}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      const list = floatingImage.images!;
+                      const total = list.length;
+                      const curr = floatingImage.currentIndex ?? 0;
+                      const nextIdx = curr === total - 1 ? 0 : curr + 1;
+                      setFloatingImage({
+                        ...floatingImage,
+                        src: list[nextIdx],
+                        title: `${floatingImage.title.split(' (Photo')[0]} (Photo ${nextIdx + 1} of ${total})`,
+                        currentIndex: nextIdx,
+                      });
+                    }}
+                    aria-label="Next photo"
+                  >
+                    <ChevronRight size={22} />
+                  </button>
+                </>
+              )}
             </div>
 
             <div className={styles.floatingImageFooter}>

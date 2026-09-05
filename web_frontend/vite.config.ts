@@ -13,11 +13,11 @@ export default defineConfig({
         name: 'Bill Scrap',
         short_name: 'Bill Scrap',
         description: 'Connect, Collect and Recycle with Bill Scrap.',
-        theme_color: '#FBC21A',
-        background_color: '#FFFFFF',
+        theme_color: '#ffd600',
+        background_color: '#ffd600',
         display: 'standalone',
         orientation: 'portrait',
-        start_url: '/home',
+        start_url: '/',
         scope: '/',
         icons: [
           {

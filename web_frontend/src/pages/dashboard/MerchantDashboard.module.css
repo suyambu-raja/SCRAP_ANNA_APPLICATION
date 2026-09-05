@@ -802,7 +802,7 @@
 
 .pickupCustomerHeaderRow {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 0.85rem;
   width: 100%;
 }
@@ -819,7 +819,6 @@
   flex-shrink: 0;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   color: #92400E;
-  margin-top: 2px;
 }
 
 .pickupCardInfo {
@@ -865,17 +864,18 @@
 }
 
 .pickupDetailsPill {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
+  justify-content: flex-start;
+  gap: 0.45rem;
   background: #F1F5F9;
   border: 1px solid #E2E8F0;
-  border-radius: 9px;
-  padding: 0.45rem 0.85rem;
+  border-radius: 8px;
+  padding: 0.32rem 0.7rem;
   font-size: 0.82rem;
   color: #334155;
-  width: 100%;
+  width: fit-content;
+  max-width: 100%;
   box-sizing: border-box;
   margin-top: 0.15rem;
   white-space: nowrap !important;
@@ -1488,6 +1488,441 @@
   margin: 0;
 }
 
+/* ==========================================================================
+   8. MERCHANT FEEDBACK SECTION (TELL US WHAT YOU THINK WITH VOICE RECORD)
+   ========================================================================== */
+.feedbackSectionWrapper {
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.feedbackCard {
+  background: #ffffff;
+  border: 1.5px solid #fbc21a;
+  border-radius: 18px;
+  padding: 1.25rem 1.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.95rem;
+  box-shadow: 0 4px 18px -2px rgba(251, 194, 26, 0.12);
+}
+
+.feedbackHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.feedbackTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.feedbackIconBadge {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: #20242D;
+  color: #fbc21a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid #2d323e;
+}
+
+.feedbackTitleCol {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.feedbackTitle {
+  font-size: 1.05rem;
+  font-weight: 900;
+  color: #0f172a;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.feedbackSubtitle {
+  font-size: 0.78rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.feedbackRatingSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  background: #fffdf7;
+  border: 1px solid #fde68a;
+  border-radius: 12px;
+  padding: 0.75rem 0.95rem;
+}
+
+.feedbackRatingLabel {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #374151;
+}
+
+.starRatingRow {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.starBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.2rem;
+  color: #cbd5e1;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.starBtn:hover {
+  transform: scale(1.15);
+}
+
+.starActive {
+  color: #fbc21a !important;
+}
+
+.feedbackFormInline {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.ratingTextTag {
+  font-size: 0.8rem;
+  font-weight: 750;
+  color: #1e293b;
+  margin-left: 0.5rem;
+  white-space: nowrap;
+}
+
+.feedbackInputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.feedbackInputLabel {
+  font-size: 0.76rem;
+  font-weight: 750;
+  color: #374151;
+}
+
+.feedbackInlineTextarea {
+  width: 100%;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 0.65rem 0.85rem;
+  font-size: 0.82rem;
+  color: #0f172a;
+  font-family: inherit;
+  resize: vertical;
+  outline: none;
+  background: #ffffff;
+  box-sizing: border-box;
+  transition: all 0.15s ease;
+  line-height: 1.4;
+}
+
+.feedbackInlineTextarea:focus {
+  border-color: #fbc21a;
+  box-shadow: 0 0 0 3px rgba(251, 194, 26, 0.2);
+}
+
+.feedbackInlineTextareaError {
+  border-color: #ef4444 !important;
+  background-color: #fffbfb !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15) !important;
+}
+
+.feedbackFieldError {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #dc2626;
+  margin-top: 0.15rem;
+  animation: feedbackShake 0.35s ease-in-out;
+}
+
+@keyframes feedbackShake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-4px); }
+  40%, 80% { transform: translateX(4px); }
+}
+
+/* Inline Voice Section */
+.inlineVoiceSection {
+  width: 100%;
+}
+
+.inlineRecordBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  background: #ffffff;
+  border: 1.5px dashed #fbc21a;
+  border-radius: 12px;
+  padding: 0.65rem 1rem;
+  color: #0f172a;
+  font-size: 0.8rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.inlineRecordBtn:hover {
+  background: #fffef5;
+  border-color: #e5aa00;
+  box-shadow: 0 2px 8px rgba(251, 194, 26, 0.2);
+}
+
+.inlineMicCircle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #fbc21a;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid #e5aa00;
+}
+
+.inlineRecordingActive {
+  background: #fef2f2;
+  border: 1.5px solid #fecaca;
+  border-radius: 12px;
+  padding: 0.6rem 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.recordingStatusWrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.redPulseDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #dc2626;
+  animation: pulseDot 1.2s infinite ease-in-out;
+}
+
+@keyframes pulseDot {
+  0% { transform: scale(0.9); opacity: 0.8; box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7); }
+  70% { transform: scale(1.1); opacity: 1; box-shadow: 0 0 0 6px rgba(220, 38, 38, 0); }
+  100% { transform: scale(0.9); opacity: 0.8; box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
+}
+
+.recordingTime {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #991b1b;
+  font-family: monospace;
+}
+
+.stopRecordMiniBtn {
+  background: #dc2626;
+  color: #ffffff;
+  border: none;
+  border-radius: 7px;
+  padding: 0.35rem 0.7rem;
+  font-size: 0.74rem;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: all 0.15s ease;
+}
+
+.stopRecordMiniBtn:hover {
+  background: #b91c1c;
+}
+
+.inlineAudioCard {
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 0.6rem 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.audioPreviewControls {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-width: 0;
+}
+
+.audioPlayBtn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #fbc21a;
+  color: #0f172a;
+  border: 1px solid #e5aa00;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.audioPlayBtn:hover {
+  background: #f5b800;
+  transform: scale(1.06);
+}
+
+.audioDetailsCol {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.audioBadgeText {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.audioTimeSub {
+  font-size: 0.68rem;
+  color: #64748b;
+  font-family: monospace;
+}
+
+.audioDeleteBtn {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 0.3rem 0.55rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #ef4444;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.audioDeleteBtn:hover {
+  background: #fee2e2;
+  border-color: #fca5a5;
+}
+
+.submitInlineBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  background: #fbc21a;
+  color: #0f172a;
+  font-size: 0.85rem;
+  font-weight: 900;
+  padding: 0.65rem 1.25rem;
+  border-radius: 10px;
+  border: 1.5px solid #e5aa00;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  width: 100%;
+  box-shadow: 0 3px 10px rgba(251, 194, 26, 0.35);
+}
+
+.submitInlineBtn:hover:not(:disabled) {
+  background: #f5b800;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(251, 194, 26, 0.45);
+}
+
+.submitInlineBtn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Success View */
+.feedbackInlineSuccess {
+  background: #f0fdf4;
+  border: 1.5px solid #bbf7d0;
+  border-radius: 12px;
+  padding: 1.5rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.45rem;
+}
+
+.successCheckWrap {
+  color: #16a34a;
+  margin-bottom: 0.25rem;
+}
+
+.inlineSuccessTitle {
+  font-size: 0.95rem;
+  font-weight: 850;
+  color: #15803d;
+  margin: 0;
+}
+
+.inlineSuccessText {
+  font-size: 0.78rem;
+  color: #166534;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.4;
+}
+
+.resetFeedbackBtn {
+  background: #ffffff;
+  border: 1px solid #86efac;
+  color: #15803d;
+  font-size: 0.76rem;
+  font-weight: 800;
+  padding: 0.4rem 0.85rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.resetFeedbackBtn:hover {
+  background: #dcfce7;
+}
+
 /* --------------------------------------------------------------------------
    RESPONSIVE DESIGN (TABLET & MOBILE BREAKPOINTS - MIRRORING HOUSEHOLD)
    -------------------------------------------------------------------------- */
@@ -1696,8 +2131,9 @@
   }
 
   .pickupDetailsPill {
-    width: 100%;
-    padding: 0.42rem 0.75rem;
+    width: fit-content;
+    max-width: 100%;
+    padding: 0.32rem 0.7rem;
   }
 
   .pickupEtaRightCol {

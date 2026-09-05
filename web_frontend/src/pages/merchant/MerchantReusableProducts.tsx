@@ -1,14 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import {
   ShieldCheck,
   Eye,
   MessageCircle,
   ShoppingBag,
   Search,
-  SlidersHorizontal,
   MapPin,
   Heart,
-  MoreHorizontal,
   Info,
   ChevronLeft,
   ChevronRight,
@@ -22,8 +20,16 @@ import {
   X,
   Phone,
   MessageSquare,
+  TrendingUp,
+  ClipboardList,
 } from 'lucide-react';
 import AddProductModal from './AddProductModal';
+import ProductRequestsModal from './ProductRequestsModal';
+import {
+  getPendingRequestsCount,
+  getProductRequests,
+  subscribeProductRequests,
+} from '@/services/merchantProductRequestsService';
 import styles from './MerchantReusableProducts.module.css';
 
 export interface ProductItem {
@@ -153,12 +159,108 @@ export default function MerchantReusableProducts() {
   const [products, setProducts] = useState<ProductItem[]>(PRODUCTS_DATA);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All Categories');
-  const [availabilityFilter, setAvailabilityFilter] = useState('All');
+  const [availabilityFilter, setAvailabilityFilter] = useState<'All' | 'In Stock' | 'Low Stock'>('All');
   const [favorites, setFavorites] = useState<Record<string, boolean>>({});
   const [activePage, setActivePage] = useState(1);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [detailsProduct, setDetailsProduct] = useState<ProductItem | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [showHowItWorks, setShowHowItWorks] = useState(true);
+  const [activeStatDot, setActiveStatDot] = useState(0);
+  const [isRequestsOpen, setIsRequestsOpen] = useState(false);
+  const [selectedRequestIdForModal, setSelectedRequestIdForModal] = useState<string | null>(null);
+  const [pendingRequestsCount, setPendingRequestsCount] = useState<number>(() =>
+    getPendingRequestsCount()
+  );
+  const statsTrackRef = useRef<HTMLDivElement>(null);
+  const performanceSectionRef = useRef<HTMLElement>(null);
+  const isScrollingToTopRef = useRef(false);
+
+  useEffect(() => {
+    const unsub = subscribeProductRequests(() => {
+      setPendingRequestsCount(getPendingRequestsCount());
+    });
+    return () => unsub();
+  }, []);
+
+  // Auto-close "How It Works" box with a smooth transition when the merchant scrolls past the performance box
+  useEffect(() => {
+    if (!showHowItWorks) return;
+
+    let ticking = false;
+
+    const handleScroll = () => {
+      if (isScrollingToTopRef.current) return;
+
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          if (performanceSectionRef.current) {
+            const rect = performanceSectionRef.current.getBoundingClientRect();
+            // When the user scrolls down past the performance section (rect.top <= 100 with scrollY > 80)
+            if (rect.top <= 100 && window.scrollY > 80) {
+              setShowHowItWorks(false);
+            }
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [showHowItWorks]);
+
+  const handleToggleHowItWorks = () => {
+    setShowHowItWorks((prev) => {
+      const next = !prev;
+      // If opening and user is scrolled down, smoothly scroll to top so the drawer is visible
+      if (next && window.scrollY > 120) {
+        isScrollingToTopRef.current = true;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        setTimeout(() => {
+          isScrollingToTopRef.current = false;
+        }, 650);
+      }
+      return next;
+    });
+  };
+
+  const handleStatsScroll = useCallback(() => {
+    if (!statsTrackRef.current) return;
+    const track = statsTrackRef.current;
+    const { scrollLeft } = track;
+    const cards = track.children;
+    if (cards.length > 0) {
+      let closestIdx = 0;
+      let minDiff = Infinity;
+      for (let i = 0; i < cards.length; i++) {
+        const card = cards[i] as HTMLElement;
+        const diff = Math.abs(card.offsetLeft - track.offsetLeft - scrollLeft);
+        if (diff < minDiff) {
+          minDiff = diff;
+          closestIdx = i;
+        }
+      }
+      setActiveStatDot(Math.min(Math.max(closestIdx, 0), cards.length - 1));
+    }
+  }, []);
+
+  const scrollToStatCard = (index: number) => {
+    if (!statsTrackRef.current) return;
+    const track = statsTrackRef.current;
+    const cards = track.children;
+    if (cards[index]) {
+      const targetCard = cards[index] as HTMLElement;
+      track.scrollTo({
+        left: targetCard.offsetLeft - track.offsetLeft,
+        behavior: 'smooth',
+      });
+      setActiveStatDot(index);
+    }
+  };
 
   const triggerToast = (msg: string) => {
     setToastMessage(msg);
@@ -180,8 +282,8 @@ export default function MerchantReusableProducts() {
       selectedCategory === 'All Categories' || product.category.includes(selectedCategory);
     const matchesAvailability =
       availabilityFilter === 'All' ||
-      (availabilityFilter === 'In Stock' && !product.isLowStock) ||
-      (availabilityFilter === 'Low Stock' && product.isLowStock);
+      (availabilityFilter === 'In Stock' && product.status === 'Active') ||
+      (availabilityFilter === 'Low Stock' && product.status === 'Low Stock');
 
     return matchesSearch && matchesCategory && matchesAvailability;
   });
@@ -211,79 +313,209 @@ export default function MerchantReusableProducts() {
         </div>
       )}
 
-      {/* Page Header */}
+      {/* 1. Page Header: Compact headline on left, How It Works button on top right */}
       <div className={styles.headerRow}>
         <div className={styles.headerLeft}>
           <div className={styles.animatedHeaderBadge} title="Reusable Circular Marketplace">
             <div className={styles.pulseRing} />
-            <RefreshCw size={20} className={styles.spinIcon} />
+            <RefreshCw size={18} className={styles.spinIcon} />
           </div>
           <div className={styles.titleGroup}>
             <h1 className={styles.pageTitle}>Reusable Products</h1>
             <p className={styles.pageSubtitle}>
-              List reusable products, machinery parts, and refurbished goods to connect with direct buyers.
+              Direct marketplace for reusable goods &amp; machinery.
             </p>
           </div>
         </div>
 
         <button
           type="button"
-          className={styles.headerAddBtn}
-          onClick={() => setIsAddModalOpen(true)}
+          className={styles.infoToggleBtn}
+          onClick={handleToggleHowItWorks}
+          aria-expanded={showHowItWorks}
+          aria-label="Toggle How it works information"
         >
-          <Plus size={16} />
-          <span>Add New Product</span>
+          <Info size={14} />
+          <span>How It Works</span>
         </button>
       </div>
 
-      {/* 4 Summary Stat Cards */}
-      <div className={styles.statsGrid}>
-        <div className={styles.statCard}>
-          <div className={styles.statCardTopRow}>
-            <span className={styles.statLabel}>Total Products</span>
-            <div className={styles.statIconCircle}>
-              <ShieldCheck size={18} />
+      {/* 2. How It Works Drawer (Shown ABOVE the Add New Product button with smooth collapse) */}
+      <div
+        className={`${styles.howItWorksWrapper} ${
+          !showHowItWorks ? styles.howItWorksWrapperCollapsed : ''
+        }`}
+        aria-hidden={!showHowItWorks}
+      >
+        <div className={styles.howItWorksInner}>
+          <div className={styles.howItWorksDrawer} role="region" aria-label="How it works guide">
+            <div className={styles.howStepsGrid}>
+              <div className={styles.howStepCol}>
+                <span className={styles.howStepNum}>01</span>
+                <div className={styles.howStepContent}>
+                  <h4 className={styles.howStepTitle}>List Your Items</h4>
+                  <p className={styles.howStepDesc}>
+                    Upload photos, price, and condition for reusable machinery, motors, parts, or scrap metal fixtures.
+                  </p>
+                </div>
+              </div>
+              <div className={styles.howStepCol}>
+                <span className={styles.howStepNum}>02</span>
+                <div className={styles.howStepContent}>
+                  <h4 className={styles.howStepTitle}>Direct Buyer Inquiries</h4>
+                  <p className={styles.howStepDesc}>
+                    Receive calls, direct inquiries, and voice notes from verified local buyers and workshops.
+                  </p>
+                </div>
+              </div>
+              <div className={styles.howStepCol}>
+                <span className={styles.howStepNum}>03</span>
+                <div className={styles.howStepContent}>
+                  <h4 className={styles.howStepTitle}>Close & Earn More</h4>
+                  <p className={styles.howStepDesc}>
+                    Sell at high reusable market margins instead of basic melting scrap metal rates.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
-          <div className={styles.statValue}>32</div>
-          <div className={styles.statSublabel}>
-            <span className={styles.sublabelGreen}>✓ Active listings</span>
-          </div>
-        </div>
-
-        <div className={styles.statCard}>
-          <div className={styles.statCardTopRow}>
-            <span className={styles.statLabel}>Total Views</span>
-            <div className={styles.statIconCircle}>
-              <Eye size={18} />
-            </div>
-          </div>
-          <div className={styles.statValue}>1,245</div>
-          <div className={styles.statSublabel}>This Month</div>
-        </div>
-
-        <div className={styles.statCard}>
-          <div className={styles.statCardTopRow}>
-            <span className={styles.statLabel}>Total Inquiries</span>
-            <div className={styles.statIconCircle}>
-              <MessageCircle size={18} />
-            </div>
-          </div>
-          <div className={styles.statValue}>86</div>
-          <div className={styles.statSublabel}>This Month</div>
-        </div>
-
-        <div className={styles.statCard}>
-          <div className={styles.statCardTopRow}>
-            <span className={styles.statLabel}>Total Sales</span>
-            <div className={styles.statIconCircle}>
-              <ShoppingBag size={18} />
-            </div>
-          </div>
-          <div className={styles.statValue}>18</div>
-          <div className={styles.statSublabel}>This Month</div>
         </div>
       </div>
+
+      {/* 3. Action Buttons Section: + Add New Product & Product Requests Button Below */}
+      <div className={styles.actionButtonsCol}>
+        <div className={styles.actionRow}>
+          <button
+            type="button"
+            className={styles.headerAddBtn}
+            onClick={() => setIsAddModalOpen(true)}
+          >
+            <Plus size={16} />
+            <span>Add New Product</span>
+          </button>
+        </div>
+
+        {/* Dedicated Product Requests Button Below Add New Product */}
+        <button
+          type="button"
+          className={styles.productRequestsBannerBtn}
+          onClick={() => {
+            setSelectedRequestIdForModal(null);
+            setIsRequestsOpen(true);
+          }}
+          aria-label={`Product Requests (${pendingRequestsCount} pending)`}
+        >
+          <div className={styles.requestsBtnLeft}>
+            <div className={styles.requestsBtnIcon}>
+              <ClipboardList size={18} />
+            </div>
+            <span className={styles.requestsBtnTitle}>Product Requests</span>
+          </div>
+
+          <div className={styles.requestsBtnRight}>
+            {pendingRequestsCount > 0 ? (
+              <span className={styles.requestsBtnBadge}>
+                <span className={styles.requestsBadgePulse} />
+                {pendingRequestsCount} Pending
+              </span>
+            ) : (
+              <span className={styles.requestsBtnBadgeZero}>
+                View Requests
+              </span>
+            )}
+            <ChevronRight size={16} className={styles.requestsBtnChevron} />
+          </div>
+        </button>
+      </div>
+
+      {/* 4. Horizontal Scrollable Performance Cards (Swipeable Carousel on mobile, 4-col grid on desktop) */}
+      <section
+        ref={performanceSectionRef}
+        className={styles.statsSectionWrapper}
+        aria-label="Performance metrics"
+      >
+        <div
+          className={styles.statsCarouselTrack}
+          ref={statsTrackRef}
+          onScroll={handleStatsScroll}
+        >
+          <div className={styles.statCard}>
+            <div className={styles.statCardTopRow}>
+              <div className={styles.statSquircleIcon}>
+                <ShieldCheck size={18} strokeWidth={2.4} />
+              </div>
+              <div className={styles.statTopRightBadge}>
+                <CheckCircle2 size={12} strokeWidth={2.4} />
+                <span>Active</span>
+              </div>
+            </div>
+            <div className={styles.statCardValueGroup}>
+              <span className={styles.statBigValue}>32</span>
+              <h3 className={styles.statCardTitle}>Total Products</h3>
+            </div>
+          </div>
+
+          <div className={styles.statCard}>
+            <div className={styles.statCardTopRow}>
+              <div className={styles.statSquircleIcon}>
+                <Eye size={18} strokeWidth={2.4} />
+              </div>
+              <div className={styles.statTopRightBadge}>
+                <TrendingUp size={12} strokeWidth={2.4} />
+                <span>+18% Views</span>
+              </div>
+            </div>
+            <div className={styles.statCardValueGroup}>
+              <span className={styles.statBigValue}>1,245</span>
+              <h3 className={styles.statCardTitle}>Total Views</h3>
+            </div>
+          </div>
+
+          <div className={styles.statCard}>
+            <div className={styles.statCardTopRow}>
+              <div className={styles.statSquircleIcon}>
+                <MessageCircle size={18} strokeWidth={2.4} />
+              </div>
+              <div className={styles.statTopRightBadge}>
+                <span>This Month</span>
+              </div>
+            </div>
+            <div className={styles.statCardValueGroup}>
+              <span className={styles.statBigValue}>86</span>
+              <h3 className={styles.statCardTitle}>Total Inquiries</h3>
+            </div>
+          </div>
+
+          <div className={styles.statCard}>
+            <div className={styles.statCardTopRow}>
+              <div className={styles.statSquircleIcon}>
+                <ShoppingBag size={18} strokeWidth={2.4} />
+              </div>
+              <div className={styles.statTopRightBadge}>
+                <CheckCircle2 size={12} strokeWidth={2.4} />
+                <span>18 Sold</span>
+              </div>
+            </div>
+            <div className={styles.statCardValueGroup}>
+              <span className={styles.statBigValue}>18</span>
+              <h3 className={styles.statCardTitle}>Total Sales</h3>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Stats Dots Indicator */}
+        <div className={styles.statsIndicatorDotsRow}>
+          {[0, 1, 2, 3].map((dotIdx) => (
+            <button
+              key={dotIdx}
+              type="button"
+              className={`${styles.statIndicatorDot} ${activeStatDot === dotIdx ? styles.statIndicatorDotActive : ''}`}
+              onClick={() => scrollToStatCard(dotIdx)}
+              aria-label={`Go to stat card ${dotIdx + 1}`}
+            />
+          ))}
+        </div>
+      </section>
 
       {/* Two-Column Layout (Main Product Grid 72% + Right Sidebar 28%) */}
       <div className={styles.reusableLayoutGrid}>
@@ -302,42 +534,36 @@ export default function MerchantReusableProducts() {
               />
             </div>
 
-            <div className={styles.filterSelectsGroup}>
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className={styles.filterSelect}
+            <div className={styles.filterTabsRow}>
+              <button
+                type="button"
+                className={`${styles.filterTabBtn} ${availabilityFilter === 'All' ? styles.filterTabBtnActive : ''}`}
+                onClick={() => setAvailabilityFilter('All')}
               >
-                <option value="All Categories">Category: All Categories</option>
-                <option value="Cycles">Category: Cycles</option>
-                <option value="Motors">Category: Motors</option>
-                <option value="Gates">Category: Gates</option>
-                <option value="Engines">Category: Engines</option>
-                <option value="AC & Cooling">Category: AC &amp; Cooling</option>
-                <option value="Industrial Parts">Category: Industrial Parts</option>
-                <option value="Furniture & Fixtures">Category: Furniture &amp; Fixtures</option>
-                <option value="Pallets">Category: Pallets</option>
-              </select>
+                <span>All</span>
+                <span className={styles.filterCountBadge}>{products.length}</span>
+              </button>
 
-              <select
-                value={availabilityFilter}
-                onChange={(e) => setAvailabilityFilter(e.target.value)}
-                className={styles.filterSelect}
+              <button
+                type="button"
+                className={`${styles.filterTabBtn} ${availabilityFilter === 'In Stock' ? styles.filterTabBtnActive : ''}`}
+                onClick={() => setAvailabilityFilter('In Stock')}
               >
-                <option value="All">Availability: All</option>
-                <option value="In Stock">Availability: In Stock</option>
-                <option value="Low Stock">Availability: Low Stock</option>
-              </select>
+                <span>In Stock</span>
+                <span className={styles.filterCountBadge}>
+                  {products.filter((p) => p.status === 'Active').length}
+                </span>
+              </button>
 
-              <select className={styles.filterSelect}>
-                <option value="Newest First">Sort by: Newest First</option>
-                <option value="Price Low to High">Price: Low to High</option>
-                <option value="Price High to Low">Price: High to Low</option>
-              </select>
-
-              <button type="button" className={styles.filtersBtn}>
-                <SlidersHorizontal size={14} />
-                <span>Filters</span>
+              <button
+                type="button"
+                className={`${styles.filterTabBtn} ${availabilityFilter === 'Low Stock' ? styles.filterTabBtnActive : ''}`}
+                onClick={() => setAvailabilityFilter('Low Stock')}
+              >
+                <span>Low Stock</span>
+                <span className={styles.filterCountBadge}>
+                  {products.filter((p) => p.status === 'Low Stock').length}
+                </span>
               </button>
             </div>
           </div>
@@ -407,13 +633,6 @@ export default function MerchantReusableProducts() {
                       onClick={() => setDetailsProduct(product)}
                     >
                       View Details
-                    </button>
-                    <button
-                      type="button"
-                      className={styles.moreOptionsBtn}
-                      aria-label="More options"
-                    >
-                      <MoreHorizontal size={15} />
                     </button>
                   </div>
                 </div>
@@ -687,8 +906,15 @@ export default function MerchantReusableProducts() {
                 type="button"
                 className={styles.modalPrimaryBtn}
                 onClick={() => {
-                  triggerToast(`Inquiry desk opened for ${detailsProduct.name}`);
+                  const allReqs = getProductRequests();
+                  const matched = allReqs.find(
+                    (r) =>
+                      r.productId === detailsProduct.id ||
+                      r.productName.toLowerCase() === detailsProduct.name.toLowerCase()
+                  );
                   setDetailsProduct(null);
+                  setSelectedRequestIdForModal(matched ? matched.id : null);
+                  setIsRequestsOpen(true);
                 }}
               >
                 <MessageSquare size={16} />
@@ -704,6 +930,16 @@ export default function MerchantReusableProducts() {
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
         onPublish={handlePublishNewProduct}
+      />
+
+      {/* Product Requests Modal */}
+      <ProductRequestsModal
+        isOpen={isRequestsOpen}
+        onClose={() => {
+          setIsRequestsOpen(false);
+          setSelectedRequestIdForModal(null);
+        }}
+        initialRequestId={selectedRequestIdForModal}
       />
     </div>
   );

@@ -16,6 +16,7 @@ import {
   ChevronRight,
   ArrowRight,
   TrendingUp,
+  History,
 } from 'lucide-react';
 import styles from './MerchantSidebar.module.css';
 
@@ -74,11 +75,11 @@ export function MerchantSidebar({ isCollapsed, onToggle }: MerchantSidebarProps)
       isActive: location.pathname.includes('/ride'),
     },
     {
-      id: 'transactions',
-      label: 'Transactions',
-      to: '/transactions',
-      icon: <Receipt size={19} />,
-      isActive: location.pathname.includes('/transactions'),
+      id: 'history',
+      label: 'History',
+      to: '/history',
+      icon: <History size={19} />,
+      isActive: location.pathname.includes('/history'),
     },
     {
       id: 'reusable-products',
@@ -106,13 +107,13 @@ export function MerchantSidebar({ isCollapsed, onToggle }: MerchantSidebarProps)
     {
       id: 'refer-earn',
       label: 'Refer & Earn',
-      to: '#refer',
+      to: '/refer-earn',
       icon: <Gift size={17} />,
     },
     {
       id: 'support',
       label: 'Support',
-      to: '#support',
+      to: '/support',
       icon: <HelpCircle size={17} />,
     },
   ];

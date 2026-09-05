@@ -11,6 +11,7 @@ export interface BillScrapFeedbackSubmission {
   userId?: string;
   userName?: string;
   userPhone?: string;
+  userType?: 'household' | 'merchant';
   satisfactionRating?: number; // 1 to 5 overall experience
   feedbackCategory?: string; // App experience, Scrap selling, etc.
   experienceRating?: string; // "Very helpful", "Helpful", "Okay", "Not very helpful", "Not helpful"
@@ -19,6 +20,8 @@ export interface BillScrapFeedbackSubmission {
   problemsFaced?: string; // "Are you facing any problems?"
   improvements?: string; // "What should we improve?"
   description?: string; // Fallback or summary description
+  voiceNoteUrl?: string; // Voice feedback recording audio URL or base64
+  voiceDurationSeconds?: number;
   createdAt: string;
 }
 

@@ -1,11 +1,20 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState, useCallback, useRef } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '@/store/useAuthStore';
 import styles from './Splash.module.css';
 
-export default function Splash() {
+interface SplashProps {
+  onComplete?: () => void;
+  isInitialLaunch?: boolean;
+}
+
+export default function Splash({ onComplete, isInitialLaunch = false }: SplashProps) {
   const navigate = useNavigate();
+  const location = useLocation();
   const [animationStep, setAnimationStep] = useState(0);
+  const [isFadingOut, setIsFadingOut] = useState(false);
+  const isNavigatedRef = useRef(false);
+
   // Step 0: Empty truck waiting centered (Idling with smoke)
   // Step 1: Fridge drops into Far-Left (x=16, touches bed floor)
   // Step 2: Can drops into Far-Right (x=176, touches bed floor)
@@ -20,6 +29,52 @@ export default function Splash() {
   const user = useAuthStore((s) => s.user);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
 
+  const handleFinish = useCallback(() => {
+    if (isNavigatedRef.current) return;
+    isNavigatedRef.current = true;
+    setIsFadingOut(true);
+
+    setTimeout(() => {
+      if (onComplete) {
+        onComplete();
+      }
+
+      // Check if we need to redirect (root or splash routes)
+      const currentPath = location.pathname;
+      const isRootOrSplash =
+        currentPath === '/' || currentPath === '/splash' || currentPath === '/loading';
+
+      if (isRootOrSplash) {
+        const storedLanguage = localStorage.getItem('sa_language');
+        const storedUser = localStorage.getItem('sa_user');
+
+        if (storedUser) {
+          try {
+            const parsed = JSON.parse(storedUser);
+            if (parsed && parsed.role) {
+              navigate(`/dashboard/${parsed.role}`, { replace: true });
+              return;
+            }
+          } catch {
+            // ignore
+          }
+        }
+
+        if (user && user.role) {
+          navigate(`/dashboard/${user.role}`, { replace: true });
+          return;
+        }
+
+        if (!storedLanguage) {
+          navigate('/language', { replace: true });
+          return;
+        }
+
+        navigate('/home', { replace: true });
+      }
+    }, 320);
+  }, [location.pathname, navigate, onComplete, user]);
+
   useEffect(() => {
     setAnimationStep(0);
 
@@ -32,31 +87,7 @@ export default function Splash() {
     const t7 = setTimeout(() => setAnimationStep(7), 2750); // Drop 7: TV (Fully Packed)
     const t8 = setTimeout(() => setAnimationStep(8), 3250); // Engine revs & wheels pre-spin
     const t9 = setTimeout(() => setAnimationStep(9), 3750); // Truck drives off to right
-
-    // Automatic Navigation to next screen after truck drives off
-    const tNav = setTimeout(() => {
-      const storedLanguage = localStorage.getItem('sa_language');
-      const storedUser = localStorage.getItem('sa_user');
-
-      if (storedUser) {
-        try {
-          const parsed = JSON.parse(storedUser);
-          if (parsed && parsed.role) {
-            navigate(`/dashboard/${parsed.role}`, { replace: true });
-            return;
-          }
-        } catch {
-          // ignore
-        }
-      }
-
-      if (!storedLanguage) {
-        navigate('/language', { replace: true });
-        return;
-      }
-
-      navigate('/home', { replace: true });
-    }, 4950);
+    const tNav = setTimeout(() => handleFinish(), 4850);    // Transition after truck finishes drive-off
 
     return () => {
       clearTimeout(t1);
@@ -70,10 +101,27 @@ export default function Splash() {
       clearTimeout(t9);
       clearTimeout(tNav);
     };
-  }, [navigate, user, isAuthenticated]);
+  }, [handleFinish]);
+
+  const progressPercent =
+    animationStep === 0 ? 12 :
+    animationStep === 1 ? 25 :
+    animationStep === 2 ? 38 :
+    animationStep === 3 ? 50 :
+    animationStep === 4 ? 62 :
+    animationStep === 5 ? 75 :
+    animationStep === 6 ? 88 :
+    animationStep >= 7 ? 100 : 12;
 
   return (
-    <div className={styles.splashCanvas}>
+    <div
+      className={[
+        styles.splashCanvas,
+        isFadingOut ? styles.splashFadingOut : '',
+      ].join(' ')}
+      role="region"
+      aria-label="Bill Scrap Loading Screen"
+    >
       {/* Main Animation Stage (Clean Minimalist Canvas) */}
       <main className={styles.stageContainer}>
         {/* Animated Scrap Truck Container (Centered then Accelerating to Right) */}
@@ -504,6 +552,19 @@ export default function Splash() {
               ? 'Scrap Loaded & Ready for Dispatch!'
               : 'Collecting Scrap... Building a Cleaner Tomorrow'}
           </p>
+          <div
+            className={styles.progressBarTrack}
+            role="progressbar"
+            aria-valuenow={progressPercent}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-label="Loading progress"
+          >
+            <div
+              className={styles.progressBarFill}
+              style={{ width: `${progressPercent}%` }}
+            />
+          </div>
         </div>
       </footer>
     </div>

@@ -26,6 +26,7 @@ import {
   AlertTriangle,
   Truck,
 } from 'lucide-react';
+import { getPrivacyArea } from '@/utils/locationPrivacy';
 import styles from './MerchantQuotes.module.css';
 
 interface QuoteItem {
@@ -542,8 +543,8 @@ export default function MerchantQuotes() {
                       <div className={styles.detailRow}>
                         <MapPin size={16} className={styles.detailIcon} />
                         <div className={styles.addressCol}>
-                          <span className={styles.detailLabel}>PICKUP LOCATION</span>
-                          <span className={styles.addressValue}>{quote.address}</span>
+                          <span className={styles.detailLabel}>PICKUP AREA</span>
+                          <span className={styles.addressValue}>{getPrivacyArea(quote.address, quote.customerName)}</span>
                         </div>
                       </div>
                     </div>
@@ -774,8 +775,8 @@ export default function MerchantQuotes() {
                   <span className={styles.specValue}>{detailsModalQuote.pickupSlot}</span>
                 </div>
                 <div className={styles.specItemFull}>
-                  <span className={styles.specLabel}>Pickup Address</span>
-                  <span className={styles.specValue}>{detailsModalQuote.address}</span>
+                  <span className={styles.specLabel}>Pickup Area</span>
+                  <span className={styles.specValue}>{getPrivacyArea(detailsModalQuote.address, detailsModalQuote.customerName)}</span>
                 </div>
                 {detailsModalQuote.quoteNote && (
                   <div className={styles.specItemFull}>

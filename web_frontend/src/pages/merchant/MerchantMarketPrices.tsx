@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
-  ArrowLeft,
   MapPin,
   Info,
   Layers,
@@ -445,13 +444,8 @@ export default function MerchantMarketPrices() {
       )}
 
       <main className={styles.detailMainContainer}>
-        {/* Top Navigation Row: Back Link, Search Bar, and Category Switcher */}
+        {/* Top Navigation Row: Search Bar */}
         <div className={styles.topNavRow}>
-          <Link to="/dashboard/merchant" className={styles.backLink}>
-            <ArrowLeft size={16} />
-            <span>← Back to Dashboard</span>
-          </Link>
-
           {/* Search Bar */}
           <div className={styles.searchBox}>
             <Search size={16} className={styles.searchIcon} />
@@ -810,9 +804,6 @@ export default function MerchantMarketPrices() {
               <h3 className={styles.relatedSectionTitle}>
                 All Materials in {activeCategory?.name || 'this category'} ({categoryMaterials.length})
               </h3>
-              <p className={styles.relatedSectionSub}>
-                Click any material card below to inspect its large image and adjust YOUR Price.
-              </p>
             </div>
 
             <div className={styles.relatedGrid}>

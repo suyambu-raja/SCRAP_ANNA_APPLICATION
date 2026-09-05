@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import type { User, UserRole } from '@/types';
+import { commissionReminderService } from '@/services/commissionReminderService';
 
 interface AuthState {
   user: User | null;
@@ -27,6 +28,10 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   logout: () => {
+    const currentUser = useAuthStore.getState().user;
+    if (currentUser?.id) {
+      commissionReminderService.clearAllForUser(currentUser.id);
+    }
     localStorage.removeItem('sa_token');
     localStorage.removeItem('sa_user');
     set({ user: null, token: null, isAuthenticated: false, isLoading: false });

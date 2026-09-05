@@ -12,6 +12,7 @@ import {
   Gift,
   CreditCard,
   Receipt,
+  History,
 } from 'lucide-react';
 import { useAuthStore } from '@/store/useAuthStore';
 import styles from './MerchantTopHeader.module.css';
@@ -86,10 +87,12 @@ export function MerchantTopHeader() {
     if (path.includes('/quotes') || path.includes('/merchant-offers')) return 'My Quotes';
     if (path.includes('/orders')) return 'My Orders';
     if (path.includes('/ride')) return "Today's Ride";
-    if (path.includes('/transactions') || (path.includes('/profile') && location.search.includes('transactions'))) return 'Transactions';
+    if (path.includes('/history')) return 'History';
     if (path.includes('/reusable-products') || path.includes('/marketplace')) return 'Reusable Marketplace';
     if (path.includes('/profile')) return 'Merchant Profile';
-    if (path.includes('/support')) return 'Support Desk';
+    if (path.includes('/support') || path.includes('/help')) return 'Support Desk';
+    if (path.includes('/refer')) return 'Refer & Earn';
+    if (path.includes('/notifications')) return 'Notifications';
     if (path.includes('/settings')) return 'Settings';
     return 'Dashboard';
   };
@@ -127,16 +130,15 @@ export function MerchantTopHeader() {
         )}
 
         {/* Notification Bell */}
-        <button
-          type="button"
+        <Link
+          to="/notifications"
           className={styles.iconBtn}
           title="3 New Notifications"
           aria-label="3 new notifications"
-          onClick={() => { }}
         >
           <Bell size={18} />
           <span className={styles.badgeCount}>3</span>
-        </button>
+        </Link>
 
         {/* User Account Dropdown */}
         <div className={styles.userMenuWrapper} ref={dropdownRef}>
@@ -174,12 +176,12 @@ export function MerchantTopHeader() {
                 <span>Profile</span>
               </Link>
               <Link
-                to="/transactions"
+                to="/history"
                 className={styles.dropdownItem}
                 onClick={() => setDropdownOpen(false)}
               >
-                <CreditCard size={15} />
-                <span>Transactions &amp; Ledger</span>
+                <History size={15} />
+                <span>History</span>
               </Link>
               <Link
                 to="/support"
@@ -190,7 +192,7 @@ export function MerchantTopHeader() {
                 <span>Support</span>
               </Link>
               <Link
-                to="/profile"
+                to="/refer-earn"
                 className={styles.dropdownItem}
                 onClick={() => setDropdownOpen(false)}
               >

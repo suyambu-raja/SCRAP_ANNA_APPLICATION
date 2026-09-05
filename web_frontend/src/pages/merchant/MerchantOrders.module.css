@@ -28,7 +28,7 @@
   position: fixed;
   top: 75px;
   right: 2rem;
-  background-color: #0f172a;
+  background-color: #20242D;
   color: #fbc21a;
   padding: 0.85rem 1.35rem;
   border-radius: 12px;
@@ -109,14 +109,14 @@
 
 .statCard {
   background-color: #ffffff;
-  border: 1px solid #edf2f7;
+  border: 1.5px solid #FFDE7A;
   border-bottom: 3.5px solid #fbc21a;
   border-radius: 14px;
   padding: 0.95rem 1.15rem;
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+  box-shadow: 0 2px 8px rgba(251, 194, 26, 0.08);
 }
 
 .statIconCircle {
@@ -281,7 +281,7 @@
 
 .orderCard {
   background: #ffffff;
-  border: 1px solid #edf2f7;
+  border: 1.5px solid #FFDE7A;
   border-bottom: 3.5px solid #fbc21a;
   border-radius: 18px;
   padding: 1.35rem 1.5rem;
@@ -293,9 +293,9 @@
 }
 
 .orderCard:hover {
-  border-color: #cbd5e1;
+  border-color: #fbc21a;
   border-bottom-color: #fbc21a;
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 8px 22px rgba(251, 194, 26, 0.12);
   transform: translateY(-2px);
 }
 
@@ -759,13 +759,13 @@
 
 .sidebarCard {
   background: #ffffff;
-  border: 1px solid #edf2f7;
+  border: 1.5px solid #FFDE7A;
   border-radius: 16px;
   padding: 1.25rem;
   display: flex;
   flex-direction: column;
   gap: 0.95rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+  box-shadow: 0 2px 8px rgba(251, 194, 26, 0.08);
 }
 
 .sidebarHeaderRow {
@@ -1104,10 +1104,13 @@
 .workflowModalOverlay {
   position: fixed;
   inset: 0;
-  background-color: #0b1120;
+  background-color: rgba(11, 17, 32, 0.75);
+  backdrop-filter: blur(4px);
   z-index: 99999;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
@@ -1116,23 +1119,50 @@
 
 .workflowModalCard {
   background: #f8fafc;
-  width: 100vw;
-  height: 100vh;
-  max-width: 100vw;
-  max-height: 100vh;
-  border-radius: 0;
+  width: 100%;
+  max-width: 520px;
+  height: 94vh;
+  max-height: 94vh;
+  border-radius: 24px 24px 0 0;
+  border: 2px solid #FFDE7A;
+  border-bottom: none;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.35);
+  animation: slideUpFromBottom 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (max-width: 540px) {
+  .workflowModalCard {
+    width: 100vw;
+    max-width: 100vw;
+    height: 96vh;
+    max-height: 96vh;
+    border-radius: 20px 20px 0 0;
+    border: 2px solid #FFDE7A;
+    border-bottom: none;
+  }
+}
+
+@keyframes slideUpFromBottom {
+  from {
+    transform: translateY(100%);
+    opacity: 0.8;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .workflowModalHeader {
-  padding: 1.1rem 2rem;
-  border-bottom: 1px solid #1e293b;
+  padding: 1rem 1.4rem;
+  border-bottom: 2px solid #fbc21a;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #0f172a;
+  background: #20242D;
   color: #ffffff;
   flex-shrink: 0;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
@@ -1185,16 +1215,17 @@
   transform: rotate(90deg) scale(1.08);
 }
 
-/* Stepper */
+/* Stepper - 6 Stages */
 .workflowStepper {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.85rem 2rem;
+  padding: 0.65rem 0.75rem;
   background: #ffffff;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1.5px solid #FFDE7A;
   flex-shrink: 0;
   overflow-x: auto;
+  gap: 2px;
 }
 
 .stepItem {
@@ -1202,53 +1233,79 @@
   flex-direction: column;
   align-items: center;
   gap: 3px;
-  opacity: 0.45;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 2px 2px;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
 }
 
-.stepItemActive {
-  opacity: 1;
+.stepItem:hover {
+  opacity: 0.9;
 }
 
 .stepNumber {
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
-  background: #cbd5e1;
-  color: #0f172a;
-  font-size: 0.75rem;
-  font-weight: 800;
+  background: #f1f5f9;
+  color: #94a3b8;
+  font-size: 0.7rem;
+  font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.stepNumberDone {
+  background: #20242D;
+  color: #fbc21a;
+  font-weight: 900;
+  box-shadow: 0 1px 4px rgba(32, 36, 45, 0.25);
 }
 
 .stepItemActive .stepNumber {
   background: #fbc21a;
   color: #0f172a;
-  box-shadow: 0 2px 8px rgba(251, 194, 26, 0.45);
+  font-weight: 900;
+  box-shadow: 0 2px 6px rgba(251, 194, 26, 0.4);
 }
 
 .stepLabel {
-  font-size: 0.7rem;
-  font-weight: 800;
+  font-size: 0.66rem;
+  font-weight: 600;
+  color: #94a3b8;
+  white-space: nowrap;
+}
+
+.stepItemActive .stepLabel {
   color: #0f172a;
+  font-weight: 800;
 }
 
 .stepConnector {
   flex: 1;
   height: 2px;
   background: #e2e8f0;
-  margin: 0 8px;
+  margin: 0 2px;
   position: relative;
   top: -7px;
+  min-width: 6px;
+  transition: background 0.15s ease;
+}
+
+.stepConnectorActive {
+  background: #fbc21a;
 }
 
 /* Modal Body */
 .workflowModalBody {
   flex: 1;
   overflow-y: auto;
-  padding: 1.75rem 2rem 5rem 2rem;
-  max-width: 980px;
+  padding: 1.15rem 1.25rem 4rem 1.25rem;
+  max-width: 520px;
   margin: 0 auto;
   width: 100%;
   box-sizing: border-box;
@@ -1260,6 +1317,563 @@
   gap: 1.25rem;
 }
 
+/* Stage 1 Yellow Alert Banner */
+.stage1AlertBanner {
+  background: #fffdf5;
+  border: 1.5px solid #FFDE7A;
+  border-radius: 14px;
+  padding: 0.85rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  box-shadow: 0 2px 8px rgba(251, 194, 26, 0.08);
+}
+
+.stage1AlertIconWrap {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1.5px solid #FFDE7A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0f172a;
+  flex-shrink: 0;
+}
+
+.stage1AlertTextCol {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stage1AlertTitle {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.stage1AlertSubtitle {
+  font-size: 0.76rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* UNIFIED NAVIGATION MAP CARD */
+.unifiedNavCard {
+  background: #ffffff;
+  border: 1.5px solid #FFDE7A;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(251, 194, 26, 0.12);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Turn header */
+.navTurnHeader {
+  background: #20242D;
+  padding: 0.85rem 1rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  border-bottom: 1.5px solid #FFDE7A;
+  box-sizing: border-box;
+}
+
+.turnIconSquare {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: #2a303c;
+  border: 1.5px solid rgba(251, 194, 26, 0.45);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.turnInfoCol {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.turnTopMetaRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.turnDistanceBig {
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: #ffffff;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.turnInstruction {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.35;
+  margin: 1px 0;
+  word-break: break-word;
+}
+
+.turnSubMeta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.76rem;
+  color: #94a3b8;
+  font-weight: 600;
+  flex-wrap: wrap;
+}
+
+.metaDot {
+  color: #64748b;
+  font-size: 0.8rem;
+}
+
+.metaGreenTraffic {
+  color: #22c55e;
+  font-weight: 700;
+}
+
+.gpsLiveBadge {
+  background: rgba(34, 197, 94, 0.15);
+  border: 1px solid rgba(34, 197, 94, 0.4);
+  color: #22c55e;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.22rem 0.55rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.gpsDotGreen {
+  color: #22c55e;
+  font-size: 0.65rem;
+}
+
+/* Google Map Viewport */
+.googleMapViewBox {
+  position: relative;
+  width: 100%;
+  height: 275px;
+  background: #f4f3f0;
+  overflow: hidden;
+}
+
+.googleMapSvg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.mapControlsColumn {
+  position: absolute;
+  top: 0.85rem;
+  right: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 10;
+}
+
+.mapCompassBtn {
+  width: 36px;
+  height: 36px;
+  background: #ffffff;
+  border: 1.5px solid #FFDE7A;
+  border-radius: 10px;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(251, 194, 26, 0.18);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.mapCompassBtn:hover {
+  background: #fffdf5;
+  border-color: #fbc21a;
+  transform: scale(1.05);
+}
+
+.mapZoomStack {
+  background: #ffffff;
+  border: 1.5px solid #FFDE7A;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(251, 194, 26, 0.18);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.mapZoomBtn {
+  width: 36px;
+  height: 34px;
+  background: transparent;
+  border: none;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.mapZoomBtn:hover {
+  background: #fffdf5;
+}
+
+.zoomDivider {
+  height: 1px;
+  background: #FFDE7A;
+  width: 100%;
+}
+
+/* Bottom Destination & Trip Metrics Panel */
+.mapBottomPanel {
+  background: #ffffff;
+  border-top: 1.5px solid #FFDE7A;
+  padding: 1rem 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  box-sizing: border-box;
+}
+
+.destHeaderRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.destLeftCol {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  min-width: 0;
+}
+
+.destTagRow {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.destPinIcon {
+  color: #0f172a;
+}
+
+.destTagText {
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #64748b;
+  letter-spacing: 0.05em;
+}
+
+.destCustomerName {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+.destAddressText {
+  font-size: 0.78rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.destViewDetailsBtn {
+  background: #fffdf5;
+  border: 1.5px solid #FFDE7A;
+  border-radius: 10px;
+  padding: 0.45rem 0.85rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #0f172a;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: 0 2px 6px rgba(251, 194, 26, 0.08);
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.destViewDetailsBtn:hover {
+  background: #fef9e7;
+  border-color: #fbc21a;
+  transform: translateY(-1px);
+}
+
+.panelDivider {
+  height: 1.5px;
+  background: #fef08a;
+  width: 100%;
+}
+
+/* 3 Metrics Boxes with Yellow Borders */
+.destMetricsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.55rem;
+}
+
+.destMetricBox {
+  background: #fffdf5;
+  border: 1.5px solid #FFDE7A;
+  border-radius: 12px;
+  padding: 0.65rem 0.45rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 3px;
+  box-shadow: 0 2px 6px rgba(251, 194, 26, 0.08);
+  transition: all 0.15s ease;
+  box-sizing: border-box;
+}
+
+.destMetricBox:hover {
+  background: #fffbeb;
+  border-color: #fbc21a;
+  transform: translateY(-1px);
+}
+
+.destMetricIconCircle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1px solid #FFDE7A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0f172a;
+  margin-bottom: 2px;
+  flex-shrink: 0;
+}
+
+.destMetricVal {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
+.destMetricValGreen {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #16a34a;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
+.destMetricLabel {
+  font-size: 0.68rem;
+  color: #64748b;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* AGREED BUYING RATE CARD */
+.agreedRateCard {
+  background: #ffffff;
+  border: 1.5px solid #FFDE7A;
+  border-radius: 14px;
+  padding: 0.85rem 1.15rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  box-shadow: 0 2px 8px rgba(251, 194, 26, 0.1);
+  box-sizing: border-box;
+}
+
+.agreedRateLeft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.agreedRateIconWrap {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: #fffdf5;
+  border: 1.5px solid #FFDE7A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0f172a;
+  flex-shrink: 0;
+}
+
+.agreedRateTextCol {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.agreedRateTag {
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #64748b;
+  letter-spacing: 0.05em;
+}
+
+.agreedRateMaterial {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.agreedRatePriceBig {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: #0f172a;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* DUAL ACTION BUTTONS */
+.navDualActionsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 0.65rem;
+  width: 100%;
+}
+
+.btnOpenGoogleMaps {
+  background: #20242D;
+  color: #ffffff;
+  border: 1.5px solid #FFDE7A;
+  border-radius: 12px;
+  padding: 0.75rem 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.25;
+  text-decoration: none;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  box-sizing: border-box;
+  min-width: 0;
+  width: 100%;
+}
+
+.btnOpenGoogleMaps span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.btnOpenGoogleMaps:hover {
+  background: #2a303c;
+  border-color: #fbc21a;
+  transform: translateY(-1px);
+}
+
+.btnCallFactory {
+  background: #ffffff;
+  border: 1.5px solid #FFDE7A;
+  color: #0f172a;
+  border-radius: 12px;
+  padding: 0.75rem 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.25;
+  text-decoration: none;
+  box-shadow: 0 2px 8px rgba(251, 194, 26, 0.08);
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  box-sizing: border-box;
+  min-width: 0;
+  width: 100%;
+}
+
+.btnCallFactory span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.btnCallFactory:hover {
+  background: #fffdf5;
+  border-color: #fbc21a;
+  transform: translateY(-1px);
+}
+
+/* BIG YELLOW PRIMARY CTA */
+.btnArrivedAtFactory {
+  width: 100%;
+  background: #fbc21a;
+  color: #0f172a;
+  border: 2px solid #eab308;
+  border-radius: 14px;
+  padding: 0.85rem 0.75rem;
+  font-size: 0.84rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(251, 194, 26, 0.35);
+  transition: all 0.15s ease;
+  box-sizing: border-box;
+}
+
+.btnArrivedAtFactory span {
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+}
+
+.btnArrivedAtFactory:hover {
+  background: #eab308;
+  border-color: #ca8a04;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(251, 194, 26, 0.45);
+}
+
 .stageHeroBadge {
   display: inline-flex;
   align-items: center;
@@ -1268,7 +1882,7 @@
   font-weight: 800;
   color: #0f172a;
   background: #fef3c7;
-  border: 1px solid #fde68a;
+  border: 1.5px solid #FFDE7A;
   padding: 0.4rem 0.75rem;
   border-radius: 8px;
   width: fit-content;
@@ -1679,10 +2293,23 @@
 }
 
 .stageInstructionText {
-  font-size: 0.85rem;
-  color: #475569;
-  line-height: 1.45;
+  background: linear-gradient(180deg, #FFF8DC 0%, #FFEEBA 100%);
+  border: 1.5px solid #FFDE7A;
+  border-radius: 12px;
+  padding: 0.85rem 1.15rem;
+  font-size: 0.825rem;
+  font-weight: 600;
+  color: #1E3A20;
+  line-height: 1.55;
   margin: 0;
+  box-shadow: 0 2px 8px rgba(251, 194, 26, 0.1);
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.stageInstructionText strong {
+  color: #0f172a;
+  font-weight: 800;
 }
 
 /* OTP Inputs */
@@ -1690,21 +2317,24 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
-  background: #f8fafc;
+  gap: 0.65rem;
+  background: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 14px;
-  padding: 1.25rem;
+  padding: 1.35rem 1.25rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .otpLabel {
-  font-size: 0.8rem;
-  font-weight: 700;
+  font-size: 0.85rem;
+  font-weight: 800;
   color: #0f172a;
 }
 
 .otpLargeInput {
-  width: 180px;
+  width: 190px;
   text-align: center;
   font-size: 1.75rem;
   font-weight: 900;
@@ -1715,6 +2345,7 @@
   background: #ffffff;
   color: #0f172a;
   outline: none;
+  transition: all 0.2s ease;
 }
 
 .otpLargeInput:focus {
@@ -1723,8 +2354,13 @@
 }
 
 .otpHelperText {
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   color: #64748b;
+  text-align: center;
+}
+
+.otpHelperText strong {
+  color: #0f172a;
 }
 
 /* Bill Preparation Header */
@@ -1760,27 +2396,33 @@
 }
 
 .billInstructionNotice {
-  background: #f1f5f9;
-  border-left: 3.5px solid #fbc21a;
-  border-radius: 8px;
-  padding: 0.75rem 1rem;
+  background: linear-gradient(180deg, #FFF8DC 0%, #FFEEBA 100%);
+  border: 1.5px solid #FFDE7A;
+  border-radius: 12px;
+  padding: 0.85rem 1.15rem;
   font-size: 0.825rem;
-  color: #334155;
+  font-weight: 600;
+  color: #1E3A20;
+  line-height: 1.5;
   margin: 0;
-  line-height: 1.45;
+  box-shadow: 0 2px 8px rgba(251, 194, 26, 0.1);
 }
 
-/* Universal Top Scrap Search Bar */
+/* Universal Top Scrap Search Bar - Fixed Height Container with Internal Scroll (Fits at least 2 items vertically) */
 .universalScrapSearchBox {
   background: #ffffff;
-  border: 1.5px solid #0f172a;
+  border: 1.5px solid #FFDE7A;
   border-radius: 14px;
-  padding: 1.15rem 1.25rem;
+  padding: 1rem 1.15rem;
   box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
   position: relative;
   display: flex;
   flex-direction: column;
   gap: 0.65rem;
+  height: 540px;
+  max-height: 540px;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .scrapSearchHeaderRow {
@@ -1789,6 +2431,7 @@
   justify-content: space-between;
   gap: 0.5rem;
   flex-wrap: wrap;
+  flex-shrink: 0;
 }
 
 .scrapSearchHeaderLabel {
@@ -1815,6 +2458,7 @@
   border-radius: 10px;
   padding: 0.65rem 0.85rem;
   transition: all 0.15s ease;
+  flex-shrink: 0;
 }
 
 .scrapSearchInputWrapper:focus-within {
@@ -1866,7 +2510,10 @@
 .categoryExplorerContainer {
   display: flex;
   flex-direction: column;
-  gap: 0.85rem;
+  gap: 0.75rem;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
 }
 
 /* Category Tabs Track (Market Price Order) */
@@ -1877,6 +2524,7 @@
   overflow-x: auto;
   padding-bottom: 4px;
   scrollbar-width: thin;
+  flex-shrink: 0;
 }
 
 .billingCategoryTabBtn {
@@ -1902,14 +2550,14 @@
 }
 
 .billingCategoryTabActive {
-  background: #0f172a !important;
+  background: #20242D !important;
   color: #fbc21a !important;
-  border-color: #0f172a !important;
-  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.15);
+  border-color: #20242D !important;
+  box-shadow: 0 3px 10px rgba(32, 36, 45, 0.2);
 }
 
 .billingCategoryTabIcon {
-  font-size: 1rem;
+  display: none;
 }
 
 .billingCategoryTabLabel {
@@ -1921,15 +2569,18 @@
   opacity: 0.75;
 }
 
-/* Subcategory Explorer Section */
+/* Subcategory Explorer Section - Scrollable Inside Container */
 .subCategoryExplorerSection {
   background: #f8fafc;
   border: 1.5px solid #e2e8f0;
   border-radius: 12px;
-  padding: 0.85rem;
+  padding: 0.75rem 0.85rem;
   display: flex;
   flex-direction: column;
-  gap: 0.65rem;
+  gap: 0.5rem;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .subCategoryHeaderRow {
@@ -1938,6 +2589,7 @@
   justify-content: space-between;
   gap: 0.5rem;
   flex-wrap: wrap;
+  flex-shrink: 0;
 }
 
 .activeCatBadge {
@@ -1954,11 +2606,17 @@
   font-weight: 600;
 }
 
-/* Subcategory Cards Grid */
+/* Subcategory Cards Grid - Smooth Scrollable Item List */
 .subCategoryCardsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
   gap: 0.65rem;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 6px;
+  scrollbar-width: thin;
+  scrollbar-color: #FFDE7A #f8fafc;
 }
 
 .subCategoryCard {
@@ -2041,7 +2699,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
-  background: #0f172a;
+  background: #20242D;
   color: #fbc21a;
   border: none;
   font-size: 0.72rem;
@@ -2053,12 +2711,12 @@
 }
 
 .addSubItemBtn:hover {
-  background: #1e293b;
+  background: #2a303c;
   color: #ffffff;
   transform: scale(1.05);
 }
 
-/* Live Search Results */
+/* Live Search Results - Contained within fixed box with internal scroll */
 .searchLiveResultsBox {
   display: flex;
   flex-direction: column;
@@ -2067,6 +2725,9 @@
   border: 1.5px solid #cbd5e1;
   border-radius: 12px;
   padding: 0.85rem;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .searchLiveResultsHeader {
@@ -2119,18 +2780,19 @@
 
 .billItemCard {
   background: #ffffff;
-  border: 1.5px solid #e2e8f0;
+  border: 1.5px solid #fbc21a;
   border-radius: 14px;
   padding: 1.15rem;
   display: flex;
   flex-direction: column;
   gap: 0.85rem;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
-  transition: border-color 0.15s ease;
+  box-shadow: 0 2px 10px rgba(251, 194, 26, 0.08);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .billItemCard:hover {
-  border-color: #cbd5e1;
+  border-color: #f59e0b;
+  box-shadow: 0 4px 14px rgba(251, 194, 26, 0.15);
 }
 
 .billItemCardHeader {
@@ -2156,8 +2818,9 @@
   gap: 0.35rem;
   font-size: 0.75rem;
   font-weight: 800;
-  color: #0f172a;
-  background: #f1f5f9;
+  color: #475569;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
   padding: 0.35rem 0.65rem;
   border-radius: 6px;
   white-space: nowrap;
@@ -2175,12 +2838,13 @@
   font-weight: 800;
   color: #0f172a;
   outline: none;
+  box-shadow: none;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .billMaterialTitleInput:focus {
   border-color: #fbc21a;
-  box-shadow: 0 0 0 3px rgba(251, 194, 26, 0.25);
+  box-shadow: 0 0 0 3px rgba(251, 194, 26, 0.18);
 }
 
 .deleteLineItemBtn {
@@ -2259,12 +2923,13 @@
 .calcAmountDisplayBox {
   display: flex;
   align-items: center;
-  background: #f0fdf4;
-  border: 1.5px solid #86efac;
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
   border-radius: 8px;
   padding: 0.625rem 0.85rem;
   min-height: 42px;
   box-sizing: border-box;
+  box-shadow: none;
 }
 
 .calcCurrencySymbol {
@@ -2289,12 +2954,13 @@
   min-width: 0;
   width: 100%;
   overflow: hidden;
+  box-shadow: none;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .unitInputWrapper:focus-within {
   border-color: #fbc21a;
-  box-shadow: 0 0 0 3px rgba(251, 194, 26, 0.25);
+  box-shadow: 0 0 0 3px rgba(251, 194, 26, 0.18);
 }
 
 .billNumberInput {
@@ -2348,8 +3014,8 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  background: #ffffff;
-  border: 2px dashed #cbd5e1;
+  background: #fffdf5;
+  border: 2px dashed #fbc21a;
   color: #0f172a;
   font-size: 0.875rem;
   font-weight: 800;
@@ -2360,9 +3026,9 @@
 }
 
 .addAnotherProductDashedBtn:hover {
-  border-color: #fbc21a;
-  background: #fffdf5;
-  color: #d97706;
+  border-color: #d97706;
+  background: #fef3c7;
+  color: #92400e;
 }
 
 /* Adjustments Grid */
@@ -2374,27 +3040,30 @@
 
 .adjustmentCard {
   background: #ffffff;
-  border: 1px solid #e2e8f0;
+  border: 1.5px solid #fbc21a;
   border-radius: 12px;
   padding: 1rem;
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
+  box-shadow: 0 2px 8px rgba(251, 194, 26, 0.08);
 }
 
 .billSelectInput {
   background: #ffffff;
-  border: 1.5px solid #cbd5e1;
+  border: 1.5px solid #fbc21a;
   border-radius: 8px;
   padding: 0.55rem 0.75rem;
   font-size: 0.85rem;
   font-weight: 700;
   color: #0f172a;
   outline: none;
+  box-shadow: 0 1px 4px rgba(251, 194, 26, 0.1);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .billSelectInput:focus {
-  border-color: #fbc21a;
+  border-color: #eab308;
   box-shadow: 0 0 0 3px rgba(251, 194, 26, 0.25);
 }
 
@@ -2405,14 +3074,15 @@
 
 /* Live Bill Summary Card */
 .liveBillSummaryCard {
-  background: #0f172a;
+  background: #20242D;
   color: #ffffff;
+  border: 1.5px solid #FFDE7A;
   border-radius: 16px;
   padding: 1.35rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.2);
+  box-shadow: 0 8px 24px rgba(32, 36, 45, 0.25);
 }
 
 .summaryTopRow {
@@ -2420,6 +3090,7 @@
   align-items: center;
   justify-content: space-around;
   background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 222, 122, 0.25);
   border-radius: 12px;
   padding: 0.85rem;
 }
@@ -2786,7 +3457,7 @@
 
 .editBillBackBtn {
   background: #ffffff;
-  border: 1.5px solid #cbd5e1;
+  border: 1.5px solid #FFDE7A;
   color: #334155;
   font-size: 0.85rem;
   font-weight: 700;
@@ -2798,8 +3469,9 @@
 }
 
 .editBillBackBtn:hover {
-  background: #f1f5f9;
-  border-color: #94a3b8;
+  background: #fffdf5;
+  border-color: #fbc21a;
+  color: #0f172a;
 }
 
 /* Settled */
@@ -2972,19 +3644,39 @@
     justify-content: center;
     background: transparent;
     border: none;
-    color: #94a3b8;
-    font-size: 0.72rem;
+    color: #cbd5e1 !important;
+    font-size: 0.74rem;
     font-weight: 700;
-    padding: 0.6rem 0.45rem;
+    padding: 0.6rem 0.65rem;
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.15s ease;
   }
 
+  .mobileOrderTabBtn span {
+    color: inherit !important;
+    display: inline-block;
+  }
+
+  .mobileOrderTabBtn:hover {
+    color: #ffffff !important;
+  }
+
+  .mobileOrderTabBtn:active,
+  .mobileOrderTabBtn:focus {
+    outline: none;
+  }
+
   .mobileOrderTabBtnActive {
     background: #fbc21a !important;
     color: #0f172a !important;
+    font-weight: 800 !important;
     box-shadow: 0 2px 8px rgba(251, 194, 26, 0.35);
+  }
+
+  .mobileOrderTabBtnActive span {
+    color: #0f172a !important;
+    font-weight: 800 !important;
   }
 
   .cardBodyGrid,
@@ -3065,6 +3757,11 @@
   .billActionRow {
     grid-template-columns: 1fr;
     gap: 0.65rem;
+  }
+
+  .navDualActionsGrid {
+    grid-template-columns: 1fr;
+    gap: 0.55rem;
   }
 
   .invoiceTableDesktop {
@@ -3189,19 +3886,1013 @@
   }
 }
 
-/* Bill Instruction Notification Banner (Yellow Background) */
+/* Bill Instruction Notification Banner (Signature Note Style) */
 .billInstructionNotice {
-  background: #fffbeb;
-  border: 1.5px solid #fde68a;
-  border-left: 4px solid #f59e0b;
-  border-radius: 10px;
-  padding: 0.75rem 1rem;
+  background: linear-gradient(180deg, #FFF8DC 0%, #FFEEBA 100%);
+  border: 1.5px solid #FFDE7A;
+  border-radius: 12px;
+  padding: 0.85rem 1.15rem;
   font-size: 0.825rem;
+  font-weight: 600;
+  color: #1E3A20;
+  line-height: 1.5;
+  margin: 0;
+  box-shadow: 0 2px 8px rgba(251, 194, 26, 0.1);
+}
+
+/* ==========================================================================
+   New Orders Page Layout (Matching Reference Screenshot)
+   ========================================================================== */
+
+.ordersHeaderSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.pageMainHeading {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.pageSubHeading {
+  font-size: 0.9rem;
+  color: #64748b;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* 2-Tab Segmented Control (Pill container) */
+.segmentedTabsContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  background: #0f172a;
+  padding: 4px;
+  border-radius: 12px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 1.5rem;
+}
+
+.segmentedTab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 42px;
+  border-radius: 9px;
+  border: none;
+  background: transparent;
+  color: #ffffff;
+  font-size: 0.88rem;
   font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+}
+
+.segmentedTab:hover {
+  color: #fbc21a;
+}
+
+.segmentedTabActive {
+  background: #fbc21a !important;
+  color: #0f172a !important;
+  font-weight: 800 !important;
+  box-shadow: 0 2px 8px rgba(251, 194, 26, 0.35);
+}
+
+.segmentedTabActive:hover {
+  color: #0f172a !important;
+}
+
+/* Section Header (Upcoming Orders / Active Orders) */
+.sectionHeaderRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 0.85rem;
+}
+
+.sectionHeaderLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sectionTitle {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.sectionSubtitle {
+  font-size: 0.82rem;
+  color: #64748b;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Sort Dropdown */
+.sortDropdownWrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.sortDropdownBtn {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #334155;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: all 0.15s ease;
+}
+
+.sortDropdownBtn:hover {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+}
+
+.sortMenuPopover {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  padding: 4px;
+  z-index: 50;
+  min-width: 170px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sortMenuItem {
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  padding: 0.45rem 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #334155;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+
+.sortMenuItem:hover {
+  background: #fef3c7;
   color: #92400e;
+}
+
+.sortMenuItemActive {
+  background: #fef3c7;
+  color: #92400e;
+  font-weight: 700;
+}
+
+/* Order Cards Stack */
+.cleanCardsStack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Clean Order Card (Matching Reference Screenshot) */
+.cleanOrderCard {
+  background: #ffffff;
+  border: 1.5px solid #FFDE7A;
+  border-radius: 16px;
+  padding: 1rem 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  box-shadow: 0 2px 8px rgba(251, 194, 26, 0.08);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  position: relative;
+}
+
+.cleanOrderCard:hover {
+  border-color: #fbc21a;
+  box-shadow: 0 6px 18px rgba(251, 194, 26, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Top Meta Row */
+.cleanCardTopRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.cleanCardTopLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tagYellowPill {
+  background: #fef3c7;
+  color: #92400e;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.2rem 0.65rem;
+  border-radius: 6px;
+  letter-spacing: 0.02em;
+}
+
+.tagOnTheWay {
+  background: #e0f2fe;
+  color: #0284c7;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.2rem 0.65rem;
+  border-radius: 6px;
+  letter-spacing: 0.02em;
+}
+
+.cleanTimeSlotText {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+/* Status Badges */
+.statusPillConfirmed {
+  background: #f8fafc;
+  border: 1px solid #f1f5f9;
+  color: #475569;
+  font-size: 0.74rem;
+  font-weight: 600;
+  padding: 0.2rem 0.65rem;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.statusPillGreen {
+  background: #dcfce7;
+  border: 1px solid #bbf7d0;
+  color: #15803d;
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 0.2rem 0.65rem;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.dotYellow {
+  color: #eab308;
+  font-size: 0.65rem;
+}
+
+.dotGreen {
+  color: #22c55e;
+  font-size: 0.65rem;
+}
+
+/* Middle Body Row */
+.cleanCardBody {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.cleanCardImg {
+  width: 74px;
+  height: 74px;
+  border-radius: 12px;
+  object-fit: cover;
+  border: 1px solid #f1f5f9;
+  flex-shrink: 0;
+  background: #f8fafc;
+}
+
+.cleanCardDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  min-width: 0;
+}
+
+.cleanCustomerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.cleanCustomerName {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cleanChevron {
+  color: #94a3b8;
+  flex-shrink: 0;
+  transition: transform 0.15s ease;
+}
+
+.cleanOrderCard:hover .cleanChevron {
+  transform: translateX(2px);
+  color: #0f172a;
+}
+
+.cleanMetaRow {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.78rem;
+  color: #64748b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cleanMetaIcon {
+  color: #64748b;
+  flex-shrink: 0;
+}
+
+.cleanMaterialName {
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.cleanQuantityText {
+  color: #64748b;
+  font-weight: 500;
+}
+
+.cleanLocationText {
+  color: #64748b;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Bottom Action Row */
+.cleanCardActionRow {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -6px;
+}
+
+.cleanYellowActionBtn {
+  background: #fbc21a;
+  color: #0f172a;
+  border: none;
+  border-radius: 9px;
+  padding: 0.5rem 1.15rem;
+  font-size: 0.82rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(251, 194, 26, 0.25);
+  transition: all 0.15s ease;
+}
+
+.cleanYellowActionBtn:hover {
+  background: #eab308;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(251, 194, 26, 0.35);
+}
+
+/* ==========================================================================
+   STAGE 5: PAYMENT (CUSTOMER -> MERCHANT)
+   ========================================================================== */
+
+.stageSubtitleText {
+  font-size: 0.8rem;
+  color: #475569;
+  margin: -0.5rem 0 0 0;
   line-height: 1.45;
+}
+
+/* Compact Final Bill Summary Card */
+.paymentSummaryCard {
+  background: #ffffff;
+  border: 1.5px solid #FFDE7A;
+  border-radius: 14px;
+  padding: 1rem 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  box-sizing: border-box;
+}
+
+.paymentSummaryTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  border-bottom: 1px solid #fef3c7;
+  padding-bottom: 0.65rem;
+}
+
+.billNumberBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.summarySmallLabel {
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.summaryBillNum {
+  font-size: 0.95rem;
+  font-weight: 900;
+  color: #20242D;
+  font-family: monospace, system-ui, sans-serif;
+}
+
+.paymentStatusPillPending {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #FFF8DC;
+  border: 1px solid #FFDE7A;
+  color: #854d0e;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.2rem 0.55rem;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+
+.paymentStatusPillInitiated {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #1d4ed8;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.2rem 0.55rem;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+
+.paymentStatusPillSubmitted {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #fef3c7;
+  border: 1px solid #fde68a;
+  color: #92400e;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.2rem 0.55rem;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+
+.paymentStatusPillConfirmed {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #ecfdf5;
+  border: 1px solid #bbf7d0;
+  color: #16a34a;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.2rem 0.55rem;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+
+.summaryAmountRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.summaryAmountCol {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.summaryAmountValGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  color: #20242D;
+}
+
+.summaryRupeeIcon {
+  font-size: 1.3rem;
+  color: #fbc21a;
+  font-weight: 900;
+}
+
+.summaryAmountVal {
+  font-size: 1.75rem;
+  font-weight: 900;
+  color: #20242D;
+  line-height: 1.1;
+}
+
+.summaryWeightCol {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.15rem;
+}
+
+.summaryWeightVal {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #20242D;
+}
+
+/* Payment Method Segmented Control */
+.methodSelectorWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.methodSelectLabel {
+  font-size: 0.74rem;
+  font-weight: 800;
+  color: #20242D;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.methodSegmentedControl {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: #f1f5f9;
+  border-radius: 12px;
+  padding: 4px;
+  gap: 4px;
+  border: 1px solid #e2e8f0;
+}
+
+.segmentBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem;
+  border-radius: 9px;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.segmentBtnActive {
+  background: #20242D;
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(32, 36, 45, 0.15);
+}
+
+/* UPI Container Card */
+.upiContainerCard {
+  background: #ffffff;
+  border: 1.5px solid #FFDE7A;
+  border-radius: 14px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+}
+
+.payeeInfoRow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+}
+
+.payeeCol {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.payeeLabel {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.payeeNameText {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #20242D;
+  white-space: nowrap;
+  text-align: right;
+}
+
+.payeeUpiBox {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.45rem 0.65rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.payeeUpiText {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #0f172a;
+  font-family: monospace, system-ui, sans-serif;
+  letter-spacing: -0.01em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.miniCopyBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #20242D;
+  color: #ffffff;
+  border: 1px solid #20242D;
+  border-radius: 6px;
+  padding: 0.35rem 0.65rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.miniCopyBtn:hover {
+  background: #fbc21a;
+  border-color: #fbc21a;
+  color: #20242D;
+}
+
+.miniCopyBtnCopied {
+  background: #16a34a;
+  border-color: #16a34a;
+  color: #ffffff;
+}
+
+.btnPayByUpiApp {
+  width: 100%;
+  background: #fbc21a;
+  color: #0f172a;
+  border: 2px solid #eab308;
+  font-size: 0.92rem;
+  font-weight: 900;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 4px 14px rgba(251, 194, 26, 0.35);
+  min-height: 48px;
+}
+
+.btnPayByUpiApp:hover {
+  background: #f59e0b;
+  transform: translateY(-1px);
+}
+
+.paymentFlowHint {
+  font-size: 0.74rem;
+  color: #64748b;
+  line-height: 1.45;
+  margin: -0.25rem 0 0 0;
+  text-align: center;
+}
+
+.utrFormCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 0.85rem;
+}
+
+.utrFormLabel {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #20242D;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.utrInputRow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+@media (min-width: 440px) {
+  .utrInputRow {
+    flex-direction: row;
+  }
+}
+
+.utrInputBox {
+  flex: 1;
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 9px;
+  padding: 0.65rem 0.85rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #0f172a;
+  outline: none;
+  transition: all 0.15s ease;
+}
+
+.utrInputBox:focus {
+  border-color: #fbc21a;
+  box-shadow: 0 0 0 3px rgba(251, 194, 26, 0.2);
+}
+
+.utrInputError {
+  border-color: #ef4444;
+}
+
+.btnRecordUtr {
+  background: #20242D;
+  color: #ffffff;
+  border: 1.5px solid #20242D;
+  font-size: 0.85rem;
+  font-weight: 800;
+  padding: 0.65rem 1rem;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.btnRecordUtr:hover {
+  background: #11141a;
+  border-color: #fbc21a;
+}
+
+.utrErrorMsg {
+  font-size: 0.72rem;
+  color: #dc2626;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.submittedNoticeBanner {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 8px;
+  padding: 0.55rem 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.submittedCheckIcon {
+  color: #16a34a;
+  flex-shrink: 0;
+}
+
+.submittedNoticeText {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.75rem;
+  color: #14532d;
+}
+
+/* Cash Container Card */
+.cashContainerCard {
+  background: #ffffff;
+  border: 1.5px solid #FFDE7A;
+  border-radius: 14px;
+  padding: 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+}
+
+.cashNoticeBox {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  background: linear-gradient(180deg, #FFF8DC 0%, #FFEEBA 100%);
+  border: 1.5px solid #FFDE7A;
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+}
+
+.cashIconWrap {
+  color: #854d0e;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.cashTextGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.cashTitle {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #20242D;
   margin: 0;
 }
+
+.cashSub {
+  font-size: 0.78rem;
+  color: #1E3A20;
+  margin: 0;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.cashAmountHighlightCard {
+  background: #20242D;
+  border: 1.5px solid #FFDE7A;
+  border-radius: 12px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.25rem;
+}
+
+.cashAmountLabel {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #FFDE7A;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.cashAmountValRow {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: #fbc21a;
+}
+
+.cashRupeeIcon {
+  color: #fbc21a;
+}
+
+.cashAmountVal {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #fbc21a;
+}
+
+.btnConfirmCash {
+  width: 100%;
+  background: #fbc21a;
+  color: #0f172a;
+  border: 2px solid #eab308;
+  font-size: 0.92rem;
+  font-weight: 900;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 4px 14px rgba(251, 194, 26, 0.35);
+  min-height: 48px;
+}
+
+.btnConfirmCash:hover {
+  background: #f59e0b;
+  transform: translateY(-1px);
+}
+
+.cashConfirmedBanner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: #ecfdf5;
+  border: 1.5px solid #bbf7d0;
+  color: #16a34a;
+  font-size: 0.85rem;
+  font-weight: 800;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.cashConfirmedIcon {
+  color: #16a34a;
+}
+
+/* Bottom Action Row & Notices */
+.paymentActionRow {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.35rem;
+}
+
+.primaryActionCtaDisabled {
+  opacity: 0.55 !important;
+  cursor: not-allowed !important;
+  background: #94a3b8 !important;
+  border-color: #94a3b8 !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.settlementPendingNotice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  color: #b45309;
+  font-weight: 600;
+  text-align: center;
+  margin: -0.5rem 0 0 0;
+  background: #fffbeb;
+  border: 1px solid #fef3c7;
+  padding: 0.45rem 0.75rem;
+  border-radius: 8px;
+}
+
 
 
 

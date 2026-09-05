@@ -1141,6 +1141,10 @@
     box-sizing: border-box;
   }
 
+  .searchBox {
+    width: 100%;
+  }
+
   .categoryPillsTrack {
     width: 100%;
     min-width: 0;
